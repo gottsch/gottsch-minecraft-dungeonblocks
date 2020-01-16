@@ -23,9 +23,9 @@ import net.minecraftforge.fml.loading.FMLPaths;
  * @author Mark Gottschling on Jan 1, 2020
  *
  */
-@Mod(value=DungeonBlocks.MODID)
+@Mod(value=DungeonBlocks.MOD_ID)
 @ModInfo(
-		modid=DungeonBlocks.MODID,
+		modid=DungeonBlocks.MOD_ID,
 		name=DungeonBlocks.NAME,
 		version=DungeonBlocks.VERSION,
 		minecraftVersion="1.14.4",
@@ -38,7 +38,7 @@ public class DungeonBlocks implements IMod {
 	public static final Logger LOGGER = LogManager.getLogger(DungeonBlocks.class.getSimpleName());
 
 	// constants
-	public static final String MODID = "dungeonblocks";
+	public static final String MOD_ID = "dungeonblocks";
 	protected static final String NAME = "DungeonBlocks";
 	protected static final String VERSION = "1.0.0";
 	
@@ -79,6 +79,6 @@ public class DungeonBlocks implements IMod {
 
 	@Override
 	public String getId() {
-		return DungeonBlocks.MODID;
+		return DungeonBlocks.MOD_ID;
 	}
 }

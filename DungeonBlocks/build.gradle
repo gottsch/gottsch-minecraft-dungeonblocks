@@ -42,7 +42,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                gottschcore {
+                dungeonblocks {
                     source sourceSets.main
                 }
             }
@@ -58,7 +58,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                gottschcore {
+                dungeonblocks {
                     source sourceSets.main
                 }
             }
@@ -76,22 +76,24 @@ minecraft {
             args '--mod', 'gottschcore', '--all', '--output', file('src/generated/resources/')
 
             mods {
-                gottschcore {
+                dungeonblocks {
                     source sourceSets.main
                 }
             }
         }
     }
 }
-
+def gottschcore_path="../../gottsch-minecraft-GottschCore/GottschCore${mc_version}/build/libs/GottschCore-mc${mc_version}-f${forge_version}-v${gottschcore_version}.jar"
+println gottschcore_path
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
     
-    compileOnly 'org.projectlombok:lombok:1.18.10'
-	annotationProcessor 'org.projectlombok:lombok:1.18.10'
+   // compileOnly 'org.projectlombok:lombok:1.18.10'
+	//annotationProcessor 'org.projectlombok:lombok:1.18.10'
+	compile files(gottschcore_path)	
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

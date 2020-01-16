@@ -64,7 +64,6 @@ public class DungeonBlocksConfig extends AbstractConfig {
 //		    latestVersionReminder = builder.comment("").define("latestVersionReminder", true);
 //	    }	 
 //    }
-
     @SubscribeEvent
     public static void onLoad(final ModConfig.Loading configEvent) {
 
