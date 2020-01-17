@@ -30,7 +30,7 @@ import net.minecraftforge.fml.config.ModConfig;
 public class DungeonBlocksConfig extends AbstractConfig {
     public static ForgeConfigSpec COMMON_CONFIG;
     public static ForgeConfigSpec CLIENT_CONFIG;
-
+    
     static {
         COMMON_CONFIG = COMMON_BUILDER.build();
         CLIENT_CONFIG = CLIENT_BUILDER.build();
@@ -41,6 +41,15 @@ public class DungeonBlocksConfig extends AbstractConfig {
      * @param mod
      */
     public DungeonBlocksConfig(IMod mod) {
+    }
+    
+    public static class BlockID {
+    	public static final String GRANITE_FACADE_ID = "granite_facade_block";
+    	public static final String POLISHED_GRANITE_FACADE_ID = "polished_granite_facade_block";
+    	public static final String DIORITE_FACADE_ID = "diorite_facade_block";
+    	public static final String POLISHED_DIORITE_FACADE_ID = "polished_diorite_facade_block";
+    	public static final String ANDESITE_FACADE_ID = "andesite_facade_block";
+    	public static final String POLISHED_ANDESITE_FACADE_ID = "polished_andesite_facade_block";
     }
     
 //    public static class Mod {

@@ -8,8 +8,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.naming.spi.DirObjectFactory;
+
 import com.google.common.base.Preconditions;
 import com.someguyssoftware.dungeonblocks.DungeonBlocks;
+import com.someguyssoftware.dungeonblocks.config.DungeonBlocksConfig.BlockID;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -22,7 +25,7 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.*;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.registries.IForgeRegistry;
 
 /**
@@ -30,12 +33,35 @@ import net.minecraftforge.registries.IForgeRegistry;
  *
  */
 public class ModBlocks {
+	
 	/*
 	 *  blocks 
 	 */
 	// facade blocks
-	public static Block stoneFacade;
-	public static Block flutedStoneFacade;
+	public static Block STONE_FACADE;
+	public static Block SMOOTH_STONE_FACADE;
+	public static Block COBBLESTONE_FACADE;
+	public static Block BRICK_FACADE;
+	public static Block MOSSY_COBBLESTONE_FACADE;
+	public static Block STONEBRICK_FACADE;
+	public static Block CRACKED_STONEBRICK_FACADE;
+	public static Block CHISELED_STONEBRICK_FACADE;
+	public static Block OBSIDIAN_FACADE;
+	public static Block SANDSTONE_FACADE;
+	public static Block SMOOTH_SANDSTONE_FACADE;
+	public static Block CHISELED_SANDSTONE_FACADE;
+	public static Block CUT_SANDSTONE_FACADE;
+	public static Block RED_SANDSTONE_FACADE;
+	public static Block SMOOTH_RED_SANDSTONE_FACADE;
+	public static Block CHISELED_RED_SANDSTONE_FACADE;
+	public static Block CUT_RED_SANDSTONE_FACADE;
+	
+	public final static Block GRANITE_FACADE;
+	public final static Block POLISHED_GRANITE_FACADE;
+	public final static Block DIORITE_FACADE;
+	public final static Block POLISHED_DIORITE_FACADE;
+	public final static Block ANDESITE_FACADE;
+	public final static Block POLISHED_ANDESITE_FACADE;
 	
 	public static Block testBlock = new Block(Block.Properties.create(Material.IRON)
  		   .hardnessAndResistance(5)
@@ -43,35 +69,39 @@ public class ModBlocks {
  		   .harvestTool(ToolType.PICKAXE))
     .setRegistryName(DungeonBlocks.MOD_ID, "test_block");
 	
-	public static Block facingBlock = new MyFacingBlock(DungeonBlocks.MOD_ID, "facing_block", Block.Properties.create(Material.ROCK)
-			.hardnessAndResistance(5)
-			.harvestLevel(2)
-			.harvestTool(ToolType.PICKAXE));
+	public static Block facingBlock = new MyFacingBlock(DungeonBlocks.MOD_ID, "facing_block", Block.Properties.create(Material.ROCK, MaterialColor.DIRT)
+			.hardnessAndResistance(1.5F, 6.0F));
 
-	public static Block facadeBlock = new MyFacingBlock(DungeonBlocks.MOD_ID, "facade_block", Block.Properties.create(Material.ROCK)
-			.hardnessAndResistance(5)
-			.harvestLevel(2)
-			.harvestTool(ToolType.PICKAXE));
+	public static Block facadeBlock = new FacadeBlock(DungeonBlocks.MOD_ID, "facade_block", Block.Properties.create(Material.ROCK, MaterialColor.DIRT)
+			.hardnessAndResistance(1.5F, 6.0F));
 	
 	public static List<Block> BLOCKS = new ArrayList<>(100);
 	
 	static {
-		// basic facade
-//		stoneFacade = new BasicFacadeBlock(DungeonBlocks.MODID, ModConfig.basicStoneFacadeId, Material.ROCK).setHardness(1.5F).setResistance(10.0F);
-
-		// flute pillar facade
-//		flutedStoneFacade = new FlutedFacadeBlock(DungeonBlocks.MODID, "fluted_stone_facade", Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 10.0F)
-//				.harvestLevel(2));
-
+		// facade
+		GRANITE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.GRANITE_FACADE_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		POLISHED_GRANITE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_GRANITE_FACADE_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		DIORITE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.DIORITE_FACADE_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		POLISHED_DIORITE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_DIORITE_FACADE_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		ANDESITE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.ANDESITE_FACADE_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		POLISHED_ANDESITE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_ANDESITE_FACADE_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));		
+		
 		/*
 		 * setup array
 		 */
-//		BLOCKS.add(flutedStoneFacade);
 		BLOCKS.add(testBlock);
 		BLOCKS.add(facingBlock);
 		BLOCKS.add(facadeBlock);
+		
+		BLOCKS.add(GRANITE_FACADE);
+		BLOCKS.add(POLISHED_GRANITE_FACADE);
+		BLOCKS.add(DIORITE_FACADE);
+		BLOCKS.add(POLISHED_DIORITE_FACADE);
+		BLOCKS.add(ANDESITE_FACADE);
+		BLOCKS.add(POLISHED_ANDESITE_FACADE);
 	}
 
+	
 	@Mod.EventBusSubscriber(modid = DungeonBlocks.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 	public static class RegistrationHandler {
 		public static final Set<BlockItem> ITEM_BLOCKS = new HashSet<>();
