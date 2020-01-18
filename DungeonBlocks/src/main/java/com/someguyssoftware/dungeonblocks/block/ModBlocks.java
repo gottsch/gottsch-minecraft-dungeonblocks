@@ -139,16 +139,82 @@ public class ModBlocks {
 	public static final Block POLISHED_DIORITE_FLUTED_FACADE;
 	public static final Block ANDESITE_FLUTED_FACADE;
 	public static final Block POLISHED_ANDESITE_FLUTED_FACADE;
-
 	
-	public static Block testBlock = new Block(Block.Properties.create(Material.IRON)
- 		   .hardnessAndResistance(5)
- 		   .harvestLevel(2)
- 		   .harvestTool(ToolType.PICKAXE))
-    .setRegistryName(DungeonBlocks.MOD_ID, "test_block");
+	// sill
+	public static final Block STONE_SILL;
+	public static final Block SMOOTH_STONE_SILL;
+	public static final Block COBBLESTONE_SILL;
+	public static final Block MOSSY_COBBLESTONE_SILL;
+	public static final Block BRICKS_SILL;
+	public static final Block STONE_BRICKS_SILL;
+	public static final Block CRACKED_STONE_BRICKS_SILL;
+	public static final Block CHISELED_STONE_BRICKS_SILL;
+	public static final Block OBSIDIAN_SILL;
+	public static final Block SANDSTONE_SILL;
+	public static final Block SMOOTH_SANDSTONE_SILL;
+	public static final Block CHISELED_SANDSTONE_SILL;
+	public static final Block CUT_SANDSTONE_SILL;
+	public static final Block RED_SANDSTONE_SILL;
+	public static final Block SMOOTH_RED_SANDSTONE_SILL;
+	public static final Block CHISELED_RED_SANDSTONE_SILL;
+	public static final Block CUT_RED_SANDSTONE_SILL;
+	public static final Block GRANITE_SILL;
+	public static final Block POLISHED_GRANITE_SILL;
+	public static final Block DIORITE_SILL;
+	public static final Block POLISHED_DIORITE_SILL;
+	public static final Block ANDESITE_SILL;
+	public static final Block POLISHED_ANDESITE_SILL;
 
-	public static Block facadeBlock = new FacadeBlock(DungeonBlocks.MOD_ID, "facade_block", Block.Properties.create(Material.ROCK, MaterialColor.DIRT)
-			.hardnessAndResistance(1.5F, 6.0F));
+	// double sill
+	public static final Block STONE_DOUBLE_SILL;
+	public static final Block SMOOTH_STONE_DOUBLE_SILL;
+	public static final Block COBBLESTONE_DOUBLE_SILL;
+	public static final Block MOSSY_COBBLESTONE_DOUBLE_SILL;
+	public static final Block BRICKS_DOUBLE_SILL;
+	public static final Block STONE_BRICKS_DOUBLE_SILL;
+	public static final Block CRACKED_STONE_BRICKS_DOUBLE_SILL;
+	public static final Block CHISELED_STONE_BRICKS_DOUBLE_SILL;
+	public static final Block OBSIDIAN_DOUBLE_SILL;
+	public static final Block SANDSTONE_DOUBLE_SILL;
+	public static final Block SMOOTH_SANDSTONE_DOUBLE_SILL;
+	public static final Block CHISELED_SANDSTONE_DOUBLE_SILL;
+	public static final Block CUT_SANDSTONE_DOUBLE_SILL;
+	public static final Block RED_SANDSTONE_DOUBLE_SILL;
+	public static final Block SMOOTH_RED_SANDSTONE_DOUBLE_SILL;
+	public static final Block CHISELED_RED_SANDSTONE_DOUBLE_SILL;
+	public static final Block CUT_RED_SANDSTONE_DOUBLE_SILL;
+	public static final Block GRANITE_DOUBLE_SILL;
+	public static final Block POLISHED_GRANITE_DOUBLE_SILL;
+	public static final Block DIORITE_DOUBLE_SILL;
+	public static final Block POLISHED_DIORITE_DOUBLE_SILL;
+	public static final Block ANDESITE_DOUBLE_SILL;
+	public static final Block POLISHED_ANDESITE_DOUBLE_SILL;
+
+	// wall sconce
+	public static final Block STONE_WALL_SCONCE;
+	public static final Block SMOOTH_STONE_WALL_SCONCE;
+	public static final Block COBBLESTONE_WALL_SCONCE;
+	public static final Block MOSSY_COBBLESTONE_WALL_SCONCE;
+	public static final Block BRICKS_WALL_SCONCE;
+	public static final Block STONE_BRICKS_WALL_SCONCE;
+	public static final Block CRACKED_STONE_BRICKS_WALL_SCONCE;
+	public static final Block CHISELED_STONE_BRICKS_WALL_SCONCE;
+	public static final Block OBSIDIAN_WALL_SCONCE;
+	public static final Block SANDSTONE_WALL_SCONCE;
+	public static final Block SMOOTH_SANDSTONE_WALL_SCONCE;
+	public static final Block CHISELED_SANDSTONE_WALL_SCONCE;
+	public static final Block CUT_SANDSTONE_WALL_SCONCE;
+	public static final Block RED_SANDSTONE_WALL_SCONCE;
+	public static final Block SMOOTH_RED_SANDSTONE_WALL_SCONCE;
+	public static final Block CHISELED_RED_SANDSTONE_WALL_SCONCE;
+	public static final Block CUT_RED_SANDSTONE_WALL_SCONCE;
+	public static final Block GRANITE_WALL_SCONCE;
+	public static final Block POLISHED_GRANITE_WALL_SCONCE;
+	public static final Block DIORITE_WALL_SCONCE;
+	public static final Block POLISHED_DIORITE_WALL_SCONCE;
+	public static final Block ANDESITE_WALL_SCONCE;
+	public static final Block POLISHED_ANDESITE_WALL_SCONCE;
+
 	
 	public static List<Block> BLOCKS = new ArrayList<>(100);
 	
@@ -261,12 +327,91 @@ public class ModBlocks {
 		ANDESITE_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, BlockID.ANDESITE_FLUTED_FACADE_ID, Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(1.5F, 6.0F));
 		POLISHED_ANDESITE_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_ANDESITE_FLUTED_FACADE_ID, Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(1.5F, 6.0F));		
 
+		// sill
+		STONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.STONE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		SMOOTH_STONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.SMOOTH_STONE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		COBBLESTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.COBBLESTONE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		MOSSY_COBBLESTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.MOSSY_COBBLESTONE_SILL_ID, Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F, 6.0F));
+		BRICKS_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.BRICKS_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.RED).hardnessAndResistance(2.0F, 6.0F));
+		STONE_BRICKS_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.STONE_BRICKS_SILL_ID, Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F));
+		CRACKED_STONE_BRICKS_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.CRACKED_STONE_BRICKS_SILL_ID, Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F));
+		CHISELED_STONE_BRICKS_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.CHISELED_STONE_BRICKS_SILL_ID, Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F));
+		OBSIDIAN_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.OBSIDIAN_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.BLACK).hardnessAndResistance(50.0F, 1200.0F));
+
+		SANDSTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.SANDSTONE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		SMOOTH_SANDSTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.SMOOTH_SANDSTONE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		CHISELED_SANDSTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.CHISELED_SANDSTONE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		CUT_SANDSTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.CUT_SANDSTONE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		RED_SANDSTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.RED_SANDSTONE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		SMOOTH_RED_SANDSTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.SMOOTH_RED_SANDSTONE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		CHISELED_RED_SANDSTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.CHISELED_RED_SANDSTONE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		CUT_RED_SANDSTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.CUT_RED_SANDSTONE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		
+		GRANITE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.GRANITE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		POLISHED_GRANITE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_GRANITE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		DIORITE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.DIORITE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.QUARTZ).hardnessAndResistance(1.5F, 6.0F));
+		POLISHED_DIORITE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_DIORITE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.QUARTZ).hardnessAndResistance(1.5F, 6.0F));
+		ANDESITE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.ANDESITE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(1.5F, 6.0F));
+		POLISHED_ANDESITE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_ANDESITE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(1.5F, 6.0F));		
+
+		// double sill
+		STONE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.STONE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		SMOOTH_STONE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.SMOOTH_STONE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		COBBLESTONE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.COBBLESTONE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		MOSSY_COBBLESTONE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.MOSSY_COBBLESTONE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F, 6.0F));
+		BRICKS_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.BRICKS_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.RED).hardnessAndResistance(2.0F, 6.0F));
+		STONE_BRICKS_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.STONE_BRICKS_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F));
+		CRACKED_STONE_BRICKS_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.CRACKED_STONE_BRICKS_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F));
+		CHISELED_STONE_BRICKS_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.CHISELED_STONE_BRICKS_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F));
+		OBSIDIAN_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.OBSIDIAN_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.BLACK).hardnessAndResistance(50.0F, 1200.0F));
+
+		SANDSTONE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.SANDSTONE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		SMOOTH_SANDSTONE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.SMOOTH_SANDSTONE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		CHISELED_SANDSTONE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.CHISELED_SANDSTONE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		CUT_SANDSTONE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.CUT_SANDSTONE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		RED_SANDSTONE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.RED_SANDSTONE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		SMOOTH_RED_SANDSTONE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.SMOOTH_RED_SANDSTONE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		CHISELED_RED_SANDSTONE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.CHISELED_RED_SANDSTONE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		CUT_RED_SANDSTONE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.CUT_RED_SANDSTONE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		
+		GRANITE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.GRANITE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		POLISHED_GRANITE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_GRANITE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		DIORITE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.DIORITE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.QUARTZ).hardnessAndResistance(1.5F, 6.0F));
+		POLISHED_DIORITE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_DIORITE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.QUARTZ).hardnessAndResistance(1.5F, 6.0F));
+		ANDESITE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.ANDESITE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(1.5F, 6.0F));
+		POLISHED_ANDESITE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_ANDESITE_DOUBLE_SILL_ID, Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(1.5F, 6.0F));		
+
+		// Wall Sconce
+		STONE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.STONE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		SMOOTH_STONE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.SMOOTH_STONE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		COBBLESTONE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.COBBLESTONE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		MOSSY_COBBLESTONE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.MOSSY_COBBLESTONE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F, 6.0F));
+		BRICKS_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.BRICKS_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.RED).hardnessAndResistance(2.0F, 6.0F));
+		STONE_BRICKS_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.STONE_BRICKS_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F));
+		CRACKED_STONE_BRICKS_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.CRACKED_STONE_BRICKS_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F));
+		CHISELED_STONE_BRICKS_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.CHISELED_STONE_BRICKS_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F));
+		OBSIDIAN_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.OBSIDIAN_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.BLACK).hardnessAndResistance(50.0F, 1200.0F));
+
+		SANDSTONE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.SANDSTONE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		SMOOTH_SANDSTONE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.SMOOTH_SANDSTONE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		CHISELED_SANDSTONE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.CHISELED_SANDSTONE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		CUT_SANDSTONE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.CUT_SANDSTONE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		RED_SANDSTONE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.RED_SANDSTONE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		SMOOTH_RED_SANDSTONE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.SMOOTH_RED_SANDSTONE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		CHISELED_RED_SANDSTONE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.CHISELED_RED_SANDSTONE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		CUT_RED_SANDSTONE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.CUT_RED_SANDSTONE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(0.8F));
+		
+		GRANITE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.GRANITE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		POLISHED_GRANITE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_GRANITE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.DIRT).hardnessAndResistance(1.5F, 6.0F));
+		DIORITE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.DIORITE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.QUARTZ).hardnessAndResistance(1.5F, 6.0F));
+		POLISHED_DIORITE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_DIORITE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.QUARTZ).hardnessAndResistance(1.5F, 6.0F));
+		ANDESITE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.ANDESITE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(1.5F, 6.0F));
+		POLISHED_ANDESITE_WALL_SCONCE = new ModTorchBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_ANDESITE_WALL_SCONCE_ID, Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(1.5F, 6.0F));		
+		
 		
 		/*
 		 * setup array
 		 */
-		BLOCKS.add(testBlock);
-		BLOCKS.add(facadeBlock);
 		
 		// facades
 		BLOCKS.add(STONE_FACADE);
@@ -367,6 +512,81 @@ public class ModBlocks {
 		BLOCKS.add(POLISHED_DIORITE_FLUTED_FACADE);
 		BLOCKS.add(ANDESITE_FLUTED_FACADE);
 		BLOCKS.add(POLISHED_ANDESITE_FLUTED_FACADE);
+
+		// sill
+		BLOCKS.add(STONE_SILL);
+		BLOCKS.add(SMOOTH_STONE_SILL);
+		BLOCKS.add(COBBLESTONE_SILL);
+		BLOCKS.add(MOSSY_COBBLESTONE_SILL);
+		BLOCKS.add(BRICKS_SILL);
+		BLOCKS.add(STONE_BRICKS_SILL);
+		BLOCKS.add(CRACKED_STONE_BRICKS_SILL);
+		BLOCKS.add(CHISELED_STONE_BRICKS_SILL);
+		BLOCKS.add(OBSIDIAN_SILL);
+		BLOCKS.add(SANDSTONE_SILL);
+		BLOCKS.add(SMOOTH_SANDSTONE_SILL);
+		BLOCKS.add(CHISELED_SANDSTONE_SILL);
+		BLOCKS.add(CUT_SANDSTONE_SILL);
+		BLOCKS.add(RED_SANDSTONE_SILL);
+		BLOCKS.add(SMOOTH_RED_SANDSTONE_SILL);
+		BLOCKS.add(CHISELED_RED_SANDSTONE_SILL);
+		BLOCKS.add(CUT_RED_SANDSTONE_SILL);
+		BLOCKS.add(GRANITE_SILL);
+		BLOCKS.add(POLISHED_GRANITE_SILL);
+		BLOCKS.add(DIORITE_SILL);
+		BLOCKS.add(POLISHED_DIORITE_SILL);
+		BLOCKS.add(ANDESITE_SILL);
+		BLOCKS.add(POLISHED_ANDESITE_SILL);
+		
+		// double sill
+		BLOCKS.add(STONE_DOUBLE_SILL);
+		BLOCKS.add(SMOOTH_STONE_DOUBLE_SILL);
+		BLOCKS.add(COBBLESTONE_DOUBLE_SILL);
+		BLOCKS.add(MOSSY_COBBLESTONE_DOUBLE_SILL);
+		BLOCKS.add(BRICKS_DOUBLE_SILL);
+		BLOCKS.add(STONE_BRICKS_DOUBLE_SILL);
+		BLOCKS.add(CRACKED_STONE_BRICKS_DOUBLE_SILL);
+		BLOCKS.add(CHISELED_STONE_BRICKS_DOUBLE_SILL);
+		BLOCKS.add(OBSIDIAN_DOUBLE_SILL);
+		BLOCKS.add(SANDSTONE_DOUBLE_SILL);
+		BLOCKS.add(SMOOTH_SANDSTONE_DOUBLE_SILL);
+		BLOCKS.add(CHISELED_SANDSTONE_DOUBLE_SILL);
+		BLOCKS.add(CUT_SANDSTONE_DOUBLE_SILL);
+		BLOCKS.add(RED_SANDSTONE_DOUBLE_SILL);
+		BLOCKS.add(SMOOTH_RED_SANDSTONE_DOUBLE_SILL);
+		BLOCKS.add(CHISELED_RED_SANDSTONE_DOUBLE_SILL);
+		BLOCKS.add(CUT_RED_SANDSTONE_DOUBLE_SILL);
+		BLOCKS.add(GRANITE_DOUBLE_SILL);
+		BLOCKS.add(POLISHED_GRANITE_DOUBLE_SILL);
+		BLOCKS.add(DIORITE_DOUBLE_SILL);
+		BLOCKS.add(POLISHED_DIORITE_DOUBLE_SILL);
+		BLOCKS.add(ANDESITE_DOUBLE_SILL);
+		BLOCKS.add(POLISHED_ANDESITE_DOUBLE_SILL);
+
+		// wall sconce
+		BLOCKS.add(STONE_WALL_SCONCE);
+		BLOCKS.add(SMOOTH_STONE_WALL_SCONCE);
+		BLOCKS.add(COBBLESTONE_WALL_SCONCE);
+		BLOCKS.add(MOSSY_COBBLESTONE_WALL_SCONCE);
+		BLOCKS.add(BRICKS_WALL_SCONCE);
+		BLOCKS.add(STONE_BRICKS_WALL_SCONCE);
+		BLOCKS.add(CRACKED_STONE_BRICKS_WALL_SCONCE);
+		BLOCKS.add(CHISELED_STONE_BRICKS_WALL_SCONCE);
+		BLOCKS.add(OBSIDIAN_WALL_SCONCE);
+		BLOCKS.add(SANDSTONE_WALL_SCONCE);
+		BLOCKS.add(SMOOTH_SANDSTONE_WALL_SCONCE);
+		BLOCKS.add(CHISELED_SANDSTONE_WALL_SCONCE);
+		BLOCKS.add(CUT_SANDSTONE_WALL_SCONCE);
+		BLOCKS.add(RED_SANDSTONE_WALL_SCONCE);
+		BLOCKS.add(SMOOTH_RED_SANDSTONE_WALL_SCONCE);
+		BLOCKS.add(CHISELED_RED_SANDSTONE_WALL_SCONCE);
+		BLOCKS.add(CUT_RED_SANDSTONE_WALL_SCONCE);
+		BLOCKS.add(GRANITE_WALL_SCONCE);
+		BLOCKS.add(POLISHED_GRANITE_WALL_SCONCE);
+		BLOCKS.add(DIORITE_WALL_SCONCE);
+		BLOCKS.add(POLISHED_DIORITE_WALL_SCONCE);
+		BLOCKS.add(ANDESITE_WALL_SCONCE);
+		BLOCKS.add(POLISHED_ANDESITE_WALL_SCONCE);
 
 	}
 

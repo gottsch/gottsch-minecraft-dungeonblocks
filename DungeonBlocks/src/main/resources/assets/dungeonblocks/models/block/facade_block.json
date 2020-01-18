@@ -1,9 +1,0 @@
-{
-    "parent": "dungeonblocks:block/facade_base",
-    "textures": {
-        "bottom": "block/stone",
-        "top": "block/stone",
-        "side": "block/cobblestone",
-        "north": "dungeonblocks:block/poison_fog"
-    }
-}

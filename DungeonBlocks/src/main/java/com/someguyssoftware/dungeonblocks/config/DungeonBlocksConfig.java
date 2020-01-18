@@ -146,6 +146,81 @@ public class DungeonBlocksConfig extends AbstractConfig {
     	public static final String ANDESITE_FLUTED_FACADE_ID = "andesite_fluted_facade_block";
     	public static final String POLISHED_ANDESITE_FLUTED_FACADE_ID = "polished_andesite_fluted_facade_block";
 
+    	// sill
+    	public static final String STONE_SILL_ID = "stone_sill_block";
+    	public static final String SMOOTH_STONE_SILL_ID = "smooth_stone_sill_block";
+    	public static final String COBBLESTONE_SILL_ID = "cobblestone_sill_block";
+    	public static final String MOSSY_COBBLESTONE_SILL_ID = "mossy_cobblestone_sill_block";
+    	public static final String BRICKS_SILL_ID = "bricks_sill_block";
+    	public static final String STONE_BRICKS_SILL_ID = "stone_bricks_sill_block";
+    	public static final String CRACKED_STONE_BRICKS_SILL_ID = "cracked_stone_bricks_sill_block";
+    	public static final String CHISELED_STONE_BRICKS_SILL_ID = "chiseled_stone_bricks_sill_block";
+    	public static final String OBSIDIAN_SILL_ID = "obsidian_sill_block";
+    	public static final String SANDSTONE_SILL_ID = "sandstone_sill_block";
+    	public static final String SMOOTH_SANDSTONE_SILL_ID = "smooth_sandstone_sill_block";
+    	public static final String CHISELED_SANDSTONE_SILL_ID = "chiseled_sandstone_sill_block";
+    	public static final String CUT_SANDSTONE_SILL_ID = "cut_sandstone_sill_block";
+    	public static final String RED_SANDSTONE_SILL_ID = "red_sandstone_sill_block";
+    	public static final String SMOOTH_RED_SANDSTONE_SILL_ID = "smooth_red_sandstone_sill_block";
+    	public static final String CHISELED_RED_SANDSTONE_SILL_ID = "chiseled_red_sandstone_sill_block";
+    	public static final String CUT_RED_SANDSTONE_SILL_ID = "cut_red_sandstone_sill_block";
+    	public static final String GRANITE_SILL_ID = "granite_sill_block";
+    	public static final String POLISHED_GRANITE_SILL_ID = "polished_granite_sill_block";
+    	public static final String DIORITE_SILL_ID = "diorite_sill_block";
+    	public static final String POLISHED_DIORITE_SILL_ID = "polished_diorite_sill_block";
+    	public static final String ANDESITE_SILL_ID = "andesite_sill_block";
+    	public static final String POLISHED_ANDESITE_SILL_ID = "polished_andesite_sill_block";
+
+    	// double sill
+    	public static final String STONE_DOUBLE_SILL_ID = "stone_double_sill_block";
+    	public static final String SMOOTH_STONE_DOUBLE_SILL_ID = "smooth_stone_double_sill_block";
+    	public static final String COBBLESTONE_DOUBLE_SILL_ID = "cobblestone_double_sill_block";
+    	public static final String MOSSY_COBBLESTONE_DOUBLE_SILL_ID = "mossy_cobblestone_double_sill_block";
+    	public static final String BRICKS_DOUBLE_SILL_ID = "bricks_double_sill_block";
+    	public static final String STONE_BRICKS_DOUBLE_SILL_ID = "stone_bricks_double_sill_block";
+    	public static final String CRACKED_STONE_BRICKS_DOUBLE_SILL_ID = "cracked_stone_bricks_double_sill_block";
+    	public static final String CHISELED_STONE_BRICKS_DOUBLE_SILL_ID = "chiseled_stone_bricks_double_sill_block";
+    	public static final String OBSIDIAN_DOUBLE_SILL_ID = "obsidian_double_sill_block";
+    	public static final String SANDSTONE_DOUBLE_SILL_ID = "sandstone_double_sill_block";
+    	public static final String SMOOTH_SANDSTONE_DOUBLE_SILL_ID = "smooth_sandstone_double_sill_block";
+    	public static final String CHISELED_SANDSTONE_DOUBLE_SILL_ID = "chiseled_sandstone_double_sill_block";
+    	public static final String CUT_SANDSTONE_DOUBLE_SILL_ID = "cut_sandstone_double_sill_block";
+    	public static final String RED_SANDSTONE_DOUBLE_SILL_ID = "red_sandstone_double_sill_block";
+    	public static final String SMOOTH_RED_SANDSTONE_DOUBLE_SILL_ID = "smooth_red_sandstone_double_sill_block";
+    	public static final String CHISELED_RED_SANDSTONE_DOUBLE_SILL_ID = "chiseled_red_sandstone_double_sill_block";
+    	public static final String CUT_RED_SANDSTONE_DOUBLE_SILL_ID = "cut_red_sandstone_double_sill_block";
+    	public static final String GRANITE_DOUBLE_SILL_ID = "granite_double_sill_block";
+    	public static final String POLISHED_GRANITE_DOUBLE_SILL_ID = "polished_granite_double_sill_block";
+    	public static final String DIORITE_DOUBLE_SILL_ID = "diorite_double_sill_block";
+    	public static final String POLISHED_DIORITE_DOUBLE_SILL_ID = "polished_diorite_double_sill_block";
+    	public static final String ANDESITE_DOUBLE_SILL_ID = "andesite_double_sill_block";
+    	public static final String POLISHED_ANDESITE_DOUBLE_SILL_ID = "polished_andesite_double_sill_block";
+
+    	// wall sconce
+    	public static final String STONE_WALL_SCONCE_ID = "stone_wall_sconce_block";
+    	public static final String SMOOTH_STONE_WALL_SCONCE_ID = "smooth_stone_wall_sconce_block";
+    	public static final String COBBLESTONE_WALL_SCONCE_ID = "cobblestone_wall_sconce_block";
+    	public static final String MOSSY_COBBLESTONE_WALL_SCONCE_ID = "mossy_cobblestone_wall_sconce_block";
+    	public static final String BRICKS_WALL_SCONCE_ID = "bricks_wall_sconce_block";
+    	public static final String STONE_BRICKS_WALL_SCONCE_ID = "stone_bricks_wall_sconce_block";
+    	public static final String CRACKED_STONE_BRICKS_WALL_SCONCE_ID = "cracked_stone_bricks_wall_sconce_block";
+    	public static final String CHISELED_STONE_BRICKS_WALL_SCONCE_ID = "chiseled_stone_bricks_wall_sconce_block";
+    	public static final String OBSIDIAN_WALL_SCONCE_ID = "obsidian_wall_sconce_block";
+    	public static final String SANDSTONE_WALL_SCONCE_ID = "sandstone_wall_sconce_block";
+    	public static final String SMOOTH_SANDSTONE_WALL_SCONCE_ID = "smooth_sandstone_wall_sconce_block";
+    	public static final String CHISELED_SANDSTONE_WALL_SCONCE_ID = "chiseled_sandstone_wall_sconce_block";
+    	public static final String CUT_SANDSTONE_WALL_SCONCE_ID = "cut_sandstone_wall_sconce_block";
+    	public static final String RED_SANDSTONE_WALL_SCONCE_ID = "red_sandstone_wall_sconce_block";
+    	public static final String SMOOTH_RED_SANDSTONE_WALL_SCONCE_ID = "smooth_red_sandstone_wall_sconce_block";
+    	public static final String CHISELED_RED_SANDSTONE_WALL_SCONCE_ID = "chiseled_red_sandstone_wall_sconce_block";
+    	public static final String CUT_RED_SANDSTONE_WALL_SCONCE_ID = "cut_red_sandstone_wall_sconce_block";
+    	public static final String GRANITE_WALL_SCONCE_ID = "granite_wall_sconce_block";
+    	public static final String POLISHED_GRANITE_WALL_SCONCE_ID = "polished_granite_wall_sconce_block";
+    	public static final String DIORITE_WALL_SCONCE_ID = "diorite_wall_sconce_block";
+    	public static final String POLISHED_DIORITE_WALL_SCONCE_ID = "polished_diorite_wall_sconce_block";
+    	public static final String ANDESITE_WALL_SCONCE_ID = "andesite_wall_sconce_block";
+    	public static final String POLISHED_ANDESITE_WALL_SCONCE_ID = "polished_andesite_wall_sconce_block";
+
     }
     
 //    public static class Mod {
