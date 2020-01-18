@@ -5,12 +5,16 @@ package com.someguyssoftware.dungeonblocks.item;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import com.someguyssoftware.dungeonblocks.DungeonBlocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -28,6 +32,10 @@ import net.minecraftforge.registries.ObjectHolder;
 @Mod.EventBusSubscriber(modid = DungeonBlocks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @ObjectHolder(DungeonBlocks.MOD_ID)
 public class ModItems {
+//	public static final ItemGroup MOD_ITEM_GROUP = new ModItemGroup(DungeonBlocks.MOD_ID,
+//			() -> new ItemStack(Items.ACACIA_SAPLING)); // TODO change my icon
+	
+	
     public static final Item test_item = null;
 
     /**
@@ -45,4 +53,22 @@ public class ModItems {
         );
     }
 
+    /**
+     * 
+     * @author Mark Gottschling on Jan 17, 2020
+     *
+     */
+    public static class ModItemGroup extends ItemGroup {
+    	private final Supplier<ItemStack> iconSupplier;
+
+    	public ModItemGroup(final String name, final Supplier<ItemStack> iconSupplier) {
+    		super(name);
+    		this.iconSupplier = iconSupplier;
+    	}
+
+    	@Override
+    	public ItemStack createIcon() {
+    		return iconSupplier.get();
+    	}
+    }
 }

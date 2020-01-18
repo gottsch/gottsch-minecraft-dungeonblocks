@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "dungeonblocks:block/sandstone_quarter_facade_block" },
+        "facing=east": { "model": "dungeonblocks:block/sandstone_quarter_facade_block", "y": 90 },
+        "facing=south": { "model": "dungeonblocks:block/sandstone_quarter_facade_block", "y": 180 },
+        "facing=west": { "model": "dungeonblocks:block/sandstone_quarter_facade_block", "y": 270 }
+    }
+}
