@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        " i ",
+        " S "
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:torch"
+        },
+        "i": {
+            "item": "minecraft:iron_ingot"
+        },
+        "S": {
+            "item": "minecraft:polished_diorite"
+        }
+    },
+  "result": {
+    "item": "dungeonblocks:polished_diorite_wall_sconce_block",
+    "count": 3
+  }
+}

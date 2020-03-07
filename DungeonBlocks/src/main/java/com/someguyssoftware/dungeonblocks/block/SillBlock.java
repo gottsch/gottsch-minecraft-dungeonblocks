@@ -34,6 +34,7 @@ public class SillBlock extends FacingBlock {
 	
 	public SillBlock(String modID, String name, Properties properties) {
 		super(modID, name, properties);
+		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
 	}
 
 	/**

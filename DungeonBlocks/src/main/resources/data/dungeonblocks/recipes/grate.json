@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "DungeonBlocks",
+  "pattern": [
+	"XNX",
+	"NNN",
+	"XNX"
+  ],
+  "key": {
+    "X": {
+		"item": "minecraft:iron_ingot"
+	},
+	"N": {
+		"item": "minecraft:iron_nugget"
+	}
+  },
+  "result": {
+    "item": "dungeonblocks:grate_block",
+    "count": 1
+  }
+}

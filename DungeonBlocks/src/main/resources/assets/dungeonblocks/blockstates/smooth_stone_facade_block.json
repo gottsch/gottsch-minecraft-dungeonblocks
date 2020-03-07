@@ -1,5 +1,7 @@
 {
     "variants": {
+        "facing=up": { "model": "dungeonblocks:block/smooth_stone_facade_block" },
+        "facing=down": { "model": "dungeonblocks:block/smooth_stone_facade_block" },
         "facing=north": { "model": "dungeonblocks:block/smooth_stone_facade_block" },
         "facing=east": { "model": "dungeonblocks:block/smooth_stone_facade_block", "y": 90 },
         "facing=south": { "model": "dungeonblocks:block/smooth_stone_facade_block", "y": 180 },
