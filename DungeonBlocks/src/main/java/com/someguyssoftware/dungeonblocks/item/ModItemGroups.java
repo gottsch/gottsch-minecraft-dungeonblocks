@@ -17,7 +17,7 @@ import net.minecraft.item.Items;
  */
 public class ModItemGroups {
 	public static final ItemGroup MOD_ITEM_GROUP = new ModItemGroup(
-			DungeonBlocks.MOD_ID,	() -> new ItemStack(Items.ACACIA_SAPLING)); // TODO change my icon
+			DungeonBlocks.MOD_ID,	() -> new ItemStack(ModItems.LOGO));
 	
 	
 	public static class ModItemGroup extends ItemGroup {

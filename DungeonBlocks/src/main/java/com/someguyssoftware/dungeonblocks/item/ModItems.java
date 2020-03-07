@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import com.someguyssoftware.dungeonblocks.DungeonBlocks;
+import com.someguyssoftware.gottschcore.item.ModItem;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -32,11 +33,8 @@ import net.minecraftforge.registries.ObjectHolder;
 @Mod.EventBusSubscriber(modid = DungeonBlocks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @ObjectHolder(DungeonBlocks.MOD_ID)
 public class ModItems {
-//	public static final ItemGroup MOD_ITEM_GROUP = new ModItemGroup(DungeonBlocks.MOD_ID,
-//			() -> new ItemStack(Items.ACACIA_SAPLING)); // TODO change my icon
 	
-	
-    public static final Item test_item = null;
+    public static final Item LOGO = new ModItem(DungeonBlocks.MOD_ID, "dungeonblocks_logo", new Item.Properties());
 
     /**
      * The actual event handler that registers the custom items.
@@ -48,8 +46,7 @@ public class ModItems {
         //In here you pass in all item instances you want to register.
         //Make sure you always set the registry name.
         event.getRegistry().registerAll(
-
-            new Item(new Item.Properties()).setRegistryName(DungeonBlocks.MOD_ID, "test_item")
+            LOGO
         );
     }
 
