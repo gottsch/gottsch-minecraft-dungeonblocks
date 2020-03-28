@@ -43,7 +43,6 @@ public class ModBlocks {
 	public static final Block BRICKS_FACADE;
 	public static final Block STONE_BRICKS_FACADE;
 	public static final Block MOSSY_STONE_BRICKS_FACADE;
-	// TODO add MOSSY_STONE_BRICK FOR ALL BLOCKS!!!
 	public static final Block CRACKED_STONE_BRICKS_FACADE;
 	public static final Block CHISELED_STONE_BRICKS_FACADE;
 	public static final Block OBSIDIAN_FACADE;
