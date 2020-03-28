@@ -31,21 +31,17 @@ public class DungeonBlocks implements IMod {
 	// constants
 	public static final String MOD_ID = "dungeonblocks";
 	protected static final String NAME = "DungeonBlocks";
-	protected static final String VERSION = "1.0.0";
+	protected static final String VERSION = "1.1.0";
 
 	public static DungeonBlocks instance;
 
 	public DungeonBlocks() {
 		DungeonBlocks.instance = this;
 
-//		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, DungeonBlocksConfig.CLIENT_CONFIG);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonBlocksConfig.COMMON_CONFIG);
 
 		// Register the setup method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-
-		// test accessing the logs
-//		DungeonBlocksConfig.LOGGING.filename.get();
 	}
 
 	/**
@@ -54,15 +50,11 @@ public class DungeonBlocks implements IMod {
 	 * @param event
 	 */
 	private void setup(final FMLCommonSetupEvent event) {
-
-		// some preinit code
-//		LOGGER.info("HELLO FROM PREINIT");
-//		LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
 	}
 
 	@Override
 	public IMod getInstance() {
-		return this.instance;
+		return DungeonBlocks.instance;
 	}
 
 	@Override
