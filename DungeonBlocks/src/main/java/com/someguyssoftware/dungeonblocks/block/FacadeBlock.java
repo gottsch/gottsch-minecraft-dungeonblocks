@@ -16,10 +16,7 @@ import net.minecraft.world.IBlockReader;
  * @author Mark Gottschling on Jan 15, 2020
  *
  */
-//public class FacadeBlock extends FacingBlock implements IFacadeShapeStateProvider {
 public class FacadeBlock extends FacadeShapeBlock {
-
-//	public static final EnumProperty<FacadeShape> SHAPE = EnumProperty.create("shape", FacadeShape.class);
 
 	// Voxels are like the bounding boxes (AABBs)
 	// Shapes names are based on the FACING direction. ex. NORTH_SHAPE faces north.
@@ -29,12 +26,11 @@ public class FacadeBlock extends FacadeShapeBlock {
 	private static final VoxelShape WEST_FACING_SHAPE = Block.makeCuboidShape(8.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 
 	// outer corners
-	private static final VoxelShape TOP_LEFT_OUTER_SHAPE = Block.makeCuboidShape(8.0D, 0D, 0D, 16.0D, 16.0D, 8.0D);
-	private static final VoxelShape TOP_RIGHT_OUTER_SHAPE = Block.makeCuboidShape(0D, 0D, 0D, 8.0D, 16.0D, 8.0D);
+	private static final VoxelShape TOP_LEFT_OUTER_SHAPE = Block.makeCuboidShape(8.0D, 0D, 8.0D, 16.0D, 16.0D, 16.0D);
+	private static final VoxelShape TOP_RIGHT_OUTER_SHAPE = Block.makeCuboidShape(0D, 0D, 8.0D, 8.0D, 16.0D, 16.0D);
 
-	private static final VoxelShape BOTTOM_LEFT_OUTER_SHAPE = Block.makeCuboidShape(8.0D, 0D, 8.0D, 16.0D, 16.0D,
-			16.0D);
-	private static final VoxelShape BOTTOM_RIGHT_OUTER_SHAPE = Block.makeCuboidShape(0D, 0D, 8.0D, 8.0D, 16.0D, 16.0D);
+	private static final VoxelShape BOTTOM_LEFT_OUTER_SHAPE = Block.makeCuboidShape(8.0D, 0D, 0D, 16.0D, 16.0D, 8.0D);
+	private static final VoxelShape BOTTOM_RIGHT_OUTER_SHAPE = Block.makeCuboidShape(0D, 0D, 0D, 8.0D, 16.0D, 8.0D);
 
 	// inner corners
 	private static final VoxelShape TOP_LEFT_INNER_SHAPE = VoxelShapes.or(SOUTH_FACING_SHAPE,

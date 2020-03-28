@@ -73,15 +73,15 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 			break;
 		case OUTER_LEFT:
 			if (facingIndex == 0)
-				shapeIndex = 8;
-			else if (facingIndex == 2)
 				shapeIndex = 9;
+			else if (facingIndex == 2)
+				shapeIndex = 8;
 			break;
 		case OUTER_RIGHT:
 			if (facingIndex == 0)
-				shapeIndex = 10;
-			else if (facingIndex == 2)
 				shapeIndex = 11;
+			else if (facingIndex == 2)
+				shapeIndex = 10;
 			break;
 		default:
 			shapeIndex = 0;
