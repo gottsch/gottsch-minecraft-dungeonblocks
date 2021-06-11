@@ -9,7 +9,6 @@ import com.someguyssoftware.dungeonblocks.DungeonBlocks;
 
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 
 /**
  * @author Mark Gottschling on Jan 17, 2020
@@ -30,7 +29,7 @@ public class ModItemGroups {
 		}
 
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return iconSupplier.get();
 		}
 	}

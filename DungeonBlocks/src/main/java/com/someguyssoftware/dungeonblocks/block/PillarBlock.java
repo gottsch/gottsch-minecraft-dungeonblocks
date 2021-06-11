@@ -20,13 +20,13 @@ import net.minecraft.world.IBlockReader;
 public class PillarBlock extends BasedBlock {
 	
 	// Voxels are like the bounding boxes (AABBs) NF= North Facing, SF = South Facing, etc
-	private static final VoxelShape NORTH_SOUTH_AABB = Block.makeCuboidShape(3.0D, 3.0D, 0.0D, 13.0D, 13.0D, 16.0D);
-	private static final VoxelShape EAST_WEST_AABB = Block.makeCuboidShape(0.0D, 3.0D, 3.0D, 16.0D, 13.0D, 13.0D);	
-	private static final VoxelShape UP_DOWN_AABB = Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 13.0D, 16.0D, 13.0D);
+	private static final VoxelShape NORTH_SOUTH_AABB = Block.box(3.0D, 3.0D, 0.0D, 13.0D, 13.0D, 16.0D);
+	private static final VoxelShape EAST_WEST_AABB = Block.box(0.0D, 3.0D, 3.0D, 16.0D, 13.0D, 13.0D);	
+	private static final VoxelShape UP_DOWN_AABB = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 16.0D, 13.0D);
 	
 	public PillarBlock(String modID, String name, Properties properties) {
 		super(modID, name, properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(BASE, Direction.UP));
+		this.registerDefaultState(this.stateDefinition.any().setValue(BASE, Direction.UP));
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class PillarBlock extends BasedBlock {
 	 */
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		Direction direction = state.get(BASE);
+		Direction direction = state.getValue(BASE);
 
 		switch (direction) {
 		case UP:

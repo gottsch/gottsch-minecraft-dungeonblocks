@@ -25,15 +25,15 @@ public abstract class FacadeShapeBlock extends FacingBlock implements IFacadeSha
 	 */
 	public FacadeShapeBlock(String modID, String name, Block.Properties properties) {
 		super(modID, name, properties);
-		this.setDefaultState(
-				this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(SHAPE, FacadeShape.STRAIGHT));
+		this.registerDefaultState(
+				this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(SHAPE, FacadeShape.STRAIGHT));
 	}
 
 	/**
 	 * 
 	 */
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(FACING, SHAPE);
 	}
 

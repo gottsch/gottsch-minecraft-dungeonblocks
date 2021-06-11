@@ -26,13 +26,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class SconceBlock extends FacingBlock {
 
 	private static final VoxelShape NORTH_FACING_SHAPE = Block
-			.makeCuboidShape(2.0D, 2.0D, 9.0D, 14.0D, 15.0D, 15.9999D);
+			.box(2.0D, 2.0D, 9.0D, 14.0D, 15.0D, 15.9999D);
 	private static final VoxelShape EAST_FACING_SHAPE = Block
-			.makeCuboidShape(0.0001D, 2.0D, 2.0D, 6.0D, 15.0D, 14.0D);
+			.box(0.0001D, 2.0D, 2.0D, 6.0D, 15.0D, 14.0D);
 	private static final VoxelShape SOUTH_FACING_SHAPE = Block
-			.makeCuboidShape(2.0D, 2.0D, 0.0001D, 14.0D, 15.0D, 6.0D);
+			.box(2.0D, 2.0D, 0.0001D, 14.0D, 15.0D, 6.0D);
 	private static final VoxelShape WEST_FACING_SHAPE = Block
-			.makeCuboidShape(9.0D, 2.0D, 2.0D, 15.9999D, 15.0D, 14.0D);
+			.box(9.0D, 2.0D, 2.0D, 15.9999D, 15.0D, 14.0D);
 
 	public SconceBlock(String modID, String name, Properties properties) {
 		super(modID, name, properties);
@@ -47,7 +47,7 @@ public class SconceBlock extends FacingBlock {
 	@OnlyIn(Dist.CLIENT)
 	public void animateTick(BlockState state, World worldIn, BlockPos pos,
 			Random rand) {
-		Direction direction = state.get(FACING);
+		Direction direction = state.getValue(FACING);
 		double d0 = (double) pos.getX() + 0.5D;
 		double d1 = (double) pos.getY() + 0.7D;
 		double d2 = (double) pos.getZ() + 0.5D;
@@ -63,61 +63,61 @@ public class SconceBlock extends FacingBlock {
 			Direction directionFacing = direction.getOpposite();
 			// middle
 			worldIn.addParticle(ParticleTypes.SMOKE,
-					d0 + d4 * (double) directionFacing.getXOffset(), d1 + d3,
-					d2 + d4 * (double) directionFacing.getZOffset(), 0.0D, 0.0D,
+					d0 + d4 * (double) directionFacing.getStepX(), d1 + d3,
+					d2 + d4 * (double) directionFacing.getStepZ(), 0.0D, 0.0D,
 					0.0D);
 			worldIn.addParticle(ParticleTypes.FLAME,
-					d0 + d4 * (double) directionFacing.getXOffset(), d1 + d3,
-					d2 + d4 * (double) directionFacing.getZOffset(), 0.0D, 0.0D,
+					d0 + d4 * (double) directionFacing.getStepX(), d1 + d3,
+					d2 + d4 * (double) directionFacing.getStepZ(), 0.0D, 0.0D,
 					0.0D);
 
 			// right
-			if (directionFacing.getXOffset() != 0) {
+			if (directionFacing.getStepX() != 0) {
 				worldIn.addParticle(ParticleTypes.SMOKE,
-						d0 + d9 * (double) directionFacing.getXOffset(),
+						d0 + d9 * (double) directionFacing.getStepX(),
 						d1 + d3,
-						d6 + d9 * (double) directionFacing.getZOffset(), 0.0D,
+						d6 + d9 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
 				worldIn.addParticle(ParticleTypes.FLAME,
-						d0 + d9 * (double) directionFacing.getXOffset(),
+						d0 + d9 * (double) directionFacing.getStepX(),
 						d1 + d3,
-						d6 + d9 * (double) directionFacing.getZOffset(), 0.0D,
+						d6 + d9 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
 			} else {
 				worldIn.addParticle(ParticleTypes.SMOKE,
-						d5 + d9 * (double) directionFacing.getXOffset(),
+						d5 + d9 * (double) directionFacing.getStepX(),
 						d1 + d3,
-						d2 + d9 * (double) directionFacing.getZOffset(), 0.0D,
+						d2 + d9 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
 				worldIn.addParticle(ParticleTypes.FLAME,
-						d5 + d9 * (double) directionFacing.getXOffset(),
+						d5 + d9 * (double) directionFacing.getStepX(),
 						d1 + d3,
-						d2 + d9 * (double) directionFacing.getZOffset(), 0.0D,
+						d2 + d9 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
 			}
 
 			// left
-			if (directionFacing.getXOffset() != 0) {
+			if (directionFacing.getStepX() != 0) {
 				worldIn.addParticle(ParticleTypes.SMOKE,
-						d0 + d4 * (double) directionFacing.getXOffset(),
+						d0 + d4 * (double) directionFacing.getStepX(),
 						d1 + d3,
-						d8 + d4 * (double) directionFacing.getZOffset(), 0.0D,
+						d8 + d4 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
 				worldIn.addParticle(ParticleTypes.FLAME,
-						d0 + d4 * (double) directionFacing.getXOffset(),
+						d0 + d4 * (double) directionFacing.getStepX(),
 						d1 + d3,
-						d8 + d4 * (double) directionFacing.getZOffset(), 0.0D,
+						d8 + d4 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
 			} else {
 				worldIn.addParticle(ParticleTypes.SMOKE,
-						d7 + d4 * (double) directionFacing.getXOffset(),
+						d7 + d4 * (double) directionFacing.getStepX(),
 						d1 + d3,
-						d2 + d4 * (double) directionFacing.getZOffset(), 0.0D,
+						d2 + d4 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
 				worldIn.addParticle(ParticleTypes.FLAME,
-						d7 + d4 * (double) directionFacing.getXOffset(),
+						d7 + d4 * (double) directionFacing.getStepX(),
 						d1 + d3,
-						d2 + d4 * (double) directionFacing.getZOffset(), 0.0D,
+						d2 + d4 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
 			}
 		}
@@ -129,7 +129,7 @@ public class SconceBlock extends FacingBlock {
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn,
 			BlockPos pos, ISelectionContext context) {
-		Direction direction = state.get(FACING);
+		Direction direction = state.getValue(FACING);
 
 		switch (direction) {
 			case NORTH :

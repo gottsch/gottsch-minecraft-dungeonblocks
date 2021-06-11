@@ -20,28 +20,28 @@ public class QuarterFacadeBlock extends FacadeShapeBlock {
 
 	// Voxels are like the bounding boxes (AABBs)
 	// Shapes names are based on the FACING direction. ex. NORTH_SHAPE faces north.
-	private static final VoxelShape NORTH_FACING_SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 12.0D, 16.0D, 16.0D, 16.0D);
-	private static final VoxelShape EAST_FACING_SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 4.0D, 16.0D, 16.0D);
-	private static final VoxelShape SOUTH_FACING_SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 4.0D);
-	private static final VoxelShape WEST_FACING_SHAPE = Block.makeCuboidShape(12.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	private static final VoxelShape NORTH_FACING_SHAPE = Block.box(0.0D, 0.0D, 12.0D, 16.0D, 16.0D, 16.0D);
+	private static final VoxelShape EAST_FACING_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 4.0D, 16.0D, 16.0D);
+	private static final VoxelShape SOUTH_FACING_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 4.0D);
+	private static final VoxelShape WEST_FACING_SHAPE = Block.box(12.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 
 	// outer corners
-	private static final VoxelShape TOP_LEFT_OUTER_SHAPE = Block.makeCuboidShape(12.0D, 0D, 12.0D, 16.0D, 16.0D, 16.0D);
-	private static final VoxelShape TOP_RIGHT_OUTER_SHAPE = Block.makeCuboidShape(0D, 0D, 12.0D, 4.0D, 16.0D, 16.0D);
+	private static final VoxelShape TOP_LEFT_OUTER_SHAPE = Block.box(12.0D, 0D, 12.0D, 16.0D, 16.0D, 16.0D);
+	private static final VoxelShape TOP_RIGHT_OUTER_SHAPE = Block.box(0D, 0D, 12.0D, 4.0D, 16.0D, 16.0D);
 
-	private static final VoxelShape BOTTOM_LEFT_OUTER_SHAPE = Block.makeCuboidShape(12.0D, 0D, 0D, 16.0D, 16.0D, 4.0D);
-	private static final VoxelShape BOTTOM_RIGHT_OUTER_SHAPE = Block.makeCuboidShape(0D, 0D, 0D, 4.0D, 16.0D, 4.0D);
+	private static final VoxelShape BOTTOM_LEFT_OUTER_SHAPE = Block.box(12.0D, 0D, 0D, 16.0D, 16.0D, 4.0D);
+	private static final VoxelShape BOTTOM_RIGHT_OUTER_SHAPE = Block.box(0D, 0D, 0D, 4.0D, 16.0D, 4.0D);
 
 	// inner corners
 	private static final VoxelShape TOP_LEFT_INNER_SHAPE = VoxelShapes.or(SOUTH_FACING_SHAPE,
-			Block.makeCuboidShape(0.0D, 0D, 4.0D, 4.0D, 16.0D, 16.0D));
+			Block.box(0.0D, 0D, 4.0D, 4.0D, 16.0D, 16.0D));
 	private static final VoxelShape TOP_RIGHT_INNER_SHAPE = VoxelShapes.or(SOUTH_FACING_SHAPE,
-			Block.makeCuboidShape(12.0D, 0D, 4.0D, 16.0D, 16.0D, 16.0D));
+			Block.box(12.0D, 0D, 4.0D, 16.0D, 16.0D, 16.0D));
 
 	private static final VoxelShape BOTTOM_LEFT_INNER_SHAPE = VoxelShapes.or(NORTH_FACING_SHAPE,
-			Block.makeCuboidShape(0.0D, 0D, 0.0D, 4.0D, 16.0D, 12.0D));
+			Block.box(0.0D, 0D, 0.0D, 4.0D, 16.0D, 12.0D));
 	private static final VoxelShape BOTTOM_RIGHT_INNER_SHAPE = VoxelShapes.or(NORTH_FACING_SHAPE,
-			Block.makeCuboidShape(12.0D, 0D, 0D, 16.0D, 16.0D, 12.0D));
+			Block.box(12.0D, 0D, 0D, 16.0D, 16.0D, 12.0D));
 
 	// SWNE = 0,1,2,3
 	private VoxelShape voxelShapes[] = {
@@ -89,11 +89,11 @@ public class QuarterFacadeBlock extends FacadeShapeBlock {
 	 */
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		BlockPos blockPos = context.getPos();
-		BlockState blockState = this.getDefaultState().with(FACING,
-				context.getPlacementHorizontalFacing().getOpposite());
+		BlockPos blockPos = context.getClickedPos();
+		BlockState blockState = this.defaultBlockState().setValue(FACING,
+				context.getHorizontalDirection().getOpposite());
 		// custom method to get block state
-		BlockState placementBlockState = getBlockStateForPlacement(context.getWorld(), blockState, blockPos);
+		BlockState placementBlockState = getBlockStateForPlacement(context.getLevel(), blockState, blockPos);
 
 		return placementBlockState;
 	}

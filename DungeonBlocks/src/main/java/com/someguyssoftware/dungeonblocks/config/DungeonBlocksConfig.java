@@ -11,6 +11,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.config.ModConfig.Reloading;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 /**
@@ -20,12 +21,14 @@ import net.minecraftforge.fml.loading.FMLPaths;
  */
 @EventBusSubscriber(modid = DungeonBlocks.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class DungeonBlocksConfig extends AbstractConfig {
+	protected static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+	protected static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+
 	public static ForgeConfigSpec COMMON_CONFIG;
 	public static ForgeConfigSpec CLIENT_CONFIG;
 
 	static {
 		COMMON_CONFIG = COMMON_BUILDER.build();
-//		CLIENT_CONFIG = CLIENT_BUILDER.build();
 	}
 
 	/**
@@ -335,6 +338,66 @@ public class DungeonBlocksConfig extends AbstractConfig {
 	}
 
 	@SubscribeEvent
-	public static void onReload(final ModConfig.ConfigReloading configEvent) {
+	public static void onReload(final Reloading configEvent) {
+	}
+
+	@Override
+	public boolean isEnableVersionChecker() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setEnableVersionChecker(boolean enableVersionChecker) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isLatestVersionReminder() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setLatestVersionReminder(boolean latestVersionReminder) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isModEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setModEnabled(boolean modEnabled) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getModsFolder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setModsFolder(String modsFolder) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getConfigFolder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setConfigFolder(String configFolder) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -33,24 +33,24 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 		int facingIndex = 0;
 		int shapeIndex = 0;
 
-		Direction direction = state.get(FACING);
-		FacadeShape shape = state.get(SHAPE);
+		Direction direction = state.getValue(FACING);
+		FacadeShape shape = state.getValue(SHAPE);
 
 		switch (direction) {
 		case NORTH:
-			facingIndex = Direction.NORTH.getHorizontalIndex();
+			facingIndex = Direction.NORTH.get2DDataValue();
 			break;
 		case SOUTH:
-			facingIndex = Direction.SOUTH.getHorizontalIndex();
+			facingIndex = Direction.SOUTH.get2DDataValue();
 			break;
 		case EAST:
-			facingIndex = Direction.EAST.getHorizontalIndex();
+			facingIndex = Direction.EAST.get2DDataValue();
 			break;
 		case WEST:
-			facingIndex = Direction.WEST.getHorizontalIndex();
+			facingIndex = Direction.WEST.get2DDataValue();
 			break;
 		default:
-			facingIndex = Direction.NORTH.getHorizontalIndex();
+			facingIndex = Direction.NORTH.get2DDataValue();
 			break;
 		}
 
@@ -98,7 +98,7 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 	 * @return
 	 */
 	default public BlockState getBlockStateForPlacement(World world, BlockState blockState, BlockPos blockPos) {
-		Direction direction = blockState.get(FACING);
+		Direction direction = blockState.getValue(FACING);
 
 		// test the direction theblock is facing
 		switch (direction) {
@@ -115,7 +115,7 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 			blockState = getStateForWestDirection(world, blockPos, blockState);
 			break;
 		default:
-			blockState = blockState.with(SHAPE, FacadeShape.STRAIGHT);
+			blockState = blockState.setValue(SHAPE, FacadeShape.STRAIGHT);
 		}
 		return blockState;
 	}
@@ -130,7 +130,7 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 		/**
 		 * Checks if a block is an instance of this class
 		 */
-		return isBlockInstanceOf(block) && state.get(FACING) == stateIn.get(FACING);
+		return isBlockInstanceOf(block) && state.getValue(FACING) == stateIn.getValue(FACING);
 	}
 
 	default BlockState getStateForSouthDirection(World world, BlockPos blockPos, BlockState blockState) {
@@ -143,11 +143,11 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 
 		// inner test
 		if (isBlockInstanceOf(neighborBlock)) {
-			neighborFacing = neighborState.get(FACING);
+			neighborFacing = neighborState.getValue(FACING);
 			if (neighborFacing == Direction.WEST && !isSameBasic(world, blockPos.east(), blockState)) {
-				blockState = blockState.with(SHAPE, FacadeShape.INNER_RIGHT);
+				blockState = blockState.setValue(SHAPE, FacadeShape.INNER_RIGHT);
 			} else if (neighborFacing == Direction.EAST && !isSameBasic(world, blockPos.west(), blockState)) {
-				blockState = blockState.with(SHAPE, FacadeShape.INNER_LEFT);
+				blockState = blockState.setValue(SHAPE, FacadeShape.INNER_LEFT);
 			}
 			return blockState;
 		}
@@ -157,11 +157,11 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 		neighborBlock = neighborState.getBlock();
 
 		if (isBlockInstanceOf(neighborBlock)) {
-			neighborFacing = neighborState.get(FACING);
+			neighborFacing = neighborState.getValue(FACING);
 			if (neighborFacing == Direction.WEST && !isSameBasic(world, blockPos.west(), blockState)) {
-				blockState = blockState.with(SHAPE, FacadeShape.OUTER_LEFT);
+				blockState = blockState.setValue(SHAPE, FacadeShape.OUTER_LEFT);
 			} else if (neighborFacing == Direction.EAST && !isSameBasic(world, blockPos.east(), blockState)) {
-				blockState = blockState.with(SHAPE, FacadeShape.OUTER_RIGHT);
+				blockState = blockState.setValue(SHAPE, FacadeShape.OUTER_RIGHT);
 			}
 		}
 
@@ -178,11 +178,11 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 
 		// inner test
 		if (isBlockInstanceOf(neighborBlock)) {
-			neighborFacing = neighborState.get(FACING);
+			neighborFacing = neighborState.getValue(FACING);
 			if (neighborFacing == Direction.WEST && !isSameBasic(world, blockPos.east(), blockState)) {
-				blockState = blockState.with(SHAPE, FacadeShape.INNER_RIGHT);
+				blockState = blockState.setValue(SHAPE, FacadeShape.INNER_RIGHT);
 			} else if (neighborFacing == Direction.EAST && !isSameBasic(world, blockPos.west(), blockState)) {
-				blockState = blockState.with(SHAPE, FacadeShape.INNER_LEFT);
+				blockState = blockState.setValue(SHAPE, FacadeShape.INNER_LEFT);
 			}
 			return blockState;
 		}
@@ -192,11 +192,11 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 		neighborBlock = neighborState.getBlock();
 
 		if (isBlockInstanceOf(neighborBlock)) {
-			neighborFacing = neighborState.get(FACING);
+			neighborFacing = neighborState.getValue(FACING);
 			if (neighborFacing == Direction.WEST && !isSameBasic(world, blockPos.west(), blockState)) {
-				blockState = blockState.with(SHAPE, FacadeShape.OUTER_LEFT);
+				blockState = blockState.setValue(SHAPE, FacadeShape.OUTER_LEFT);
 			} else if (neighborFacing == Direction.EAST && !isSameBasic(world, blockPos.east(), blockState)) {
-				blockState = blockState.with(SHAPE, FacadeShape.OUTER_RIGHT);
+				blockState = blockState.setValue(SHAPE, FacadeShape.OUTER_RIGHT);
 			}
 		}
 		return blockState;
@@ -212,13 +212,13 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 
 		// inner test
 		if (isBlockInstanceOf(neighborBlock)) {
-			neighborFacing = neighborState.get(FACING);
+			neighborFacing = neighborState.getValue(FACING);
 			if (neighborFacing == Direction.NORTH && !isSameBasic(world, blockPos.south(), blockState)) {
-				blockState = blockState.with(FACING, Direction.NORTH);
-				blockState = blockState.with(SHAPE, FacadeShape.INNER_LEFT);
+				blockState = blockState.setValue(FACING, Direction.NORTH);
+				blockState = blockState.setValue(SHAPE, FacadeShape.INNER_LEFT);
 			} else if (neighborFacing == Direction.SOUTH && !isSameBasic(world, blockPos.north(), blockState)) {
-				blockState = blockState.with(FACING, Direction.SOUTH);
-				blockState = blockState.with(SHAPE, FacadeShape.INNER_LEFT);
+				blockState = blockState.setValue(FACING, Direction.SOUTH);
+				blockState = blockState.setValue(SHAPE, FacadeShape.INNER_LEFT);
 			}
 			return blockState;
 		}
@@ -228,13 +228,13 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 		neighborBlock = neighborState.getBlock();
 
 		if (isBlockInstanceOf(neighborBlock)) {
-			neighborFacing = neighborState.get(FACING);
+			neighborFacing = neighborState.getValue(FACING);
 			if (neighborFacing == Direction.NORTH && !isSameBasic(world, blockPos.north(), blockState)) {
-				blockState = blockState.with(FACING, Direction.NORTH);
-				blockState = blockState.with(SHAPE, FacadeShape.OUTER_RIGHT);
+				blockState = blockState.setValue(FACING, Direction.NORTH);
+				blockState = blockState.setValue(SHAPE, FacadeShape.OUTER_RIGHT);
 			} else if (neighborFacing == Direction.SOUTH && !isSameBasic(world, blockPos.south(), blockState)) {
-				blockState = blockState.with(FACING, Direction.SOUTH);
-				blockState = blockState.with(SHAPE, FacadeShape.OUTER_RIGHT);
+				blockState = blockState.setValue(FACING, Direction.SOUTH);
+				blockState = blockState.setValue(SHAPE, FacadeShape.OUTER_RIGHT);
 			}
 		}
 		return blockState;
@@ -250,13 +250,13 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 
 		// inner test
 		if (isBlockInstanceOf(neighborBlock)) {
-			neighborFacing = neighborState.get(FACING);
+			neighborFacing = neighborState.getValue(FACING);
 			if (neighborFacing == Direction.NORTH && !isSameBasic(world, blockPos.south(), blockState)) {
-				blockState = blockState.with(FACING, Direction.NORTH);
-				blockState = blockState.with(SHAPE, FacadeShape.INNER_RIGHT);
+				blockState = blockState.setValue(FACING, Direction.NORTH);
+				blockState = blockState.setValue(SHAPE, FacadeShape.INNER_RIGHT);
 			} else if (neighborFacing == Direction.SOUTH && !isSameBasic(world, blockPos.north(), blockState)) {
-				blockState = blockState.with(FACING, Direction.SOUTH);
-				blockState = blockState.with(SHAPE, FacadeShape.INNER_RIGHT);
+				blockState = blockState.setValue(FACING, Direction.SOUTH);
+				blockState = blockState.setValue(SHAPE, FacadeShape.INNER_RIGHT);
 			}
 			return blockState;
 		}
@@ -266,13 +266,13 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 		neighborBlock = neighborState.getBlock();
 
 		if (isBlockInstanceOf(neighborBlock)) {
-			neighborFacing = neighborState.get(FACING);
+			neighborFacing = neighborState.getValue(FACING);
 			if (neighborFacing == Direction.NORTH && !isSameBasic(world, blockPos.north(), blockState)) {
-				blockState = blockState.with(FACING, Direction.NORTH);
-				blockState = blockState.with(SHAPE, FacadeShape.OUTER_LEFT);
+				blockState = blockState.setValue(FACING, Direction.NORTH);
+				blockState = blockState.setValue(SHAPE, FacadeShape.OUTER_LEFT);
 			} else if (neighborFacing == Direction.SOUTH && !isSameBasic(world, blockPos.south(), blockState)) {
-				blockState = blockState.with(FACING, Direction.SOUTH);
-				blockState = blockState.with(SHAPE, FacadeShape.OUTER_LEFT);
+				blockState = blockState.setValue(FACING, Direction.SOUTH);
+				blockState = blockState.setValue(SHAPE, FacadeShape.OUTER_LEFT);
 			}
 		}
 		return blockState;

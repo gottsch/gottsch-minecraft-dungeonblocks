@@ -20,12 +20,12 @@ import net.minecraft.world.IBlockReader;
  */
 public class GrateBlock extends BasedBlock {
 
-	private static final VoxelShape UP_SHAPE = Block.makeCuboidShape(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-	private static final VoxelShape DOWN_SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-	private static final VoxelShape NORTH_SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 8.0D);
-	private static final VoxelShape EAST_SHAPE = Block.makeCuboidShape(8.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-	private static final VoxelShape SOUTH_SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 8.0D, 16.0D, 16.0D, 16.0D);
-	private static final VoxelShape WEST_SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 8.0D, 16.0D, 16.0D);
+	private static final VoxelShape UP_SHAPE = Block.box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	private static final VoxelShape DOWN_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
+	private static final VoxelShape NORTH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 8.0D);
+	private static final VoxelShape EAST_SHAPE = Block.box(8.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	private static final VoxelShape SOUTH_SHAPE = Block.box(0.0D, 0.0D, 8.0D, 16.0D, 16.0D, 16.0D);
+	private static final VoxelShape WEST_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 8.0D, 16.0D, 16.0D);
 
 	/**
 	 * 
@@ -35,33 +35,15 @@ public class GrateBlock extends BasedBlock {
 	 */
 	public GrateBlock(String modID, String name, Properties properties) {
 		super(modID, name, properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(BASE, Direction.UP));
+		this.registerDefaultState(this.stateDefinition.any().setValue(BASE, Direction.UP));
 	}
-
-	/**
-	 * 
-	 * @param modID
-	 * @param name
-	 * @param material
-	 */
-//	public GrateBlock(String modID, String name, Material material) {
-//		super(modID, name, material);		
-//		setSoundType(SoundType.STONE);
-//		setBoundingBox(
-//				new AxisAlignedBB(0F, 0.5F, 0F, 1F, 1F, 1F),	// NORTH
-//				new AxisAlignedBB(0F, 0.5F, 0F, 1F, 1F, 1F),	// EAST
-//				new AxisAlignedBB(0F, 0.5F, 0F, 1F, 1F, 1F),	// SOUTH
-//				new AxisAlignedBB(0F, 0.5F, 0F, 1F, 1F, 1F));	// WEST
-//		setCreativeTab(Dungeons2.DUNGEONS_TAB);
-//		this.setDefaultState(blockState.getBaseState().withProperty(BASE, EnumFacing.DOWN));
-//	}	
 
 	/**
 	 * 
 	 */
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		Direction direction = state.get(BASE);
+		Direction direction = state.getValue(BASE);
 
 		switch (direction) {
 		case UP:

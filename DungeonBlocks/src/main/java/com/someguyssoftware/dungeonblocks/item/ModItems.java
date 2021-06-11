@@ -3,24 +3,17 @@
  */
 package com.someguyssoftware.dungeonblocks.item;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.function.Supplier;
 
 import com.someguyssoftware.dungeonblocks.DungeonBlocks;
 import com.someguyssoftware.gottschcore.item.ModItem;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
 
 /**
@@ -64,7 +57,7 @@ public class ModItems {
     	}
 
     	@Override
-    	public ItemStack createIcon() {
+    	public ItemStack makeIcon() {
     		return iconSupplier.get();
     	}
     }

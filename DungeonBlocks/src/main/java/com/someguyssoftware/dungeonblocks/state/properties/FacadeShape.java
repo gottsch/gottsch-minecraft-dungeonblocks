@@ -26,8 +26,12 @@ public enum FacadeShape implements IStringSerializable {
         return this.name;
     }
 
-    @Override
 	public String getName() {
         return this.name;
     }
+
+	@Override
+	public String getSerializedName() {
+		return getName();
+	}
 }

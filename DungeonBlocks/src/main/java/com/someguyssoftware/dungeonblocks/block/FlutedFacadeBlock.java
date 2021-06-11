@@ -19,21 +19,21 @@ import net.minecraft.world.IBlockReader;
 public class FlutedFacadeBlock extends FacadeShapeBlock {
 
 	// Voxels are like the bounding boxes (AABBs)
-	private static final VoxelShape NORTH_FACING_PART = Block.makeCuboidShape(2.0D, 0.0D, 10.0D, 14.0D, 16.0D, 16.0D);
-	private static final VoxelShape N1_PART = Block.makeCuboidShape(0, 0, 8, 4, 16, 12);
-	private static final VoxelShape N2_PART = Block.makeCuboidShape(12.0D, 0.0D, 8.0D, 16.0D, 16.0D, 12.0D);
+	private static final VoxelShape NORTH_FACING_PART = Block.box(2.0D, 0.0D, 10.0D, 14.0D, 16.0D, 16.0D);
+	private static final VoxelShape N1_PART = Block.box(0, 0, 8, 4, 16, 12);
+	private static final VoxelShape N2_PART = Block.box(12.0D, 0.0D, 8.0D, 16.0D, 16.0D, 12.0D);
 
-	private static final VoxelShape SOUTH_FACING_PART = Block.makeCuboidShape(2.0D, 0.0D, 0.0D, 14.0D, 16.0D, 6.0D);
-	private static final VoxelShape S1_PART = Block.makeCuboidShape(0, 0, 4, 4, 16, 8);
-	private static final VoxelShape S2_PART = Block.makeCuboidShape(12, 0.0D, 4.0D, 16.0D, 16.0D, 8.0D);
+	private static final VoxelShape SOUTH_FACING_PART = Block.box(2.0D, 0.0D, 0.0D, 14.0D, 16.0D, 6.0D);
+	private static final VoxelShape S1_PART = Block.box(0, 0, 4, 4, 16, 8);
+	private static final VoxelShape S2_PART = Block.box(12, 0.0D, 4.0D, 16.0D, 16.0D, 8.0D);
 
-	private static final VoxelShape EAST_FACING_PART = Block.makeCuboidShape(0.0D, 0.0D, 2.0D, 6.0D, 16.0D, 14.0D);
-	private static final VoxelShape E1_PART = Block.makeCuboidShape(4.0D, 0.0D, 0.0D, 8.0D, 16.0D, 4.0D);
-	private static final VoxelShape E2_PART = Block.makeCuboidShape(4.0D, 0.0D, 12.0D, 8.0D, 16.0D, 16.0D);
+	private static final VoxelShape EAST_FACING_PART = Block.box(0.0D, 0.0D, 2.0D, 6.0D, 16.0D, 14.0D);
+	private static final VoxelShape E1_PART = Block.box(4.0D, 0.0D, 0.0D, 8.0D, 16.0D, 4.0D);
+	private static final VoxelShape E2_PART = Block.box(4.0D, 0.0D, 12.0D, 8.0D, 16.0D, 16.0D);
 
-	private static final VoxelShape WEST_FACING_PART = Block.makeCuboidShape(10.0D, 0.0D, 2.0D, 16.0D, 16.0D, 14.0D);
-	private static final VoxelShape W1_PART = Block.makeCuboidShape(8.0D, 0.0D, 0.0D, 12.0D, 16.0D, 4.0D);
-	private static final VoxelShape W2_PART = Block.makeCuboidShape(8.0D, 0.0D, 12.0D, 12.0D, 16.0D, 16.0D);
+	private static final VoxelShape WEST_FACING_PART = Block.box(10.0D, 0.0D, 2.0D, 16.0D, 16.0D, 14.0D);
+	private static final VoxelShape W1_PART = Block.box(8.0D, 0.0D, 0.0D, 12.0D, 16.0D, 4.0D);
+	private static final VoxelShape W2_PART = Block.box(8.0D, 0.0D, 12.0D, 12.0D, 16.0D, 16.0D);
 
 	private static final VoxelShape NORTH_FACING_SHAPE = VoxelShapes.or(NORTH_FACING_PART, N1_PART, N2_PART);
 	private static final VoxelShape EAST_FACING_SHAPE = VoxelShapes.or(EAST_FACING_PART, E1_PART, E2_PART);
@@ -41,28 +41,28 @@ public class FlutedFacadeBlock extends FacadeShapeBlock {
 	private static final VoxelShape WEST_FACING_SHAPE = VoxelShapes.or(WEST_FACING_PART, W1_PART, W2_PART);
 
 	// outer corners
-	private static final VoxelShape TOP_LEFT_OUTER_SHAPE = Block.makeCuboidShape(10, 0, 10, 16, 16, 16);
-	private static final VoxelShape TOP_RIGHT_OUTER_SHAPE = Block.makeCuboidShape(0, 0, 10, 6, 16, 16);
+	private static final VoxelShape TOP_LEFT_OUTER_SHAPE = Block.box(10, 0, 10, 16, 16, 16);
+	private static final VoxelShape TOP_RIGHT_OUTER_SHAPE = Block.box(0, 0, 10, 6, 16, 16);
 
-	private static final VoxelShape BOTTOM_LEFT_OUTER_SHAPE = Block.makeCuboidShape(10, 0, 0, 16, 16, 6);
-	private static final VoxelShape BOTTOM_RIGHT_OUTER_SHAPE = Block.makeCuboidShape(0, 0, 0, 6, 16, 6);
+	private static final VoxelShape BOTTOM_LEFT_OUTER_SHAPE = Block.box(10, 0, 0, 16, 16, 6);
+	private static final VoxelShape BOTTOM_RIGHT_OUTER_SHAPE = Block.box(0, 0, 0, 6, 16, 6);
 
 	// inner corners
-	private static final VoxelShape TOP_LEFT_INNER_SHAPE = VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 14, 16, 6),
-			S2_PART, Block.makeCuboidShape(0, 0, 6, 6, 16, 14), // med block
-			Block.makeCuboidShape(4, 0, 12, 8, 16, 16)); // small block
+	private static final VoxelShape TOP_LEFT_INNER_SHAPE = VoxelShapes.or(Block.box(0, 0, 0, 14, 16, 6),
+			S2_PART, Block.box(0, 0, 6, 6, 16, 14), // med block
+			Block.box(4, 0, 12, 8, 16, 16)); // small block
 
-	private static final VoxelShape TOP_RIGHT_INNER_SHAPE = VoxelShapes.or(Block.makeCuboidShape(2, 0, 0, 16, 16, 6),
-			S1_PART, Block.makeCuboidShape(10, 0, 6, 16, 16, 14), // med block
-			Block.makeCuboidShape(8, 0, 12, 12, 16, 16)); // small block
+	private static final VoxelShape TOP_RIGHT_INNER_SHAPE = VoxelShapes.or(Block.box(2, 0, 0, 16, 16, 6),
+			S1_PART, Block.box(10, 0, 6, 16, 16, 14), // med block
+			Block.box(8, 0, 12, 12, 16, 16)); // small block
 
 	private static final VoxelShape BOTTOM_LEFT_INNER_SHAPE = VoxelShapes.or(
-			Block.makeCuboidShape(0, 0, 10, 14, 16, 16), N2_PART, Block.makeCuboidShape(0, 0, 2, 6, 16, 10), // med
-			Block.makeCuboidShape(4, 0, 0, 8, 16, 4)); // small
+			Block.box(0, 0, 10, 14, 16, 16), N2_PART, Block.box(0, 0, 2, 6, 16, 10), // med
+			Block.box(4, 0, 0, 8, 16, 4)); // small
 
 	private static final VoxelShape BOTTOM_RIGHT_INNER_SHAPE = VoxelShapes.or(
-			Block.makeCuboidShape(2, 0, 10, 16, 16, 16), N1_PART, Block.makeCuboidShape(10, 0, 2, 16, 16, 10),
-			Block.makeCuboidShape(8, 0, 0, 12, 16, 4));
+			Block.box(2, 0, 10, 16, 16, 16), N1_PART, Block.box(10, 0, 2, 16, 16, 10),
+			Block.box(8, 0, 0, 12, 16, 4));
 
 	// SWNE = 0,1,2,3
 	private VoxelShape voxelShapes[] = {
@@ -110,11 +110,11 @@ public class FlutedFacadeBlock extends FacadeShapeBlock {
 	 */
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		BlockPos blockPos = context.getPos();
-		BlockState blockState = this.getDefaultState().with(FACING,
-				context.getPlacementHorizontalFacing().getOpposite());
+		BlockPos blockPos = context.getClickedPos();
+		BlockState blockState = this.defaultBlockState().setValue(FACING,
+				context.getHorizontalDirection().getOpposite());
 		// custom method to get block state
-		BlockState placementBlockState = getBlockStateForPlacement(context.getWorld(), blockState, blockPos);
+		BlockState placementBlockState = getBlockStateForPlacement(context.getLevel(), blockState, blockPos);
 
 		return placementBlockState;
 	}
