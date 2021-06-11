@@ -1,6 +1,9 @@
 modLoader="javafml" #mandatory
 loaderVersion="[36,)" #mandatory (32 is current forge version)
 
+# License
+license="GNU GPLv3"
+
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/gottsch/gottsch-minecraft-dungeonblocks/issues" #optional
 
