@@ -1,4 +1,5 @@
 {
+	"itemGroup.dungeonblocks":"DungeonBlocks",
 	"block.dungeonblocks.stone_facade_block": "Stone Facade",
 	"block.dungeonblocks.smooth_stone_facade_block": "Smooth Stone Facade",
 	"block.dungeonblocks.cobblestone_facade_block": "Cobblestone Facade",
@@ -274,5 +275,4 @@
 	"block.dungeonblocks.andesite_wall_sconce_block": "Andesite Wall Sconce",
 	"block.dungeonblocks.polished_andesite_wall_sconce_block": "Polished Andesite Wall Sconce",	
     "block.dungeonblocks.grate_block": "Grate"
-
 }
