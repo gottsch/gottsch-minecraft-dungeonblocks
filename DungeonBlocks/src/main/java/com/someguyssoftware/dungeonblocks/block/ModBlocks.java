@@ -330,7 +330,7 @@ public class ModBlocks {
 
 	}
 
-	@Mod.EventBusSubscriber(modid = DungeonBlocks.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value=Dist.CLIENT)
+	@Mod.EventBusSubscriber(modid = DungeonBlocks.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 	public static class RegistrationHandler {
 		
 		public static  Set<BlockItem> ITEM_BLOCKS = new HashSet<>();
