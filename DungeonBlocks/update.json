@@ -7,6 +7,6 @@
     "1.16.5": {
         "1.0.0": "Initial version release.",
         "1.0.1": "Fixed tabe name.",
-        "1.0.1": "Fixed client-side only registering of blocks"
+        "1.0.2": "Fixed client-side only registering of blocks"
 	}
 }
