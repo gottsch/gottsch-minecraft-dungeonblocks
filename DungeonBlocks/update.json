@@ -1,11 +1,12 @@
 {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/dungeonblocks",
+    "homepage": "https://minecraft.curseforge.com/projects/dungeonblocks",
     "promos": {
     "1.16.5-latest": "1.0.2",
     "1.16.5-recommended": "1.0.2"
   },
-  "1.16.5": {
-    	"1.0.1": "Fixed tab name.",
-    	"1.0.2": "Fixed client-side only registering of blocks"
-    }
+    "1.16.5": {
+        "1.0.0": "Initial version release.",
+        "1.0.1": "Fixed tabe name.",
+        "1.0.1": "Fixed client-side only registering of blocks"
+	}
 }
