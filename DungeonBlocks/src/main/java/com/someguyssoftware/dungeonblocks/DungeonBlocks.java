@@ -38,8 +38,8 @@ public class DungeonBlocks implements IMod {
 	// constants
 	public static final String MOD_ID = "dungeonblocks";
 	protected static final String NAME = "DungeonBlocks";
-	protected static final String VERSION = "1.0.2";
-	protected static final String UPDATE_JSON_URL = "https://github.com/gottsch/gottsch-minecraft-dungeonblocks/blob/1.16.5-master/DungeonBlocks/update.json";
+	protected static final String VERSION = "1.0.3";
+	protected static final String UPDATE_JSON_URL = "https://raw.githubusercontent.com/gottsch/gottsch-minecraft-dungeonblocks/1.16.5-master/DungeonBlocks/update.json";
 
 	public static DungeonBlocks instance;
 	private static DungeonBlocksConfig config;
