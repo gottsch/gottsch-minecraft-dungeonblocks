@@ -11,11 +11,11 @@ credits="gottsch" #optional
 
 [[mods]] #mandatory
 modId="dungeonblocks" #mandatory
-version="1.0.2" #mandatory
+version="1.0.3" #mandatory
 displayName="Dungeon Blocks" #mandatory
 
 # A URL to query for updates for this mod. See the JSON update specification <here>
-updateJSONURL="https://github.com/gottsch/gottsch-minecraft-dungeonblocks/blob/1.16.5-master/DungeonBlocks/update.json" #optional
+updateJSONURL="https://raw.githubusercontent.com/gottsch/gottsch-minecraft-dungeonblocks/1.16.5-master/DungeonBlocks/update.json" #optional
 
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="https://www.curseforge.com/minecraft/mc-mods/dungeonblocks" #optional
