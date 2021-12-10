@@ -6,14 +6,12 @@ package com.someguyssoftware.dungeonblocks.block;
 import com.someguyssoftware.dungeonblocks.state.properties.FacadeShape;
 import com.someguyssoftware.gottschcore.block.IFacingBlock;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+
 
 /**
  * @author Mark Gottschling on Mar 24, 2020

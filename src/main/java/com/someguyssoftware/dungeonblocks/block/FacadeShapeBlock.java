@@ -1,15 +1,13 @@
-/**
- * 
- */
+
 package com.someguyssoftware.dungeonblocks.block;
 
 import com.someguyssoftware.dungeonblocks.state.properties.FacadeShape;
 import com.someguyssoftware.gottschcore.block.FacingBlock;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 
 /**
  * @author Mark Gottschling on Mar 25, 2020
@@ -33,7 +31,7 @@ public abstract class FacadeShapeBlock extends FacingBlock implements IFacadeSha
 	 * 
 	 */
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(FACING, SHAPE);
 	}
 

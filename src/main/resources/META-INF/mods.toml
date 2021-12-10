@@ -1,5 +1,8 @@
+# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
 modLoader="javafml" #mandatory
-loaderVersion="[36,)" #mandatory (32 is current forge version)
+
+modLoader="javafml" #mandatory
+loaderVersion="[38,)" #mandatory (32 is current forge version)
 
 # License
 license="GNU GPLv3"
@@ -11,7 +14,7 @@ credits="gottsch" #optional
 
 [[mods]] #mandatory
 modId="dungeonblocks" #mandatory
-version="1.0.3" #mandatory
+version="1.0.0" #mandatory
 displayName="Dungeon Blocks" #mandatory
 
 # A URL to query for updates for this mod. See the JSON update specification <here>
@@ -28,20 +31,20 @@ gottsch's DungeonBlocks
       [[dependencies.dungeonblocks]]
         modId="forge"
         mandatory=true
-    versionRange="[36,)" #mandatory
+    versionRange="[38,)" #mandatory
         ordering="NONE"
         side="BOTH"
 
       [[dependencies.dungeonblocks]]
         modId="minecraft"
         mandatory=true
-    versionRange="[1.16.5]"
+    versionRange="[1.18,1.19]"
         ordering="NONE"
         side="BOTH"
         
       [[dependencies.dungeonblocks]]
         modId="gottschcore"
         mandatory=true
-    	versionRange="[1.1,)" #mandatory
+    	versionRange="[1.0,)" #mandatory
         ordering="BEFORE"
         side="BOTH"

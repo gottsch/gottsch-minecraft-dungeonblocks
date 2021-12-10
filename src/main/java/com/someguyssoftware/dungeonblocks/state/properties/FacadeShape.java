@@ -3,13 +3,13 @@
  */
 package com.someguyssoftware.dungeonblocks.state.properties;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
 /**
  * @author Mark Gottschling on Jan 12, 2020
  *
  */
-public enum FacadeShape implements IStringSerializable {
+public enum FacadeShape implements StringRepresentable {
     STRAIGHT("straight"),
     INNER_LEFT("inner_left"),
     INNER_RIGHT("inner_right"),
