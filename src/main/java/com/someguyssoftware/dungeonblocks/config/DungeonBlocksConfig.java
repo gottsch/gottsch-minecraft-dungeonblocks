@@ -1,5 +1,21 @@
-/**
+/*
+ * This file is part of  DungeonBlocks.
+ * Copyright (c) 2021, Mark Gottschling (gottsch)
  * 
+ * All rights reserved.
+ *
+ * DungeonBlocks is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * DungeonBlocks is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with DungeonBlocks.  If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 package com.someguyssoftware.dungeonblocks.config;
 
@@ -10,8 +26,8 @@ import com.someguyssoftware.gottschcore.mod.IMod;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.config.ModConfig.Reloading;
+import net.minecraftforge.fml.event.config.ModConfigEvent.Loading;
+import net.minecraftforge.fml.event.config.ModConfigEvent.Reloading;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 /**
@@ -66,6 +82,22 @@ public class DungeonBlocksConfig extends AbstractConfig {
 		public static final String POLISHED_DIORITE_FACADE_ID = "polished_diorite_facade_block";
 		public static final String ANDESITE_FACADE_ID = "andesite_facade_block";
 		public static final String POLISHED_ANDESITE_FACADE_ID = "polished_andesite_facade_block";
+		
+		public static final String BLACKSTONE_FACADE_ID = "blackstone_facade_block";
+		public static final String POLISHED_BLACKSTONE_FACADE_ID = "polished_blackstone_facade_block";
+		public static final String CHISELED_POLISHED_BLACKSTONE_FACADE_ID = "chiseled_polished_blackstone_facade_block";
+		public static final String GILDED_BLACKSTONE_FACADE_ID = "gilded_blackstone_facade_block";
+		public static final String POLISHED_BLACKSTONE_BRICKS_FACADE_ID = "polished_blackstone_bricks_facade_block";
+		public static final String CRACKED_POLISHED_BLACKSTONE_BRICKS_FACADE_ID = "cracked_polished_blackstone_bricks_facade_block";
+		
+		public static final String DEEPSLATE_FACADE_ID = "deepslate_facade_block";
+		public static final String DEEPSLATE_BRICKS_FACADE_ID = "deepslate_bricks_facade_block";
+		public static final String CRACKED_DEEPSLATE_BRICKS_FACADE_ID = "cracked_deepslate_bricks_facade_block";
+		public static final String COBBLED_DEEPSLATE_FACADE_ID = "cobbled_deepslate_facade_block";
+		public static final String POLISHED_DEEPSLATE_FACADE_ID = "polished_deepslate_facade_block";
+		public static final String CHISELED_DEEPSLATE_FACADE_ID = "chiseled_deepslate_facade_block";
+		public static final String DEEPSLATE_TILES_FACADE_ID = "deepslate_tiles_facade_block";
+		public static final String CRACKED_DEEPSLATE_TILES_FACADE_ID = "cracked_deepslate_tiles_facade_block";
 
 		// quarter
 		public static final String STONE_QUARTER_FACADE_ID = "stone_quarter_facade_block";
@@ -92,7 +124,21 @@ public class DungeonBlocksConfig extends AbstractConfig {
 		public static final String POLISHED_DIORITE_QUARTER_FACADE_ID = "polished_diorite_quarter_facade_block";
 		public static final String ANDESITE_QUARTER_FACADE_ID = "andesite_quarter_facade_block";
 		public static final String POLISHED_ANDESITE_QUARTER_FACADE_ID = "polished_andesite_quarter_facade_block";
-
+		public static final String BLACKSTONE_QUARTER_FACADE_ID = "blackstone_quarter_facade_block";
+		public static final String POLISHED_BLACKSTONE_QUARTER_FACADE_ID = "polished_blackstone_quarter_facade_block";
+		public static final String CHISELED_POLISHED_BLACKSTONE_QUARTER_FACADE_ID = "chiseled_polished_blackstone_quarter_facade_block";
+		public static final String GILDED_BLACKSTONE_QUARTER_FACADE_ID = "gilded_blackstone_quarter_facade_block";
+		public static final String POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE_ID = "polished_blackstone_bricks_quarter_facade_block";
+		public static final String CRACKED_POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE_ID = "cracked_polished_blackstone_bricks_quarter_facade_block";
+		public static final String DEEPSLATE_QUARTER_FACADE_ID = "deepslate_quarter_facade_block";
+		public static final String DEEPSLATE_BRICKS_QUARTER_FACADE_ID = "deepslate_bricks_quarter_facade_block";
+		public static final String CRACKED_DEEPSLATE_BRICKS_QUARTER_FACADE_ID = "cracked_deepslate_bricks_quarter_facade_block";
+		public static final String COBBLED_DEEPSLATE_QUARTER_FACADE_ID = "cobbled_deepslate_quarter_facade_block";
+		public static final String POLISHED_DEEPSLATE_QUARTER_FACADE_ID = "polished_deepslate_quarter_facade_block";
+		public static final String CHISELED_DEEPSLATE_QUARTER_FACADE_ID = "chiseled_deepslate_quarter_facade_block";
+		public static final String DEEPSLATE_TILES_QUARTER_FACADE_ID = "deepslate_tiles_quarter_facade_block";
+		public static final String CRACKED_DEEPSLATE_TILES_QUARTER_FACADE_ID = "cracked_deepslate_tiles_quarter_facade_block";
+		
 		// fluted
 		public static final String STONE_FLUTED_ID = "stone_fluted_block";
 		public static final String SMOOTH_STONE_FLUTED_ID = "smooth_stone_fluted_block";
@@ -118,7 +164,21 @@ public class DungeonBlocksConfig extends AbstractConfig {
 		public static final String POLISHED_DIORITE_FLUTED_ID = "polished_diorite_fluted_block";
 		public static final String ANDESITE_FLUTED_ID = "andesite_fluted_block";
 		public static final String POLISHED_ANDESITE_FLUTED_ID = "polished_andesite_fluted_block";
-
+		public static final String BLACKSTONE_FLUTED_ID = "blackstone_fluted_block";
+		public static final String POLISHED_BLACKSTONE_FLUTED_ID = "polished_blackstone_fluted_block";
+		public static final String CHISELED_POLISHED_BLACKSTONE_FLUTED_ID = "chiseled_polished_blackstone_fluted_block";
+		public static final String GILDED_BLACKSTONE_FLUTED_ID = "gilded_blackstone_fluted_block";
+		public static final String POLISHED_BLACKSTONE_BRICKS_FLUTED_ID = "polished_blackstone_bricks_fluted_block";
+		public static final String CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED_ID = "cracked_polished_blackstone_bricks_fluted_block";
+		public static final String DEEPSLATE_FLUTED_ID = "deepslate_fluted_block";
+		public static final String DEEPSLATE_BRICKS_FLUTED_ID = "deepslate_bricks_fluted_block";
+		public static final String CRACKED_DEEPSLATE_BRICKS_FLUTED_ID = "cracked_deepslate_bricks_fluted_block";
+		public static final String COBBLED_DEEPSLATE_FLUTED_ID = "cobbled_deepslate_fluted_block";
+		public static final String POLISHED_DEEPSLATE_FLUTED_ID = "polished_deepslate_fluted_block";
+		public static final String CHISELED_DEEPSLATE_FLUTED_ID = "chiseled_deepslate_fluted_block";
+		public static final String DEEPSLATE_TILES_FLUTED_ID = "deepslate_tiles_fluted_block";
+		public static final String CRACKED_DEEPSLATE_TILES_FLUTED_ID = "cracked_deepslate_tiles_fluted_block";
+		
 		// fluted facade
 		public static final String STONE_FLUTED_FACADE_ID = "stone_fluted_facade_block";
 		public static final String SMOOTH_STONE_FLUTED_FACADE_ID = "smooth_stone_fluted_facade_block";
@@ -144,6 +204,20 @@ public class DungeonBlocksConfig extends AbstractConfig {
 		public static final String POLISHED_DIORITE_FLUTED_FACADE_ID = "polished_diorite_fluted_facade_block";
 		public static final String ANDESITE_FLUTED_FACADE_ID = "andesite_fluted_facade_block";
 		public static final String POLISHED_ANDESITE_FLUTED_FACADE_ID = "polished_andesite_fluted_facade_block";
+		public static final String BLACKSTONE_FLUTED_FACADE_ID = "blackstone_fluted_facade_block";
+		public static final String POLISHED_BLACKSTONE_FLUTED_FACADE_ID = "polished_blackstone_fluted_facade_block";
+		public static final String CHISELED_POLISHED_BLACKSTONE_FLUTED_FACADE_ID = "chiseled_polished_blackstone_fluted_facade_block";
+		public static final String GILDED_BLACKSTONE_FLUTED_FACADE_ID = "gilded_blackstone_fluted_facade_block";
+		public static final String POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE_ID = "polished_blackstone_bricks_fluted_facade_block";
+		public static final String CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE_ID = "cracked_polished_blackstone_bricks_fluted_facade_block";
+		public static final String DEEPSLATE_FLUTED_FACADE_ID = "deepslate_fluted_facade_block";
+		public static final String DEEPSLATE_BRICKS_FLUTED_FACADE_ID = "deepslate_bricks_fluted_facade_block";
+		public static final String CRACKED_DEEPSLATE_BRICKS_FLUTED_FACADE_ID = "cracked_deepslate_bricks_fluted_facade_block";
+		public static final String COBBLED_DEEPSLATE_FLUTED_FACADE_ID = "cobbled_deepslate_fluted_facade_block";
+		public static final String POLISHED_DEEPSLATE_FLUTED_FACADE_ID = "polished_deepslate_fluted_facade_block";
+		public static final String CHISELED_DEEPSLATE_FLUTED_FACADE_ID = "chiseled_deepslate_fluted_facade_block";
+		public static final String DEEPSLATE_TILES_FLUTED_FACADE_ID = "deepslate_tiles_fluted_facade_block";
+		public static final String CRACKED_DEEPSLATE_TILES_FLUTED_FACADE_ID = "cracked_deepslate_tiles_fluted_facade_block";
 
 		// sill
 		public static final String STONE_SILL_ID = "stone_sill_block";
@@ -170,6 +244,20 @@ public class DungeonBlocksConfig extends AbstractConfig {
 		public static final String POLISHED_DIORITE_SILL_ID = "polished_diorite_sill_block";
 		public static final String ANDESITE_SILL_ID = "andesite_sill_block";
 		public static final String POLISHED_ANDESITE_SILL_ID = "polished_andesite_sill_block";
+		public static final String BLACKSTONE_SILL_ID = "blackstone_sill_block";
+		public static final String POLISHED_BLACKSTONE_SILL_ID = "polished_blackstone_sill_block";
+		public static final String CHISELED_POLISHED_BLACKSTONE_SILL_ID = "chiseled_polished_blackstone_sill_block";
+		public static final String GILDED_BLACKSTONE_SILL_ID = "gilded_blackstone_sill_block";
+		public static final String POLISHED_BLACKSTONE_BRICKS_SILL_ID = "polished_blackstone_bricks_sill_block";
+		public static final String CRACKED_POLISHED_BLACKSTONE_BRICKS_SILL_ID = "cracked_polished_blackstone_bricks_sill_block";
+		public static final String DEEPSLATE_SILL_ID = "deepslate_sill_block";
+		public static final String DEEPSLATE_BRICKS_SILL_ID = "deepslate_bricks_sill_block";
+		public static final String CRACKED_DEEPSLATE_BRICKS_SILL_ID = "cracked_deepslate_bricks_sill_block";
+		public static final String COBBLED_DEEPSLATE_SILL_ID = "cobbled_deepslate_sill_block";
+		public static final String POLISHED_DEEPSLATE_SILL_ID = "polished_deepslate_sill_block";
+		public static final String CHISELED_DEEPSLATE_SILL_ID = "chiseled_deepslate_sill_block";
+		public static final String DEEPSLATE_TILES_SILL_ID = "deepslate_tiles_sill_block";
+		public static final String CRACKED_DEEPSLATE_TILES_SILL_ID = "cracked_deepslate_tiles_sill_block";
 
 		// double sill
 		public static final String STONE_DOUBLE_SILL_ID = "stone_double_sill_block";
@@ -332,25 +420,13 @@ public class DungeonBlocksConfig extends AbstractConfig {
 	}
 
 	@SubscribeEvent
-	public static void onLoad(final ModConfig.Loading configEvent) {
+	public static void onLoad(final Loading configEvent) {
 		DungeonBlocksConfig.loadConfig(DungeonBlocksConfig.COMMON_CONFIG,
 				FMLPaths.CONFIGDIR.get().resolve(DungeonBlocks.MOD_ID + "-common.toml"));
 	}
 
 	@SubscribeEvent
 	public static void onReload(final Reloading configEvent) {
-	}
-
-	@Override
-	public boolean isEnableVersionChecker() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setEnableVersionChecker(boolean enableVersionChecker) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -397,6 +473,42 @@ public class DungeonBlocksConfig extends AbstractConfig {
 
 	@Override
 	public void setConfigFolder(String configFolder) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getLogsFolder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLogsFolder(String logsFolder) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getLoggerSize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLoggerSize(String size) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getLoggerLevel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLoggerLevel(String level) {
 		// TODO Auto-generated method stub
 		
 	}

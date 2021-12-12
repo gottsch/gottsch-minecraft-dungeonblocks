@@ -1,0 +1,9 @@
+{
+    "parent": "dungeonblocks:block/facade_inner_base",
+    "textures": {
+        "bottom": "block/chisel_polished_blackstone",
+        "top": "block/chisel_polished_blackstone",
+        "side": "block/chisel_polished_blackstone",
+        "north": "block/chisel_polished_blackstone"
+    }
+}

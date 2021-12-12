@@ -27,8 +27,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 		modid = DungeonBlocks.MOD_ID, 
 		name = DungeonBlocks.NAME, 
 		version = DungeonBlocks.VERSION, 
-		minecraftVersion = "1.18.0", 
-		forgeVersion = "38.1.0", 
+		minecraftVersion = "1.18.1", 
+		forgeVersion = "39.0.0", 
 		updateJsonUrl = DungeonBlocks.UPDATE_JSON_URL)
 @Credits(values = { "DungeonBlocks for Minecraft 1.14+ was first developed by Mark Gottschling on Jan 1, 2020." })
 public class DungeonBlocks implements IMod {

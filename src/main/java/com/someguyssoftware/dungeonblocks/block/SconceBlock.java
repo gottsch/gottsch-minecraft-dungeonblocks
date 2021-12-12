@@ -1,5 +1,21 @@
-/**
+/*
+ * This file is part of  DungeonBlocks.
+ * Copyright (c) 2021, Mark Gottschling (gottsch)
  * 
+ * All rights reserved.
+ *
+ * DungeonBlocks is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * DungeonBlocks is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with DungeonBlocks.  If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 package com.someguyssoftware.dungeonblocks.block;
 
@@ -7,15 +23,15 @@ import java.util.Random;
 
 import com.someguyssoftware.gottschcore.block.FacingBlock;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -45,8 +61,7 @@ public class SconceBlock extends FacingBlock {
 	 * called regardless of whether the block can receive random update ticks
 	 */
 	@OnlyIn(Dist.CLIENT)
-	public void animateTick(BlockState state, World worldIn, BlockPos pos,
-			Random rand) {
+	public void animateTick(BlockState state, Level level, BlockPos pos, Random rand) {
 		Direction direction = state.getValue(FACING);
 		double d0 = (double) pos.getX() + 0.5D;
 		double d1 = (double) pos.getY() + 0.7D;
@@ -62,34 +77,34 @@ public class SconceBlock extends FacingBlock {
 		if (direction.getAxis().isHorizontal()) {
 			Direction directionFacing = direction.getOpposite();
 			// middle
-			worldIn.addParticle(ParticleTypes.SMOKE,
+			level.addParticle(ParticleTypes.SMOKE,
 					d0 + d4 * (double) directionFacing.getStepX(), d1 + d3,
 					d2 + d4 * (double) directionFacing.getStepZ(), 0.0D, 0.0D,
 					0.0D);
-			worldIn.addParticle(ParticleTypes.FLAME,
+			level.addParticle(ParticleTypes.FLAME,
 					d0 + d4 * (double) directionFacing.getStepX(), d1 + d3,
 					d2 + d4 * (double) directionFacing.getStepZ(), 0.0D, 0.0D,
 					0.0D);
 
 			// right
 			if (directionFacing.getStepX() != 0) {
-				worldIn.addParticle(ParticleTypes.SMOKE,
+				level.addParticle(ParticleTypes.SMOKE,
 						d0 + d9 * (double) directionFacing.getStepX(),
 						d1 + d3,
 						d6 + d9 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
-				worldIn.addParticle(ParticleTypes.FLAME,
+				level.addParticle(ParticleTypes.FLAME,
 						d0 + d9 * (double) directionFacing.getStepX(),
 						d1 + d3,
 						d6 + d9 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
 			} else {
-				worldIn.addParticle(ParticleTypes.SMOKE,
+				level.addParticle(ParticleTypes.SMOKE,
 						d5 + d9 * (double) directionFacing.getStepX(),
 						d1 + d3,
 						d2 + d9 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
-				worldIn.addParticle(ParticleTypes.FLAME,
+				level.addParticle(ParticleTypes.FLAME,
 						d5 + d9 * (double) directionFacing.getStepX(),
 						d1 + d3,
 						d2 + d9 * (double) directionFacing.getStepZ(), 0.0D,
@@ -98,23 +113,23 @@ public class SconceBlock extends FacingBlock {
 
 			// left
 			if (directionFacing.getStepX() != 0) {
-				worldIn.addParticle(ParticleTypes.SMOKE,
+				level.addParticle(ParticleTypes.SMOKE,
 						d0 + d4 * (double) directionFacing.getStepX(),
 						d1 + d3,
 						d8 + d4 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
-				worldIn.addParticle(ParticleTypes.FLAME,
+				level.addParticle(ParticleTypes.FLAME,
 						d0 + d4 * (double) directionFacing.getStepX(),
 						d1 + d3,
 						d8 + d4 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
 			} else {
-				worldIn.addParticle(ParticleTypes.SMOKE,
+				level.addParticle(ParticleTypes.SMOKE,
 						d7 + d4 * (double) directionFacing.getStepX(),
 						d1 + d3,
 						d2 + d4 * (double) directionFacing.getStepZ(), 0.0D,
 						0.0D, 0.0D);
-				worldIn.addParticle(ParticleTypes.FLAME,
+				level.addParticle(ParticleTypes.FLAME,
 						d7 + d4 * (double) directionFacing.getStepX(),
 						d1 + d3,
 						d2 + d4 * (double) directionFacing.getStepZ(), 0.0D,
@@ -127,8 +142,7 @@ public class SconceBlock extends FacingBlock {
 	 * 
 	 */
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn,
-			BlockPos pos, ISelectionContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
 		Direction direction = state.getValue(FACING);
 
 		switch (direction) {

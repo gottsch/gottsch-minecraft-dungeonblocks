@@ -1,17 +1,33 @@
-/**
+/*
+ * This file is part of  DungeonBlocks.
+ * Copyright (c) 2021, Mark Gottschling (gottsch)
  * 
+ * All rights reserved.
+ *
+ * DungeonBlocks is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * DungeonBlocks is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with DungeonBlocks.  If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 package com.someguyssoftware.dungeonblocks.block;
 
 import com.someguyssoftware.gottschcore.block.BasedBlock;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * 
@@ -42,23 +58,17 @@ public class GrateBlock extends BasedBlock {
 	 * 
 	 */
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
 		Direction direction = state.getValue(BASE);
 
-		switch (direction) {
-		case UP:
-			return UP_SHAPE;
-		case DOWN:
-		default:
-			return DOWN_SHAPE;
-		case NORTH:
-			return NORTH_SHAPE;
-		case SOUTH:
-			return SOUTH_SHAPE;
-		case EAST:
-			return EAST_SHAPE;
-		case WEST:
-			return WEST_SHAPE;
-		}
+		return switch (direction) {
+		case UP -> UP_SHAPE;
+		case DOWN -> DOWN_SHAPE;
+		case NORTH -> NORTH_SHAPE;
+		case SOUTH -> SOUTH_SHAPE;
+		case EAST -> EAST_SHAPE;
+		case WEST -> WEST_SHAPE;
+		default -> DOWN_SHAPE;
+		};
 	}
 }

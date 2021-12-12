@@ -1,16 +1,32 @@
-/**
+/*
+ * This file is part of  DungeonBlocks.
+ * Copyright (c) 2021, Mark Gottschling (gottsch)
  * 
+ * All rights reserved.
+ *
+ * DungeonBlocks is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * DungeonBlocks is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with DungeonBlocks.  If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 package com.someguyssoftware.dungeonblocks.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * @author Mark Gottschling on Jan 15, 2020
@@ -33,14 +49,14 @@ public class QuarterFacadeBlock extends FacadeShapeBlock {
 	private static final VoxelShape BOTTOM_RIGHT_OUTER_SHAPE = Block.box(0D, 0D, 0D, 4.0D, 16.0D, 4.0D);
 
 	// inner corners
-	private static final VoxelShape TOP_LEFT_INNER_SHAPE = VoxelShapes.or(SOUTH_FACING_SHAPE,
+	private static final VoxelShape TOP_LEFT_INNER_SHAPE = Shapes.or(SOUTH_FACING_SHAPE,
 			Block.box(0.0D, 0D, 4.0D, 4.0D, 16.0D, 16.0D));
-	private static final VoxelShape TOP_RIGHT_INNER_SHAPE = VoxelShapes.or(SOUTH_FACING_SHAPE,
+	private static final VoxelShape TOP_RIGHT_INNER_SHAPE = Shapes.or(SOUTH_FACING_SHAPE,
 			Block.box(12.0D, 0D, 4.0D, 16.0D, 16.0D, 16.0D));
 
-	private static final VoxelShape BOTTOM_LEFT_INNER_SHAPE = VoxelShapes.or(NORTH_FACING_SHAPE,
+	private static final VoxelShape BOTTOM_LEFT_INNER_SHAPE = Shapes.or(NORTH_FACING_SHAPE,
 			Block.box(0.0D, 0D, 0.0D, 4.0D, 16.0D, 12.0D));
-	private static final VoxelShape BOTTOM_RIGHT_INNER_SHAPE = VoxelShapes.or(NORTH_FACING_SHAPE,
+	private static final VoxelShape BOTTOM_RIGHT_INNER_SHAPE = Shapes.or(NORTH_FACING_SHAPE,
 			Block.box(12.0D, 0D, 0D, 16.0D, 16.0D, 12.0D));
 
 	// SWNE = 0,1,2,3
@@ -77,8 +93,8 @@ public class QuarterFacadeBlock extends FacadeShapeBlock {
 	 * NOTE if shape != STRAIGHT, then facing index can only == North || South
 	 */
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		int shapeIndex = getBlockShapeIndex(state, worldIn, pos, context);
+	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
+		int shapeIndex = getBlockShapeIndex(state, getter, pos, context);
 		return voxelShapes[shapeIndex];
 	}
 
@@ -88,7 +104,7 @@ public class QuarterFacadeBlock extends FacadeShapeBlock {
 	 * rendered.
 	 */
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		BlockPos blockPos = context.getClickedPos();
 		BlockState blockState = this.defaultBlockState().setValue(FACING,
 				context.getHorizontalDirection().getOpposite());

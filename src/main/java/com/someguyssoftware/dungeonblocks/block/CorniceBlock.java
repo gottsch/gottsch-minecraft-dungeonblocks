@@ -1,11 +1,30 @@
-/**
+/*
+ * This file is part of  DungeonBlocks.
+ * Copyright (c) 2021, Mark Gottschling (gottsch)
  * 
+ * All rights reserved.
+ *
+ * DungeonBlocks is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * DungeonBlocks is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with DungeonBlocks.  If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 package com.someguyssoftware.dungeonblocks.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -96,8 +115,8 @@ public class CorniceBlock extends FacadeShapeBlock {
 	 * NOTE if shape != STRAIGHT, then facing index can only == North || South
 	 */
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		int shapeIndex = getBlockShapeIndex(state, worldIn, pos, context);
+	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
+		int shapeIndex = getBlockShapeIndex(state, getter, pos, context);
 		return voxelShapes[shapeIndex];
 	}
 
@@ -107,7 +126,7 @@ public class CorniceBlock extends FacadeShapeBlock {
 	 * rendered.
 	 */
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		BlockPos blockPos = context.getClickedPos();
 		BlockState blockState = this.defaultBlockState().setValue(FACING,
 				context.getHorizontalDirection().getOpposite());
@@ -124,24 +143,4 @@ public class CorniceBlock extends FacadeShapeBlock {
 	public boolean isBlockInstanceOf(Block block) {
 		return block instanceof CorniceBlock;
 	}
-
-//	/**
-//	 * 
-//	 */
-//	@Override
-//	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-//		Direction direction = state.get(FACING);
-//
-//		switch (direction) {
-//		case NORTH:
-//		default:
-//			return NORTH_FACING_SHAPE;
-//		case SOUTH:
-//			return SOUTH_FACING_SHAPE;
-//		case EAST:
-//			return EAST_FACING_AABB;
-//		case WEST:
-//			return WEST_FACING_AABB;
-//		}
-//	}
 }

@@ -1,5 +1,21 @@
-/**
+/*
+ * This file is part of  DungeonBlocks.
+ * Copyright (c) 2021, Mark Gottschling (gottsch)
  * 
+ * All rights reserved.
+ *
+ * DungeonBlocks is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * DungeonBlocks is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with DungeonBlocks.  If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 package com.someguyssoftware.dungeonblocks.block;
 
@@ -13,14 +29,15 @@ import com.someguyssoftware.dungeonblocks.DungeonBlocks;
 import com.someguyssoftware.dungeonblocks.config.DungeonBlocksConfig.BlockID;
 import com.someguyssoftware.dungeonblocks.item.ModItemGroups;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -61,7 +78,27 @@ public class ModBlocks {
 	public static  Block POLISHED_DIORITE_FACADE;
 	public static  Block ANDESITE_FACADE;
 	public static  Block POLISHED_ANDESITE_FACADE;
-
+	// 1.16/1.17/1.18
+	public static  Block BLACKSTONE_FACADE;
+	public static Block POLISHED_BLACKSTONE_FACADE;
+	public static Block CHISELED_POLISHED_BLACKSTONE_FACADE;
+	public static Block GILDED_BLACKSTONE_FACADE;
+	public static Block POLISHED_BLACKSTONE_BRICKS_FACADE;
+	public static Block CRACKED_POLISHED_BLACKSTONE_BRICKS_FACADE;
+	
+	public static  Block DEEPSLATE_FACADE;
+	public static  Block DEEPSLATE_BRICKS_FACADE;
+	public static  Block CRACKED_DEEPSLATE_BRICKS_FACADE;
+	public static  Block COBBLED_DEEPSLATE_FACADE;
+	public static  Block POLISHED_DEEPSLATE_FACADE;
+	public static  Block CHISELED_DEEPSLATE_FACADE;
+	public static  Block DEEPSLATE_TILES_FACADE;
+	public static  Block CRACKED_DEEPSLATE_TILES_FACADE;
+	
+//	public static Block TUFF_FACADE;
+//	public static Block CALCITE;
+	
+	
 	// quarter facade
 	public static  Block STONE_QUARTER_FACADE;
 	public static  Block SMOOTH_STONE_QUARTER_FACADE;
@@ -87,7 +124,21 @@ public class ModBlocks {
 	public static  Block POLISHED_DIORITE_QUARTER_FACADE;
 	public static  Block ANDESITE_QUARTER_FACADE;
 	public static  Block POLISHED_ANDESITE_QUARTER_FACADE;
-
+	public static  Block BLACKSTONE_QUARTER_FACADE;
+	public static  Block POLISHED_BLACKSTONE_QUARTER_FACADE;
+	public static  Block CHISELED_POLISHED_BLACKSTONE_QUARTER_FACADE;
+	public static  Block GILDED_BLACKSTONE_QUARTER_FACADE;
+	public static  Block POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE;
+	public static  Block CRACKED_POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE;
+	public static  Block DEEPSLATE_QUARTER_FACADE;
+	public static  Block DEEPSLATE_BRICKS_QUARTER_FACADE;
+	public static  Block CRACKED_DEEPSLATE_BRICKS_QUARTER_FACADE;
+	public static  Block COBBLED_DEEPSLATE_QUARTER_FACADE;
+	public static  Block POLISHED_DEEPSLATE_QUARTER_FACADE;
+	public static  Block CHISELED_DEEPSLATE_QUARTER_FACADE;
+	public static  Block DEEPSLATE_TILES_QUARTER_FACADE;
+	public static  Block CRACKED_DEEPSLATE_TILES_QUARTER_FACADE;
+	
 	// fluted
 	public static  Block STONE_FLUTED;
 	public static  Block SMOOTH_STONE_FLUTED;
@@ -113,6 +164,20 @@ public class ModBlocks {
 	public static  Block POLISHED_DIORITE_FLUTED;
 	public static  Block ANDESITE_FLUTED;
 	public static  Block POLISHED_ANDESITE_FLUTED;
+	public static Block BLACKSTONE_FLUTED;
+	public static Block POLISHED_BLACKSTONE_FLUTED;
+	public static Block CHISELED_POLISHED_BLACKSTONE_FLUTED;
+	public static Block GILDED_BLACKSTONE_FLUTED;
+	public static Block POLISHED_BLACKSTONE_BRICKS_FLUTED;
+	public static Block CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED;
+	public static Block DEEPSLATE_FLUTED;
+	public static Block DEEPSLATE_BRICKS_FLUTED;
+	public static Block CRACKED_DEEPSLATE_BRICKS_FLUTED;
+	public static Block COBBLED_DEEPSLATE_FLUTED;
+	public static Block POLISHED_DEEPSLATE_FLUTED;
+	public static Block CHISELED_DEEPSLATE_FLUTED;
+	public static Block DEEPSLATE_TILES_FLUTED;
+	public static Block CRACKED_DEEPSLATE_TILES_FLUTED;
 
 	// fluted facade
 	public static  Block STONE_FLUTED_FACADE;
@@ -139,7 +204,22 @@ public class ModBlocks {
 	public static  Block POLISHED_DIORITE_FLUTED_FACADE;
 	public static  Block ANDESITE_FLUTED_FACADE;
 	public static  Block POLISHED_ANDESITE_FLUTED_FACADE;
+	public static Block BLACKSTONE_FLUTED_FACADE;
+	public static Block POLISHED_BLACKSTONE_FLUTED_FACADE;
+	public static Block CHISELED_POLISHED_BLACKSTONE_FLUTED_FACADE;
+	public static Block GILDED_BLACKSTONE_FLUTED_FACADE;
+	public static Block POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE;
+	public static Block CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE;
+	public static Block DEEPSLATE_FLUTED_FACADE;
+	public static Block DEEPSLATE_BRICKS_FLUTED_FACADE;
+	public static Block CRACKED_DEEPSLATE_BRICKS_FLUTED_FACADE;
+	public static Block COBBLED_DEEPSLATE_FLUTED_FACADE;
+	public static Block POLISHED_DEEPSLATE_FLUTED_FACADE;
+	public static Block CHISELED_DEEPSLATE_FLUTED_FACADE;
+	public static Block DEEPSLATE_TILES_FLUTED_FACADE;
+	public static Block CRACKED_DEEPSLATE_TILES_FLUTED_FACADE;
 
+	
 	// sill
 	public static  Block STONE_SILL;
 	public static  Block SMOOTH_STONE_SILL;
@@ -165,6 +245,20 @@ public class ModBlocks {
 	public static  Block POLISHED_DIORITE_SILL;
 	public static  Block ANDESITE_SILL;
 	public static  Block POLISHED_ANDESITE_SILL;
+	public static Block BLACKSTONE_SILL;
+	public static Block POLISHED_BLACKSTONE_SILL;
+	public static Block CHISELED_POLISHED_BLACKSTONE_SILL;
+	public static Block GILDED_BLACKSTONE_SILL;
+	public static Block POLISHED_BLACKSTONE_BRICKS_SILL;
+	public static Block CRACKED_POLISHED_BLACKSTONE_BRICKS_SILL;
+	public static Block DEEPSLATE_SILL;
+	public static Block DEEPSLATE_BRICKS_SILL;
+	public static Block CRACKED_DEEPSLATE_BRICKS_SILL;
+	public static Block COBBLED_DEEPSLATE_SILL;
+	public static Block POLISHED_DEEPSLATE_SILL;
+	public static Block CHISELED_DEEPSLATE_SILL;
+	public static Block DEEPSLATE_TILES_SILL;
+	public static Block CRACKED_DEEPSLATE_TILES_SILL;
 
 	// double sill
 	public static  Block STONE_DOUBLE_SILL;
@@ -383,15 +477,45 @@ public class ModBlocks {
 			DIORITE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.DIORITE_FACADE_ID,
 					Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F));
 			POLISHED_DIORITE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_DIORITE_FACADE_ID,
-					Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F));
+					BlockBehaviour.Properties.copy(Blocks.DIORITE));
 			ANDESITE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.ANDESITE_FACADE_ID,
-					Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F));
+					BlockBehaviour.Properties.copy(Blocks.ANDESITE));
 			POLISHED_ANDESITE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_ANDESITE_FACADE_ID,
-					Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F));
+					BlockBehaviour.Properties.copy(Blocks.ANDESITE));
+
+			BLACKSTONE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.BLACKSTONE_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.BLACKSTONE));	
+			POLISHED_BLACKSTONE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_BLACKSTONE_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.BLACKSTONE));	
+			CHISELED_POLISHED_BLACKSTONE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.CHISELED_POLISHED_BLACKSTONE_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.BLACKSTONE));	
+			GILDED_BLACKSTONE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.GILDED_BLACKSTONE_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE));	
+			POLISHED_BLACKSTONE_BRICKS_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_BLACKSTONE_BRICKS_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.BLACKSTONE));	
+			CRACKED_POLISHED_BLACKSTONE_BRICKS_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.BLACKSTONE));			
+
+			DEEPSLATE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.DEEPSLATE_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE));
+			DEEPSLATE_BRICKS_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.DEEPSLATE_BRICKS_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE));
+			CRACKED_DEEPSLATE_BRICKS_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.CRACKED_DEEPSLATE_BRICKS_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE));
+			COBBLED_DEEPSLATE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.COBBLED_DEEPSLATE_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE));
+			POLISHED_DEEPSLATE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_DEEPSLATE_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE));
+			CHISELED_DEEPSLATE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.CHISELED_DEEPSLATE_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE));
+			DEEPSLATE_TILES_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.DEEPSLATE_TILES_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE));
+			CRACKED_DEEPSLATE_TILES_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.CRACKED_DEEPSLATE_TILES_FACADE_ID,
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE));
 
 			// quarter facade
 			STONE_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, BlockID.STONE_QUARTER_FACADE_ID,
-					Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F));
+					BlockBehaviour.Properties.copy(Blocks.STONE));
 			SMOOTH_STONE_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID,
 					BlockID.SMOOTH_STONE_QUARTER_FACADE_ID,
 					Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F));
@@ -456,7 +580,49 @@ public class ModBlocks {
 			POLISHED_ANDESITE_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID,
 					BlockID.POLISHED_ANDESITE_QUARTER_FACADE_ID,
 					Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F));
-
+			BLACKSTONE_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.BLACKSTONE_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.BLACKSTONE));
+			POLISHED_BLACKSTONE_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.POLISHED_BLACKSTONE_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE));
+			CHISELED_POLISHED_BLACKSTONE_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CHISELED_POLISHED_BLACKSTONE_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE));
+			GILDED_BLACKSTONE_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.GILDED_BLACKSTONE_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE));
+			POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS));
+			CRACKED_POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS));
+			DEEPSLATE_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.DEEPSLATE_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE));
+			DEEPSLATE_BRICKS_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.DEEPSLATE_BRICKS_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS));
+			CRACKED_DEEPSLATE_BRICKS_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CRACKED_DEEPSLATE_BRICKS_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS));
+			COBBLED_DEEPSLATE_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.COBBLED_DEEPSLATE_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE));
+			POLISHED_DEEPSLATE_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.POLISHED_DEEPSLATE_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE));
+			CHISELED_DEEPSLATE_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CHISELED_DEEPSLATE_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE));
+			DEEPSLATE_TILES_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.DEEPSLATE_TILES_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES));
+			CRACKED_DEEPSLATE_TILES_QUARTER_FACADE = new QuarterFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CRACKED_DEEPSLATE_TILES_QUARTER_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES));
+			
 			// fluted
 			STONE_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, BlockID.STONE_FLUTED_ID,
 					Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F));
@@ -508,6 +674,49 @@ public class ModBlocks {
 					Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F));
 			POLISHED_ANDESITE_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_ANDESITE_FLUTED_ID,
 					Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F));
+
+			BLACKSTONE_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.BLACKSTONE_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.BLACKSTONE));
+			POLISHED_BLACKSTONE_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.POLISHED_BLACKSTONE_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE));
+			CHISELED_POLISHED_BLACKSTONE_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CHISELED_POLISHED_BLACKSTONE_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE));
+			GILDED_BLACKSTONE_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.GILDED_BLACKSTONE_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE));
+			POLISHED_BLACKSTONE_BRICKS_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.POLISHED_BLACKSTONE_BRICKS_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS));
+			CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS));
+			DEEPSLATE_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.DEEPSLATE_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE));
+			DEEPSLATE_BRICKS_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.DEEPSLATE_BRICKS_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS));
+			CRACKED_DEEPSLATE_BRICKS_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CRACKED_DEEPSLATE_BRICKS_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS));
+			COBBLED_DEEPSLATE_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.COBBLED_DEEPSLATE_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE));
+			POLISHED_DEEPSLATE_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.POLISHED_DEEPSLATE_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE));
+			CHISELED_DEEPSLATE_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CHISELED_DEEPSLATE_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE));
+			DEEPSLATE_TILES_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.DEEPSLATE_TILES_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES));
+			CRACKED_DEEPSLATE_TILES_FLUTED = new FlutedBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CRACKED_DEEPSLATE_TILES_FLUTED_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES));
 
 			// fluted facade
 			STONE_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, BlockID.STONE_FLUTED_FACADE_ID,
@@ -575,6 +784,49 @@ public class ModBlocks {
 					BlockID.POLISHED_ANDESITE_FLUTED_FACADE_ID,
 					Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F));
 
+			BLACKSTONE_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.BLACKSTONE_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.BLACKSTONE));
+			POLISHED_BLACKSTONE_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.POLISHED_BLACKSTONE_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE));
+			CHISELED_POLISHED_BLACKSTONE_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CHISELED_POLISHED_BLACKSTONE_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE));
+			GILDED_BLACKSTONE_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.GILDED_BLACKSTONE_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE));
+			POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS));
+			CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS));
+			DEEPSLATE_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.DEEPSLATE_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE));
+			DEEPSLATE_BRICKS_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.DEEPSLATE_BRICKS_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS));
+			CRACKED_DEEPSLATE_BRICKS_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CRACKED_DEEPSLATE_BRICKS_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS));
+			COBBLED_DEEPSLATE_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.COBBLED_DEEPSLATE_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE));
+			POLISHED_DEEPSLATE_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.POLISHED_DEEPSLATE_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE));
+			CHISELED_DEEPSLATE_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CHISELED_DEEPSLATE_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE));
+			DEEPSLATE_TILES_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.DEEPSLATE_TILES_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES));
+			CRACKED_DEEPSLATE_TILES_FLUTED_FACADE = new FlutedFacadeBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CRACKED_DEEPSLATE_TILES_FLUTED_FACADE_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES));
+			
 			// sill
 			STONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.STONE_SILL_ID,
 					Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F));
@@ -626,6 +878,48 @@ public class ModBlocks {
 					Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F));
 			POLISHED_ANDESITE_SILL = new SillBlock(DungeonBlocks.MOD_ID, BlockID.POLISHED_ANDESITE_SILL_ID,
 					Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F));
+			BLACKSTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.BLACKSTONE_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.BLACKSTONE));
+			POLISHED_BLACKSTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.POLISHED_BLACKSTONE_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE));
+			CHISELED_POLISHED_BLACKSTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CHISELED_POLISHED_BLACKSTONE_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CHISEL_POLISHED_BLACKSTONE));
+			GILDED_BLACKSTONE_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.GILDED_BLACKSTONE_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE));
+			POLISHED_BLACKSTONE_BRICKS_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.POLISHED_BLACKSTONE_BRICKS_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS));
+			CRACKED_POLISHED_BLACKSTONE_BRICKS_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE));
+			DEEPSLATE_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.DEEPSLATE_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE));
+			DEEPSLATE_BRICKS_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.DEEPSLATE_BRICKS_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS));
+			CRACKED_DEEPSLATE_BRICKS_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CRACKED_DEEPSLATE_BRICKS_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS));
+			COBBLED_DEEPSLATE_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.COBBLED_DEEPSLATE_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE));
+			POLISHED_DEEPSLATE_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.POLISHED_DEEPSLATE_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE));
+			CHISELED_DEEPSLATE_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CHISELED_DEEPSLATE_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE));
+			DEEPSLATE_TILES_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.DEEPSLATE_TILES_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES));
+			CRACKED_DEEPSLATE_TILES_SILL = new SillBlock(DungeonBlocks.MOD_ID, 
+					BlockID.CRACKED_DEEPSLATE_TILES_SILL_ID, 
+					BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES));
 
 			// double sill
 			STONE_DOUBLE_SILL = new DoubleSillBlock(DungeonBlocks.MOD_ID, BlockID.STONE_DOUBLE_SILL_ID,
@@ -1035,6 +1329,21 @@ public class ModBlocks {
 			BLOCKS.add(POLISHED_DIORITE_FACADE);
 			BLOCKS.add(ANDESITE_FACADE);
 			BLOCKS.add(POLISHED_ANDESITE_FACADE);
+			
+			BLOCKS.add(BLACKSTONE_FACADE);
+			BLOCKS.add(POLISHED_BLACKSTONE_FACADE);
+			BLOCKS.add(CHISELED_POLISHED_BLACKSTONE_FACADE);
+			BLOCKS.add(GILDED_BLACKSTONE_FACADE);
+			BLOCKS.add(POLISHED_BLACKSTONE_BRICKS_FACADE);
+			BLOCKS.add(CRACKED_POLISHED_BLACKSTONE_BRICKS_FACADE);
+			BLOCKS.add(DEEPSLATE_FACADE);
+			BLOCKS.add(DEEPSLATE_BRICKS_FACADE);
+			BLOCKS.add(CRACKED_DEEPSLATE_BRICKS_FACADE);
+			BLOCKS.add(COBBLED_DEEPSLATE_FACADE);
+			BLOCKS.add(POLISHED_DEEPSLATE_FACADE);
+			BLOCKS.add(CHISELED_DEEPSLATE_FACADE);
+			BLOCKS.add(DEEPSLATE_TILES_FACADE);
+			BLOCKS.add(CRACKED_DEEPSLATE_TILES_FACADE);
 
 			// quarter facades
 			BLOCKS.add(STONE_QUARTER_FACADE);
@@ -1061,7 +1370,21 @@ public class ModBlocks {
 			BLOCKS.add(POLISHED_DIORITE_QUARTER_FACADE);
 			BLOCKS.add(ANDESITE_QUARTER_FACADE);
 			BLOCKS.add(POLISHED_ANDESITE_QUARTER_FACADE);
-
+			BLOCKS.add(BLACKSTONE_QUARTER_FACADE);
+			BLOCKS.add(POLISHED_BLACKSTONE_QUARTER_FACADE);
+			BLOCKS.add(CHISELED_POLISHED_BLACKSTONE_QUARTER_FACADE);
+			BLOCKS.add(GILDED_BLACKSTONE_QUARTER_FACADE);
+			BLOCKS.add(POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE);
+			BLOCKS.add(CRACKED_POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE);
+			BLOCKS.add(DEEPSLATE_QUARTER_FACADE);
+			BLOCKS.add(DEEPSLATE_BRICKS_QUARTER_FACADE);
+			BLOCKS.add(CRACKED_DEEPSLATE_BRICKS_QUARTER_FACADE);
+			BLOCKS.add(COBBLED_DEEPSLATE_QUARTER_FACADE);
+			BLOCKS.add(POLISHED_DEEPSLATE_QUARTER_FACADE);
+			BLOCKS.add(CHISELED_DEEPSLATE_QUARTER_FACADE);
+			BLOCKS.add(DEEPSLATE_TILES_QUARTER_FACADE);
+			BLOCKS.add(CRACKED_DEEPSLATE_TILES_QUARTER_FACADE);
+			
 			// fluted
 			BLOCKS.add(STONE_FLUTED);
 			BLOCKS.add(SMOOTH_STONE_FLUTED);
@@ -1087,6 +1410,20 @@ public class ModBlocks {
 			BLOCKS.add(POLISHED_DIORITE_FLUTED);
 			BLOCKS.add(ANDESITE_FLUTED);
 			BLOCKS.add(POLISHED_ANDESITE_FLUTED);
+			BLOCKS.add(BLACKSTONE_FLUTED);
+			BLOCKS.add(POLISHED_BLACKSTONE_FLUTED);
+			BLOCKS.add(CHISELED_POLISHED_BLACKSTONE_FLUTED);
+			BLOCKS.add(GILDED_BLACKSTONE_FLUTED);
+			BLOCKS.add(POLISHED_BLACKSTONE_BRICKS_FLUTED);
+			BLOCKS.add(CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED);
+			BLOCKS.add(DEEPSLATE_FLUTED);
+			BLOCKS.add(DEEPSLATE_BRICKS_FLUTED);
+			BLOCKS.add(CRACKED_DEEPSLATE_BRICKS_FLUTED);
+			BLOCKS.add(COBBLED_DEEPSLATE_FLUTED);
+			BLOCKS.add(POLISHED_DEEPSLATE_FLUTED);
+			BLOCKS.add(CHISELED_DEEPSLATE_FLUTED);
+			BLOCKS.add(DEEPSLATE_TILES_FLUTED);
+			BLOCKS.add(CRACKED_DEEPSLATE_TILES_FLUTED);
 
 			// fluted facade
 			BLOCKS.add(STONE_FLUTED_FACADE);
@@ -1113,6 +1450,20 @@ public class ModBlocks {
 			BLOCKS.add(POLISHED_DIORITE_FLUTED_FACADE);
 			BLOCKS.add(ANDESITE_FLUTED_FACADE);
 			BLOCKS.add(POLISHED_ANDESITE_FLUTED_FACADE);
+			BLOCKS.add(BLACKSTONE_FLUTED_FACADE);
+			BLOCKS.add(POLISHED_BLACKSTONE_FLUTED_FACADE);
+			BLOCKS.add(CHISELED_POLISHED_BLACKSTONE_FLUTED_FACADE);
+			BLOCKS.add(GILDED_BLACKSTONE_FLUTED_FACADE);
+			BLOCKS.add(POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE);
+			BLOCKS.add(CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE);
+			BLOCKS.add(DEEPSLATE_FLUTED_FACADE);
+			BLOCKS.add(DEEPSLATE_BRICKS_FLUTED_FACADE);
+			BLOCKS.add(CRACKED_DEEPSLATE_BRICKS_FLUTED_FACADE);
+			BLOCKS.add(COBBLED_DEEPSLATE_FLUTED_FACADE);
+			BLOCKS.add(POLISHED_DEEPSLATE_FLUTED_FACADE);
+			BLOCKS.add(CHISELED_DEEPSLATE_FLUTED_FACADE);
+			BLOCKS.add(DEEPSLATE_TILES_FLUTED_FACADE);
+			BLOCKS.add(CRACKED_DEEPSLATE_TILES_FLUTED_FACADE);
 
 			// sill
 			BLOCKS.add(STONE_SILL);
@@ -1139,6 +1490,20 @@ public class ModBlocks {
 			BLOCKS.add(POLISHED_DIORITE_SILL);
 			BLOCKS.add(ANDESITE_SILL);
 			BLOCKS.add(POLISHED_ANDESITE_SILL);
+			BLOCKS.add(BLACKSTONE_SILL);
+			BLOCKS.add(POLISHED_BLACKSTONE_SILL);
+			BLOCKS.add(CHISELED_POLISHED_BLACKSTONE_SILL);
+			BLOCKS.add(GILDED_BLACKSTONE_SILL);
+			BLOCKS.add(POLISHED_BLACKSTONE_BRICKS_SILL);
+			BLOCKS.add(CRACKED_POLISHED_BLACKSTONE_BRICKS_SILL);
+			BLOCKS.add(DEEPSLATE_SILL);
+			BLOCKS.add(DEEPSLATE_BRICKS_SILL);
+			BLOCKS.add(CRACKED_DEEPSLATE_BRICKS_SILL);
+			BLOCKS.add(COBBLED_DEEPSLATE_SILL);
+			BLOCKS.add(POLISHED_DEEPSLATE_SILL);
+			BLOCKS.add(CHISELED_DEEPSLATE_SILL);
+			BLOCKS.add(DEEPSLATE_TILES_SILL);
+			BLOCKS.add(CRACKED_DEEPSLATE_TILES_SILL);
 
 			// double sill
 			BLOCKS.add(STONE_DOUBLE_SILL);
