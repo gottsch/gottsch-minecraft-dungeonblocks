@@ -19,8 +19,6 @@
  */
 package com.someguyssoftware.dungeonblocks.block;
 
-import com.someguyssoftware.gottschcore.block.BasedBlock;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -33,7 +31,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * @author Mark Gottschling on Jan 18, 2020
  *
  */
-public class PillarBlock extends BasedBlock {
+public class PillarBlock extends NonCubeBasedBlock {
 	
 	// Voxels are like the bounding boxes (AABBs) NF= North Facing, SF = South Facing, etc
 	private static final VoxelShape NORTH_SOUTH_AABB = Block.box(3.0D, 3.0D, 0.0D, 13.0D, 13.0D, 16.0D);

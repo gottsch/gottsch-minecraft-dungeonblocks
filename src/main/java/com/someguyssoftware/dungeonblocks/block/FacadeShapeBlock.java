@@ -20,9 +20,11 @@
 package com.someguyssoftware.dungeonblocks.block;
 
 import com.someguyssoftware.dungeonblocks.state.properties.FacadeShape;
-import com.someguyssoftware.gottschcore.block.FacingBlock;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -31,7 +33,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
  * @author Mark Gottschling on Mar 25, 2020
  *
  */
-public abstract class FacadeShapeBlock extends FacingBlock implements IFacadeShapeBlock {
+public abstract class FacadeShapeBlock extends NonCubeFacingBlock implements IFacadeShapeBlock {
 
 	/**
 	 * 
@@ -59,4 +61,25 @@ public abstract class FacadeShapeBlock extends FacingBlock implements IFacadeSha
 	@Override
 	public abstract boolean isBlockInstanceOf(Block block);
 
+	@Override
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState state2, boolean flag) {
+		level.neighborChanged(pos, state.getBlock(), pos);
+	}
+	
+	@Override
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState state2, boolean flag) {
+		level.neighborChanged(pos, state.getBlock(), pos);
+	}
+	
+	@Override
+	public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor level, BlockPos blockPos, BlockPos blockPos2) {
+		// custom method to get block state
+		BlockState placementBlockState = getBlockStateForPlacement((Level)level, blockState, blockPos);
+		return placementBlockState;
+	}
+	
+	@Override
+	public boolean useShapeForLightOcclusion(BlockState state) {
+		return true;
+	}
 }

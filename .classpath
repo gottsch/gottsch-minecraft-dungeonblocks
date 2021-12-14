@@ -478,7 +478,7 @@
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="F:/Development/workspace/git/gottsch-minecraft-GottschCore/build/libs/GottschCore-mc1.18.1-f39.0.0-v1.0.0.jar">
+	<classpathentry kind="lib" path="F:/Development/workspace/git/gottsch-minecraft-GottschCore/build/libs/GottschCore-mc1.18.1-f39.0.0-v1.0.0.jar" sourcepath="/GottschCore">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>

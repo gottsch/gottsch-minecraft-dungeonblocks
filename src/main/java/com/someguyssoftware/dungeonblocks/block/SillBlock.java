@@ -19,8 +19,6 @@
  */
 package com.someguyssoftware.dungeonblocks.block;
 
-import com.someguyssoftware.gottschcore.block.FacingBlock;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -34,7 +32,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * @author Mark Gottschling on Jan 18, 2020
  *
  */
-public class SillBlock extends FacingBlock {
+public class SillBlock extends NonCubeFacingBlock {
 	
 	// Voxels are like the bounding boxes (AABBs) NF= North Facing, SF = South Facing, etc
 	private static final VoxelShape MAIN_PART = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);

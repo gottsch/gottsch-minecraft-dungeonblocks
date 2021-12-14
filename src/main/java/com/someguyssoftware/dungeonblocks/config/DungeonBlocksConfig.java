@@ -284,6 +284,20 @@ public class DungeonBlocksConfig extends AbstractConfig {
 		public static final String POLISHED_DIORITE_DOUBLE_SILL_ID = "polished_diorite_double_sill_block";
 		public static final String ANDESITE_DOUBLE_SILL_ID = "andesite_double_sill_block";
 		public static final String POLISHED_ANDESITE_DOUBLE_SILL_ID = "polished_andesite_double_sill_block";
+		public static final String BLACKSTONE_DOUBLE_SILL_ID = "blackstone_double_sill_block";
+		public static final String POLISHED_BLACKSTONE_DOUBLE_SILL_ID = "polished_blackstone_double_sill_block";
+		public static final String CHISELED_POLISHED_BLACKSTONE_DOUBLE_SILL_ID = "chiseled_polished_blackstone_double_sill_block";
+		public static final String GILDED_BLACKSTONE_DOUBLE_SILL_ID = "gilded_blackstone_double_sill_block";
+		public static final String POLISHED_BLACKSTONE_BRICKS_DOUBLE_SILL_ID = "polished_blackstone_bricks_double_sill_block";
+		public static final String CRACKED_POLISHED_BLACKSTONE_BRICKS_DOUBLE_SILL_ID = "cracked_polished_blackstone_bricks_double_sill_block";
+		public static final String DEEPSLATE_DOUBLE_SILL_ID = "deepslate_double_sill_block";
+		public static final String DEEPSLATE_BRICKS_DOUBLE_SILL_ID = "deepslate_bricks_double_sill_block";
+		public static final String CRACKED_DEEPSLATE_BRICKS_DOUBLE_SILL_ID = "cracked_deepslate_bricks_double_sill_block";
+		public static final String COBBLED_DEEPSLATE_DOUBLE_SILL_ID = "cobbled_deepslate_double_sill_block";
+		public static final String POLISHED_DEEPSLATE_DOUBLE_SILL_ID = "polished_deepslate_double_sill_block";
+		public static final String CHISELED_DEEPSLATE_DOUBLE_SILL_ID = "chiseled_deepslate_double_sill_block";
+		public static final String DEEPSLATE_TILES_DOUBLE_SILL_ID = "deepslate_tiles_double_sill_block";
+		public static final String CRACKED_DEEPSLATE_TILES_DOUBLE_SILL_ID = "cracked_deepslate_tiles_double_sill_block";
 
 		// cornice
 		public static final String STONE_CORNICE_ID = "stone_cornice_block";
@@ -310,6 +324,20 @@ public class DungeonBlocksConfig extends AbstractConfig {
 		public static final String POLISHED_DIORITE_CORNICE_ID = "polished_diorite_cornice_block";
 		public static final String ANDESITE_CORNICE_ID = "andesite_cornice_block";
 		public static final String POLISHED_ANDESITE_CORNICE_ID = "polished_andesite_cornice_block";
+		public static final String BLACKSTONE_CORNICE_ID = "blackstone_cornice_block";
+		public static final String POLISHED_BLACKSTONE_CORNICE_ID = "polished_blackstone_cornice_block";
+		public static final String CHISELED_POLISHED_BLACKSTONE_CORNICE_ID = "chiseled_polished_blackstone_cornice_block";
+		public static final String GILDED_BLACKSTONE_CORNICE_ID = "gilded_blackstone_cornice_block";
+		public static final String POLISHED_BLACKSTONE_BRICKS_CORNICE_ID = "polished_blackstone_bricks_cornice_block";
+		public static final String CRACKED_POLISHED_BLACKSTONE_BRICKS_CORNICE_ID = "cracked_polished_blackstone_bricks_cornice_block";
+		public static final String DEEPSLATE_CORNICE_ID = "deepslate_cornice_block";
+		public static final String DEEPSLATE_BRICKS_CORNICE_ID = "deepslate_bricks_cornice_block";
+		public static final String CRACKED_DEEPSLATE_BRICKS_CORNICE_ID = "cracked_deepslate_bricks_cornice_block";
+		public static final String COBBLED_DEEPSLATE_CORNICE_ID = "cobbled_deepslate_cornice_block";
+		public static final String POLISHED_DEEPSLATE_CORNICE_ID = "polished_deepslate_cornice_block";
+		public static final String CHISELED_DEEPSLATE_CORNICE_ID = "chiseled_deepslate_cornice_block";
+		public static final String DEEPSLATE_TILES_CORNICE_ID = "deepslate_tiles_cornice_block";
+		public static final String CRACKED_DEEPSLATE_TILES_CORNICE_ID = "cracked_deepslate_tiles_cornice_block";
 
 		// crown molding
 		public static final String STONE_CROWN_MOLDING_ID = "stone_crown_molding_block";
@@ -336,6 +364,20 @@ public class DungeonBlocksConfig extends AbstractConfig {
 		public static final String POLISHED_DIORITE_CROWN_MOLDING_ID = "polished_diorite_crown_molding_block";
 		public static final String ANDESITE_CROWN_MOLDING_ID = "andesite_crown_molding_block";
 		public static final String POLISHED_ANDESITE_CROWN_MOLDING_ID = "polished_andesite_crown_molding_block";
+		public static final String BLACKSTONE_CROWN_MOLDING_ID = "blackstone_crown_molding_block";
+		public static final String POLISHED_BLACKSTONE_CROWN_MOLDING_ID = "polished_blackstone_crown_molding_block";
+		public static final String CHISELED_POLISHED_BLACKSTONE_CROWN_MOLDING_ID = "chiseled_polished_blackstone_crown_molding_block";
+		public static final String GILDED_BLACKSTONE_CROWN_MOLDING_ID = "gilded_blackstone_crown_molding_block";
+		public static final String POLISHED_BLACKSTONE_BRICKS_CROWN_MOLDING_ID = "polished_blackstone_bricks_crown_molding_block";
+		public static final String CRACKED_POLISHED_BLACKSTONE_BRICKS_CROWN_MOLDING_ID = "cracked_polished_blackstone_bricks_crown_molding_block";
+		public static final String DEEPSLATE_CROWN_MOLDING_ID = "deepslate_crown_molding_block";
+		public static final String DEEPSLATE_BRICKS_CROWN_MOLDING_ID = "deepslate_bricks_crown_molding_block";
+		public static final String CRACKED_DEEPSLATE_BRICKS_CROWN_MOLDING_ID = "cracked_deepslate_bricks_crown_molding_block";
+		public static final String COBBLED_DEEPSLATE_CROWN_MOLDING_ID = "cobbled_deepslate_crown_molding_block";
+		public static final String POLISHED_DEEPSLATE_CROWN_MOLDING_ID = "polished_deepslate_crown_molding_block";
+		public static final String CHISELED_DEEPSLATE_CROWN_MOLDING_ID = "chiseled_deepslate_crown_molding_block";
+		public static final String DEEPSLATE_TILES_CROWN_MOLDING_ID = "deepslate_tiles_crown_molding_block";
+		public static final String CRACKED_DEEPSLATE_TILES_CROWN_MOLDING_ID = "cracked_deepslate_tiles_crown_molding_block";
 
 		// pillar base
 		public static final String STONE_PILLAR_BASE_ID = "stone_pillar_base_block";
@@ -362,6 +404,20 @@ public class DungeonBlocksConfig extends AbstractConfig {
 		public static final String POLISHED_DIORITE_PILLAR_BASE_ID = "polished_diorite_pillar_base_block";
 		public static final String ANDESITE_PILLAR_BASE_ID = "andesite_pillar_base_block";
 		public static final String POLISHED_ANDESITE_PILLAR_BASE_ID = "polished_andesite_pillar_base_block";
+		public static final String BLACKSTONE_PILLAR_BASE_ID = "blackstone_pillar_base_block";
+		public static final String POLISHED_BLACKSTONE_PILLAR_BASE_ID = "polished_blackstone_pillar_base_block";
+		public static final String CHISELED_POLISHED_BLACKSTONE_PILLAR_BASE_ID = "chiseled_polished_blackstone_pillar_base_block";
+		public static final String GILDED_BLACKSTONE_PILLAR_BASE_ID = "gilded_blackstone_pillar_base_block";
+		public static final String POLISHED_BLACKSTONE_BRICKS_PILLAR_BASE_ID = "polished_blackstone_bricks_pillar_base_block";
+		public static final String CRACKED_POLISHED_BLACKSTONE_BRICKS_PILLAR_BASE_ID = "cracked_polished_blackstone_bricks_pillar_base_block";
+		public static final String DEEPSLATE_PILLAR_BASE_ID = "deepslate_pillar_base_block";
+		public static final String DEEPSLATE_BRICKS_PILLAR_BASE_ID = "deepslate_bricks_pillar_base_block";
+		public static final String CRACKED_DEEPSLATE_BRICKS_PILLAR_BASE_ID = "cracked_deepslate_bricks_pillar_base_block";
+		public static final String COBBLED_DEEPSLATE_PILLAR_BASE_ID = "cobbled_deepslate_pillar_base_block";
+		public static final String POLISHED_DEEPSLATE_PILLAR_BASE_ID = "polished_deepslate_pillar_base_block";
+		public static final String CHISELED_DEEPSLATE_PILLAR_BASE_ID = "chiseled_deepslate_pillar_base_block";
+		public static final String DEEPSLATE_TILES_PILLAR_BASE_ID = "deepslate_tiles_pillar_base_block";
+		public static final String CRACKED_DEEPSLATE_TILES_PILLAR_BASE_ID = "cracked_deepslate_tiles_pillar_base_block";
 
 		// pillar
 		public static final String STONE_PILLAR_ID = "stone_pillar_block";
@@ -388,6 +444,20 @@ public class DungeonBlocksConfig extends AbstractConfig {
 		public static final String POLISHED_DIORITE_PILLAR_ID = "polished_diorite_pillar_block";
 		public static final String ANDESITE_PILLAR_ID = "andesite_pillar_block";
 		public static final String POLISHED_ANDESITE_PILLAR_ID = "polished_andesite_pillar_block";
+		public static final String BLACKSTONE_PILLAR_ID = "blackstone_pillar_block";
+		public static final String POLISHED_BLACKSTONE_PILLAR_ID = "polished_blackstone_pillar_block";
+		public static final String CHISELED_POLISHED_BLACKSTONE_PILLAR_ID = "chiseled_polished_blackstone_pillar_block";
+		public static final String GILDED_BLACKSTONE_PILLAR_ID = "gilded_blackstone_pillar_block";
+		public static final String POLISHED_BLACKSTONE_BRICKS_PILLAR_ID = "polished_blackstone_bricks_pillar_block";
+		public static final String CRACKED_POLISHED_BLACKSTONE_BRICKS_PILLAR_ID = "cracked_polished_blackstone_bricks_pillar_block";
+		public static final String DEEPSLATE_PILLAR_ID = "deepslate_pillar_block";
+		public static final String DEEPSLATE_BRICKS_PILLAR_ID = "deepslate_bricks_pillar_block";
+		public static final String CRACKED_DEEPSLATE_BRICKS_PILLAR_ID = "cracked_deepslate_bricks_pillar_block";
+		public static final String COBBLED_DEEPSLATE_PILLAR_ID = "cobbled_deepslate_pillar_block";
+		public static final String POLISHED_DEEPSLATE_PILLAR_ID = "polished_deepslate_pillar_block";
+		public static final String CHISELED_DEEPSLATE_PILLAR_ID = "chiseled_deepslate_pillar_block";
+		public static final String DEEPSLATE_TILES_PILLAR_ID = "deepslate_tiles_pillar_block";
+		public static final String CRACKED_DEEPSLATE_TILES_PILLAR_ID = "cracked_deepslate_tiles_pillar_block";
 
 		// wall sconce
 		public static final String STONE_WALL_SCONCE_ID = "stone_wall_sconce_block";
@@ -414,6 +484,20 @@ public class DungeonBlocksConfig extends AbstractConfig {
 		public static final String POLISHED_DIORITE_WALL_SCONCE_ID = "polished_diorite_wall_sconce_block";
 		public static final String ANDESITE_WALL_SCONCE_ID = "andesite_wall_sconce_block";
 		public static final String POLISHED_ANDESITE_WALL_SCONCE_ID = "polished_andesite_wall_sconce_block";
+		public static final String BLACKSTONE_WALL_SCONCE_ID = "blackstone_wall_sconce_block";
+		public static final String POLISHED_BLACKSTONE_WALL_SCONCE_ID = "polished_blackstone_wall_sconce_block";
+		public static final String CHISELED_POLISHED_BLACKSTONE_WALL_SCONCE_ID = "chiseled_polished_blackstone_wall_sconce_block";
+		public static final String GILDED_BLACKSTONE_WALL_SCONCE_ID = "gilded_blackstone_wall_sconce_block";
+		public static final String POLISHED_BLACKSTONE_BRICKS_WALL_SCONCE_ID = "polished_blackstone_bricks_wall_sconce_block";
+		public static final String CRACKED_POLISHED_BLACKSTONE_BRICKS_WALL_SCONCE_ID = "cracked_polished_blackstone_bricks_wall_sconce_block";
+		public static final String DEEPSLATE_WALL_SCONCE_ID = "deepslate_wall_sconce_block";
+		public static final String DEEPSLATE_BRICKS_WALL_SCONCE_ID = "deepslate_bricks_wall_sconce_block";
+		public static final String CRACKED_DEEPSLATE_BRICKS_WALL_SCONCE_ID = "cracked_deepslate_bricks_wall_sconce_block";
+		public static final String COBBLED_DEEPSLATE_WALL_SCONCE_ID = "cobbled_deepslate_wall_sconce_block";
+		public static final String POLISHED_DEEPSLATE_WALL_SCONCE_ID = "polished_deepslate_wall_sconce_block";
+		public static final String CHISELED_DEEPSLATE_WALL_SCONCE_ID = "chiseled_deepslate_wall_sconce_block";
+		public static final String DEEPSLATE_TILES_WALL_SCONCE_ID = "deepslate_tiles_wall_sconce_block";
+		public static final String CRACKED_DEEPSLATE_TILES_WALL_SCONCE_ID = "cracked_deepslate_tiles_wall_sconce_block";
 
 		public static final String GRATE_ID = "grate_block";
 

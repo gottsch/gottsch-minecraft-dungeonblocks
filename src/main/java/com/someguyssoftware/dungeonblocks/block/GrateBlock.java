@@ -19,8 +19,6 @@
  */
 package com.someguyssoftware.dungeonblocks.block;
 
-import com.someguyssoftware.gottschcore.block.BasedBlock;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -34,7 +32,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * @author Mark Gottschling on Mar 5, 2020
  *
  */
-public class GrateBlock extends BasedBlock {
+public class GrateBlock extends NonCubeBasedBlock {
 
 	private static final VoxelShape UP_SHAPE = Block.box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 	private static final VoxelShape DOWN_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);

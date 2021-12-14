@@ -21,8 +21,6 @@ package com.someguyssoftware.dungeonblocks.block;
 
 import java.util.Random;
 
-import com.someguyssoftware.gottschcore.block.FacingBlock;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -39,7 +37,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * @author Mark Gottschling on Jan 18, 2020
  *
  */
-public class SconceBlock extends FacingBlock {
+public class SconceBlock extends NonCubeFacingBlock {
 
 	private static final VoxelShape NORTH_FACING_SHAPE = Block
 			.box(2.0D, 2.0D, 9.0D, 14.0D, 15.0D, 15.9999D);
