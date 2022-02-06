@@ -6,6 +6,6 @@
   },
     "1.18.1": {
         "1.1.0": "Port from 1.16.5.\nAdd Blackstone and Deepslate and variant textures.",
-        "1.1.1": "Fixed missing block loot tables."
+        "1.1.1": "Fixed missing block drops.\nUpdated to forge-1.18.1-39.0.66."
 	}
 }

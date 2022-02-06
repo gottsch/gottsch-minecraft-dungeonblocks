@@ -1,7 +1,7 @@
 {
     "type": "minecraft:stonecutting",
     "ingredient": {
-        "item": "minecraft:chisel_polished_blackstone"
+        "item": "minecraft:chiseled_polished_blackstone"
     },
     "result": "dungeonblocks:chiseled_polished_blackstone_sill_block",
     "count": 1
