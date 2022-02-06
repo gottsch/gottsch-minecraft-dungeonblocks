@@ -1,7 +1,7 @@
 {
     "type": "minecraft:stonecutting",
     "ingredient": {
-        "item": "minecraft:cracked_polished_blackstone"
+        "item": "minecraft:cracked_polished_blackstone_bricks"
     },
     "result": "dungeonblocks:cracked_polished_blackstone_bricks_sill_block",
     "count": 1

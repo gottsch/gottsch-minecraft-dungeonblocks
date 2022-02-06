@@ -535,7 +535,8 @@ public class ModBlocks {
 			CHISELED_STONE_BRICKS_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.CHISELED_STONE_BRICKS_FACADE_ID,
 					Block.Properties.of(Material.STONE).strength(1.5F, 6.0F));
 			OBSIDIAN_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.OBSIDIAN_FACADE_ID,
-					Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(50.0F, 1200.0F));
+					//Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(50.0F, 1200.0F));
+					BlockBehaviour.Properties.copy(Blocks.OBSIDIAN));
 
 			SANDSTONE_FACADE = new FacadeBlock(DungeonBlocks.MOD_ID, BlockID.SANDSTONE_FACADE_ID,
 					Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F));
