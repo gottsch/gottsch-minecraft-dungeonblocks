@@ -2,10 +2,16 @@
     "homepage": "https://minecraft.curseforge.com/projects/dungeonblocks",
     "promos": {
     "1.18.1-latest": "1.1.1",
-    "1.18.1-recommended": "1.1.1"
+    "1.18.1-recommended": "1.1.1",
+    "1.18.2-latest": "1.1.1",
+    "1.18.2-recommended": "1.1.1"	    
   },
     "1.18.1": {
         "1.1.0": "Port from 1.16.5.\nAdd Blackstone and Deepslate and variant textures.",
         "1.1.1": "Fixed missing block drops.\nUpdated to forge-1.18.1-39.0.66."
+	},
+	"1.18.2": {
+		"1.1.1": "initial port to 1.18.2"
 	}
+	
 }
