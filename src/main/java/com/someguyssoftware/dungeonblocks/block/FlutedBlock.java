@@ -43,6 +43,15 @@ public class FlutedBlock extends ModBlock {
 	private static final VoxelShape SE_PART = Block.box(12.0D, 0.0D, 12.0D, 16.0D, 16.0D, 16.0D);
 	private static final VoxelShape AABB = Shapes.or(MAIN_PART, NW_PART, NE_PART, SW_PART, SE_PART);
 	
+	/**
+	 * 
+	 * @param properties
+	 */
+	public FlutedBlock(Properties properties) {
+		super(properties);
+	}
+	
+	@Deprecated
 	public FlutedBlock(String modID, String name, Properties properties) {
 		super(modID, name, properties);
 	}

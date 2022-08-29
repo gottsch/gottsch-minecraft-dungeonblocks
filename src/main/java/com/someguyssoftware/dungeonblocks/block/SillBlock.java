@@ -46,6 +46,15 @@ public class SillBlock extends NonCubeFacingBlock {
 	private static final VoxelShape SOUTH_FACING_AABB = Shapes.or(MAIN_PART, SF_TOP_PART);
 	private static final VoxelShape WEST_FACING_AABB = Shapes.or(MAIN_PART, WF_TOP_PART);
 	
+	/**
+	 * 
+	 * @param properties
+	 */
+	public SillBlock(Properties properties) {
+		super(properties);
+	}
+	
+	@Deprecated
 	public SillBlock(String modID, String name, Properties properties) {
 		super(modID, name, properties);
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));

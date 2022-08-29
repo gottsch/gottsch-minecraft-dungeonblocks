@@ -38,6 +38,11 @@ public class PillarBlock extends NonCubeBasedBlock {
 	private static final VoxelShape EAST_WEST_AABB = Block.box(0.0D, 3.0D, 3.0D, 16.0D, 13.0D, 13.0D);	
 	private static final VoxelShape UP_DOWN_AABB = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 16.0D, 13.0D);
 	
+	public PillarBlock(Properties properties) {
+		super(properties);
+	}
+	
+	@Deprecated
 	public PillarBlock(String modID, String name, Properties properties) {
 		super(modID, name, properties);
 		this.registerDefaultState(this.stateDefinition.any().setValue(BASE, Direction.UP));

@@ -37,10 +37,20 @@ public abstract class FacadeShapeBlock extends NonCubeFacingBlock implements IFa
 
 	/**
 	 * 
+	 * @param properties
+	 */
+	public FacadeShapeBlock(Properties properties) {
+		super(properties);
+		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(SHAPE, FacadeShape.STRAIGHT));
+	}
+	
+	/**
+	 * 
 	 * @param modID
 	 * @param name
 	 * @param materialIn
 	 */
+	@Deprecated
 	public FacadeShapeBlock(String modID, String name, Block.Properties properties) {
 		super(modID, name, properties);
 		this.registerDefaultState(

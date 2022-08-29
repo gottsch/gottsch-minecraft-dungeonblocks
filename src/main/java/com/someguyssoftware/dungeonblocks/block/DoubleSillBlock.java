@@ -37,6 +37,15 @@ public class DoubleSillBlock extends NonCubeFacingBlock {
 	private static final VoxelShape NORTH_SOUTH_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 	private static final VoxelShape EAST_WEST_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 	
+	/**
+	 * 
+	 * @param properties
+	 */
+	public DoubleSillBlock(Properties properties) {
+		super(properties);
+	}
+	
+	@Deprecated
 	public DoubleSillBlock(String modID, String name, Properties properties) {
 		super(modID, name, properties);
 	}

@@ -115,10 +115,19 @@ public class CrownMoldingBlock extends FacadeShapeBlock {
 
 	/**
 	 * 
+	 * @param properties
+	 */
+	public CrownMoldingBlock(Properties properties) {
+		super(properties);
+	}
+	
+	/**
+	 * 
 	 * @param modID
 	 * @param name
 	 * @param properties
 	 */
+	@Deprecated
 	public CrownMoldingBlock(String modID, String name, Properties properties) {
 		super(modID, name, properties);
 	}

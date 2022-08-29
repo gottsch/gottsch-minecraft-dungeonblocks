@@ -48,6 +48,11 @@ public class SconceBlock extends NonCubeFacingBlock {
 	private static final VoxelShape WEST_FACING_SHAPE = Block
 			.box(9.0D, 2.0D, 2.0D, 15.9999D, 15.0D, 14.0D);
 
+	public SconceBlock(Properties properties) {
+		super(properties);
+	}
+	
+	@Deprecated
 	public SconceBlock(String modID, String name, Properties properties) {
 		super(modID, name, properties);
 	}

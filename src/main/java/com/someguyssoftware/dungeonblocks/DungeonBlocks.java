@@ -6,7 +6,9 @@ package com.someguyssoftware.dungeonblocks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.someguyssoftware.dungeonblocks.block.ModBlocks;
 import com.someguyssoftware.dungeonblocks.config.DungeonBlocksConfig;
+import com.someguyssoftware.dungeonblocks.item.ModItems;
 import com.someguyssoftware.gottschcore.annotation.Credits;
 import com.someguyssoftware.gottschcore.annotation.ModInfo;
 import com.someguyssoftware.gottschcore.config.IConfig;
@@ -49,6 +51,10 @@ public class DungeonBlocks implements IMod {
 		DungeonBlocks.config = new DungeonBlocksConfig(this);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonBlocksConfig.COMMON_CONFIG);
 
+		// register the deferred registries
+		ModBlocks.register();
+		ModItems.register();
+				
 		// Register the setup method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 	}

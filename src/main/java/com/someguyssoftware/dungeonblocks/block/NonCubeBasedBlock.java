@@ -23,6 +23,7 @@ import com.someguyssoftware.gottschcore.block.BasedBlock;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 /**
  * 
@@ -31,12 +32,17 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public class NonCubeBasedBlock extends BasedBlock {
 
+	public NonCubeBasedBlock(Properties properties) {
+		super(properties);
+	}
+	
 	/**
 	 * 
 	 * @param modID
 	 * @param name
 	 * @param properties
 	 */
+	@Deprecated
 	public NonCubeBasedBlock(String modID, String name, Block.Properties properties) {
 		super(modID, name, properties);
 	}

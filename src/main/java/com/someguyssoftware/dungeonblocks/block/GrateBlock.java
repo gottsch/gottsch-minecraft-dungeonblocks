@@ -41,12 +41,17 @@ public class GrateBlock extends NonCubeBasedBlock {
 	private static final VoxelShape SOUTH_SHAPE = Block.box(0.0D, 0.0D, 8.0D, 16.0D, 16.0D, 16.0D);
 	private static final VoxelShape WEST_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 8.0D, 16.0D, 16.0D);
 
+	public GrateBlock(Properties properties) {
+		super(properties);
+	}
+	
 	/**
 	 * 
 	 * @param modID
 	 * @param name
 	 * @param properties
 	 */
+	@Deprecated
 	public GrateBlock(String modID, String name, Properties properties) {
 		super(modID, name, properties);
 		this.registerDefaultState(this.stateDefinition.any().setValue(BASE, Direction.UP));

@@ -80,10 +80,19 @@ public class QuarterFacadeBlock extends FacadeShapeBlock {
 
 	/**
 	 * 
+	 * @param properties
+	 */
+	public QuarterFacadeBlock(Properties properties) {
+		super(properties);
+	}
+	
+	/**
+	 * 
 	 * @param modID
 	 * @param registryName
 	 * @param properties
 	 */
+	@Deprecated
 	public QuarterFacadeBlock(String modID, String registryName, Properties properties) {
 		super(modID, registryName, properties);
 	}

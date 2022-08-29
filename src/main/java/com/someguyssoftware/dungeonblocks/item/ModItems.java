@@ -20,13 +20,20 @@
 package com.someguyssoftware.dungeonblocks.item;
 
 import com.someguyssoftware.dungeonblocks.DungeonBlocks;
+import com.someguyssoftware.dungeonblocks.block.ModBlocks;
+import com.someguyssoftware.dungeonblocks.setup.Registration;
 import com.someguyssoftware.gottschcore.item.ModItem;
 
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * @author Mark Gottschling on Jan 13, 2020
@@ -36,41 +43,24 @@ import net.minecraftforge.registries.ObjectHolder;
  *
  */
 @Mod.EventBusSubscriber(modid = DungeonBlocks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-@ObjectHolder(DungeonBlocks.MOD_ID)
 public class ModItems {
+
+	public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(DungeonBlocks.MOD_ID) {
+		@Override
+		public ItemStack makeIcon() {
+			return new ItemStack(ModItems.LOGO.get());
+		}
+	};
 	
-    public static final Item LOGO = new ModItem(DungeonBlocks.MOD_ID, "dungeonblocks_logo", new Item.Properties());
+	public static final Item.Properties ITEM_PROPERTIES = new Item.Properties().tab(ITEM_GROUP);
 
-    /**
-     * The actual event handler that registers the custom items.
-     *
-     * @param event The event this event handler handles
-     */
-    @SubscribeEvent
-    public static void registerItems(RegistryEvent.Register<Item> event) {
-        //In here you pass in all item instances you want to register.
-        //Make sure you always set the registry name.
-        event.getRegistry().registerAll(
-            LOGO
-        );
-    }
+	public static final RegistryObject<Item> LOGO = Registration.ITEMS.register("dungeonblocks_logo", () -> new Item(new Item.Properties()));
 
-    /**
-     * 
-     * @author Mark Gottschling on Jan 17, 2020
-     *
-     */
-//    public static class ModItemGroup extends ItemGroup {
-//    	private final Supplier<ItemStack> iconSupplier;
-//
-//    	public ModItemGroup(final String name, final Supplier<ItemStack> iconSupplier) {
-//    		super(name);
-//    		this.iconSupplier = iconSupplier;
-//    	}
-//
-//    	@Override
-//    	public ItemStack makeIcon() {
-//    		return iconSupplier.get();
-//    	}
-//    }
+	/**
+	 * 
+	 */
+	public static void register() {
+		// cycle through all block and create items
+		Registration.registerItems();
+	}
 }

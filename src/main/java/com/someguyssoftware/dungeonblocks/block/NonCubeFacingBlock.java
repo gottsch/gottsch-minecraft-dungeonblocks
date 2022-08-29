@@ -33,10 +33,19 @@ public class NonCubeFacingBlock extends FacingBlock {
 
 	/**
 	 * 
+	 * @param properties
+	 */
+	public NonCubeFacingBlock(Block.Properties properties) {
+		super(properties);
+	}
+	
+	/**
+	 * 
 	 * @param modID
 	 * @param name
 	 * @param properties
 	 */
+	@Deprecated
 	public NonCubeFacingBlock(String modID, String name, Block.Properties properties) {
 		super(modID, name, properties);
 	}

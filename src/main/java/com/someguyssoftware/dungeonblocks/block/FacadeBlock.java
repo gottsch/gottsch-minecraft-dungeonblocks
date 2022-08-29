@@ -66,8 +66,7 @@ public class FacadeBlock extends FacadeShapeBlock {
 
 			// inner left
 			TOP_LEFT_INNER_SHAPE, // 4
-			BOTTOM_LEFT_INNER_SHAPE, // 5
-
+			BOTTOM_LEFT_INNER_SHAPE,
 			// inner right
 			TOP_RIGHT_INNER_SHAPE, // 6
 			BOTTOM_RIGHT_INNER_SHAPE, // 7
@@ -80,10 +79,19 @@ public class FacadeBlock extends FacadeShapeBlock {
 
 	/**
 	 * 
+	 * @param properties
+	 */
+	public FacadeBlock(Properties properties) {
+		super(properties);
+	}
+	
+	/**
+	 * 
 	 * @param modID
 	 * @param registryName
 	 * @param properties
 	 */
+	@Deprecated
 	public FacadeBlock(String modID, String registryName, Properties properties) {
 		super(modID, registryName, properties);
 	}

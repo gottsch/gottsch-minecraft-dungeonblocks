@@ -101,10 +101,19 @@ public class FlutedFacadeBlock extends FacadeShapeBlock {
 
 	/**
 	 * 
+	 * @param properties
+	 */
+	public FlutedFacadeBlock(Properties properties) {
+		super(properties);
+	}
+
+	/**
+	 * 
 	 * @param modID
 	 * @param registryName
 	 * @param properties
 	 */
+	@Deprecated
 	public FlutedFacadeBlock(String modID, String registryName, Properties properties) {
 		super(modID, registryName, properties);
 	}

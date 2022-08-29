@@ -78,6 +78,11 @@ public class PillarBaseBlock extends NonCubeBasedBlock {
 			Block.box(1.0D, 0.0D, 1.0D, 15.0D, 2.0D, 15.0D) // "top"
 	);
 
+	public PillarBaseBlock(Properties properties) {
+		super(properties);
+	}
+	
+	@Deprecated
 	public PillarBaseBlock(String modID, String name, Properties properties) {
 		super(modID, name, properties);
 		this.registerDefaultState(this.stateDefinition.any().setValue(BASE, Direction.UP));

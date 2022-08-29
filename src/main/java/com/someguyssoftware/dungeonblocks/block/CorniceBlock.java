@@ -20,14 +20,10 @@
 package com.someguyssoftware.dungeonblocks.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -105,10 +101,19 @@ public class CorniceBlock extends FacadeShapeBlock {
 
 	/**
 	 * 
+	 * @param properties
+	 */
+	public CorniceBlock(Properties properties) {
+		super(properties);
+	}
+	
+	/**
+	 * 
 	 * @param modID
 	 * @param name
 	 * @param properties
 	 */
+	@Deprecated
 	public CorniceBlock(String modID, String name, Properties properties) {
 		super(modID, name, properties);
 		//		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
