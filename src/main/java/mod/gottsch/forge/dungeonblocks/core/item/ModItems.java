@@ -20,10 +20,13 @@
 package mod.gottsch.forge.dungeonblocks.core.item;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -36,23 +39,28 @@ import net.minecraftforge.registries.RegistryObject;
  */
 @Mod.EventBusSubscriber(modid = DungeonBlocks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModItems {
-
-	public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(DungeonBlocks.MOD_ID) {
-		@Override
-		public ItemStack makeIcon() {
-			return new ItemStack(ModItems.LOGO.get());
-		}
-	};
 	
-	public static final Item.Properties ITEM_PROPERTIES = new Item.Properties().tab(ITEM_GROUP);
+	public static final Item.Properties ITEM_PROPERTIES = new Item.Properties();
 
 	public static final RegistryObject<Item> LOGO = Registration.ITEMS.register("dungeonblocks_logo", () -> new Item(new Item.Properties()));
 
+	static {
+		// create items
+		Registration.BLOCKS.getEntries().forEach(block -> {
+			ModBlocks.MAP.put(block, fromBlock(block, ModItems.ITEM_PROPERTIES));
+		});	
+	}
+	
 	/**
 	 * 
 	 */
 	public static void register() {
 		// cycle through all block and create items
 		Registration.registerItems();
+	}
+	
+	// conveniance method: take a RegistryObject<Block> and make a corresponding RegistryObject<Item> from it
+	public static <B extends Block> RegistryObject<Item> fromBlock(RegistryObject<B> block, Item.Properties itemProperties) {
+		return Registration.ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), itemProperties));
 	}
 }

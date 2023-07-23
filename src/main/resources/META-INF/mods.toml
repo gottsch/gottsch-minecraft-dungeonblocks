@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[43,)" #mandatory (32 is current forge version)
+loaderVersion="[44,)" #mandatory (32 is current forge version)
 
 # License
 license="GNU GPLv3"
@@ -15,7 +15,7 @@ version="1.2.0" #mandatory
 displayName="Dungeon Blocks" #mandatory
 
 # A URL to query for updates for this mod. See the JSON update specification <here>
-updateJSONURL="https://raw.githubusercontent.com/gottsch/gottsch-minecraft-dungeonblocks/1.18.2-main/update.json" #optional
+updateJSONURL="https://raw.githubusercontent.com/gottsch/gottsch-minecraft-dungeonblocks/1.19.3-main/update.json" #optional
 
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="https://www.curseforge.com/minecraft/mc-mods/dungeonblocks" #optional
@@ -32,7 +32,7 @@ gottsch's DungeonBlocks
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[43,)" #mandatory
+    versionRange="[44,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -42,7 +42,7 @@ gottsch's DungeonBlocks
     modId="minecraft"
     mandatory=true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
-    versionRange="[1.19.2,1.20)"
+    versionRange="[1.19.3,1.20)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.dungeonblocks]]
