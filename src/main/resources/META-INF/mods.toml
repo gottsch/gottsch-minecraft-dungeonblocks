@@ -11,7 +11,7 @@ credits="gottsch" #optional
 
 [[mods]] #mandatory
 modId="dungeonblocks" #mandatory
-version="1.2.0" #mandatory
+version="1.2.1" #mandatory
 displayName="Dungeon Blocks" #mandatory
 
 # A URL to query for updates for this mod. See the JSON update specification <here>
