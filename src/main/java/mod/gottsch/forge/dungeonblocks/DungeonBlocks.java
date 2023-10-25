@@ -19,6 +19,8 @@
  */
 package mod.gottsch.forge.dungeonblocks;
 
+import mod.gottsch.forge.dungeonblocks.core.item.ModCreativeModeTabs;
+import net.minecraftforge.eventbus.api.IEventBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,20 +44,20 @@ public class DungeonBlocks {
 
 	// constants
 	public static final String MOD_ID = "dungeonblocks";
-	protected static final String NAME = "DungeonBlocks";
-	protected static final String VERSION = "1.1.1";
-	protected static final String UPDATE_JSON_URL = "https://raw.githubusercontent.com/gottsch/gottsch-minecraft-dungeonblocks/1.18.2-master/update.json";
-
 	public static DungeonBlocks instance;
 
 	public DungeonBlocks() {
 		DungeonBlocks.instance = this;
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonBlocksConfig.COMMON_CONFIG);
 
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
 		// register the deferred registries
 		ModBlocks.register();
 		ModItems.register();
-				
+
+		ModCreativeModeTabs.TABS.register(modEventBus);
+
 		// Register the setup method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 	}

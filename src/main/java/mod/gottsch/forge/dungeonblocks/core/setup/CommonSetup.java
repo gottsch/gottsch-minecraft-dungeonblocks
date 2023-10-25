@@ -18,11 +18,6 @@
 package mod.gottsch.forge.dungeonblocks.core.setup;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
-import mod.gottsch.forge.dungeonblocks.core.item.ModCreativeModeTabs;
-import net.minecraft.world.item.CreativeModeTab.TabVisibility;
-import net.minecraftforge.event.CreativeModeTabEvent.BuildContents;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
@@ -40,12 +35,12 @@ public class CommonSetup {
     public static void init(FMLCommonSetupEvent event) {
     }
     
-	@SubscribeEvent
-	public static void registemItemsToTab(BuildContents event) {
-		if (event.getTab() == ModCreativeModeTabs.MOD_TAB) {
-			ModBlocks.MAP.forEach((block, item) -> {
-				event.accept(item.get(), TabVisibility.PARENT_AND_SEARCH_TABS);
-			});
-		}
-	}
+//	@SubscribeEvent
+//	public static void registemItemsToTab(BuildContents event) {
+//		if (event.getTab() == ModCreativeModeTabs.MOD_TAB) {
+//			ModBlocks.MAP.forEach((block, item) -> {
+//				event.accept(item.get(), TabVisibility.PARENT_AND_SEARCH_TABS);
+//			});
+//		}
+//	}
 }

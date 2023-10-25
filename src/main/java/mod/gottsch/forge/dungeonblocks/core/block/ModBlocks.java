@@ -19,23 +19,19 @@
  */
 package mod.gottsch.forge.dungeonblocks.core.block;
 
-import static mod.gottsch.forge.dungeonblocks.core.item.ModItems.ITEM_PROPERTIES;
-
 import java.util.Map;
 
 import com.google.common.collect.Maps;
 
 import mod.gottsch.forge.dungeonblocks.core.config.DungeonBlocksConfig.BlockID;
-import mod.gottsch.forge.dungeonblocks.core.item.ModItems;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
@@ -495,55 +491,60 @@ public class ModBlocks {
 	public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_WALL_SCONCE;
 
 	// grate
-	public static final RegistryObject<Block> GRATE = Registration.BLOCKS.register(BlockID.GRATE_ID, () -> new GrateBlock(Block.Properties.of(Material.METAL, MaterialColor.STONE).strength(1.5F, 6.0F)));
+	public static final RegistryObject<Block> GRATE = Registration.BLOCKS.register(BlockID.GRATE_ID, () -> new GrateBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
+
+	// FUTURE
+	// BARRED_WINDOW
+	// BARRED_WINDOW_FACADE
+	// WALL_RING
 
 	public static final Map<RegistryObject<Block>, RegistryObject<Item>> MAP = Maps.newHashMap();
 	
 	static {
 		// facade
-		STONE_FACADE = Registration.BLOCKS.register(BlockID.STONE_FACADE_ID,	() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+		STONE_FACADE = Registration.BLOCKS.register(BlockID.STONE_FACADE_ID,	() -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		SMOOTH_STONE_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		COBBLESTONE_FACADE = Registration.BLOCKS.register(BlockID.COBBLESTONE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_COBBLESTONE_FACADE = Registration.BLOCKS.register(BlockID.MOSSY_COBBLESTONE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE).strength(2.0F, 6.0F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
 		BRICKS_FACADE = Registration.BLOCKS.register(BlockID.BRICKS_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_RED).strength(2.0F, 6.0F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
 		STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.STONE_BRICKS_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CRACKED_STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CHISELED_STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		OBSIDIAN_FACADE = Registration.BLOCKS.register(BlockID.OBSIDIAN_FACADE_ID,
 				() -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.OBSIDIAN)));
 
 		SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.SANDSTONE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_SANDSTONE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_SANDSTONE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		RED_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_RED_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_RED_SANDSTONE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_RED_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_RED_SANDSTONE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_RED_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.CUT_RED_SANDSTONE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 
 		GRANITE_FACADE = Registration.BLOCKS.register(BlockID.GRANITE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_GRANITE_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_GRANITE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		DIORITE_FACADE = Registration.BLOCKS.register(BlockID.DIORITE_FACADE_ID,
-				() -> new FacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new FacadeBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		POLISHED_DIORITE_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_FACADE_ID,
 				() -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DIORITE)));
 		ANDESITE_FACADE = Registration.BLOCKS.register(BlockID.ANDESITE_FACADE_ID,
@@ -585,53 +586,53 @@ public class ModBlocks {
 		STONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.STONE_QUARTER_FACADE_ID,
 				() -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.STONE)));
 		SMOOTH_STONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		COBBLESTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.COBBLESTONE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_COBBLESTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.MOSSY_COBBLESTONE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE).strength(2.0F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
 		BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.BRICKS_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_RED).strength(2.0F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
 		STONE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.STONE_BRICKS_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_STONE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CRACKED_STONE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CHISELED_STONE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		OBSIDIAN_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.OBSIDIAN_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(50.0F, 1200.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
 
 		SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.SANDSTONE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_SANDSTONE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_SANDSTONE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		RED_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_RED_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_RED_SANDSTONE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_RED_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_RED_SANDSTONE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_RED_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.CUT_RED_SANDSTONE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 
 		GRANITE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.GRANITE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_GRANITE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_GRANITE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		DIORITE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.DIORITE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		POLISHED_DIORITE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		ANDESITE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.ANDESITE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_ANDESITE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_ANDESITE_QUARTER_FACADE_ID,
-				() -> new QuarterFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		BLACKSTONE_QUARTER_FACADE = Registration.BLOCKS.register(
 				BlockID.BLACKSTONE_QUARTER_FACADE_ID, 
 				() -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
@@ -677,55 +678,55 @@ public class ModBlocks {
 
 		// fluted
 		STONE_FLUTED = Registration.BLOCKS.register(BlockID.STONE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		SMOOTH_STONE_FLUTED = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		COBBLESTONE_FLUTED = Registration.BLOCKS.register(BlockID.COBBLESTONE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_COBBLESTONE_FLUTED = Registration.BLOCKS.register(BlockID.MOSSY_COBBLESTONE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE).strength(2.0F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
 		BRICKS_FLUTED = Registration.BLOCKS.register(BlockID.BRICKS_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_RED).strength(2.0F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
 		STONE_BRICKS_FLUTED = Registration.BLOCKS.register(BlockID.STONE_BRICKS_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_STONE_BRICKS_FLUTED = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CRACKED_STONE_BRICKS_FLUTED = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CHISELED_STONE_BRICKS_FLUTED = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		OBSIDIAN_FLUTED = Registration.BLOCKS.register(BlockID.OBSIDIAN_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(50.0F, 1200.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
 
 		SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.SANDSTONE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.SMOOTH_SANDSTONE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.CHISELED_SANDSTONE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		RED_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_RED_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.SMOOTH_RED_SANDSTONE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_RED_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.CHISELED_RED_SANDSTONE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_RED_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.CUT_RED_SANDSTONE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 
 		GRANITE_FLUTED = Registration.BLOCKS.register(BlockID.GRANITE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_GRANITE_FLUTED = Registration.BLOCKS.register(BlockID.POLISHED_GRANITE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		DIORITE_FLUTED = Registration.BLOCKS.register(BlockID.DIORITE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		POLISHED_DIORITE_FLUTED = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		ANDESITE_FLUTED = Registration.BLOCKS.register(BlockID.ANDESITE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_ANDESITE_FLUTED = Registration.BLOCKS.register(BlockID.POLISHED_ANDESITE_FLUTED_ID,
-				() -> new FlutedBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 
 		BLACKSTONE_FLUTED = Registration.BLOCKS.register(
 				BlockID.BLACKSTONE_FLUTED_ID, 
@@ -776,65 +777,65 @@ public class ModBlocks {
 		SMOOTH_STONE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_FLUTED_FACADE_ID,
 				() -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(SMOOTH_STONE_FLUTED.get())));
 		COBBLESTONE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.COBBLESTONE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_COBBLESTONE_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.MOSSY_COBBLESTONE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE).strength(2.0F, 6.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
 		BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.BRICKS_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_RED).strength(2.0F, 6.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
 		STONE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.STONE_BRICKS_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_STONE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.MOSSY_STONE_BRICKS_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CRACKED_STONE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.CRACKED_STONE_BRICKS_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CHISELED_STONE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.CHISELED_STONE_BRICKS_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		OBSIDIAN_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.OBSIDIAN_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(50.0F, 1200.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
 
 		SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.SANDSTONE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.SMOOTH_SANDSTONE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.CHISELED_SANDSTONE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.CUT_SANDSTONE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		RED_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.RED_SANDSTONE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_RED_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.SMOOTH_RED_SANDSTONE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_RED_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.CHISELED_RED_SANDSTONE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_RED_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.CUT_RED_SANDSTONE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 
 		GRANITE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.GRANITE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_GRANITE_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.POLISHED_GRANITE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		DIORITE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.DIORITE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		POLISHED_DIORITE_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.POLISHED_DIORITE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		ANDESITE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.ANDESITE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_ANDESITE_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.POLISHED_ANDESITE_FLUTED_FACADE_ID,
-				() -> new FlutedFacadeBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 
 		BLACKSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
 				BlockID.BLACKSTONE_FLUTED_FACADE_ID, 
@@ -881,55 +882,55 @@ public class ModBlocks {
 
 		// sill
 		STONE_SILL = Registration.BLOCKS.register(BlockID.STONE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		SMOOTH_STONE_SILL = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		COBBLESTONE_SILL = Registration.BLOCKS.register(BlockID.COBBLESTONE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_COBBLESTONE_SILL = Registration.BLOCKS.register(BlockID.MOSSY_COBBLESTONE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE).strength(2.0F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
 		BRICKS_SILL = Registration.BLOCKS.register(BlockID.BRICKS_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_RED).strength(2.0F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
 		STONE_BRICKS_SILL = Registration.BLOCKS.register(BlockID.STONE_BRICKS_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_STONE_BRICKS_SILL = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CRACKED_STONE_BRICKS_SILL = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CHISELED_STONE_BRICKS_SILL = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		OBSIDIAN_SILL = Registration.BLOCKS.register(BlockID.OBSIDIAN_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(50.0F, 1200.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
 
 		SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.SANDSTONE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.SMOOTH_SANDSTONE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.CHISELED_SANDSTONE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		RED_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_RED_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.SMOOTH_RED_SANDSTONE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_RED_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.CHISELED_RED_SANDSTONE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_RED_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.CUT_RED_SANDSTONE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 
 		GRANITE_SILL = Registration.BLOCKS.register(BlockID.GRANITE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_GRANITE_SILL = Registration.BLOCKS.register(BlockID.POLISHED_GRANITE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		DIORITE_SILL = Registration.BLOCKS.register(BlockID.DIORITE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		POLISHED_DIORITE_SILL = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		ANDESITE_SILL = Registration.BLOCKS.register(BlockID.ANDESITE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_ANDESITE_SILL = Registration.BLOCKS.register(BlockID.POLISHED_ANDESITE_SILL_ID,
-				() -> new SillBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		BLACKSTONE_SILL = Registration.BLOCKS.register(
 				BlockID.BLACKSTONE_SILL_ID, 
 				() -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
@@ -975,67 +976,67 @@ public class ModBlocks {
 
 		// double sill
 		STONE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.STONE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		SMOOTH_STONE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		COBBLESTONE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.COBBLESTONE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_COBBLESTONE_DOUBLE_SILL = Registration.BLOCKS.register(
 				BlockID.MOSSY_COBBLESTONE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE).strength(2.0F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
 		BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.BRICKS_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_RED).strength(2.0F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
 		STONE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.STONE_BRICKS_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_STONE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
 				BlockID.MOSSY_STONE_BRICKS_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CRACKED_STONE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
 				BlockID.CRACKED_STONE_BRICKS_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CHISELED_STONE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
 				BlockID.CHISELED_STONE_BRICKS_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		OBSIDIAN_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.OBSIDIAN_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(50.0F, 1200.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
 
 		SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.SANDSTONE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
 				BlockID.SMOOTH_SANDSTONE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
 				BlockID.CHISELED_SANDSTONE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		RED_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_RED_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
 				BlockID.SMOOTH_RED_SANDSTONE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_RED_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
 				BlockID.CHISELED_RED_SANDSTONE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_RED_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
 				BlockID.CUT_RED_SANDSTONE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 
 		GRANITE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.GRANITE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_GRANITE_DOUBLE_SILL = Registration.BLOCKS.register(
 				BlockID.POLISHED_GRANITE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		DIORITE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.DIORITE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		POLISHED_DIORITE_DOUBLE_SILL = Registration.BLOCKS.register(
 				BlockID.POLISHED_DIORITE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		ANDESITE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.ANDESITE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_ANDESITE_DOUBLE_SILL = Registration.BLOCKS.register(
 				BlockID.POLISHED_ANDESITE_DOUBLE_SILL_ID,
-				() -> new DoubleSillBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		BLACKSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
 				BlockID.BLACKSTONE_DOUBLE_SILL_ID, 
 				() -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
@@ -1081,55 +1082,55 @@ public class ModBlocks {
 
 		// Cornice
 		STONE_CORNICE = Registration.BLOCKS.register(BlockID.STONE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		SMOOTH_STONE_CORNICE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		COBBLESTONE_CORNICE = Registration.BLOCKS.register(BlockID.COBBLESTONE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_COBBLESTONE_CORNICE = Registration.BLOCKS.register(BlockID.MOSSY_COBBLESTONE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE).strength(2.0F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
 		BRICKS_CORNICE = Registration.BLOCKS.register(BlockID.BRICKS_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_RED).strength(2.0F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
 		STONE_BRICKS_CORNICE = Registration.BLOCKS.register(BlockID.STONE_BRICKS_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_STONE_BRICKS_CORNICE = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CRACKED_STONE_BRICKS_CORNICE = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CHISELED_STONE_BRICKS_CORNICE = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		OBSIDIAN_CORNICE = Registration.BLOCKS.register(BlockID.OBSIDIAN_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(50.0F, 1200.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
 
 		SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.SANDSTONE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.SMOOTH_SANDSTONE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.CHISELED_SANDSTONE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		RED_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_RED_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.SMOOTH_RED_SANDSTONE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_RED_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.CHISELED_RED_SANDSTONE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_RED_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.CUT_RED_SANDSTONE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 
 		GRANITE_CORNICE = Registration.BLOCKS.register(BlockID.GRANITE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_GRANITE_CORNICE = Registration.BLOCKS.register(BlockID.POLISHED_GRANITE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		DIORITE_CORNICE = Registration.BLOCKS.register(BlockID.DIORITE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		POLISHED_DIORITE_CORNICE = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		ANDESITE_CORNICE = Registration.BLOCKS.register(BlockID.ANDESITE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_ANDESITE_CORNICE = Registration.BLOCKS.register(BlockID.POLISHED_ANDESITE_CORNICE_ID,
-				() -> new CorniceBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		BLACKSTONE_CORNICE = Registration.BLOCKS.register(
 				BlockID.BLACKSTONE_CORNICE_ID, 
 				() -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
@@ -1175,69 +1176,69 @@ public class ModBlocks {
 
 		// crown molding
 		STONE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.STONE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		SMOOTH_STONE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		COBBLESTONE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.COBBLESTONE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_COBBLESTONE_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.MOSSY_COBBLESTONE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE).strength(2.0F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
 		BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.BRICKS_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_RED).strength(2.0F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
 		STONE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.STONE_BRICKS_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_STONE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.MOSSY_STONE_BRICKS_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CRACKED_STONE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.CRACKED_STONE_BRICKS_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CHISELED_STONE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.CHISELED_STONE_BRICKS_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		OBSIDIAN_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.OBSIDIAN_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(50.0F, 1200.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
 
 		SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.SANDSTONE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.SMOOTH_SANDSTONE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.CHISELED_SANDSTONE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.CUT_SANDSTONE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		RED_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.RED_SANDSTONE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_RED_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.SMOOTH_RED_SANDSTONE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_RED_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.CHISELED_RED_SANDSTONE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_RED_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.CUT_RED_SANDSTONE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 
 		GRANITE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.GRANITE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_GRANITE_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.POLISHED_GRANITE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		DIORITE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.DIORITE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		POLISHED_DIORITE_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.POLISHED_DIORITE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		ANDESITE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.ANDESITE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_ANDESITE_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.POLISHED_ANDESITE_CROWN_MOLDING_ID,
-				() -> new CrownMoldingBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		BLACKSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
 				BlockID.BLACKSTONE_CROWN_MOLDING_ID, 
 				() -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
@@ -1283,67 +1284,67 @@ public class ModBlocks {
 
 		// pillar base
 		STONE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.STONE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		SMOOTH_STONE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		COBBLESTONE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.COBBLESTONE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_COBBLESTONE_PILLAR_BASE = Registration.BLOCKS.register(
 				BlockID.MOSSY_COBBLESTONE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE).strength(2.0F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
 		BRICKS_PILLAR_BASE = Registration.BLOCKS.register(BlockID.BRICKS_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_RED).strength(2.0F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
 		STONE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(BlockID.STONE_BRICKS_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_STONE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
 				BlockID.MOSSY_STONE_BRICKS_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CRACKED_STONE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
 				BlockID.CRACKED_STONE_BRICKS_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CHISELED_STONE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
 				BlockID.CHISELED_STONE_BRICKS_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		OBSIDIAN_PILLAR_BASE = Registration.BLOCKS.register(BlockID.OBSIDIAN_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(50.0F, 1200.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
 
 		SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.SANDSTONE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(
 				BlockID.SMOOTH_SANDSTONE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(
 				BlockID.CHISELED_SANDSTONE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		RED_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_RED_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(
 				BlockID.SMOOTH_RED_SANDSTONE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_RED_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(
 				BlockID.CHISELED_RED_SANDSTONE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_RED_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(
 				BlockID.CUT_RED_SANDSTONE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 
 		GRANITE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.GRANITE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_GRANITE_PILLAR_BASE = Registration.BLOCKS.register(
 				BlockID.POLISHED_GRANITE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		DIORITE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.DIORITE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		POLISHED_DIORITE_PILLAR_BASE = Registration.BLOCKS.register(
 				BlockID.POLISHED_DIORITE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		ANDESITE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.ANDESITE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_ANDESITE_PILLAR_BASE = Registration.BLOCKS.register(
 				BlockID.POLISHED_ANDESITE_PILLAR_BASE_ID,
-				() -> new PillarBaseBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		BLACKSTONE_PILLAR_BASE = Registration.BLOCKS.register(
 				BlockID.BLACKSTONE_PILLAR_BASE_ID, 
 				() -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
@@ -1389,55 +1390,55 @@ public class ModBlocks {
 
 		// pillar
 		STONE_PILLAR = Registration.BLOCKS.register(BlockID.STONE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		SMOOTH_STONE_PILLAR = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		COBBLESTONE_PILLAR = Registration.BLOCKS.register(BlockID.COBBLESTONE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_COBBLESTONE_PILLAR = Registration.BLOCKS.register(BlockID.MOSSY_COBBLESTONE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE).strength(2.0F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
 		BRICKS_PILLAR = Registration.BLOCKS.register(BlockID.BRICKS_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_RED).strength(2.0F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
 		STONE_BRICKS_PILLAR = Registration.BLOCKS.register(BlockID.STONE_BRICKS_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		MOSSY_STONE_BRICKS_PILLAR = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CRACKED_STONE_BRICKS_PILLAR = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		CHISELED_STONE_BRICKS_PILLAR = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		OBSIDIAN_PILLAR = Registration.BLOCKS.register(BlockID.OBSIDIAN_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(50.0F, 1200.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
 
 		SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.SANDSTONE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.SMOOTH_SANDSTONE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.CHISELED_SANDSTONE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		RED_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		SMOOTH_RED_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.SMOOTH_RED_SANDSTONE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CHISELED_RED_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.CHISELED_RED_SANDSTONE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 		CUT_RED_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.CUT_RED_SANDSTONE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
 
 		GRANITE_PILLAR = Registration.BLOCKS.register(BlockID.GRANITE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_GRANITE_PILLAR = Registration.BLOCKS.register(BlockID.POLISHED_GRANITE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		DIORITE_PILLAR = Registration.BLOCKS.register(BlockID.DIORITE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		POLISHED_DIORITE_PILLAR = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
 		ANDESITE_PILLAR = Registration.BLOCKS.register(BlockID.ANDESITE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		POLISHED_ANDESITE_PILLAR = Registration.BLOCKS.register(BlockID.POLISHED_ANDESITE_PILLAR_ID,
-				() -> new PillarBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)));
+				() -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
 		BLACKSTONE_PILLAR = Registration.BLOCKS.register(
 				BlockID.BLACKSTONE_PILLAR_ID, 
 				() -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
@@ -1483,84 +1484,84 @@ public class ModBlocks {
 
 		// wall sconce
 		STONE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.STONE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)
 				.noCollission().lightLevel((light)->{return  14;}).sound(SoundType.WOOD)));
 		SMOOTH_STONE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		COBBLESTONE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.COBBLESTONE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		MOSSY_COBBLESTONE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.MOSSY_COBBLESTONE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE).strength(2.0F, 6.0F).noCollission()
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F).noCollission()
 				.lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		BRICKS_WALL_SCONCE = Registration.BLOCKS.register(BlockID.BRICKS_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_RED).strength(2.0F, 6.0F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		STONE_BRICKS_WALL_SCONCE = Registration.BLOCKS.register(BlockID.STONE_BRICKS_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE).strength(1.5F, 6.0F).noCollission()
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F).noCollission()
 				.lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		MOSSY_STONE_BRICKS_WALL_SCONCE = Registration.BLOCKS.register(
 				BlockID.MOSSY_STONE_BRICKS_WALL_SCONCE_ID, 
-				() -> new SconceBlock(Block.Properties.of(Material.STONE)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.STONE)
 				.strength(1.5F, 6.0F).noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		CRACKED_STONE_BRICKS_WALL_SCONCE = Registration.BLOCKS.register(
 				BlockID.CRACKED_STONE_BRICKS_WALL_SCONCE_ID, 
-				() -> new SconceBlock(Block.Properties.of(Material.STONE)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.STONE)
 				.strength(1.5F, 6.0F).noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		CHISELED_STONE_BRICKS_WALL_SCONCE = Registration.BLOCKS.register(
 				BlockID.CHISELED_STONE_BRICKS_WALL_SCONCE_ID, 
-				() -> new SconceBlock(Block.Properties.of(Material.STONE)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.STONE)
 				.strength(1.5F, 6.0F).noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		OBSIDIAN_WALL_SCONCE = Registration.BLOCKS.register(BlockID.OBSIDIAN_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(50.0F, 1200.0F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 
 		SANDSTONE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.SANDSTONE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		SMOOTH_SANDSTONE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.SMOOTH_SANDSTONE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		CHISELED_SANDSTONE_WALL_SCONCE = Registration.BLOCKS.register(
 				BlockID.CHISELED_SANDSTONE_WALL_SCONCE_ID, 
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.SAND)
 				.strength(0.8F).noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		CUT_SANDSTONE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		RED_SANDSTONE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		SMOOTH_RED_SANDSTONE_WALL_SCONCE = Registration.BLOCKS.register(
 				BlockID.SMOOTH_RED_SANDSTONE_WALL_SCONCE_ID, 
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.SAND)
 				.strength(0.8F).noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		CHISELED_RED_SANDSTONE_WALL_SCONCE = Registration.BLOCKS.register(
 				BlockID.CHISELED_RED_SANDSTONE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		CUT_RED_SANDSTONE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.CUT_RED_SANDSTONE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).strength(0.8F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 
 		GRANITE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.GRANITE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		POLISHED_GRANITE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.POLISHED_GRANITE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.DIRT).strength(1.5F, 6.0F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		DIORITE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.DIORITE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		POLISHED_DIORITE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.QUARTZ).strength(1.5F, 6.0F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		ANDESITE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.ANDESITE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		POLISHED_ANDESITE_WALL_SCONCE = Registration.BLOCKS.register(BlockID.POLISHED_ANDESITE_WALL_SCONCE_ID,
-				() -> new SconceBlock(Block.Properties.of(Material.STONE, MaterialColor.STONE).strength(1.5F, 6.0F)
+				() -> new SconceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)
 				.noCollission().lightLevel((light)->{return 14;}).sound(SoundType.WOOD)));
 		BLACKSTONE_WALL_SCONCE = Registration.BLOCKS.register(
 				BlockID.BLACKSTONE_WALL_SCONCE_ID, 

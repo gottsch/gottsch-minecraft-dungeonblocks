@@ -18,13 +18,16 @@
 package mod.gottsch.forge.dungeonblocks.core.item;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * 
@@ -33,11 +36,28 @@ import net.minecraftforge.fml.common.Mod;
  */
 @Mod.EventBusSubscriber(modid = DungeonBlocks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModCreativeModeTabs {
-	public static CreativeModeTab MOD_TAB;
-	
-	@SubscribeEvent
-	public static void registerTab(CreativeModeTabEvent.Register event) {
-		MOD_TAB = event.registerCreativeModeTab(new ResourceLocation(DungeonBlocks.MOD_ID, "dungeon_blocks_tab"),
-				builder -> builder.icon(() -> new ItemStack(ModItems.LOGO.get())).title(Component.translatable("itemGroup.dungeonblocks")));
-	}
+//	public static CreativeModeTab MOD_TAB;
+
+	public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, DungeonBlocks.MOD_ID);
+
+	public static final RegistryObject<CreativeModeTab> MOD_TAB = TABS.register("treasure_tab",
+			() -> CreativeModeTab.builder()
+					.title(Component.translatable("itemGroup.dungeonblocks"))
+					.icon(ModItems.LOGO.get()::getDefaultInstance)
+					.displayItems((displayParams, output) -> {
+						// add all items
+						Registration.ITEMS.getEntries().forEach(item -> {
+							if (!item.equals(ModItems.LOGO)) {
+								output.accept(item.get(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+							}
+						});
+					})
+					.build()
+	);
+
+//	@SubscribeEvent
+//	public static void registerTab(CreativeModeTabEvent.Register event) {
+//		MOD_TAB = event.registerCreativeModeTab(new ResourceLocation(DungeonBlocks.MOD_ID, "dungeon_blocks_tab"),
+//				builder -> builder.icon(() -> new ItemStack(ModItems.LOGO.get())).title(Component.translatable("itemGroup.dungeonblocks")));
+//	}
 }
