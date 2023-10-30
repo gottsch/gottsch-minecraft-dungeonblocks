@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "n": {
+      "item": "minecraft:iron_nugget"
+    },
+    "x": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "xnx",
+    "nnn",
+    "xnx"
+  ],
+  "result": {
+    "item": "dungeonblocks:dark_iron_grate"
+  },
+  "show_notification": true
+}

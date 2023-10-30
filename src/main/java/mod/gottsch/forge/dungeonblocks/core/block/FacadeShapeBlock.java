@@ -32,7 +32,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
  * @author Mark Gottschling on Mar 25, 2020
  *
  */
-public abstract class FacadeShapeBlock extends NonCubeFacingBlock implements IFacadeShapeBlock {
+public abstract class FacadeShapeBlock extends WaterloggedNonCubeFacingBlock implements IFacadeShapeBlock {
 
 	/**
 	 * 

@@ -31,7 +31,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * @author Mark Gottschling on Jan 18, 2020
  *
  */
-public class PillarBlock extends NonCubeBasedBlock {
+public class PillarBlock extends WaterloggedNonCubeBasedBlock {
 	
 	// Voxels are like the bounding boxes (AABBs) NF= North Facing, SF = South Facing, etc
 	private static final VoxelShape NORTH_SOUTH_AABB = Block.box(3.0D, 3.0D, 0.0D, 13.0D, 13.0D, 16.0D);

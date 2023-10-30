@@ -38,14 +38,18 @@ import net.minecraft.world.level.material.Fluids;
  * @author Mark Gottschling on Dec 14, 2021
  *
  */
-public class NonCubeFacingBlock extends FacingBlock {
+public class WaterloggedNonCubeFacingBlock extends FacingBlock implements SimpleWaterloggedBlock {
 
+	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+	
 	/**
-	 *
+	 * 
 	 * @param properties
 	 */
-	public NonCubeFacingBlock(Properties properties) {
+	public WaterloggedNonCubeFacingBlock(Block.Properties properties) {
 		super(properties);
+		this.registerDefaultState(this.stateDefinition.any()
+				.setValue(WATERLOGGED, Boolean.valueOf(false)));
 	}
 	
 	/**
@@ -54,6 +58,7 @@ public class NonCubeFacingBlock extends FacingBlock {
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
+		builder.add(WATERLOGGED);
 	}
 	
 	/**
@@ -68,18 +73,22 @@ public class NonCubeFacingBlock extends FacingBlock {
 
 		BlockState blockState = this.defaultBlockState().setValue(FACING,
 				context.getHorizontalDirection().getOpposite());
+		blockState.setValue(WATERLOGGED, Boolean.valueOf(fluidState.getType() == Fluids.WATER));
 
 		return blockState;
 	}
 	
 	@Override
 	public BlockState updateShape(BlockState state, Direction direction, BlockState newState, LevelAccessor levelAccessor, BlockPos pos, BlockPos p_56930_) {
+		if (state.getValue(WATERLOGGED)) {
+			levelAccessor.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
+		}
 		return super.updateShape(state, direction, newState, levelAccessor, pos, p_56930_);
 	}
 	
 	@Override
 	public FluidState getFluidState(BlockState blockState) {
-		return super.getFluidState(blockState);
+		return blockState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(blockState);
 	}
 	
 	@Override

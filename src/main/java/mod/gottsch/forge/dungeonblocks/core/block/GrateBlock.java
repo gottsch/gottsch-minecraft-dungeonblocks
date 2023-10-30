@@ -32,14 +32,16 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * @author Mark Gottschling on Mar 5, 2020
  *
  */
-public class GrateBlock extends NonCubeBasedBlock {
+public class GrateBlock extends WaterloggedNonCubeBasedBlock {
 
-	private static final VoxelShape UP_SHAPE = Block.box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-	private static final VoxelShape DOWN_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-	private static final VoxelShape NORTH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 8.0D);
-	private static final VoxelShape EAST_SHAPE = Block.box(8.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-	private static final VoxelShape SOUTH_SHAPE = Block.box(0.0D, 0.0D, 8.0D, 16.0D, 16.0D, 16.0D);
-	private static final VoxelShape WEST_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 8.0D, 16.0D, 16.0D);
+//	private static final VoxelShape UP_SHAPE = Block.box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+//	private static final VoxelShape DOWN_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
+//	private static final VoxelShape NORTH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 8.0D);
+//	private static final VoxelShape EAST_SHAPE = Block.box(8.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+//	private static final VoxelShape SOUTH_SHAPE = Block.box(0.0D, 0.0D, 8.0D, 16.0D, 16.0D, 16.0D);
+//	private static final VoxelShape WEST_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 8.0D, 16.0D, 16.0D);
+
+	private static final VoxelShape AABB = Block.box(0.0D, 0.0D, 0.0D, 15.99D, 15.99D, 15.99D);
 
 	public GrateBlock(Properties properties) {
 		super(properties);
@@ -50,16 +52,16 @@ public class GrateBlock extends NonCubeBasedBlock {
 	 */
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
-		Direction direction = state.getValue(BASE);
-
-		return switch (direction) {
-		case UP -> UP_SHAPE;
-		case DOWN -> DOWN_SHAPE;
-		case NORTH -> NORTH_SHAPE;
-		case SOUTH -> SOUTH_SHAPE;
-		case EAST -> EAST_SHAPE;
-		case WEST -> WEST_SHAPE;
-		default -> DOWN_SHAPE;
-		};
+//		Direction direction = state.getValue(BASE);
+//
+//		return switch (direction) {
+//			case UP -> UP_SHAPE;
+//            case NORTH -> NORTH_SHAPE;
+//			case SOUTH -> SOUTH_SHAPE;
+//			case EAST -> EAST_SHAPE;
+//			case WEST -> WEST_SHAPE;
+//			default -> DOWN_SHAPE;
+//		};
+		return AABB;
 	}
 }

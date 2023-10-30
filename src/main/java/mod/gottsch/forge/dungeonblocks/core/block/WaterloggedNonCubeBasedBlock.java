@@ -19,10 +19,11 @@
  */
 package mod.gottsch.forge.dungeonblocks.core.block;
 
-import mod.gottsch.forge.gottschcore.block.FacingBlock;
+import mod.gottsch.forge.gottschcore.block.BasedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -32,20 +33,27 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * 
  * @author Mark Gottschling on Dec 14, 2021
  *
  */
-public class NonCubeFacingBlock extends FacingBlock {
+public class WaterloggedNonCubeBasedBlock extends BasedBlock implements SimpleWaterloggedBlock {
+	private static final VoxelShape DEFAULT_SHAPE = Block.box(0.0D, 0D, 0.0D, 15.99D, 15.99D, 15.99D);
 
+	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+	
 	/**
-	 *
+	 * 
 	 * @param properties
 	 */
-	public NonCubeFacingBlock(Properties properties) {
+	public WaterloggedNonCubeBasedBlock(Properties properties) {
 		super(properties);
+		this.registerDefaultState(this.stateDefinition.any()
+				.setValue(WATERLOGGED, Boolean.valueOf(false)));
 	}
 	
 	/**
@@ -54,8 +62,30 @@ public class NonCubeFacingBlock extends FacingBlock {
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
+		builder.add(WATERLOGGED);
 	}
-	
+
+	@Override
+	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
+		Direction direction = state.getValue(BASE);
+
+		return switch (direction) {
+			case UP -> getUpShape();
+			case NORTH -> getNorthShape();
+			case SOUTH -> getSouthShape();
+			case EAST -> getEastShape();
+			case WEST -> getWestShape();
+			default -> getDownShape();
+		};
+	}
+
+	public VoxelShape getUpShape() {return DEFAULT_SHAPE; }
+	public VoxelShape getNorthShape() {return DEFAULT_SHAPE; }
+	public VoxelShape getSouthShape() {return DEFAULT_SHAPE; }
+	public VoxelShape getEastShape() {return DEFAULT_SHAPE; }
+	public VoxelShape getWestShape() {return DEFAULT_SHAPE; }
+	public VoxelShape getDownShape() {return DEFAULT_SHAPE; }
+
 	/**
 	 * This method returns the state of the block so that the correct entry in the
 	 * blockstate.json file can be selected and the corresponding block model
@@ -66,20 +96,23 @@ public class NonCubeFacingBlock extends FacingBlock {
 		BlockPos blockPos = context.getClickedPos();
 		FluidState fluidState = context.getLevel().getFluidState(blockPos);
 
-		BlockState blockState = this.defaultBlockState().setValue(FACING,
-				context.getHorizontalDirection().getOpposite());
+		BlockState blockState = this.defaultBlockState().setValue(BASE, context.getClickedFace());
+		blockState.setValue(WATERLOGGED, Boolean.valueOf(fluidState.getType() == Fluids.WATER));
 
 		return blockState;
 	}
 	
 	@Override
 	public BlockState updateShape(BlockState state, Direction direction, BlockState newState, LevelAccessor levelAccessor, BlockPos pos, BlockPos p_56930_) {
+		if (state.getValue(WATERLOGGED)) {
+			levelAccessor.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
+		}
 		return super.updateShape(state, direction, newState, levelAccessor, pos, p_56930_);
 	}
 	
 	@Override
 	public FluidState getFluidState(BlockState blockState) {
-		return super.getFluidState(blockState);
+		return blockState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(blockState);
 	}
 	
 	@Override
