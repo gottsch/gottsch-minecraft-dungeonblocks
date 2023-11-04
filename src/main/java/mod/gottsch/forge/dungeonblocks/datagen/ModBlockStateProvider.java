@@ -2,14 +2,23 @@ package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.SconceBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.AttachFace;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Function;
@@ -79,11 +88,23 @@ public class ModBlockStateProvider extends BlockStateProvider {
         grateBlock(ModBlocks.WEATHERED_COPPER_GRATE, mcLoc("block/weathered_copper"));
         torchSconceBlock(ModBlocks.TORCH_SCONCE);
         wallRingBlock(ModBlocks.WALL_RING);
+        hayPatchBlock(ModBlocks.HAY_PATCH);
         largeWallRingBlock(ModBlocks.LARGE_WALL_RING);
+
         sewerBlock(ModBlocks.WEATHERED_COPPER_SEWER, modLoc("block/weathered_copper_pipe"), mcLoc("block/weathered_copper"));
         sewerBlock(ModBlocks.TERRACOTTA_SEWER, mcLoc("block/terracotta"), mcLoc("block/terracotta"));
 
-        simpleBlock(ModBlocks.STRAW.get(), models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/straw_block")));
+        greekBlock(ModBlocks.STONE_GREEK_BLOCK, modLoc("block/stone_greek_block"));
+        greekBlock(ModBlocks.ANDESITE_GREEK_BLOCK, modLoc("block/andesite_greek_block"));
+        greekBlock(ModBlocks.POLISHED_BASALT_GREEK_BLOCK, modLoc("block/polished_basalt_greek_block"));
+
+        dungeonDoorBlock((DoorBlock)ModBlocks.SPRUCE_DUNGEON_DOOR.get(), mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_top"));
+        dungeonDoorBlock((DoorBlock)ModBlocks.DARK_OAK_DUNGEON_DOOR.get(), mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_top"));
+        dungeonDoorBlock((DoorBlock)ModBlocks.CRIMSON_DUNGEON_DOOR.get(), mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_top"));
+        dungeonDoorBlock((DoorBlock)ModBlocks.MANGROVE_DUNGEON_DOOR.get(), mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_top"));
+
+        candleSconceBlock(ModBlocks.CANDLE_SCONCE);
+        //        simpleBlock(ModBlocks.STRAW.get(), models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/straw_block")));
         // can't do this as many blocks aren't the same ie. facing etc.
 //        ModBlocks.MAP.forEach((k, v) -> {
 //            switch(k.getId().getPath()) {
@@ -123,10 +144,36 @@ public class ModBlockStateProvider extends BlockStateProvider {
         myHorizontalBlock(block.get(), model);
     }
 
+    public void dungeonDoorBlock(DoorBlock block, ResourceLocation bottom, ResourceLocation top) {
+        String name = key(block).toString();
+        myDoorBlockInternal(block, name, bottom, top);
+    }
+
+    public void greekBlock(RegistryObject<Block> block, ResourceLocation texture) {
+        ModelFile model = models().cubeAll(block.getId().getPath(), texture);
+        myHorizontalBlock(block.get(), model);
+    }
+
     public void torchSconceBlock(RegistryObject<Block> block) {
         ModelFile model = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/torch_sconce_block"));
         myHorizontalBlock(block.get(), model);
     }
+
+    public void candleSconceBlock(RegistryObject<Block> block) {
+        ModelFile empty = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/candle_sconce_block"));
+
+        ModelFile one_lit = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/candle_sconce_one_candle_lit_block"));
+        ModelFile one_unlit = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/candle_sconce_one_candle_block"));
+
+        ModelFile two_lit = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/candle_sconce_two_candles_lit_block"));
+        ModelFile two_unlit = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/candle_sconce_two_candles_block"));
+
+        ModelFile three_lit = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/candle_sconce_three_candles_lit_block"));
+        ModelFile three_unlit = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/candle_sconce_three_candles_block"));
+
+        myCandleSconceBlock(block.get(), empty, one_lit, one_unlit, two_lit, two_unlit, three_lit, three_unlit);
+    }
+
 
     public void wallRingBlock(RegistryObject<Block> block) {
        ModelFile model = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/wall_ring"));
@@ -140,6 +187,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         // TODO get the extended model
 
         myHorizontalBlock(block.get(), model);
+    }
+
+    public void hayPatchBlock(RegistryObject<Block> block) {
+        ModelFile model = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/hay_patch_block"));
+        simpleBlock(block.get(), model);
     }
 
     public void grateBlock(RegistryObject<Block> block, ResourceLocation texture) {
@@ -204,11 +256,90 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 });
     }
 
+    private void myCandleSconceBlock(Block block, ModelFile empty, ModelFile oneLit, ModelFile oneUnlit, ModelFile twoLit, ModelFile twoUnlit, ModelFile threeLit, ModelFile threeUnlit) {
+        getVariantBuilder(block).forAllStatesExcept(state -> {
+            ModelFile model = empty;
+            boolean isLit = state.getValue(SconceBlock.LIT);
+            int candles = state.getValue(SconceBlock.CANDLES);
+            Direction facing = state.getValue(SconceBlock.FACING);
+
+            if (candles == 0) {
+            }
+            else if (candles == 1) {
+                model = isLit ? oneLit : oneUnlit;
+            } else if (candles == 2) {
+                model = isLit ? twoLit : twoUnlit;
+            } else if (candles == 3) {
+                model = isLit ? threeLit : threeUnlit;
+            }
+            return ConfiguredModel.builder()
+                    .modelFile(model)
+                    .rotationY((int) facing.getOpposite().toYRot())
+                    .uvLock(true)
+                    .build();
+        }, SconceBlock.WATERLOGGED);
+    }
+
+
+    private void myDoorBlockInternal(DoorBlock block, String baseName, ResourceLocation bottom, ResourceLocation top) {
+        ModelFile bottomLeft = doorBottomLeft(baseName + "_bottom_left", bottom, top);
+        ModelFile bottomLeftOpen = doorBottomLeftOpen(baseName + "_bottom_left_open", bottom, top);
+        ModelFile bottomRight = doorBottomRight(baseName + "_bottom_right", bottom, top);
+        ModelFile bottomRightOpen = doorBottomRightOpen(baseName + "_bottom_right_open", bottom, top);
+        ModelFile topLeft = doorTopLeft(baseName + "_top_left", bottom, top);
+        ModelFile topLeftOpen = doorTopLeftOpen(baseName + "_top_left_open", bottom, top);
+        ModelFile topRight = doorTopRight(baseName + "_top_right", bottom, top);
+        ModelFile topRightOpen = doorTopRightOpen(baseName + "_top_right_open", bottom, top);
+        doorBlock(block, bottomLeft, bottomLeftOpen, bottomRight, bottomRightOpen, topLeft, topLeftOpen, topRight, topRightOpen);
+    }
+
+    private BlockModelBuilder door(String name, String model, ResourceLocation bottom, ResourceLocation top) {
+        return models().withExistingParent(name,  "dungeonblocks:block/" + model)
+                .texture("bottom", bottom)
+                .texture("top", top);
+    }
+
+    public BlockModelBuilder doorBottomLeft(String name, ResourceLocation bottom, ResourceLocation top) {
+        return door(name, "dungeon_door_bottom_left", bottom, top);
+    }
+
+    public BlockModelBuilder doorBottomLeftOpen(String name, ResourceLocation bottom, ResourceLocation top) {
+        return door(name, "dungeon_door_bottom_left_open", bottom, top);
+    }
+
+    public BlockModelBuilder doorBottomRight(String name, ResourceLocation bottom, ResourceLocation top) {
+        return door(name, "dungeon_door_bottom_right", bottom, top);
+    }
+
+    public BlockModelBuilder doorBottomRightOpen(String name, ResourceLocation bottom, ResourceLocation top) {
+        return door(name, "dungeon_door_bottom_right_open", bottom, top);
+    }
+
+    public BlockModelBuilder doorTopLeft(String name, ResourceLocation bottom, ResourceLocation top) {
+        return door(name, "dungeon_door_top_left", bottom, top);
+    }
+
+    public BlockModelBuilder doorTopLeftOpen(String name, ResourceLocation bottom, ResourceLocation top) {
+        return door(name, "dungeon_door_top_left_open", bottom, top);
+    }
+
+    public BlockModelBuilder doorTopRight(String name, ResourceLocation bottom, ResourceLocation top) {
+        return door(name, "dungeon_door_top_right", bottom, top);
+    }
+
+    public BlockModelBuilder doorTopRightOpen(String name, ResourceLocation bottom, ResourceLocation top) {
+        return door(name, "dungeon_door_top_right_open", bottom, top);
+    }
+
     public BlockModelBuilder twoTextures(String name, ResourceLocation parent,
                                          String textureKey1, ResourceLocation texture1,
                                          String textureKey2, ResourceLocation texture2) {
         return models().withExistingParent(name, parent)
                 .texture(textureKey1, texture1)
                 .texture(textureKey2, texture2);
+    }
+
+    private ResourceLocation key(Block block) {
+        return ForgeRegistries.BLOCKS.getKey(block);
     }
 }

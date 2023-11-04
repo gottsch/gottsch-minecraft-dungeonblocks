@@ -10,6 +10,7 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.function.Consumer;
@@ -28,8 +29,13 @@ public class Recipes extends RecipeProvider {
 		@Override
 		protected void buildRecipes(Consumer<FinishedRecipe> recipe) {
 
-			// TODO add dark iron and copper grates
-			ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModBlocks.DARK_IRON_GRATE.get())
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.DUNGEON_LANTERN.get())
+					.requires(Blocks.LANTERN)
+					.requires(Items.IRON_INGOT)
+					.unlockedBy("criteria", InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.LANTERN))
+					.save(recipe);
+
+			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.DARK_IRON_GRATE.get())
 					.pattern("xnx")
 					.pattern("nnn")
 					.pattern("xnx")
@@ -38,12 +44,22 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy("criteria", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
 					.save(recipe);
 
-			ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModBlocks.WEATHERED_COPPER_GRATE.get())
+			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.WEATHERED_COPPER_GRATE.get())
 					.pattern("x x")
 					.pattern(" x ")
 					.pattern("x x")
 					.define('x', Items.COPPER_INGOT)
 					.unlockedBy("criteria", InventoryChangeTrigger.TriggerInstance.hasItems(Items.COPPER_INGOT))
+					.save(recipe);
+
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.STONE), RecipeCategory.BUILDING_BLOCKS, ModBlocks.STONE_GREEK_BLOCK.get())
+					.unlockedBy("criteria", InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.STONE))
+					.save(recipe);
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.ANDESITE), RecipeCategory.BUILDING_BLOCKS, ModBlocks.ANDESITE_GREEK_BLOCK.get())
+					.unlockedBy("criteria", InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.STONE))
+					.save(recipe);
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.POLISHED_BASALT), RecipeCategory.BUILDING_BLOCKS, ModBlocks.POLISHED_BASALT_GREEK_BLOCK.get())
+					.unlockedBy("criteria", InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.STONE))
 					.save(recipe);
 
 			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.STONE), RecipeCategory.BUILDING_BLOCKS, ModBlocks.STONE_BARRED_WINDOW.get())

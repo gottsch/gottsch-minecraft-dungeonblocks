@@ -19,24 +19,55 @@
  */
 package mod.gottsch.forge.dungeonblocks.core.block;
 
+import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.AbstractCandleBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import javax.annotation.Nullable;
+import java.util.function.ToIntFunction;
 
 /**
  * @author Mark Gottschling on Jan 18, 2020
  *
  */
-public class SconceBlock extends WaterloggedNonCubeFacingBlock {
+public class SconceBlock extends AbstractSconceBlock {
+	public static final int MIN_CANDLES = 0;
+	public static final int MAX_CANDLES = 3;
+	public static final int LIGHT_PER_CANDLE = 4;
+	public static final IntegerProperty CANDLES = IntegerProperty.create("candles", 0, 4);
+
+	public static final ToIntFunction<BlockState> LIGHT_EMISSION = (state) -> {
+		return state.getValue(LIT) ? LIGHT_PER_CANDLE * state.getValue(CANDLES) : 0;
+	};
 
 	private static final VoxelShape NORTH_FACING_SHAPE = Block
 			.box(2.0D, 2.0D, 9.0D, 14.0D, 15.0D, 15.9999D);
@@ -52,94 +83,156 @@ public class SconceBlock extends WaterloggedNonCubeFacingBlock {
 	 * @param properties
 	 */
 	public SconceBlock(Properties properties) {
+
 		super(properties);
+		this.registerDefaultState(this.stateDefinition.any().setValue(CANDLES, Integer.valueOf(0)));
+
+	}
+
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
+		builder.add(CANDLES);
 	}
 
 	@Override
-	public boolean canSurvive(BlockState state, LevelReader levelReader, BlockPos pos) {
-		 return !levelReader.getBlockState(pos).is(Blocks.WATER);
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+		if (player.getAbilities().mayBuild &&
+				(player.getItemInHand(hand).is(Items.CANDLE) ||
+						player.getItemInHand(hand).is(ItemTags.CANDLES))) {
+			state = state.cycle(CANDLES);
+			DungeonBlocks.LOGGER.info("candles -> {}", state.getValue(CANDLES));
+			level.setBlock(pos, state, 11);
+			level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
+			player.getItemInHand(hand).hurtAndBreak(1, player, (p) -> {
+				p.broadcastBreakEvent(hand);
+			});
+			return InteractionResult.sidedSuccess(level.isClientSide);
+		}
+		return super.use(state, level, pos, player, hand, hitResult);
+	}
+
+	public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState blockState, FluidState fluidState) {
+		if (!blockState.getValue(WATERLOGGED) && fluidState.getType() == Fluids.WATER) {
+			BlockState blockstate = blockState.setValue(WATERLOGGED, Boolean.valueOf(true));
+			if (blockState.getValue(LIT)) {
+				extinguish((Player)null, blockstate, level, pos);
+			} else {
+				level.setBlock(pos, blockstate, 3);
+			}
+
+			level.scheduleTick(pos, fluidState.getType(), fluidState.getType().getTickDelay(level));
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// THIS DOESN'T WORK
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+
+		BlockState blockstate = context.getLevel().getBlockState(context.getClickedPos());
+			FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
+			boolean flag = fluidstate.getType() == Fluids.WATER;
+			return super.getStateForPlacement(context).setValue(WATERLOGGED, Boolean.valueOf(flag));
 	}
 
 	/**
 	 * Called periodically clientside on blocks near the player to show effects
 	 * (like furnace fire particles). Note that this method is unrelated to
-	 * {@link randomTick} and {@link #needsRandomTick}, and will always be
+	 * {randomTick} and {needsRandomTick}, and will always be
 	 * called regardless of whether the block can receive random update ticks
 	 */
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource rand) {
+		
+		if (!state.getValue(LIT) || state.getValue(WATERLOGGED)) {
+			return;
+		}
+		// 35% probability of animating
+		float f = rand.nextFloat();
+		if (f > 0.35F) {
+			return;
+		}
+		if (f < 0.17F) {
+			level.playLocalSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundEvents.CANDLE_AMBIENT, SoundSource.BLOCKS, 1.0F + rand.nextFloat(), rand.nextFloat() * 0.7F + 0.3F, false);
+		}
 		Direction direction = state.getValue(FACING);
 		double d0 = (double) pos.getX() + 0.5D;
 		double d1 = (double) pos.getY() + 0.7D;
 		double d2 = (double) pos.getZ() + 0.5D;
-		double d3 = 0.30D; // y offset
+		double d3 = 0.37D; // y offset
 		double d4 = 0.22D; // horizontal offset middle
 		double d5 = (double) pos.getX() + 0.25D;
 		double d6 = (double) pos.getZ() + 0.25D;
 		double d7 = (double) pos.getX() + 0.75D;
 		double d8 = (double) pos.getZ() + 0.75D;
-		double d9 = 0.27D; // horizontal offset for side torches
+		double d9 = 0.24D; // horizontal offset for side torches
 
+		int candles = state.getValue(CANDLES);
 		if (direction.getAxis().isHorizontal()) {
-			Direction directionFacing = direction.getOpposite();
-			// middle
-			level.addParticle(ParticleTypes.SMOKE,
-					d0 + d4 * (double) directionFacing.getStepX(), d1 + d3,
-					d2 + d4 * (double) directionFacing.getStepZ(), 0.0D, 0.0D,
-					0.0D);
-			level.addParticle(ParticleTypes.FLAME,
-					d0 + d4 * (double) directionFacing.getStepX(), d1 + d3,
-					d2 + d4 * (double) directionFacing.getStepZ(), 0.0D, 0.0D,
-					0.0D);
-
-			// right
-			if (directionFacing.getStepX() != 0) {
+				Direction directionFacing = direction.getOpposite();
+			if (candles == 1 || candles == 3) {
+				// middle
 				level.addParticle(ParticleTypes.SMOKE,
-						d0 + d9 * (double) directionFacing.getStepX(),
-						d1 + d3,
-						d6 + d9 * (double) directionFacing.getStepZ(), 0.0D,
-						0.0D, 0.0D);
-				level.addParticle(ParticleTypes.FLAME,
-						d0 + d9 * (double) directionFacing.getStepX(),
-						d1 + d3,
-						d6 + d9 * (double) directionFacing.getStepZ(), 0.0D,
-						0.0D, 0.0D);
-			} else {
-				level.addParticle(ParticleTypes.SMOKE,
-						d5 + d9 * (double) directionFacing.getStepX(),
-						d1 + d3,
-						d2 + d9 * (double) directionFacing.getStepZ(), 0.0D,
-						0.0D, 0.0D);
-				level.addParticle(ParticleTypes.FLAME,
-						d5 + d9 * (double) directionFacing.getStepX(),
-						d1 + d3,
-						d2 + d9 * (double) directionFacing.getStepZ(), 0.0D,
-						0.0D, 0.0D);
+						d0 + d4 * (double) directionFacing.getStepX(), d1 + d3,
+						d2 + d4 * (double) directionFacing.getStepZ(), 0.0D, 0.0D,
+						0.0D);
+				level.addParticle(ParticleTypes.SMALL_FLAME,
+						d0 + d4 * (double) directionFacing.getStepX(), d1 + d3,
+						d2 + d4 * (double) directionFacing.getStepZ(), 0.0D, 0.0D,
+						0.0D);
 			}
 
-			// left
-			if (directionFacing.getStepX() != 0) {
-				level.addParticle(ParticleTypes.SMOKE,
-						d0 + d4 * (double) directionFacing.getStepX(),
-						d1 + d3,
-						d8 + d4 * (double) directionFacing.getStepZ(), 0.0D,
-						0.0D, 0.0D);
-				level.addParticle(ParticleTypes.FLAME,
-						d0 + d4 * (double) directionFacing.getStepX(),
-						d1 + d3,
-						d8 + d4 * (double) directionFacing.getStepZ(), 0.0D,
-						0.0D, 0.0D);
-			} else {
-				level.addParticle(ParticleTypes.SMOKE,
-						d7 + d4 * (double) directionFacing.getStepX(),
-						d1 + d3,
-						d2 + d4 * (double) directionFacing.getStepZ(), 0.0D,
-						0.0D, 0.0D);
-				level.addParticle(ParticleTypes.FLAME,
-						d7 + d4 * (double) directionFacing.getStepX(),
-						d1 + d3,
-						d2 + d4 * (double) directionFacing.getStepZ(), 0.0D,
-						0.0D, 0.0D);
+			if (candles == 2 || candles == 3) {
+				// right
+				if (directionFacing.getStepX() != 0) {
+					level.addParticle(ParticleTypes.SMOKE,
+							d0 + d9 * (double) directionFacing.getStepX(),
+							d1 + d3,
+							d6 + d9 * (double) directionFacing.getStepZ(), 0.0D,
+							0.0D, 0.0D);
+					level.addParticle(ParticleTypes.SMALL_FLAME,
+							d0 + d9 * (double) directionFacing.getStepX(),
+							d1 + d3,
+							d6 + d9 * (double) directionFacing.getStepZ(), 0.0D,
+							0.0D, 0.0D);
+				} else {
+					level.addParticle(ParticleTypes.SMOKE,
+							d5 + d9 * (double) directionFacing.getStepX(),
+							d1 + d3,
+							d2 + d9 * (double) directionFacing.getStepZ(), 0.0D,
+							0.0D, 0.0D);
+					level.addParticle(ParticleTypes.SMALL_FLAME,
+							d5 + d9 * (double) directionFacing.getStepX(),
+							d1 + d3,
+							d2 + d9 * (double) directionFacing.getStepZ(), 0.0D,
+							0.0D, 0.0D);
+				}
+
+				// left
+				if (directionFacing.getStepX() != 0) {
+					level.addParticle(ParticleTypes.SMOKE,
+							d0 + d4 * (double) directionFacing.getStepX(),
+							d1 + d3,
+							d8 + d4 * (double) directionFacing.getStepZ(), 0.0D,
+							0.0D, 0.0D);
+					level.addParticle(ParticleTypes.SMALL_FLAME,
+							d0 + d4 * (double) directionFacing.getStepX(),
+							d1 + d3,
+							d8 + d4 * (double) directionFacing.getStepZ(), 0.0D,
+							0.0D, 0.0D);
+				} else {
+					level.addParticle(ParticleTypes.SMOKE,
+							d7 + d4 * (double) directionFacing.getStepX(),
+							d1 + d3,
+							d2 + d4 * (double) directionFacing.getStepZ(), 0.0D,
+							0.0D, 0.0D);
+					level.addParticle(ParticleTypes.SMALL_FLAME,
+							d7 + d4 * (double) directionFacing.getStepX(),
+							d1 + d3,
+							d2 + d4 * (double) directionFacing.getStepZ(), 0.0D,
+							0.0D, 0.0D);
+				}
 			}
 		}
 	}

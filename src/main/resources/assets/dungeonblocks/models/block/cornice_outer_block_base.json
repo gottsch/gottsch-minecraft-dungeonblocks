@@ -15,7 +15,7 @@
 				"south": {"uv": [3, 0, 16, 4], "texture": "#0"},
 				"west": {"uv": [3, 0, 16, 4], "texture": "#0"},
 				"up": {"uv": [3, 3, 16, 16], "texture": "#0"},
-				"down": {"uv": [3, 0, 16, 13], "texture": "#0"}
+				"down": {"uv": [0, 3, 13, 16], "texture": "#0"}
 			}
 		},
 		{
@@ -28,7 +28,7 @@
 				"south": {"uv": [8, 4, 16, 16], "texture": "#0"},
 				"west": {"uv": [8, 4, 16, 16], "texture": "#0"},
 				"up": {"uv": [0, 0, 16, 8], "texture": "#0"},
-				"down": {"uv": [8, 0, 16, 8], "texture": "#0"}
+				"down": {"uv": [0, 8, 8, 16], "texture": "#0"}
 			}
 		}
 	],
@@ -36,6 +36,8 @@
 		{
 			"name": "VoxelShapes",
 			"origin": [8, 8, 8],
+			"color": 0,
+			"nbt": "{}",
 			"children": [0, 1]
 		}
 	]

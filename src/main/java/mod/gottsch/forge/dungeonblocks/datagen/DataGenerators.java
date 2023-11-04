@@ -27,6 +27,9 @@ public class DataGenerators {
 
         if (event.includeServer()) {
             generator.addProvider(true, new Recipes(packOutput));
+            generator.addProvider(true, ModLootTableProvider.create(packOutput));
+            ModBlockTagGenerator blockTagGenerator = generator.addProvider(event.includeServer(),
+                new ModBlockTagGenerator(packOutput, lookupProvider, existingFileHelper));
         }
         if (event.includeClient()) {
             generator.addProvider(event.includeClient(), new ModBlockStateProvider(packOutput, existingFileHelper));
@@ -34,10 +37,8 @@ public class DataGenerators {
             generator.addProvider(true, new LanguageGen(packOutput, "en_us"));
         }
 //        generator.addProvider(event.includeServer(), new ModRecipeProvider(packOutput));
-//        generator.addProvider(event.includeServer(), ModLootTableProvider.create(packOutput));
-//
-//        ModBlockTagGenerator blockTagGenerator = generator.addProvider(event.includeServer(),
-//                new ModBlockTagGenerator(packOutput, lookupProvider, existingFileHelper));
+
+
 //        generator.addProvider(event.includeServer(), new ModItemTagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter(), existingFileHelper));
     }
 }

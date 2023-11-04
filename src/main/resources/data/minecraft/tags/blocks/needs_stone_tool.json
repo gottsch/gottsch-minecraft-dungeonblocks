@@ -10,7 +10,6 @@
 	"dungeonblocks:obsidian_pillar_base_block",
 	"dungeonblocks:obsidian_pillar_block",
 	"dungeonblocks:obsidian_quarter_facade_block",
-	"dungeonblocks:obsidian_sill_block",
-	"dungeonblocks:obsidian_wall_sconce_block"
+	"dungeonblocks:obsidian_sill_block"
   ]
 }
