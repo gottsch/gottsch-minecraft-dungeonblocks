@@ -1,15 +1,13 @@
 package mod.gottsch.forge.dungeonblocks.datagen;
 
+import mod.gottsch.forge.dungeonblocks.core.block.BrazierBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.SconceBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.ButtonBlock;
-import net.minecraft.world.level.block.DoorBlock;
-import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
@@ -86,7 +84,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         grateBlock(ModBlocks.DARK_IRON_GRATE, modLoc("block/dark_iron"));
         grateBlock(ModBlocks.WEATHERED_COPPER_GRATE, mcLoc("block/weathered_copper"));
-        torchSconceBlock(ModBlocks.TORCH_SCONCE);
         wallRingBlock(ModBlocks.WALL_RING);
         hayPatchBlock(ModBlocks.HAY_PATCH);
         largeWallRingBlock(ModBlocks.LARGE_WALL_RING);
@@ -103,7 +100,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
         dungeonDoorBlock((DoorBlock)ModBlocks.CRIMSON_DUNGEON_DOOR.get(), mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_top"));
         dungeonDoorBlock((DoorBlock)ModBlocks.MANGROVE_DUNGEON_DOOR.get(), mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_top"));
 
+        torchSconceBlock(ModBlocks.TORCH_SCONCE);
         candleSconceBlock(ModBlocks.CANDLE_SCONCE);
+        brazierBlock(ModBlocks.BRAZIER);
+
         //        simpleBlock(ModBlocks.STRAW.get(), models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/straw_block")));
         // can't do this as many blocks aren't the same ie. facing etc.
 //        ModBlocks.MAP.forEach((k, v) -> {
@@ -209,6 +209,18 @@ public class ModBlockStateProvider extends BlockStateProvider {
         // TODO get the extended model
 
         myHorizontalBlock(block.get(), model);
+    }
+
+    public void brazierBlock(RegistryObject<Block> block) {
+        ModelFile brazier_lit = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/brazier_lit_block"));
+        ModelFile brazier = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/brazier_block"));
+        brazierBlock(block.get(), brazier, brazier_lit);
+    }
+
+    public void brazierBlock(Block block, ModelFile brazier, ModelFile brazier_lit) {
+        getVariantBuilder(block)
+                .partialState().with(BrazierBlock.LIT, true).addModels(new ConfiguredModel(brazier_lit))
+                .partialState().with(BrazierBlock.LIT, false).addModels(new ConfiguredModel(brazier));
     }
 
     public void myHorizontalBlock(Block block, ModelFile model) {

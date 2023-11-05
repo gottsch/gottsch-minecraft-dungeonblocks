@@ -35,6 +35,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		});
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.TORCH_SCONCE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.CANDLE_SCONCE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.BRAZIER));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_GRATE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_GRATE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.WALL_RING));

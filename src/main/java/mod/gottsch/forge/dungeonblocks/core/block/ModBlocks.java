@@ -129,7 +129,11 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> CANDLE_SCONCE = Registration.BLOCKS.register("candle_sconce_block",
             () -> new SconceBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion().lightLevel(SconceBlock.LIGHT_EMISSION)));
+    public static final RegistryObject<Block> DUNGEON_LANTERN = Registration.BLOCKS.register("dungeon_lantern", () -> new DungeonLanternBlock(Properties.of().mapColor(MapColor.METAL)
+            .forceSolidOn().requiresCorrectToolForDrops().strength(3.5F).sound(SoundType.LANTERN).lightLevel(DungeonLanternBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
 
+    public static final RegistryObject<Block> BRAZIER = Registration.BLOCKS.register("brazier_block", () -> new BrazierBlock(Properties.of().mapColor(MapColor.METAL)
+            .forceSolidOn().requiresCorrectToolForDrops().strength(3.5F).sound(SoundType.METAL).lightLevel(BrazierBlock.LIGHT_EMISSION).noOcclusion()));
     // grate
     public static final RegistryObject<Block> DARK_IRON_GRATE = Registration.BLOCKS.register("dark_iron_grate", () -> new GrateBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
     public static final RegistryObject<Block> WEATHERED_COPPER_GRATE = Registration.BLOCKS.register("weather_copper_grate", () -> new GrateBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
@@ -142,8 +146,6 @@ public class ModBlocks {
     public static final RegistryObject<Block> WALL_RING = Registration.BLOCKS.register("wall_ring", () -> new WallRingBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> LARGE_WALL_RING = Registration.BLOCKS.register("large_wall_ring", () -> new WallRingBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> HAY_PATCH = Registration.BLOCKS.register("hay_patch_block", () -> new CarpetBlock(Properties.copy(Blocks.YELLOW_CARPET)));
-    public static final RegistryObject<Block> DUNGEON_LANTERN = Registration.BLOCKS.register("dungeon_lantern", () -> new DungeonLanternBlock(Properties.of().mapColor(MapColor.METAL)
-            .forceSolidOn().requiresCorrectToolForDrops().strength(3.5F).sound(SoundType.LANTERN).lightLevel((x) -> 15).noOcclusion().pushReaction(PushReaction.DESTROY)));
     public static final RegistryObject<Block> STONE_GREEK_BLOCK = Registration.BLOCKS.register("stone_greek_block", () -> new FacingBlock(Properties.copy(Blocks.STONE)));
     public static final RegistryObject<Block> ANDESITE_GREEK_BLOCK = Registration.BLOCKS.register("andesite_greek_block", () -> new FacingBlock(Properties.copy(Blocks.ANDESITE)));
     public static final RegistryObject<Block> POLISHED_BASALT_GREEK_BLOCK = Registration.BLOCKS.register("polished_basalt_greek_block", () -> new FacingBlock(Properties.copy(Blocks.STONE)));

@@ -2,6 +2,7 @@
 package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.DungeonLanternBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -33,6 +34,21 @@ public class Recipes extends RecipeProvider {
 					.requires(Blocks.LANTERN)
 					.requires(Items.IRON_INGOT)
 					.unlockedBy("criteria", InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.LANTERN))
+					.save(recipe);
+
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.TORCH_SCONCE.get())
+					.requires(Blocks.TORCH)
+					.requires(Items.IRON_INGOT)
+					.unlockedBy("criteria", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+					.save(recipe);
+
+			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.CANDLE_SCONCE.get())
+					.pattern(" c ")
+					.pattern("x x")
+					.pattern("xxx")
+					.define('x', Items.IRON_INGOT)
+					.define('c', Items.CANDLE)
+					.unlockedBy("criteria", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
 					.save(recipe);
 
 			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.DARK_IRON_GRATE.get())
