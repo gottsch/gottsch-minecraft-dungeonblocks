@@ -29,7 +29,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		 */
 		ModBlocks.MAP.forEach((k, v) -> {
 			if (k.getId().getPath().contains("barred_window") ||
-					k.getId().getPath().contains("greek_block")) {
+					k.getId().getPath().contains("greek_block") || k.getId().getPath().contains("keystone") ||
+			k.getId().getPath().contains("ledge")) {
 				blockItemParent(v);
 			}
 		});

@@ -63,7 +63,7 @@ public class SconceBlock extends AbstractSconceBlock {
 	public static final int MIN_CANDLES = 0;
 	public static final int MAX_CANDLES = 3;
 	public static final int LIGHT_PER_CANDLE = 4;
-	public static final IntegerProperty CANDLES = IntegerProperty.create("candles", 0, 4);
+	public static final IntegerProperty CANDLES = IntegerProperty.create("candles", 0, 3);
 
 	public static final ToIntFunction<BlockState> LIGHT_EMISSION = (state) -> {
 		return state.getValue(LIT) ? LIGHT_PER_CANDLE * state.getValue(CANDLES) : 0;
@@ -85,7 +85,9 @@ public class SconceBlock extends AbstractSconceBlock {
 	public SconceBlock(Properties properties) {
 
 		super(properties);
-		this.registerDefaultState(this.stateDefinition.any().setValue(CANDLES, Integer.valueOf(0)));
+		this.registerDefaultState(this.stateDefinition.any()
+						.setValue(LIT, Boolean.valueOf(false))
+				.setValue(CANDLES, Integer.valueOf(0)));
 
 	}
 
@@ -99,8 +101,8 @@ public class SconceBlock extends AbstractSconceBlock {
 		if (player.getAbilities().mayBuild &&
 				(player.getItemInHand(hand).is(Items.CANDLE) ||
 						player.getItemInHand(hand).is(ItemTags.CANDLES))) {
+			DungeonBlocks.LOGGER.info("placing candle, lit state -> {}", state.getValue(LIT));
 			state = state.cycle(CANDLES);
-			DungeonBlocks.LOGGER.info("candles -> {}", state.getValue(CANDLES));
 			level.setBlock(pos, state, 11);
 			level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 			player.getItemInHand(hand).hurtAndBreak(1, player, (p) -> {

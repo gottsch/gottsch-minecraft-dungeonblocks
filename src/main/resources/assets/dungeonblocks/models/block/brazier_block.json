@@ -1,5 +1,5 @@
 {
-	"credit": "Made with Blockbench",
+	"parent": "block/block",
 	"textures": {
 		"0": "dungeonblocks:block/dark_iron",
 		"1": "dungeonblocks:block/brazier",

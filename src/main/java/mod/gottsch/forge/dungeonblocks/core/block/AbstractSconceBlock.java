@@ -19,6 +19,7 @@
  */
 package mod.gottsch.forge.dungeonblocks.core.block;
 
+import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -73,6 +74,7 @@ public abstract class AbstractSconceBlock extends WaterloggedNonCubeFacingBlock 
                         player.getItemInHand(hand).is(Items.FLINT_AND_STEEL))
                 && !state.getValue(LIT)
         ) {
+            DungeonBlocks.LOGGER.info("lighting candle");
             setLit(level, state, pos, true);
             level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
             player.getItemInHand(hand).hurtAndBreak(1, player, (p) -> {

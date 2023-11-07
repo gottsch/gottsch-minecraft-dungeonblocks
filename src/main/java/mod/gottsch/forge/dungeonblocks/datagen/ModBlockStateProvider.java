@@ -1,6 +1,7 @@
 package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.core.block.BrazierBlock;
+import mod.gottsch.forge.dungeonblocks.core.block.KeystoneBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.SconceBlock;
@@ -9,13 +10,9 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraft.world.level.block.state.properties.DoorHingeSide;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -35,6 +32,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
+        // barred windows
         barredWindowBlock(ModBlocks.STONE_BARRED_WINDOW, mcLoc("block/stone"));
         barredWindowBlock(ModBlocks.SMOOTH_STONE_BARRED_WINDOW, mcLoc("block/smooth_stone"));
         barredWindowBlock(ModBlocks.COBBLESTONE_BARRED_WINDOW, mcLoc("block/cobblestone"));
@@ -81,6 +79,23 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         barredWindowFacadeBlock(ModBlocks.TERRACOTTA_BARRED_WINDOW_FACADE, mcLoc("block/terracotta"));
 
+        // keystones
+        modelSingleTexture(KeystoneBlocks.POLISHED_DIORITE_KEYSTONE, modLoc(ModelProvider.BLOCK_FOLDER + "/keystone_block"), mcLoc("block/polished_diorite"));
+
+        String name = ModelProvider.BLOCK_FOLDER + "/keystone_slab_block";
+        modelSingleTexture(KeystoneBlocks.STONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/stone"));
+        modelSingleTexture(KeystoneBlocks.SMOOTH_STONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/smooth_stone"));
+        modelSingleTexture(KeystoneBlocks.COBBLESTONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/cobblestone"));
+        modelSingleTexture(KeystoneBlocks.MOSSY_COBBLESTONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/mossy_cobblestone"));
+        modelSingleTexture(KeystoneBlocks.BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/bricks"));
+        modelSingleTexture(KeystoneBlocks.STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/stone_bricks"));
+        modelSingleTexture(KeystoneBlocks.MOSSY_STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/mossy_stone_bricks"));
+        modelSingleTexture(KeystoneBlocks.LIGHT_GRAY_CONCRETE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/light_gray_concrete"));
+
+        name = ModelProvider.BLOCK_FOLDER + "/ledge_block";
+        modelSingleTexture(ModBlocks.POLISHED_DIORITE_LEDGE, modLoc(name), mcLoc("block/polished_diorite"));
+
+        modelSingleTexture(ModBlocks.STONE_BRICKS_POLISHED_DIORITE_QUOIN, modLoc(ModelProvider.BLOCK_FOLDER + "/quoin_block"), mcLoc("block/polished_diorite"));
 
         grateBlock(ModBlocks.DARK_IRON_GRATE, modLoc("block/dark_iron"));
         grateBlock(ModBlocks.WEATHERED_COPPER_GRATE, mcLoc("block/weathered_copper"));
@@ -91,15 +106,18 @@ public class ModBlockStateProvider extends BlockStateProvider {
         sewerBlock(ModBlocks.WEATHERED_COPPER_SEWER, modLoc("block/weathered_copper_pipe"), mcLoc("block/weathered_copper"));
         sewerBlock(ModBlocks.TERRACOTTA_SEWER, mcLoc("block/terracotta"), mcLoc("block/terracotta"));
 
+        // pattern
         greekBlock(ModBlocks.STONE_GREEK_BLOCK, modLoc("block/stone_greek_block"));
         greekBlock(ModBlocks.ANDESITE_GREEK_BLOCK, modLoc("block/andesite_greek_block"));
         greekBlock(ModBlocks.POLISHED_BASALT_GREEK_BLOCK, modLoc("block/polished_basalt_greek_block"));
 
+        // doors
         dungeonDoorBlock((DoorBlock)ModBlocks.SPRUCE_DUNGEON_DOOR.get(), mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_top"));
         dungeonDoorBlock((DoorBlock)ModBlocks.DARK_OAK_DUNGEON_DOOR.get(), mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_top"));
         dungeonDoorBlock((DoorBlock)ModBlocks.CRIMSON_DUNGEON_DOOR.get(), mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_top"));
         dungeonDoorBlock((DoorBlock)ModBlocks.MANGROVE_DUNGEON_DOOR.get(), mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_top"));
 
+        // light source
         torchSconceBlock(ModBlocks.TORCH_SCONCE);
         candleSconceBlock(ModBlocks.CANDLE_SCONCE);
         brazierBlock(ModBlocks.BRAZIER);
@@ -116,6 +134,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
         simpleBlockWithItem(blockRegistryObject.get(), cubeAll(blockRegistryObject.get()));
         simpleBlock(blockRegistryObject.get());
+    }
+
+    private void modelSingleTexture(RegistryObject<Block> block, ResourceLocation modelName, ResourceLocation texture) {
+        ModelFile model = models().singleTexture(block.getId().getPath(), modelName, "0", texture);
+        myHorizontalBlock(block.get(), model);
     }
 
     private BlockModelBuilder barredWindow(String name, ResourceLocation texture) {
@@ -146,7 +169,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     public void dungeonDoorBlock(DoorBlock block, ResourceLocation bottom, ResourceLocation top) {
         String name = key(block).toString();
-        myDoorBlockInternal(block, name, bottom, top);
+        dungeonDoorBlock(block, name, bottom, top);
     }
 
     public void greekBlock(RegistryObject<Block> block, ResourceLocation texture) {
@@ -174,6 +197,37 @@ public class ModBlockStateProvider extends BlockStateProvider {
         myCandleSconceBlock(block.get(), empty, one_lit, one_unlit, two_lit, two_unlit, three_lit, three_unlit);
     }
 
+    public void recessBlock(RegistryObject<Block> block, ResourceLocation texture) {
+        String name = block.getId().getPath();
+        ModelFile bottom = models().withExistingParent(name + "_bottom", "dungeonblocks:block/" + "recess_bottom_block").texture("0", texture); //modLoc(ModelProvider.BLOCK_FOLDER + "/" + name + "_bottom"));
+        ModelFile middle = models().withExistingParent(name + "_middle", "dungeonblocks:block/" + "recess_middle_block").texture("0", texture);
+        ModelFile top = models().withExistingParent(name + "_top", "dungeonblocks:block/" + "recess_top_block").texture("0", texture);
+//        ModelFile middle = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/" + name + "_middle"));
+//        ModelFile top = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/" + name + "_top"));
+        recessBlock(block.get(), bottom, middle, top);
+    }
+
+    private void recessBlock(Block block, ModelFile bottom, ModelFile middle, ModelFile top) {
+        getVariantBuilder(block).forAllStates(state -> {
+            ModelFile model = bottom;
+//            int piece = state.getValue(RecessBlock.PIECE);
+            int piece = 1;
+            Direction facing = state.getValue(SconceBlock.FACING);
+
+            if (piece == 1) {
+                model = bottom;
+            } else if (piece == 2) {
+                model = middle;
+            } else if (piece == 3) {
+                model = top;
+            }
+            return ConfiguredModel.builder()
+                    .modelFile(model)
+                    .rotationY((int) facing.getOpposite().toYRot())
+                    .uvLock(true)
+                    .build();
+        });
+    }
 
     public void wallRingBlock(RegistryObject<Block> block) {
        ModelFile model = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/wall_ring"));
@@ -292,8 +346,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         }, SconceBlock.WATERLOGGED);
     }
 
-
-    private void myDoorBlockInternal(DoorBlock block, String baseName, ResourceLocation bottom, ResourceLocation top) {
+    private void dungeonDoorBlock(DoorBlock block, String baseName, ResourceLocation bottom, ResourceLocation top) {
         ModelFile bottomLeft = doorBottomLeft(baseName + "_bottom_left", bottom, top);
         ModelFile bottomLeftOpen = doorBottomLeftOpen(baseName + "_bottom_left_open", bottom, top);
         ModelFile bottomRight = doorBottomRight(baseName + "_bottom_right", bottom, top);
