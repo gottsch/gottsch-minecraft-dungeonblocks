@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  *
- * @author Mark Gottschling on Oct 26, 2024
+ * @author Mark Gottschling on Oct 26, 2023
  *
  */
 @Mod.EventBusSubscriber(modid = DungeonBlocks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)

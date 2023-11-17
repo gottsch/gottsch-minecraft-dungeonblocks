@@ -3,7 +3,7 @@
 	"ambientocclusion": false,
 	"textures": {
 		"1": "dungeonblocks:block/dark_iron",
-		"particle": "#0"
+		"particle": "#top"
 	},
 	"elements": [
 		{

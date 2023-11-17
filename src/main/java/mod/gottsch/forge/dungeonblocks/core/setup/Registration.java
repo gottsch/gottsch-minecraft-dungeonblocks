@@ -18,13 +18,15 @@
 package mod.gottsch.forge.dungeonblocks.core.setup;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.CorbelBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.KeystoneBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.LedgeBlocks;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 /**
  * 
@@ -43,6 +45,11 @@ public class Registration {
 	 */
 	public static void registerBlocks() {
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+		KeystoneBlocks.register();
+		LedgeBlocks.register();
+		CorbelBlocks.register();
+
 		BLOCKS.register(eventBus);
 	}
 	

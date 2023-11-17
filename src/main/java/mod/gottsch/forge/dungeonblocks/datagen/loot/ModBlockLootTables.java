@@ -33,17 +33,25 @@ import java.util.Set;
 public class ModBlockLootTables extends BlockLootSubProvider {
     List<String> names = Arrays.asList(
             "barred_window",
-            "cornice",
-            "crown_molding",
-            "double_sill",
-            "facade",
-            "fluted",
+            "brazier",
+            "corbel",
+//            "cornice",
+//            "crown_molding",
+//            "double_sill",
+            "door",
+            "lantern",
+//            "facade",
+//            "fluted",
             "grate",
-            "pillar",
-            "quarter",
+            "keystone",
+            "ledge",
+            "plate_bracket",
+//            "pillar",
+//            "quarter",
             "sconce",
             "sewer",
-            "sill",
+//            "sill",
+            "hay",
             "wall_ring");
 
     public ModBlockLootTables() {
@@ -54,10 +62,16 @@ public class ModBlockLootTables extends BlockLootSubProvider {
     protected void generate() {
         ModBlocks.MAP.forEach((k, v) -> {
             String name = k.getId().getPath();
-            if (name.contains("barred_window") || name.contains("sewer") || name.contains("grate") || name.contains("wall_ring")
-                    || name.contains("greek_block") || name.contains("dungeon_lantern") || name.contains("dungeon_door")) {
-                dropSelf(k.get());
+            for(String n : names) {
+                if (name.contains(n)) {
+                    dropSelf(k.get());
+                    break;
+                }
             }
+//            if (name.contains("barred_window") || name.contains("sewer") || name.contains("grate") || name.contains("wall_ring")
+//                    || name.contains("greek_block") || name.contains("dungeon_lantern") || name.contains("dungeon_door")) {
+//                dropSelf(k.get());
+//            }
         });
 
 //        this.add(ModBlocks.SAPPHIRE_ORE.get(),
@@ -86,9 +100,14 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 // TODO in the future include all blocks
                 .filter(b -> {
                     String name = b.getId().getPath();
-                    if (name.contains("barred_window") || name.contains("sewer") || name.contains("grate") || name.contains("wall_ring")
-                            || name.contains("greek_block") || name.contains("dungeon_lantern") || name.contains("dungeon_door")) {
-                        return true;
+//                    if (name.contains("barred_window") || name.contains("sewer") || name.contains("grate") || name.contains("wall_ring")
+//                            || name.contains("greek_block") || name.contains("dungeon_lantern") || name.contains("dungeon_door")) {
+//                        return true;
+//                    }
+                    for(String n : names) {
+                        if (name.contains(n)) {
+                            return true;
+                        }
                     }
                     return false;
                     })

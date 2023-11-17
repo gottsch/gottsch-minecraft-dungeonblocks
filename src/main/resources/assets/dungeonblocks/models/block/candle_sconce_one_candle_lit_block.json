@@ -6,6 +6,7 @@
 		"4": "minecraft:block/candle_lit",
 		"particle": "minecraft:block/candle_lit"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"name": "base",

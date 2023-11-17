@@ -58,18 +58,28 @@ public class ModBlocks {
 
     // grate
     public static final RegistryObject<Block> DARK_IRON_GRATE = Registration.BLOCKS.register("dark_iron_grate", () -> new GrateBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
-    public static final RegistryObject<Block> WEATHERED_COPPER_GRATE = Registration.BLOCKS.register("weather_copper_grate", () -> new GrateBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
+    public static final RegistryObject<Block> WEATHERED_COPPER_GRATE = Registration.BLOCKS.register("weathered_copper_grate", () -> new GrateBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
+
+    // grate trapdoor
+    public static final RegistryObject<Block> DARK_IRON_GRATE_TRAPDOOR = Registration.BLOCKS.register("dark_iron_grate_trapdoor", () -> new GrateTrapDoorBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
+    public static final RegistryObject<Block> WEATHERED_COPPER_GRATE_TRAPDOOR = Registration.BLOCKS.register("weathered_copper_grate_trapdoor", () -> new GrateTrapDoorBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
+
     // sewer
     public static final RegistryObject<Block> WEATHERED_COPPER_SEWER = Registration.BLOCKS.register("weathered_copper_sewer_block", () -> new SewerBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> TERRACOTTA_SEWER = Registration.BLOCKS.register("terracotta_sewer_block", () -> new SewerBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
 
 
     public static final RegistryObject<Block> WALL_RING = Registration.BLOCKS.register("wall_ring", () -> new WallRingBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> LARGE_WALL_RING = Registration.BLOCKS.register("large_wall_ring", () -> new WallRingBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
+    public static final RegistryObject<Block> PLATE_BRACKET_BLOCK = Registration.BLOCKS.register("plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
+
+    // hay patches
     public static final RegistryObject<Block> HAY_PATCH = Registration.BLOCKS.register("hay_patch_block", () -> new CarpetBlock(Properties.copy(Blocks.YELLOW_CARPET)));
+    public static final RegistryObject<Block> DIRTY_HAY_PATCH = Registration.BLOCKS.register("dirty_hay_patch_block", () -> new CarpetBlock(Properties.copy(Blocks.YELLOW_CARPET)));
+
+    // greek blocks
     public static final RegistryObject<Block> STONE_GREEK_BLOCK = Registration.BLOCKS.register("stone_greek_block", () -> new FacingBlock(Properties.copy(Blocks.STONE)));
     public static final RegistryObject<Block> ANDESITE_GREEK_BLOCK = Registration.BLOCKS.register("andesite_greek_block", () -> new FacingBlock(Properties.copy(Blocks.ANDESITE)));
-    public static final RegistryObject<Block> POLISHED_BASALT_GREEK_BLOCK = Registration.BLOCKS.register("polished_basalt_greek_block", () -> new FacingBlock(Properties.copy(Blocks.STONE)));
+    public static final RegistryObject<Block> POLISHED_BASALT_GREEK_BLOCK = Registration.BLOCKS.register("polished_basalt_greek_block", () -> new FacingBlock(Properties.copy(Blocks.POLISHED_BASALT)));
 
     // doors
     public static final RegistryObject<Block> SPRUCE_DUNGEON_DOOR = Registration.BLOCKS.register("spruce_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.SPRUCE_DOOR), BlockSetType.SPRUCE));
@@ -77,15 +87,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> DARK_OAK_DUNGEON_DOOR = Registration.BLOCKS.register("dark_oak_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK));
     public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR = Registration.BLOCKS.register("mangrove_dungeon_door", () -> new DoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE));
 
-    public static RegistryObject<Block> STONE_LEDGE = Registration.BLOCKS.register("polished_diorite_ledge_block",
-            () -> new LedgeBlock(Properties.copy(Blocks.STONE)));
-    public static RegistryObject<Block> POLISHED_DIORITE_LEDGE = Registration.BLOCKS.register("polished_diorite_ledge_block",
-            () -> new LedgeBlock(Properties.copy(Blocks.POLISHED_DIORITE)));
-
-    @Deprecated
-    public static RegistryObject<Block> STONE_BRICKS_POLISHED_DIORITE_QUOIN = Registration.BLOCKS.register("stone_bricks_polished_diorite_quoin_block",
-            () -> new QuoinBlock(Properties.copy(Blocks.STONE)));
-
+    // barred windows and facades
     public static RegistryObject<Block> STONE_BARRED_WINDOW = Registration.BLOCKS.register("stone_barred_window_block",
             () -> new BarredWindowBlock(Properties.copy(Blocks.STONE)));
     public static RegistryObject<Block> SMOOTH_STONE_BARRED_WINDOW = Registration.BLOCKS.register("smooth_stone_barred_window_block",

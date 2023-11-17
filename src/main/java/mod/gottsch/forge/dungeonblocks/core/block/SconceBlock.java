@@ -63,20 +63,20 @@ public class SconceBlock extends AbstractSconceBlock {
 	public static final int MIN_CANDLES = 0;
 	public static final int MAX_CANDLES = 3;
 	public static final int LIGHT_PER_CANDLE = 4;
-	public static final IntegerProperty CANDLES = IntegerProperty.create("candles", 0, 3);
+	public static final IntegerProperty CANDLES = IntegerProperty.create("candles", MIN_CANDLES, MAX_CANDLES);
 
 	public static final ToIntFunction<BlockState> LIGHT_EMISSION = (state) -> {
 		return state.getValue(LIT) ? LIGHT_PER_CANDLE * state.getValue(CANDLES) : 0;
 	};
 
 	private static final VoxelShape NORTH_FACING_SHAPE = Block
-			.box(2.0D, 2.0D, 9.0D, 14.0D, 15.0D, 15.9999D);
+			.box(2.0D, 2.0D, 9.0D, 14.0D, 15.0D, 16);
 	private static final VoxelShape EAST_FACING_SHAPE = Block
 			.box(0.0001D, 2.0D, 2.0D, 6.0D, 15.0D, 14.0D);
 	private static final VoxelShape SOUTH_FACING_SHAPE = Block
 			.box(2.0D, 2.0D, 0.0001D, 14.0D, 15.0D, 6.0D);
 	private static final VoxelShape WEST_FACING_SHAPE = Block
-			.box(9.0D, 2.0D, 2.0D, 15.9999D, 15.0D, 14.0D);
+			.box(9.0D, 2.0D, 2.0D, 16, 15.0D, 14.0D);
 
 	/**
 	 * 

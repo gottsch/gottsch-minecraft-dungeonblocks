@@ -43,13 +43,13 @@ public class TorchSconceBlock extends NonCubeFacingBlock {
 
 	// TODO update sizes
 	private static final VoxelShape NORTH_FACING_SHAPE = Block
-			.box(2.0D, 2.0D, 9.0D, 14.0D, 15.0D, 15.9999D);
+			.box(5, 3, 8, 11, 13, 16);
 	private static final VoxelShape EAST_FACING_SHAPE = Block
-			.box(0.0001D, 2.0D, 2.0D, 6.0D, 15.0D, 14.0D);
+			.box(0, 3, 5, 8, 13, 11);
 	private static final VoxelShape SOUTH_FACING_SHAPE = Block
-			.box(2.0D, 2.0D, 0.0001D, 14.0D, 15.0D, 6.0D);
+			.box(5, 3, 0, 11, 13, 8);
 	private static final VoxelShape WEST_FACING_SHAPE = Block
-			.box(9.0D, 2.0D, 2.0D, 15.9999D, 15.0D, 14.0D);
+			.box(8, 3, 5, 16, 13, 11);
 
 	/**
 	 *
@@ -84,13 +84,8 @@ public class TorchSconceBlock extends NonCubeFacingBlock {
 		double d0 = (double) pos.getX() + 0.5D;
 		double d1 = (double) pos.getY() + 0.5D;
 		double d2 = (double) pos.getZ() + 0.5D;
-		double d3 = 0.30D; // y offset
-		double d4 = 0.15; //0.22D; // horizontal offset middle
-		double d5 = (double) pos.getX() + 0.25D;
-		double d6 = (double) pos.getZ() + 0.25D;
-		double d7 = (double) pos.getX() + 0.75D;
-		double d8 = (double) pos.getZ() + 0.75D;
-		double d9 = 0.27D; // horizontal offset for side torches
+		double d3 = 0.40D; // y offset
+		double d4 = 0.05D; // horizontal offset middle
 
 		if (direction.getAxis().isHorizontal()) {
 			Direction directionFacing = direction.getOpposite();
@@ -104,55 +99,6 @@ public class TorchSconceBlock extends NonCubeFacingBlock {
 					d2 + d4 * (double) directionFacing.getStepZ(), 0.0D, 0.0D,
 					0.0D);
 
-//			// right
-//			if (directionFacing.getStepX() != 0) {
-//				level.addParticle(ParticleTypes.SMOKE,
-//						d0 + d9 * (double) directionFacing.getStepX(),
-//						d1 + d3,
-//						d6 + d9 * (double) directionFacing.getStepZ(), 0.0D,
-//						0.0D, 0.0D);
-//				level.addParticle(ParticleTypes.FLAME,
-//						d0 + d9 * (double) directionFacing.getStepX(),
-//						d1 + d3,
-//						d6 + d9 * (double) directionFacing.getStepZ(), 0.0D,
-//						0.0D, 0.0D);
-//			} else {
-//				level.addParticle(ParticleTypes.SMOKE,
-//						d5 + d9 * (double) directionFacing.getStepX(),
-//						d1 + d3,
-//						d2 + d9 * (double) directionFacing.getStepZ(), 0.0D,
-//						0.0D, 0.0D);
-//				level.addParticle(ParticleTypes.FLAME,
-//						d5 + d9 * (double) directionFacing.getStepX(),
-//						d1 + d3,
-//						d2 + d9 * (double) directionFacing.getStepZ(), 0.0D,
-//						0.0D, 0.0D);
-//			}
-//
-//			// left
-//			if (directionFacing.getStepX() != 0) {
-//				level.addParticle(ParticleTypes.SMOKE,
-//						d0 + d4 * (double) directionFacing.getStepX(),
-//						d1 + d3,
-//						d8 + d4 * (double) directionFacing.getStepZ(), 0.0D,
-//						0.0D, 0.0D);
-//				level.addParticle(ParticleTypes.FLAME,
-//						d0 + d4 * (double) directionFacing.getStepX(),
-//						d1 + d3,
-//						d8 + d4 * (double) directionFacing.getStepZ(), 0.0D,
-//						0.0D, 0.0D);
-//			} else {
-//				level.addParticle(ParticleTypes.SMOKE,
-//						d7 + d4 * (double) directionFacing.getStepX(),
-//						d1 + d3,
-//						d2 + d4 * (double) directionFacing.getStepZ(), 0.0D,
-//						0.0D, 0.0D);
-//				level.addParticle(ParticleTypes.FLAME,
-//						d7 + d4 * (double) directionFacing.getStepX(),
-//						d1 + d3,
-//						d2 + d4 * (double) directionFacing.getStepZ(), 0.0D,
-//						0.0D, 0.0D);
-//			}
 		}
 	}
 
