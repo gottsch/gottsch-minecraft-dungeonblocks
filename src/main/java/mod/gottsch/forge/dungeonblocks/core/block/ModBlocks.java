@@ -39,6 +39,8 @@ import net.minecraftforge.registries.RegistryObject;
  * @author Mark Gottschling on Jan 12, 2020
  */
 public class ModBlocks {
+    // map from registry block to registry item
+    public static final Map<RegistryObject<Block>, RegistryObject<Item>> MAP = Maps.newHashMap();
 
     // NEW 10/26/2023
     // wall sconce
@@ -87,93 +89,6 @@ public class ModBlocks {
     public static final RegistryObject<Block> DARK_OAK_DUNGEON_DOOR = Registration.BLOCKS.register("dark_oak_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK));
     public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR = Registration.BLOCKS.register("mangrove_dungeon_door", () -> new DoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE));
 
-    // barred windows and facades
-    public static RegistryObject<Block> STONE_BARRED_WINDOW = Registration.BLOCKS.register("stone_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.STONE)));
-    public static RegistryObject<Block> SMOOTH_STONE_BARRED_WINDOW = Registration.BLOCKS.register("smooth_stone_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.SMOOTH_STONE)));
-    public static RegistryObject<Block> COBBLESTONE_BARRED_WINDOW = Registration.BLOCKS.register("cobblestone_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.COBBLESTONE)));
-    public static RegistryObject<Block> MOSSY_COBBLESTONE_BARRED_WINDOW = Registration.BLOCKS.register("mossy_cobblestone_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.MOSSY_COBBLESTONE)));
-    public static RegistryObject<Block> BRICKS_BARRED_WINDOW = Registration.BLOCKS.register("bricks_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.BRICKS)));
-    public static RegistryObject<Block> STONE_BRICKS_BARRED_WINDOW = Registration.BLOCKS.register("stone_bricks_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.STONE_BRICKS)));
-    public static RegistryObject<Block> MOSSY_STONE_BRICKS_BARRED_WINDOW = Registration.BLOCKS.register("mossy_stone_bricks_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS)));
-    public static RegistryObject<Block> CRACKED_STONE_BRICKS_BARRED_WINDOW = Registration.BLOCKS.register("cracked_stone_bricks_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
-    public static RegistryObject<Block> CHISELED_STONE_BRICKS_BARRED_WINDOW = Registration.BLOCKS.register("chiseled_stone_bricks_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.CHISELED_STONE_BRICKS)));
-    public static RegistryObject<Block> OBSIDIAN_BARRED_WINDOW = Registration.BLOCKS.register("obsidian_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.OBSIDIAN)));
-
-    public static RegistryObject<Block> SANDSTONE_BARRED_WINDOW = Registration.BLOCKS.register("sandstone_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.SANDSTONE)));
-    public static RegistryObject<Block> SMOOTH_SANDSTONE_BARRED_WINDOW = Registration.BLOCKS.register("smooth_sandstone_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.SMOOTH_SANDSTONE)));
-    public static RegistryObject<Block> CHISELED_SANDSTONE_BARRED_WINDOW = Registration.BLOCKS.register("chiseled_sandstone_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.CHISELED_SANDSTONE)));
-    public static RegistryObject<Block> CUT_SANDSTONE_BARRED_WINDOW = Registration.BLOCKS.register("cut_sandstone_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.CUT_SANDSTONE)));
-    public static RegistryObject<Block> RED_SANDSTONE_BARRED_WINDOW = Registration.BLOCKS.register("red_sandstone_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.RED_SANDSTONE)));
-    public static RegistryObject<Block> SMOOTH_RED_SANDSTONE_BARRED_WINDOW = Registration.BLOCKS.register("smooth_red_sandstone_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.SMOOTH_RED_SANDSTONE)));
-    public static RegistryObject<Block> CHISELED_RED_SANDSTONE_BARRED_WINDOW = Registration.BLOCKS.register("chiseled_red_sandstone_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.CHISELED_RED_SANDSTONE)));
-    public static RegistryObject<Block> CUT_RED_SANDSTONE_BARRED_WINDOW = Registration.BLOCKS.register("cut_red_sandstone_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.CUT_RED_SANDSTONE)));
-
-    public static RegistryObject<Block> TERRACOTTA_BARRED_WINDOW = Registration.BLOCKS.register("terracotta_barred_window_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.TERRACOTTA)));
-
-    // barred window facade
-    public static RegistryObject<Block> STONE_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("stone_barred_window_facade_block",
-            () -> new BarredWindowFacadeBlock(Properties.copy(Blocks.STONE)));
-    public static RegistryObject<Block> SMOOTH_STONE_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("smooth_stone_barred_window_facade_block",
-            () -> new BarredWindowFacadeBlock(Properties.copy(Blocks.SMOOTH_STONE)));
-    public static RegistryObject<Block> COBBLESTONE_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("cobblestone_barred_window_facade_block",
-            () -> new BarredWindowFacadeBlock(Properties.copy(Blocks.COBBLESTONE)));
-    public static RegistryObject<Block> MOSSY_COBBLESTONE_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("mossy_cobblestone_barred_window_facade_block",
-            () -> new BarredWindowFacadeBlock(Properties.copy(Blocks.MOSSY_COBBLESTONE)));
-    public static RegistryObject<Block> BRICKS_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("bricks_barred_window_facade_block",
-            () -> new BarredWindowFacadeBlock(Properties.copy(Blocks.BRICKS)));
-    public static RegistryObject<Block> STONE_BRICKS_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("stone_bricks_barred_window_facade_block",
-            () -> new BarredWindowFacadeBlock(Properties.copy(Blocks.STONE_BRICKS)));
-    public static RegistryObject<Block> MOSSY_STONE_BRICKS_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("mossy_stone_bricks_barred_window_facade_block",
-            () -> new BarredWindowFacadeBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS)));
-    public static RegistryObject<Block> CRACKED_STONE_BRICKS_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("cracked_stone_bricks_barred_window_facade_block",
-            () -> new BarredWindowFacadeBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
-    public static RegistryObject<Block> CHISELED_STONE_BRICKS_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("chiseled_stone_bricks_barred_window_facade_block",
-            () -> new BarredWindowFacadeBlock(Properties.copy(Blocks.CHISELED_STONE_BRICKS)));
-    public static RegistryObject<Block> OBSIDIAN_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("obsidian_barred_window_facade_block",
-            () -> new BarredWindowFacadeBlock(Properties.copy(Blocks.OBSIDIAN)));
-
-    public static RegistryObject<Block> SANDSTONE_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("sandstone_barred_window_facade_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.SANDSTONE)));
-    public static RegistryObject<Block> SMOOTH_SANDSTONE_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("smooth_sandstone_barred_window_facade_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.SMOOTH_SANDSTONE)));
-    public static RegistryObject<Block> CHISELED_SANDSTONE_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("chiseled_sandstone_barred_window_facade_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.CHISELED_SANDSTONE)));
-    public static RegistryObject<Block> CUT_SANDSTONE_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("cut_sandstone_barred_window_facade_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.CUT_SANDSTONE)));
-    public static RegistryObject<Block> RED_SANDSTONE_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("red_sandstone_barred_window_facade_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.RED_SANDSTONE)));
-    public static RegistryObject<Block> SMOOTH_RED_SANDSTONE_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("smooth_red_sandstone_barred_window_facade_facade_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.SMOOTH_RED_SANDSTONE)));
-    public static RegistryObject<Block> CHISELED_RED_SANDSTONE_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("chiseled_red_sandstone_barred_window_facade_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.CHISELED_RED_SANDSTONE)));
-    public static RegistryObject<Block> CUT_RED_SANDSTONE_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("cut_red_sandstone_barred_window_facade_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.CUT_RED_SANDSTONE)));
-
-    public static RegistryObject<Block> TERRACOTTA_BARRED_WINDOW_FACADE = Registration.BLOCKS.register("terracotta_barred_window_facade_block",
-            () -> new BarredWindowBlock(Properties.copy(Blocks.TERRACOTTA)));
-
-    public static final Map<RegistryObject<Block>, RegistryObject<Item>> MAP = Maps.newHashMap();
-
-
     // facade
     public static final RegistryObject<Block> STONE_FACADE = Registration.BLOCKS.register(BlockID.STONE_FACADE_ID, () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> SMOOTH_STONE_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_FACADE_ID,
@@ -189,7 +104,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> MOSSY_STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_FACADE_ID,
             () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> CRACKED_STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
+            () -> new FacadeBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
     public static final RegistryObject<Block> CHISELED_STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_FACADE_ID,
             () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> OBSIDIAN_FACADE = Registration.BLOCKS.register(BlockID.OBSIDIAN_FACADE_ID,
@@ -556,7 +471,7 @@ public class ModBlocks {
 
     // sill
     public static final RegistryObject<Block> STONE_SILL = Registration.BLOCKS.register(BlockID.STONE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
+            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F).noOcclusion()));
     public static final RegistryObject<Block> SMOOTH_STONE_SILL = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_SILL_ID,
             () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> COBBLESTONE_SILL = Registration.BLOCKS.register(BlockID.COBBLESTONE_SILL_ID,

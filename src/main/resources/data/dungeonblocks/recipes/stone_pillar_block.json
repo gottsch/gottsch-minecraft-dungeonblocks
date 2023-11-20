@@ -1,8 +1,0 @@
-{
-    "type": "minecraft:stonecutting",
-    "ingredient": {
-        "item": "minecraft:stone"
-    },
-    "result": "dungeonblocks:stone_pillar_block",
-    "count": 1
-}

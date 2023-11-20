@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 1,
-  "ingredient": {
-    "item": "minecraft:polished_basalt"
-  },
-  "result": "dungeonblocks:polished_basalt_greek_block"
-}

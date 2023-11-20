@@ -2,6 +2,7 @@ package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.core.block.*;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
 import mod.gottsch.forge.dungeonblocks.core.state.properties.FacadeShape;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
@@ -14,6 +15,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -32,115 +35,74 @@ public class ModBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         DataGenMaps maps = new DataGenMaps();
 
-        // barred windows
-        barredWindowBlock(ModBlocks.STONE_BARRED_WINDOW, maps.t.get(Blocks.STONE));
-        barredWindowBlock(ModBlocks.SMOOTH_STONE_BARRED_WINDOW, maps.t.get(Blocks.SMOOTH_STONE));
-        barredWindowBlock(ModBlocks.COBBLESTONE_BARRED_WINDOW, mcLoc("block/cobblestone"));
-        barredWindowBlock(ModBlocks.MOSSY_COBBLESTONE_BARRED_WINDOW, mcLoc("block/mossy_cobblestone"));
-        barredWindowBlock(ModBlocks.BRICKS_BARRED_WINDOW, mcLoc("block/bricks"));
-        barredWindowBlock(ModBlocks.STONE_BRICKS_BARRED_WINDOW, mcLoc("block/stone_bricks"));
-        barredWindowBlock(ModBlocks.MOSSY_STONE_BRICKS_BARRED_WINDOW, mcLoc("block/mossy_stone_bricks"));
-        barredWindowBlock(ModBlocks.CRACKED_STONE_BRICKS_BARRED_WINDOW, mcLoc("block/cracked_stone_bricks"));
-        barredWindowBlock(ModBlocks.CHISELED_STONE_BRICKS_BARRED_WINDOW, mcLoc("block/chiseled_stone_bricks"));
-        barredWindowBlock(ModBlocks.OBSIDIAN_BARRED_WINDOW, mcLoc("block/obsidian"));
-
-        barredWindowBlock(ModBlocks.SANDSTONE_BARRED_WINDOW, mcLoc("block/sandstone"));
-        barredWindowBlock(ModBlocks.SMOOTH_SANDSTONE_BARRED_WINDOW, mcLoc("block/sandstone_top"));
-        barredWindowBlock(ModBlocks.CHISELED_SANDSTONE_BARRED_WINDOW, mcLoc("block/chiseled_sandstone"));
-        barredWindowBlock(ModBlocks.CUT_SANDSTONE_BARRED_WINDOW, mcLoc("block/cut_sandstone"));
-
-        barredWindowBlock(ModBlocks.RED_SANDSTONE_BARRED_WINDOW, mcLoc("block/red_sandstone"));
-        barredWindowBlock(ModBlocks.SMOOTH_RED_SANDSTONE_BARRED_WINDOW, mcLoc("block/red_sandstone_top"));
-        barredWindowBlock(ModBlocks.CHISELED_RED_SANDSTONE_BARRED_WINDOW, mcLoc("block/chiseled_red_sandstone"));
-        barredWindowBlock(ModBlocks.CUT_RED_SANDSTONE_BARRED_WINDOW, mcLoc("block/cut_red_sandstone"));
-
-        barredWindowBlock(ModBlocks.TERRACOTTA_BARRED_WINDOW, mcLoc("block/terracotta"));
-
-        barredWindowFacadeBlock(ModBlocks.STONE_BARRED_WINDOW_FACADE, mcLoc("block/stone"));
-        barredWindowFacadeBlock(ModBlocks.SMOOTH_STONE_BARRED_WINDOW_FACADE, mcLoc("block/smooth_stone"));
-        barredWindowFacadeBlock(ModBlocks.COBBLESTONE_BARRED_WINDOW_FACADE, mcLoc("block/cobblestone"));
-        barredWindowFacadeBlock(ModBlocks.MOSSY_COBBLESTONE_BARRED_WINDOW_FACADE, mcLoc("block/mossy_cobblestone"));
-        barredWindowFacadeBlock(ModBlocks.BRICKS_BARRED_WINDOW_FACADE, mcLoc("block/bricks"));
-        barredWindowFacadeBlock(ModBlocks.STONE_BRICKS_BARRED_WINDOW_FACADE, mcLoc("block/stone_bricks"));
-        barredWindowFacadeBlock(ModBlocks.MOSSY_STONE_BRICKS_BARRED_WINDOW_FACADE, mcLoc("block/mossy_stone_bricks"));
-        barredWindowFacadeBlock(ModBlocks.CRACKED_STONE_BRICKS_BARRED_WINDOW_FACADE, mcLoc("block/cracked_stone_bricks"));
-        barredWindowFacadeBlock(ModBlocks.CHISELED_STONE_BRICKS_BARRED_WINDOW_FACADE, mcLoc("block/chiseled_stone_bricks"));
-        barredWindowFacadeBlock(ModBlocks.OBSIDIAN_BARRED_WINDOW_FACADE, mcLoc("block/obsidian"));
-
-        barredWindowFacadeBlock(ModBlocks.SANDSTONE_BARRED_WINDOW_FACADE, mcLoc("block/sandstone"));
-        barredWindowFacadeBlock(ModBlocks.SMOOTH_SANDSTONE_BARRED_WINDOW_FACADE, mcLoc("block/sandstone_top"));
-        barredWindowFacadeBlock(ModBlocks.CHISELED_SANDSTONE_BARRED_WINDOW_FACADE, mcLoc("block/chiseled_sandstone"));
-        barredWindowFacadeBlock(ModBlocks.CUT_SANDSTONE_BARRED_WINDOW_FACADE, mcLoc("block/cut_sandstone"));
-
-        barredWindowFacadeBlock(ModBlocks.RED_SANDSTONE_BARRED_WINDOW_FACADE, mcLoc("block/red_sandstone"));
-        barredWindowFacadeBlock(ModBlocks.SMOOTH_RED_SANDSTONE_BARRED_WINDOW_FACADE, mcLoc("block/red_sandstone_top"));
-        barredWindowFacadeBlock(ModBlocks.CHISELED_RED_SANDSTONE_BARRED_WINDOW_FACADE, mcLoc("block/chiseled_red_sandstone"));
-        barredWindowFacadeBlock(ModBlocks.CUT_RED_SANDSTONE_BARRED_WINDOW_FACADE, mcLoc("block/cut_red_sandstone"));
-
-        barredWindowFacadeBlock(ModBlocks.TERRACOTTA_BARRED_WINDOW_FACADE, mcLoc("block/terracotta"));
+        Registration.BLOCKS.getEntries().stream()
+                .filter(b -> {
+                    for(String n : maps.names) {
+                        if (b.getId().getPath().contains(n)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .forEach(b -> {
+                    String name = b.getId().getPath();
+                    if (name.contains("barred_window_block")) {
+                        String material = b.getId().getPath().split("_barred_window_block")[0];
+                        barredWindowBlock(b, maps.t2.get(material));
+                    } else if (name.contains("barred_window_facade")) {
+                        String material = b.getId().getPath().split("_barred_window_facade_block")[0];
+//                        DungeonBlocks.LOGGER.info("barred window facade processing material ->{} to texture ->{} ", material, maps.t2.get(material));
+                        barredWindowFacadeBlock(b, maps.t2.get(material));
+                    } else if (name.contains("corbel")) {
+                        String material = b.getId().getPath().split("_corbel_block")[0];
+                        DungeonBlocks.LOGGER.info("corbel processing material ->{} to texture ->{} ", material, maps.t2.get(material));
+                        modelSingleTexture(b, modLoc(ModelProvider.BLOCK_FOLDER + "/corbel_block"), maps.t2.get(material));
+                    } else if (name.contains("ledge")) {
+                        String material = b.getId().getPath().split("_ledge_block")[0];
+//                        DungeonBlocks.LOGGER.info("ledge processing material ->{} to texture ->{} ", material, maps.t2.get(material));
+                        ledgeBlock(b, maps.t2.get(material));
+                    } else if (name.contains("keystone_block")) {
+                        String material = b.getId().getPath().split("_keystone_block")[0];
+                        modelSingleTexture(b, modLoc(name), maps.t2.get(material));
+                     } else if (name.contains("keystone_slab")) {
+                        String material = b.getId().getPath().split("_keystone_slab_block")[0];
+                        modelSingleTexture(b, modLoc(name), maps.t2.get(material));
+                    }
+                    // else do all the other types
+                });
 
         // keystones
-        String name = ModelProvider.BLOCK_FOLDER + "/keystone_block";
-        modelSingleTexture(KeystoneBlocks.STONE_KEYSTONE, modLoc(name), mcLoc("block/stone"));
-        modelSingleTexture(KeystoneBlocks.SMOOTH_STONE_KEYSTONE, modLoc(name), mcLoc("block/smooth_stone"));
-        modelSingleTexture(KeystoneBlocks.COBBLESTONE_KEYSTONE, modLoc(name), mcLoc("block/cobblestone"));
-        modelSingleTexture(KeystoneBlocks.MOSSY_COBBLESTONE_KEYSTONE, modLoc(name), mcLoc("block/mossy_cobblestone"));
-        modelSingleTexture(KeystoneBlocks.BRICKS_KEYSTONE, modLoc(name), mcLoc("block/bricks"));
-        modelSingleTexture(KeystoneBlocks.STONE_BRICKS_KEYSTONE, modLoc(name), mcLoc("block/stone_bricks"));
-        modelSingleTexture(KeystoneBlocks.MOSSY_STONE_BRICKS_KEYSTONE, modLoc(name), mcLoc("block/mossy_stone_bricks"));
-        modelSingleTexture(KeystoneBlocks.CRACKED_STONE_BRICKS_KEYSTONE, modLoc(name), mcLoc("block/cracked_stone_bricks"));
-        modelSingleTexture(KeystoneBlocks.CHISELED_STONE_BRICKS_KEYSTONE, modLoc(name), mcLoc("block/chiseled_stone_bricks"));
-        modelSingleTexture(KeystoneBlocks.OBSIDIAN_KEYSTONE, modLoc(name), mcLoc("block/obsidian"));
-
-        modelSingleTexture(KeystoneBlocks.LIGHT_GRAY_CONCRETE_KEYSTONE, modLoc(name), mcLoc("block/light_gray_concrete"));
-
-        modelSingleTexture(KeystoneBlocks.POLISHED_DIORITE_KEYSTONE, modLoc(ModelProvider.BLOCK_FOLDER + "/keystone_block"), mcLoc("block/polished_diorite"));
-
-        name = ModelProvider.BLOCK_FOLDER + "/keystone_slab_block";
-        modelSingleTexture(KeystoneBlocks.STONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/stone"));
-        modelSingleTexture(KeystoneBlocks.SMOOTH_STONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/smooth_stone"));
-        modelSingleTexture(KeystoneBlocks.COBBLESTONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/cobblestone"));
-        modelSingleTexture(KeystoneBlocks.MOSSY_COBBLESTONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/mossy_cobblestone"));
-        modelSingleTexture(KeystoneBlocks.BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/bricks"));
-        modelSingleTexture(KeystoneBlocks.STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/stone_bricks"));
-        modelSingleTexture(KeystoneBlocks.MOSSY_STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/mossy_stone_bricks"));
-        modelSingleTexture(KeystoneBlocks.CRACKED_STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/cracked_stone_bricks"));
-        modelSingleTexture(KeystoneBlocks.CHISELED_STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/chiseled_stone_bricks"));
-        modelSingleTexture(KeystoneBlocks.OBSIDIAN_KEYSTONE_SLAB, modLoc(name), mcLoc("block/obsidian"));
-
-        modelSingleTexture(KeystoneBlocks.LIGHT_GRAY_CONCRETE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/light_gray_concrete"));
-        modelSingleTexture(KeystoneBlocks.POLISHED_DIORITE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/polished_diorite"));
-
-        name = ModelProvider.BLOCK_FOLDER + "/ledge_block";
-        ledgeBlock(LedgeBlocks.STONE_LEDGE, maps.t.get(Blocks.STONE));
-        ledgeBlock(LedgeBlocks.SMOOTH_STONE_LEDGE, maps.t.get(Blocks.SMOOTH_STONE));
-        ledgeBlock(LedgeBlocks.COBBLESTONE_LEDGE, maps.t.get(Blocks.COBBLESTONE));
-        ledgeBlock(LedgeBlocks.MOSSY_COBBLESTONE_LEDGE, maps.t.get(Blocks.MOSSY_COBBLESTONE));
-        ledgeBlock(LedgeBlocks.BRICKS_LEDGE, maps.t.get(Blocks.BRICKS));
-        ledgeBlock(LedgeBlocks.STONE_BRICKS_LEDGE, maps.t.get(Blocks.STONE_BRICKS));
-        ledgeBlock(LedgeBlocks.MOSSY_STONE_BRICKS_LEDGE, maps.t.get(Blocks.MOSSY_STONE_BRICKS));
-
-        ledgeBlock(LedgeBlocks.LIGHT_GRAY_CONCRETE_LEDGE, maps.t.get(Blocks.LIGHT_GRAY_CONCRETE));
-        ledgeBlock(LedgeBlocks.POLISHED_DIORITE_LEDGE, maps.t.get(Blocks.POLISHED_DIORITE));
-
-        name = ModelProvider.BLOCK_FOLDER + "/corbel_block";
-        modelSingleTexture(CorbelBlocks.ACACIA_CORBEL, modLoc(name), mcLoc("block/acacia_planks"));
-        modelSingleTexture(CorbelBlocks.BIRCH_CORBEL, modLoc(name), mcLoc("block/birch_planks"));
-        modelSingleTexture(CorbelBlocks.CHERRY_CORBEL, modLoc(name), mcLoc("block/cherry_planks"));
-        modelSingleTexture(CorbelBlocks.DARK_OAK_CORBEL, modLoc(name), mcLoc("block/dark_oak_planks"));
-        modelSingleTexture(CorbelBlocks.JUNGLE_CORBEL, modLoc(name), mcLoc("block/jungle_planks"));
-        modelSingleTexture(CorbelBlocks.MANGROVE_CORBEL, modLoc(name), mcLoc("block/mangrove_planks"));
-        modelSingleTexture(CorbelBlocks.OAK_CORBEL, modLoc(name), mcLoc("block/oak_planks"));
-        modelSingleTexture(CorbelBlocks.SPRUCE_CORBEL, modLoc(name), mcLoc("block/spruce_planks"));
-
-        modelSingleTexture(CorbelBlocks.STRIPPED_ACACIA_CORBEL, modLoc(name), mcLoc("block/stripped_acacia_log"));
-        modelSingleTexture(CorbelBlocks.STRIPPED_BIRCH_CORBEL, modLoc(name), mcLoc("block/stripped_birch_log"));
-        modelSingleTexture(CorbelBlocks.STRIPPED_CHERRY_CORBEL, modLoc(name), mcLoc("block/stripped_cherry_log"));
-        modelSingleTexture(CorbelBlocks.STRIPPED_DARK_OAK_CORBEL, modLoc(name), mcLoc("block/stripped_dark_oak_log"));
-        modelSingleTexture(CorbelBlocks.STRIPPED_JUNGLE_CORBEL, modLoc(name), mcLoc("block/stripped_jungle_log"));
-        modelSingleTexture(CorbelBlocks.STRIPPED_MANGROVE_CORBEL, modLoc(name), mcLoc("block/stripped_mangrove_log"));
-        modelSingleTexture(CorbelBlocks.STRIPPED_OAK_CORBEL, modLoc(name), mcLoc("block/stripped_oak_log"));
-        modelSingleTexture(CorbelBlocks.STRIPPED_SPRUCE_CORBEL, modLoc(name), mcLoc("block/stripped_spruce_log"));
+        String name ;
+//        name = ModelProvider.BLOCK_FOLDER + "/keystone_block";
+//        modelSingleTexture(KeystoneBlocks.STONE_KEYSTONE, modLoc(name), mcLoc("block/stone"));
+//        modelSingleTexture(KeystoneBlocks.SMOOTH_STONE_KEYSTONE, modLoc(name), mcLoc("block/smooth_stone"));
+//        modelSingleTexture(KeystoneBlocks.COBBLESTONE_KEYSTONE, modLoc(name), mcLoc("block/cobblestone"));
+//        modelSingleTexture(KeystoneBlocks.MOSSY_COBBLESTONE_KEYSTONE, modLoc(name), mcLoc("block/mossy_cobblestone"));
+//        modelSingleTexture(KeystoneBlocks.BRICKS_KEYSTONE, modLoc(name), mcLoc("block/bricks"));
+//        modelSingleTexture(KeystoneBlocks.STONE_BRICKS_KEYSTONE, modLoc(name), mcLoc("block/stone_bricks"));
+//        modelSingleTexture(KeystoneBlocks.MOSSY_STONE_BRICKS_KEYSTONE, modLoc(name), mcLoc("block/mossy_stone_bricks"));
+//        modelSingleTexture(KeystoneBlocks.CRACKED_STONE_BRICKS_KEYSTONE, modLoc(name), mcLoc("block/cracked_stone_bricks"));
+//        modelSingleTexture(KeystoneBlocks.CHISELED_STONE_BRICKS_KEYSTONE, modLoc(name), mcLoc("block/chiseled_stone_bricks"));
+//        modelSingleTexture(KeystoneBlocks.OBSIDIAN_KEYSTONE, modLoc(name), mcLoc("block/obsidian"));
+//
+//        modelSingleTexture(KeystoneBlocks.LIGHT_GRAY_CONCRETE_KEYSTONE, modLoc(name), mcLoc("block/light_gray_concrete"));
+//
+//        modelSingleTexture(KeystoneBlocks.POLISHED_DIORITE_KEYSTONE, modLoc(ModelProvider.BLOCK_FOLDER + "/keystone_block"), mcLoc("block/polished_diorite"));
+//
+//        name = ModelProvider.BLOCK_FOLDER + "/keystone_slab_block";
+//        modelSingleTexture(KeystoneBlocks.STONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/stone"));
+//        modelSingleTexture(KeystoneBlocks.SMOOTH_STONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/smooth_stone"));
+//        modelSingleTexture(KeystoneBlocks.COBBLESTONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/cobblestone"));
+//        modelSingleTexture(KeystoneBlocks.MOSSY_COBBLESTONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/mossy_cobblestone"));
+//        modelSingleTexture(KeystoneBlocks.BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/bricks"));
+//        modelSingleTexture(KeystoneBlocks.STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/stone_bricks"));
+//        modelSingleTexture(KeystoneBlocks.MOSSY_STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/mossy_stone_bricks"));
+//        modelSingleTexture(KeystoneBlocks.CRACKED_STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/cracked_stone_bricks"));
+//        modelSingleTexture(KeystoneBlocks.CHISELED_STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/chiseled_stone_bricks"));
+//        modelSingleTexture(KeystoneBlocks.OBSIDIAN_KEYSTONE_SLAB, modLoc(name), mcLoc("block/obsidian"));
+//
+//        modelSingleTexture(KeystoneBlocks.LIGHT_GRAY_CONCRETE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/light_gray_concrete"));
+//        modelSingleTexture(KeystoneBlocks.POLISHED_DIORITE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/polished_diorite"));
 
         grateTrapDoorBlock(ModBlocks.DARK_IRON_GRATE_TRAPDOOR, modLoc("block/dark_iron"), true);
         grateTrapDoorBlock(ModBlocks.WEATHERED_COPPER_GRATE_TRAPDOOR, mcLoc("block/weathered_copper"), true);
@@ -170,14 +132,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         torchSconceBlock(ModBlocks.TORCH_SCONCE);
         candleSconceBlock(ModBlocks.CANDLE_SCONCE);
         brazierBlock(ModBlocks.BRAZIER);
-
-        //        simpleBlock(ModBlocks.STRAW.get(), models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/straw_block")));
-        // can't do this as many blocks aren't the same ie. facing etc.
-//        ModBlocks.MAP.forEach((k, v) -> {
-//            switch(k.getId().getPath()) {
-//                case "stone" -> barredWindowBlock(k, mcLoc("block/stone"));
-//            }
-//        });
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {

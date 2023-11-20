@@ -19,7 +19,12 @@
  */
 package mod.gottsch.forge.dungeonblocks.datagen;
 
+import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.BarredWindows;
+import mod.gottsch.forge.dungeonblocks.core.block.CorbelBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.LedgeBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
+import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -27,6 +32,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.*;
@@ -46,6 +52,7 @@ public class Recipes extends RecipeProvider {
 
 		@Override
 		protected void buildRecipes(Consumer<FinishedRecipe> recipe) {
+			Map<Block, RegistryObject<Block>> ingredientMap = new HashMap<>();
 
 			// dungeon lantern
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.DUNGEON_LANTERN.get())
@@ -96,6 +103,19 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.COPPER_INGOT))
 					.save(recipe);
 
+			// grate trapdoors
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_GRATE_TRAPDOOR.get())
+					.requires(Blocks.IRON_TRAPDOOR)
+					.requires(Items.IRON_INGOT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+					.save(recipe);
+
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.WEATHERED_COPPER_GRATE_TRAPDOOR.get())
+					.requires(Blocks.IRON_TRAPDOOR)
+					.requires(Items.COPPER_INGOT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+					.save(recipe);
+
 			// brazier
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.BRAZIER.get())
 					.requires(Blocks.CAMPFIRE)
@@ -144,74 +164,157 @@ public class Recipes extends RecipeProvider {
 					.save(recipe);
 
 			// barred windows
-			Map<Block, RegistryObject<Block>> barredMap = new HashMap<>();
-			barredMap.put(Blocks.STONE, ModBlocks.STONE_BARRED_WINDOW);
-			barredMap.put(Blocks.SMOOTH_STONE, ModBlocks.SMOOTH_STONE_BARRED_WINDOW);
-			barredMap.put(Blocks.COBBLESTONE, ModBlocks.COBBLESTONE_BARRED_WINDOW);
-			barredMap.put(Blocks.MOSSY_COBBLESTONE, ModBlocks.MOSSY_COBBLESTONE_BARRED_WINDOW);
-			barredMap.put(Blocks.BRICKS, ModBlocks.BRICKS_BARRED_WINDOW);
-			barredMap.put(Blocks.STONE_BRICKS, ModBlocks.STONE_BRICKS_BARRED_WINDOW);
-			barredMap.put(Blocks.MOSSY_STONE_BRICKS, ModBlocks.MOSSY_STONE_BRICKS_BARRED_WINDOW);
-			barredMap.put(Blocks.CRACKED_STONE_BRICKS, ModBlocks.CRACKED_STONE_BRICKS_BARRED_WINDOW);
-			barredMap.put(Blocks.CHISELED_STONE_BRICKS, ModBlocks.CHISELED_STONE_BRICKS_BARRED_WINDOW);
-			barredMap.put(Blocks.OBSIDIAN, ModBlocks.OBSIDIAN_BARRED_WINDOW);
+			ingredientMap.clear();
+			ingredientMap.put(Blocks.STONE, BarredWindows.STONE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.SMOOTH_STONE, BarredWindows.SMOOTH_STONE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.COBBLESTONE, BarredWindows.COBBLESTONE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.MOSSY_COBBLESTONE, BarredWindows.MOSSY_COBBLESTONE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.BRICKS, BarredWindows.BRICKS_BARRED_WINDOW);
+			ingredientMap.put(Blocks.STONE_BRICKS, BarredWindows.STONE_BRICKS_BARRED_WINDOW);
+			ingredientMap.put(Blocks.MOSSY_STONE_BRICKS, BarredWindows.MOSSY_STONE_BRICKS_BARRED_WINDOW);
+			ingredientMap.put(Blocks.CRACKED_STONE_BRICKS, BarredWindows.CRACKED_STONE_BRICKS_BARRED_WINDOW);
+			ingredientMap.put(Blocks.CHISELED_STONE_BRICKS, BarredWindows.CHISELED_STONE_BRICKS_BARRED_WINDOW);
+			ingredientMap.put(Blocks.OBSIDIAN, BarredWindows.OBSIDIAN_BARRED_WINDOW);
 
-			barredMap.put(Blocks.SANDSTONE, ModBlocks.SANDSTONE_BARRED_WINDOW);
-			barredMap.put(Blocks.SMOOTH_SANDSTONE, ModBlocks.SMOOTH_SANDSTONE_BARRED_WINDOW);
-			barredMap.put(Blocks.CHISELED_SANDSTONE, ModBlocks.CHISELED_SANDSTONE_BARRED_WINDOW);
-			barredMap.put(Blocks.CUT_SANDSTONE, ModBlocks.CUT_SANDSTONE_BARRED_WINDOW);
-			barredMap.put(Blocks.RED_SANDSTONE, ModBlocks.RED_SANDSTONE_BARRED_WINDOW);
-			barredMap.put(Blocks.SMOOTH_RED_SANDSTONE, ModBlocks.SMOOTH_RED_SANDSTONE_BARRED_WINDOW);
-			barredMap.put(Blocks.CHISELED_RED_SANDSTONE, ModBlocks.CHISELED_RED_SANDSTONE_BARRED_WINDOW);
-			barredMap.put(Blocks.CUT_RED_SANDSTONE, ModBlocks.CUT_RED_SANDSTONE_BARRED_WINDOW);
-			barredMap.put(Blocks.TERRACOTTA, ModBlocks.TERRACOTTA_BARRED_WINDOW);
+			ingredientMap.put(Blocks.SANDSTONE, BarredWindows.SANDSTONE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.SMOOTH_SANDSTONE, BarredWindows.SMOOTH_SANDSTONE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.CHISELED_SANDSTONE, BarredWindows.CHISELED_SANDSTONE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.CUT_SANDSTONE, BarredWindows.CUT_SANDSTONE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.RED_SANDSTONE, BarredWindows.RED_SANDSTONE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.SMOOTH_RED_SANDSTONE, BarredWindows.SMOOTH_RED_SANDSTONE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.CHISELED_RED_SANDSTONE, BarredWindows.CHISELED_RED_SANDSTONE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.CUT_RED_SANDSTONE, BarredWindows.CUT_RED_SANDSTONE_BARRED_WINDOW);
 
-			barredMap.forEach((k,v) -> {
+			ingredientMap.put(Blocks.GRANITE, BarredWindows.GRANITE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.ANDESITE, BarredWindows.ANDESITE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.DIORITE, BarredWindows.DIORITE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.POLISHED_GRANITE, BarredWindows.POLISHED_GRANITE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.POLISHED_ANDESITE, BarredWindows.POLISHED_ANDESITE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.POLISHED_DIORITE, BarredWindows.POLISHED_DIORITE_BARRED_WINDOW);
+
+			ingredientMap.put(Blocks.BLACKSTONE, BarredWindows.BLACKSTONE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.POLISHED_BLACKSTONE, BarredWindows.POLISHED_BLACKSTONE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.POLISHED_BLACKSTONE_BRICKS, BarredWindows.POLISHED_BLACKSTONE_BRICKS_BARRED_WINDOW);
+
+			ingredientMap.put(Blocks.DEEPSLATE, BarredWindows.DEEPSLATE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.DEEPSLATE_BRICKS, BarredWindows.DEEPSLATE_BRICKS_BARRED_WINDOW);
+			ingredientMap.put(Blocks.COBBLED_DEEPSLATE, BarredWindows.COBBLED_DEEPSLATE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.POLISHED_DEEPSLATE, BarredWindows.POLISHED_DEEPSLATE_BARRED_WINDOW);
+			ingredientMap.put(Blocks.DEEPSLATE_TILES, BarredWindows.DEEPSLATE_TILES_BARRED_WINDOW);
+
+			ingredientMap.put(Blocks.TERRACOTTA, BarredWindows.TERRACOTTA_BARRED_WINDOW);
+
+			ingredientMap.forEach((k,v) -> {
 				ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, v.get())
 						.requires(k)
 						.requires(Ingredient.of(ModBlocks.DARK_IRON_GRATE.get(), ModBlocks.DARK_IRON_GRATE_TRAPDOOR.get()))
 						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.DARK_IRON_GRATE.get(), ModBlocks.DARK_IRON_GRATE_TRAPDOOR.get()))
 						.save(recipe);
 			});
-			barredMap.clear();
-			barredMap.put(ModBlocks.STONE_BARRED_WINDOW.get(), ModBlocks.STONE_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.SMOOTH_STONE_BARRED_WINDOW.get(), ModBlocks.SMOOTH_STONE_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.COBBLESTONE_BARRED_WINDOW.get(), ModBlocks.COBBLESTONE_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.MOSSY_COBBLESTONE_BARRED_WINDOW.get(), ModBlocks.MOSSY_COBBLESTONE_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.BRICKS_BARRED_WINDOW.get(), ModBlocks.BRICKS_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.STONE_BRICKS_BARRED_WINDOW.get(), ModBlocks.STONE_BRICKS_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.MOSSY_STONE_BRICKS_BARRED_WINDOW.get(), ModBlocks.MOSSY_STONE_BRICKS_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.CRACKED_STONE_BRICKS_BARRED_WINDOW.get(), ModBlocks.CRACKED_STONE_BRICKS_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.CHISELED_STONE_BRICKS_BARRED_WINDOW.get(), ModBlocks.CHISELED_STONE_BRICKS_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.OBSIDIAN_BARRED_WINDOW.get(), ModBlocks.OBSIDIAN_BARRED_WINDOW_FACADE);
+			ingredientMap.clear();
+			ingredientMap.put(BarredWindows.STONE_BARRED_WINDOW.get(), BarredWindows.STONE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.SMOOTH_STONE_BARRED_WINDOW.get(), BarredWindows.SMOOTH_STONE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.COBBLESTONE_BARRED_WINDOW.get(), BarredWindows.COBBLESTONE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.MOSSY_COBBLESTONE_BARRED_WINDOW.get(), BarredWindows.MOSSY_COBBLESTONE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.BRICKS_BARRED_WINDOW.get(), BarredWindows.BRICKS_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.STONE_BRICKS_BARRED_WINDOW.get(), BarredWindows.STONE_BRICKS_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.MOSSY_STONE_BRICKS_BARRED_WINDOW.get(), BarredWindows.MOSSY_STONE_BRICKS_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.CRACKED_STONE_BRICKS_BARRED_WINDOW.get(), BarredWindows.CRACKED_STONE_BRICKS_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.CHISELED_STONE_BRICKS_BARRED_WINDOW.get(), BarredWindows.CHISELED_STONE_BRICKS_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.OBSIDIAN_BARRED_WINDOW.get(), BarredWindows.OBSIDIAN_BARRED_WINDOW_FACADE);
 
-			barredMap.put(ModBlocks.SANDSTONE_BARRED_WINDOW.get(), ModBlocks.SANDSTONE_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.SMOOTH_SANDSTONE_BARRED_WINDOW.get(), ModBlocks.SMOOTH_SANDSTONE_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.CHISELED_SANDSTONE_BARRED_WINDOW.get(), ModBlocks.CHISELED_SANDSTONE_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.CUT_SANDSTONE_BARRED_WINDOW.get(), ModBlocks.CUT_SANDSTONE_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.RED_SANDSTONE_BARRED_WINDOW.get(), ModBlocks.RED_SANDSTONE_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.SMOOTH_RED_SANDSTONE_BARRED_WINDOW.get(), ModBlocks.SMOOTH_RED_SANDSTONE_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.CHISELED_RED_SANDSTONE_BARRED_WINDOW.get(), ModBlocks.CHISELED_RED_SANDSTONE_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.CUT_RED_SANDSTONE_BARRED_WINDOW.get(), ModBlocks.CUT_RED_SANDSTONE_BARRED_WINDOW_FACADE);
-			barredMap.put(ModBlocks.TERRACOTTA_BARRED_WINDOW.get(), ModBlocks.TERRACOTTA_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.SANDSTONE_BARRED_WINDOW.get(), BarredWindows.SANDSTONE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.SMOOTH_SANDSTONE_BARRED_WINDOW.get(), BarredWindows.SMOOTH_SANDSTONE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.CHISELED_SANDSTONE_BARRED_WINDOW.get(), BarredWindows.CHISELED_SANDSTONE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.CUT_SANDSTONE_BARRED_WINDOW.get(), BarredWindows.CUT_SANDSTONE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.RED_SANDSTONE_BARRED_WINDOW.get(), BarredWindows.RED_SANDSTONE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.SMOOTH_RED_SANDSTONE_BARRED_WINDOW.get(), BarredWindows.SMOOTH_RED_SANDSTONE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.CHISELED_RED_SANDSTONE_BARRED_WINDOW.get(), BarredWindows.CHISELED_RED_SANDSTONE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.CUT_RED_SANDSTONE_BARRED_WINDOW.get(), BarredWindows.CUT_RED_SANDSTONE_BARRED_WINDOW_FACADE);
 
-			barredMap.forEach((k,v) -> {
+			ingredientMap.put(BarredWindows.GRANITE_BARRED_WINDOW.get(), BarredWindows.GRANITE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.ANDESITE_BARRED_WINDOW.get(), BarredWindows.ANDESITE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.DIORITE_BARRED_WINDOW.get(), BarredWindows.DIORITE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.POLISHED_GRANITE_BARRED_WINDOW.get(), BarredWindows.POLISHED_GRANITE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.POLISHED_ANDESITE_BARRED_WINDOW.get(), BarredWindows.POLISHED_ANDESITE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.POLISHED_DIORITE_BARRED_WINDOW.get(), BarredWindows.POLISHED_DIORITE_BARRED_WINDOW_FACADE);
+
+			ingredientMap.put(BarredWindows.BLACKSTONE_BARRED_WINDOW.get(), BarredWindows.BLACKSTONE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.POLISHED_BLACKSTONE_BARRED_WINDOW.get(), BarredWindows.POLISHED_BLACKSTONE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.POLISHED_BLACKSTONE_BRICKS_BARRED_WINDOW.get(), BarredWindows.POLISHED_BLACKSTONE_BRICKS_BARRED_WINDOW_FACADE);
+
+			ingredientMap.put(BarredWindows.DEEPSLATE_BARRED_WINDOW.get(), BarredWindows.DEEPSLATE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.DEEPSLATE_BRICKS_BARRED_WINDOW.get(), BarredWindows.DEEPSLATE_BRICKS_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.COBBLED_DEEPSLATE_BARRED_WINDOW.get(), BarredWindows.COBBLED_DEEPSLATE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.POLISHED_DEEPSLATE_BARRED_WINDOW.get(), BarredWindows.POLISHED_DEEPSLATE_BARRED_WINDOW_FACADE);
+			ingredientMap.put(BarredWindows.DEEPSLATE_TILES_BARRED_WINDOW.get(), BarredWindows.DEEPSLATE_TILES_BARRED_WINDOW_FACADE);
+
+			ingredientMap.put(BarredWindows.TERRACOTTA_BARRED_WINDOW.get(), BarredWindows.TERRACOTTA_BARRED_WINDOW_FACADE);
+
+			ingredientMap.forEach((k,v) -> {
 				ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, v.get(), 2)
 						.requires(k)
 						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(v.get()))
 						.save(recipe);
 			});
 
+			ingredientMap.clear();
+			// that's the recipe for a button
+//			ingredientMap.put(Blocks.ACACIA_PLANKS, CorbelBlocks.ACACIA_CORBEL);
+//			ingredientMap.put(Blocks.BIRCH_PLANKS, CorbelBlocks.BIRCH_CORBEL);
+//			ingredientMap.forEach((k,v) -> {
+//				ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, v.get(), 2)
+//						.requires(k)
+//						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(v.get()))
+//						.save(recipe);
+//			});
+
+			// TODO add wood corbels to the stonecutting?
 			/*
 			 * stone cutting
 			 */
-			DataGenMaps.m.forEach((k, v) -> {
-				v.forEach(b -> {
-					SingleItemRecipeBuilder.stonecutting(Ingredient.of(k), RecipeCategory.BUILDING_BLOCKS, b.get())
-							.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(k))
-							.save(recipe);
-				});
-			});
+//			DataGenMaps.m.forEach((k, v) -> {
+//				v.forEach(b -> {
+//					SingleItemRecipeBuilder.stonecutting(Ingredient.of(k), RecipeCategory.BUILDING_BLOCKS, b.get())
+//							.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(k))
+//							.save(recipe);
+//				});
+//			});
+
+			DataGenMaps maps = new DataGenMaps();
+
+			Registration.BLOCKS.getEntries().stream()
+					.filter(b -> {
+						for(String n : maps.names) {
+							if (b.getId().getPath().contains(n)) {
+								return true;
+							}
+						}
+						return false;
+					})
+					.forEach(b -> {
+						String name = b.getId().getPath();
+						String material = null;
+						if (name.contains("corbel")) {
+							material = b.getId().getPath().split("_corbel_block")[0];
+							DungeonBlocks.LOGGER.info("corbel recipe material ->{} to texture ->{} ", material, maps.m2.get(material));
+						} else if (name.contains("ledge")) {
+							material = b.getId().getPath().split("_ledge_block")[0];
+                        DungeonBlocks.LOGGER.info("ledge recipe material ->{} to texture ->{} ", material, maps.m2.get(material));
+						} else if (name.contains("keystone_block")) {
+							material = b.getId().getPath().split("_keystone_block")[0];
+						} else if (name.contains("keystone_slab")) {
+							material = b.getId().getPath().split("_keystone_slab_block")[0];
+						}
+						// else do all the other types
+
+						if (material != null) {
+							SingleItemRecipeBuilder.stonecutting(Ingredient.of(maps.m2.get(material)), RecipeCategory.BUILDING_BLOCKS, b.get())
+									.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(maps.m2.get(material)))
+									.save(recipe);
+						}
+
+					});
 
 		}
 }

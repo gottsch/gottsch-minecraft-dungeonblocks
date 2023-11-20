@@ -68,20 +68,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                     break;
                 }
             }
-//            if (name.contains("barred_window") || name.contains("sewer") || name.contains("grate") || name.contains("wall_ring")
-//                    || name.contains("greek_block") || name.contains("dungeon_lantern") || name.contains("dungeon_door")) {
-//                dropSelf(k.get());
-//            }
         });
-
-//        this.add(ModBlocks.SAPPHIRE_ORE.get(),
-//                block -> createCopperLikeOreDrops(ModBlocks.SAPPHIRE_ORE.get(), ModItems.RAW_SAPPHIRE.get()));
-//        this.add(ModBlocks.DEEPSLATE_SAPPHIRE_ORE.get(),
-//                block -> createCopperLikeOreDrops(ModBlocks.DEEPSLATE_SAPPHIRE_ORE.get(), ModItems.RAW_SAPPHIRE.get()));
-//        this.add(ModBlocks.NETHER_SAPPHIRE_ORE.get(),
-//                block -> createCopperLikeOreDrops(ModBlocks.NETHER_SAPPHIRE_ORE.get(), ModItems.RAW_SAPPHIRE.get()));
-//        this.add(ModBlocks.END_STONE_SAPPHIRE_ORE.get(),
-//                block -> createCopperLikeOreDrops(ModBlocks.END_STONE_SAPPHIRE_ORE.get(), ModItems.RAW_SAPPHIRE.get()));
 
     }
 
@@ -97,13 +84,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
     protected Iterable<Block> getKnownBlocks() {
         return Registration.BLOCKS.getEntries().stream()
                 // only process these block
-                // TODO in the future include all blocks
                 .filter(b -> {
                     String name = b.getId().getPath();
-//                    if (name.contains("barred_window") || name.contains("sewer") || name.contains("grate") || name.contains("wall_ring")
-//                            || name.contains("greek_block") || name.contains("dungeon_lantern") || name.contains("dungeon_door")) {
-//                        return true;
-//                    }
                     for(String n : names) {
                         if (name.contains(n)) {
                             return true;
