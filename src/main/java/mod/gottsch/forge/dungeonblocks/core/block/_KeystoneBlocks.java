@@ -19,16 +19,10 @@
  */
 package mod.gottsch.forge.dungeonblocks.core.block;
 
-import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.registries.RegistryObject;
-
 /**
  * @author Mark Gottschling on Nov 11, 2023
  */
-public class KeystoneBlocks {
+public class _KeystoneBlocks {
 
 //    public static RegistryObject<Block> STONE_KEYSTONE = Registration.BLOCKS.register("stone_keystone_block",
 //            () -> new _KeystoneBlock(BlockBehaviour.Properties.copy(Blocks.STONE)));

@@ -17,12 +17,13 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-public class StrawBlock extends NonCubeBlock implements SimpleWaterloggedBlock {
+@Deprecated
+public class _StrawBlock extends NonCubeBlock implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final VoxelShape AABB = Block.box(0.0D, 0D, 0.0D, 16D, 0.5D, 16D);
 
-    public StrawBlock(Properties properties) {
+    public _StrawBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(WATERLOGGED, Boolean.valueOf(false)));

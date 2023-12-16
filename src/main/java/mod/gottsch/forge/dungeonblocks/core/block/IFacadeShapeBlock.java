@@ -103,7 +103,7 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 		Direction direction = blockState.getValue(FACING);
 		BlockState newState = blockState;
 		
-		// test the direction theblock is facing
+		// test the direction the block is facing
 		newState = switch (direction) {
 		case SOUTH -> getStateForSouthDirection(level, blockPos, blockState);
 		case NORTH -> getStateForNorthDirection(level, blockPos, blockState);

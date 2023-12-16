@@ -20,14 +20,9 @@
 package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.CorbelBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.KeystoneBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.LedgeBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Arrays;
 import java.util.HashMap;

@@ -20,7 +20,6 @@ package mod.gottsch.forge.dungeonblocks.core.setup;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.BarredWindows;
 import mod.gottsch.forge.dungeonblocks.core.block.CorbelBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.KeystoneBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.LedgeBlocks;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;

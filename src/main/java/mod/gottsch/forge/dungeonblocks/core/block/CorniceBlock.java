@@ -94,7 +94,8 @@ public class CorniceBlock extends FacadeShapeBlock {
 			BOTTOM_RIGHT_INNER_SHAPE, // 7
 
 			// outer left
-			TOP_LEFT_OUTER_SHAPE, BOTTOM_LEFT_OUTER_SHAPE,
+			TOP_LEFT_OUTER_SHAPE, // 8
+			BOTTOM_LEFT_OUTER_SHAPE, //9
 
 			// outer right
 			TOP_RIGHT_OUTER_SHAPE, BOTTOM_RIGHT_OUTER_SHAPE };
@@ -108,7 +109,7 @@ public class CorniceBlock extends FacadeShapeBlock {
 	}
 
 	/**
-	 * Returns the VoxelShape (ie bounding box) of the block in the correctposition.
+	 * Returns the VoxelShape (ie bounding box) of the block in the correct position.
 	 * NOTE if shape != STRAIGHT, then facing index can only == North || South
 	 */
 	@Override

@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2023-xx-xx
+## [2.0.0] - 2023-12-15
 
 ### Changed
 
@@ -13,18 +13,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced wall sconce's torches with candles
 - Updated grate to be a full block
 - Fixed Cornice texture positioning
+- All new blocks assets and data files are generated. Some older files were ported to generation.
 
 ### Added
 
-- Barred window block (with variants)
-- Barred window facade block (with variants)
+- Grate Trapdoor (with variant)
+- Barred window (with variants)
+- Barred window facade (with variants)
 - Torch sconce
+- Brazier
 - Sewer block (with variant)
 - Dungeon Lantern (lit/unlit)
 - Dungeon Door (with variants)
-- Hay Patch
+- Hay Patch (with variant)
 - Wall Ring
 - Pattern block (greek-esque)
+- Corbel (with variants)
+- Ledge (with variants)
+- Plate Bracket
 
 ## [1.2.0] - 2023-10-24
 

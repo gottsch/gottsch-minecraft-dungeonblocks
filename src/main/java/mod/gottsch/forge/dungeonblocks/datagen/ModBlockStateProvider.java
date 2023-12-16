@@ -292,7 +292,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         myDirectionalBlock(block.get(), model);
     }
 
-    public void sewerBlock(RegistryObject<Block> block, ResourceLocation texture, ResourceLocation texture1) {
+    @Deprecated
+    public void _sewerBlock(RegistryObject<Block> block, ResourceLocation texture, ResourceLocation texture1) {
         ModelFile model = twoTextures(
                 block.getId().getPath(),
                 modLoc(ModelProvider.BLOCK_FOLDER + "/template_sewer_block"), "0", texture, "1", texture1);
@@ -303,6 +304,37 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         myHorizontalBlock(block.get(), model);
     }
+
+    public void sewerBlock(RegistryObject<Block> block, ResourceLocation texture, ResourceLocation texture1) {
+        String name = block.getId().getPath();
+        ModelFile model = twoTextures(name, modLoc(ModelProvider.BLOCK_FOLDER + "/template_sewer_block"), "0", texture, "1", texture1);
+        ModelFile corner = twoTextures(name + "_corner", modLoc(ModelProvider.BLOCK_FOLDER + "/template_sewer_block_corner"), "0", texture, "1", texture1);
+
+        sewerBlock(block.get(), model, corner);
+    }
+
+    public void sewerBlock(Block block, ModelFile sewer, ModelFile corner) {
+        getVariantBuilder(block)
+                .forAllStates(state -> {
+                    Direction facing = state.getValue(LedgeBlock.FACING);
+                    SewerBlock.SewerShape shape = state.getValue(SewerBlock.SHAPE);
+                    int yRot = ((int) state.getValue(FACING).toYRot() + DEFAULT_ANGLE_OFFSET) % 360;
+                   yRot = switch(shape) {
+                       case STRAIGHT -> yRot;
+                       case TOP_LEFT -> 180;
+                       case BOTTOM_LEFT -> 90;
+                       case TOP_RIGHT -> 270;
+                       case BOTTOM_RIGHT -> 0;
+                   };
+
+                    return ConfiguredModel.builder()
+                            .modelFile(shape == SewerBlock.SewerShape.STRAIGHT ? sewer : corner)
+                            .rotationY(yRot)
+                            .uvLock(true)
+                            .build();
+                });
+    }
+
 
     public void brazierBlock(RegistryObject<Block> block) {
         ModelFile brazier_lit = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/brazier_lit_block"));
