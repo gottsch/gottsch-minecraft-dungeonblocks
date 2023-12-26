@@ -43,14 +43,11 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
 //                        this.tag(BlockTags.NEEDS_IRON_TOOL)
 //                                .add(b.get());
                     } else {
-                        this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
-                                .add(b.get());
+                        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get());
                         if (name.contains("obsidian")) {
-                            this.tag(BlockTags.NEEDS_DIAMOND_TOOL)
-                                    .add(b.get());
+                            this.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(b.get());
                         } else {
-                            this.tag(BlockTags.NEEDS_IRON_TOOL)
-                                    .add(b.get());
+                            this.tag(BlockTags.NEEDS_STONE_TOOL).add(b.get());
                         }
                     }
                 });

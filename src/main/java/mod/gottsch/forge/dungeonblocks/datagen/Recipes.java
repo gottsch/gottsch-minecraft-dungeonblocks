@@ -301,11 +301,12 @@ public class Recipes extends RecipeProvider {
 						} else if (name.contains("ledge")) {
 							material = b.getId().getPath().split("_ledge_block")[0];
                         DungeonBlocks.LOGGER.info("ledge recipe material ->{} to texture ->{} ", material, maps.m2.get(material));
-						} else if (name.contains("keystone_block")) {
-							material = b.getId().getPath().split("_keystone_block")[0];
-						} else if (name.contains("keystone_slab")) {
-							material = b.getId().getPath().split("_keystone_slab_block")[0];
 						}
+//						else if (name.contains("keystone_block")) {
+//							material = b.getId().getPath().split("_keystone_block")[0];
+//						} else if (name.contains("keystone_slab")) {
+//							material = b.getId().getPath().split("_keystone_slab_block")[0];
+//						}
 						// else do all the other types
 
 						if (material != null) {
