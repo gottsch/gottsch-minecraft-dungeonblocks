@@ -21,6 +21,7 @@ package mod.gottsch.forge.dungeonblocks.datagen.loot;
 
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
+import mod.gottsch.forge.dungeonblocks.datagen.DataGenMaps;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
@@ -31,38 +32,19 @@ import java.util.List;
 import java.util.Set;
 
 public class ModBlockLootTables extends BlockLootSubProvider {
-    List<String> names = Arrays.asList(
-            "barred_window",
-            "brazier",
-            "corbel",
-//            "cornice",
-//            "crown_molding",
-//            "double_sill",
-            "door",
-            "lantern",
-//            "facade",
-//            "fluted",
-            "grate",
-            "keystone",
-            "ledge",
-            "plate_bracket",
-//            "pillar",
-//            "quarter",
-            "sconce",
-            "sewer",
-//            "sill",
-            "hay",
-            "wall_ring");
-
     public ModBlockLootTables() {
         super(Set.of(), FeatureFlags.REGISTRY.allFlags());
     }
 
+    private DataGenMaps maps = new DataGenMaps();
+
     @Override
     protected void generate() {
+
+
         ModBlocks.MAP.forEach((k, v) -> {
             String name = k.getId().getPath();
-            for(String n : names) {
+            for(String n : maps.names) {
                 if (name.contains(n)) {
                     dropSelf(k.get());
                     break;
@@ -86,7 +68,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 // only process these block
                 .filter(b -> {
                     String name = b.getId().getPath();
-                    for(String n : names) {
+                    for(String n : maps.names) {
                         if (name.contains(n)) {
                             return true;
                         }

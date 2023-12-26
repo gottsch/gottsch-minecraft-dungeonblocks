@@ -66,6 +66,40 @@ public class DataGenMaps {
             "wall_ring"
     );
 
+    public List<String> stone_blocks = Arrays.asList(
+            "barred_window",
+            "ledge",
+            "greek",
+            "corbel",
+            "cornice",
+            "crown_molding",
+            "double_sill",
+            "facade",
+            "fluted",
+            "pillar",
+            "quarter",
+            "sill"
+            );
+
+    public List<String> wood_names = Arrays.asList(
+            "acacia",
+            "birch",
+            "cherry",
+            "dark_oak",
+            "jungle",
+            "mangrove",
+            "oak",
+            "spruce",
+            "stripped_acacia",
+            "stripped_birch",
+            "stripped_cherry",
+            "stripped_dark_oak",
+            "stripped_jungle",
+            "stripped_mangrove",
+            "stripped_oak",
+            "stripped_spruce"
+    );
+
     /**
      *
      */

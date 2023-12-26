@@ -56,7 +56,7 @@ public class ModBlocks {
             .forceSolidOn().requiresCorrectToolForDrops().strength(3.5F).sound(SoundType.LANTERN).lightLevel(DungeonLanternBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
 
     public static final RegistryObject<Block> BRAZIER = Registration.BLOCKS.register("brazier_block", () -> new BrazierBlock(Properties.of().mapColor(MapColor.METAL)
-            .forceSolidOn().requiresCorrectToolForDrops().strength(3.5F).sound(SoundType.METAL).lightLevel(BrazierBlock.LIGHT_EMISSION).noOcclusion()));
+            .forceSolidOn().strength(3.5F).sound(SoundType.METAL).lightLevel(BrazierBlock.LIGHT_EMISSION).noOcclusion()));
 
     // grate
     public static final RegistryObject<Block> DARK_IRON_GRATE = Registration.BLOCKS.register("dark_iron_grate", () -> new GrateBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
