@@ -217,11 +217,11 @@ public class DataGenMaps {
     }
 
     public ResourceLocation modLoc(String name) {
-        return new ResourceLocation(DungeonBlocks.MOD_ID, name);
+        return ResourceLocation.fromNamespaceAndPath(DungeonBlocks.MOD_ID, name);
     }
 
     public ResourceLocation mcLoc(String name) {
-        return new ResourceLocation(name);
+        return ResourceLocation.withDefaultNamespace(name);
     }
 
     // TODO this m map can be replace with the same type of code as ModelBlockStateProvider

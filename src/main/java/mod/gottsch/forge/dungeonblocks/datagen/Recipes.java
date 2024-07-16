@@ -21,22 +21,21 @@ package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.BarredWindows;
-import mod.gottsch.forge.dungeonblocks.core.block.CorbelBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.LedgeBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 
@@ -46,12 +45,13 @@ import java.util.function.Consumer;
 public class Recipes extends RecipeProvider {
 	private static String CRITERIA = "criteria";
 
-		public Recipes(PackOutput output) {
-			super(output);
+		public Recipes(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+
+			super(output, provider);
 		}
 
 		@Override
-		protected void buildRecipes(Consumer<FinishedRecipe> recipe) {
+		protected void buildRecipes(RecipeOutput recipe) {
 			Map<Block, RegistryObject<Block>> ingredientMap = new HashMap<>();
 
 			// dungeon lantern

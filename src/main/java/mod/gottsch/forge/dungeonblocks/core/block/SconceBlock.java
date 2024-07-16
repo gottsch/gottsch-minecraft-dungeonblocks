@@ -30,7 +30,10 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -97,7 +100,7 @@ public class SconceBlock extends AbstractSconceBlock {
 	}
 
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+	protected ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		if (player.getAbilities().mayBuild &&
 				(player.getItemInHand(hand).is(Items.CANDLE) ||
 						player.getItemInHand(hand).is(ItemTags.CANDLES))) {
@@ -105,12 +108,10 @@ public class SconceBlock extends AbstractSconceBlock {
 			state = state.cycle(CANDLES);
 			level.setBlock(pos, state, 11);
 			level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-			player.getItemInHand(hand).hurtAndBreak(1, player, (p) -> {
-				p.broadcastBreakEvent(hand);
-			});
-			return InteractionResult.sidedSuccess(level.isClientSide);
+			player.getItemInHand(hand).hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+			return ItemInteractionResult.sidedSuccess(level.isClientSide);
 		}
-		return super.use(state, level, pos, player, hand, hitResult);
+		return super.useItemOn(itemStack, state, level, pos, player, hand, result);
 	}
 
 	public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState blockState, FluidState fluidState) {

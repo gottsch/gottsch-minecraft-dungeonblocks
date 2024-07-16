@@ -75,19 +75,19 @@ public class ModBlocks {
     public static final RegistryObject<Block> PLATE_BRACKET_BLOCK = Registration.BLOCKS.register("plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
 
     // hay patches
-    public static final RegistryObject<Block> HAY_PATCH = Registration.BLOCKS.register("hay_patch_block", () -> new CarpetBlock(Properties.copy(Blocks.YELLOW_CARPET)));
-    public static final RegistryObject<Block> DIRTY_HAY_PATCH = Registration.BLOCKS.register("dirty_hay_patch_block", () -> new CarpetBlock(Properties.copy(Blocks.YELLOW_CARPET)));
+    public static final RegistryObject<Block> HAY_PATCH = Registration.BLOCKS.register("hay_patch_block", () -> new CarpetBlock(Properties.ofFullCopy(Blocks.YELLOW_CARPET)));
+    public static final RegistryObject<Block> DIRTY_HAY_PATCH = Registration.BLOCKS.register("dirty_hay_patch_block", () -> new CarpetBlock(Properties.ofFullCopy(Blocks.YELLOW_CARPET)));
 
     // greek blocks
-    public static final RegistryObject<Block> STONE_GREEK_BLOCK = Registration.BLOCKS.register("stone_greek_block", () -> new FacingBlock(Properties.copy(Blocks.STONE)));
-    public static final RegistryObject<Block> ANDESITE_GREEK_BLOCK = Registration.BLOCKS.register("andesite_greek_block", () -> new FacingBlock(Properties.copy(Blocks.ANDESITE)));
-    public static final RegistryObject<Block> POLISHED_BASALT_GREEK_BLOCK = Registration.BLOCKS.register("polished_basalt_greek_block", () -> new FacingBlock(Properties.copy(Blocks.POLISHED_BASALT)));
+    public static final RegistryObject<Block> STONE_GREEK_BLOCK = Registration.BLOCKS.register("stone_greek_block", () -> new FacingBlock(Properties.ofFullCopy(Blocks.STONE)));
+    public static final RegistryObject<Block> ANDESITE_GREEK_BLOCK = Registration.BLOCKS.register("andesite_greek_block", () -> new FacingBlock(Properties.ofFullCopy(Blocks.ANDESITE)));
+    public static final RegistryObject<Block> POLISHED_BASALT_GREEK_BLOCK = Registration.BLOCKS.register("polished_basalt_greek_block", () -> new FacingBlock(Properties.ofFullCopy(Blocks.POLISHED_BASALT)));
 
     // doors
-    public static final RegistryObject<Block> SPRUCE_DUNGEON_DOOR = Registration.BLOCKS.register("spruce_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.SPRUCE_DOOR), BlockSetType.SPRUCE));
-    public static final RegistryObject<Block> CRIMSON_DUNGEON_DOOR = Registration.BLOCKS.register("crimson_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.CRIMSON_DOOR), BlockSetType.CRIMSON));
-    public static final RegistryObject<Block> DARK_OAK_DUNGEON_DOOR = Registration.BLOCKS.register("dark_oak_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK));
-    public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR = Registration.BLOCKS.register("mangrove_dungeon_door", () -> new DoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE));
+    public static final RegistryObject<Block> SPRUCE_DUNGEON_DOOR = Registration.BLOCKS.register("spruce_dungeon_door", () -> new DungeonDoorBlock(Properties.ofFullCopy(Blocks.SPRUCE_DOOR), BlockSetType.SPRUCE));
+    public static final RegistryObject<Block> CRIMSON_DUNGEON_DOOR = Registration.BLOCKS.register("crimson_dungeon_door", () -> new DungeonDoorBlock(Properties.ofFullCopy(Blocks.CRIMSON_DOOR), BlockSetType.CRIMSON));
+    public static final RegistryObject<Block> DARK_OAK_DUNGEON_DOOR = Registration.BLOCKS.register("dark_oak_dungeon_door", () -> new DungeonDoorBlock(Properties.ofFullCopy(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK));
+    public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR = Registration.BLOCKS.register("mangrove_dungeon_door", () -> new DoorBlock(BlockSetType.MANGROVE, Properties.ofFullCopy(Blocks.MANGROVE_DOOR)));
 
     // facade
     public static final RegistryObject<Block> STONE_FACADE = Registration.BLOCKS.register(BlockID.STONE_FACADE_ID, () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
@@ -104,11 +104,11 @@ public class ModBlocks {
     public static final RegistryObject<Block> MOSSY_STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_FACADE_ID,
             () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> CRACKED_STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
+            () -> new FacadeBlock(Properties.ofFullCopy(Blocks.CRACKED_STONE_BRICKS)));
     public static final RegistryObject<Block> CHISELED_STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_FACADE_ID,
             () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> OBSIDIAN_FACADE = Registration.BLOCKS.register(BlockID.OBSIDIAN_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.OBSIDIAN)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OBSIDIAN)));
 
     public static final RegistryObject<Block> SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.SANDSTONE_FACADE_ID,
             () -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
@@ -134,46 +134,46 @@ public class ModBlocks {
     public static final RegistryObject<Block> DIORITE_FACADE = Registration.BLOCKS.register(BlockID.DIORITE_FACADE_ID,
             () -> new FacadeBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> POLISHED_DIORITE_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DIORITE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIORITE)));
     public static final RegistryObject<Block> ANDESITE_FACADE = Registration.BLOCKS.register(BlockID.ANDESITE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.ANDESITE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ANDESITE)));
     public static final RegistryObject<Block> POLISHED_ANDESITE_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_ANDESITE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.ANDESITE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ANDESITE)));
 
     public static final RegistryObject<Block> BLACKSTONE_FACADE = Registration.BLOCKS.register(BlockID.BLACKSTONE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_BLACKSTONE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
     public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_POLISHED_BLACKSTONE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
     public static final RegistryObject<Block> GILDED_BLACKSTONE_FACADE = Registration.BLOCKS.register(BlockID.GILDED_BLACKSTONE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GILDED_BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_BLACKSTONE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
     public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
 
     public static final RegistryObject<Block> DEEPSLATE_FACADE = Registration.BLOCKS.register(BlockID.DEEPSLATE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.DEEPSLATE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.CRACKED_DEEPSLATE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> COBBLED_DEEPSLATE_FACADE = Registration.BLOCKS.register(BlockID.COBBLED_DEEPSLATE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> POLISHED_DEEPSLATE_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_DEEPSLATE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> CHISELED_DEEPSLATE_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_DEEPSLATE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_TILES_FACADE = Registration.BLOCKS.register(BlockID.DEEPSLATE_TILES_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_FACADE = Registration.BLOCKS.register(BlockID.CRACKED_DEEPSLATE_TILES_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new FacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
 
 
     // quarter facade
     public static RegistryObject<Block> STONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.STONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.STONE)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)));
     public static RegistryObject<Block> SMOOTH_STONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_QUARTER_FACADE_ID,
             () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static RegistryObject<Block> COBBLESTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.COBBLESTONE_QUARTER_FACADE_ID,
@@ -224,46 +224,46 @@ public class ModBlocks {
             () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static RegistryObject<Block> BLACKSTONE_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.BLACKSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
     public static RegistryObject<Block> POLISHED_BLACKSTONE_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE)));
     public static RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.CHISELED_POLISHED_BLACKSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
     public static RegistryObject<Block> GILDED_BLACKSTONE_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.GILDED_BLACKSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GILDED_BLACKSTONE)));
     public static RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
     public static RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
     public static RegistryObject<Block> DEEPSLATE_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static RegistryObject<Block> DEEPSLATE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_BRICKS_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_BRICKS)));
     public static RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_BRICKS_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
     public static RegistryObject<Block> COBBLED_DEEPSLATE_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.COBBLED_DEEPSLATE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE)));
     public static RegistryObject<Block> POLISHED_DEEPSLATE_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.POLISHED_DEEPSLATE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_DEEPSLATE)));
     public static RegistryObject<Block> CHISELED_DEEPSLATE_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.CHISELED_DEEPSLATE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_DEEPSLATE)));
     public static RegistryObject<Block> DEEPSLATE_TILES_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_TILES_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_TILES)));
     public static RegistryObject<Block> CRACKED_DEEPSLATE_TILES_QUARTER_FACADE = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_TILES_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
+            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_TILES)));
 
     // fluted
     public static final RegistryObject<Block> STONE_FLUTED = Registration.BLOCKS.register(BlockID.STONE_FLUTED_ID,
@@ -319,52 +319,52 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> BLACKSTONE_FLUTED = Registration.BLOCKS.register(
             BlockID.BLACKSTONE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_FLUTED = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_FLUTED = Registration.BLOCKS.register(
             BlockID.CHISELED_POLISHED_BLACKSTONE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> GILDED_BLACKSTONE_FLUTED = Registration.BLOCKS.register(
             BlockID.GILDED_BLACKSTONE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GILDED_BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_FLUTED = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_BRICKS_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED = Registration.BLOCKS.register(
             BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> DEEPSLATE_FLUTED = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_BRICKS_FLUTED = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_BRICKS_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_FLUTED = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_BRICKS_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> COBBLED_DEEPSLATE_FLUTED = Registration.BLOCKS.register(
             BlockID.COBBLED_DEEPSLATE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE)));
     public static final RegistryObject<Block> POLISHED_DEEPSLATE_FLUTED = Registration.BLOCKS.register(
             BlockID.POLISHED_DEEPSLATE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_DEEPSLATE)));
     public static final RegistryObject<Block> CHISELED_DEEPSLATE_FLUTED = Registration.BLOCKS.register(
             BlockID.CHISELED_DEEPSLATE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_TILES_FLUTED = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_TILES_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_TILES)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_FLUTED = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_TILES_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
+            () -> new FlutedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_TILES)));
 
     // fluted facade
     public static final RegistryObject<Block> STONE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.STONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(STONE_FLUTED.get())));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(STONE_FLUTED.get())));
     public static final RegistryObject<Block> SMOOTH_STONE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(SMOOTH_STONE_FLUTED.get())));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(SMOOTH_STONE_FLUTED.get())));
     public static final RegistryObject<Block> COBBLESTONE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.COBBLESTONE_FLUTED_FACADE_ID,
             () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> MOSSY_COBBLESTONE_FLUTED_FACADE = Registration.BLOCKS.register(
@@ -428,46 +428,46 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> BLACKSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.BLACKSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.CHISELED_POLISHED_BLACKSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> GILDED_BLACKSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.GILDED_BLACKSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GILDED_BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> DEEPSLATE_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_BRICKS_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_BRICKS_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> COBBLED_DEEPSLATE_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.COBBLED_DEEPSLATE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE)));
     public static final RegistryObject<Block> POLISHED_DEEPSLATE_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.POLISHED_DEEPSLATE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_DEEPSLATE)));
     public static final RegistryObject<Block> CHISELED_DEEPSLATE_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.CHISELED_DEEPSLATE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_TILES_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_TILES_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_TILES)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_FLUTED_FACADE = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_TILES_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
+            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_TILES)));
 
     // sill
     public static final RegistryObject<Block> STONE_SILL = Registration.BLOCKS.register(BlockID.STONE_SILL_ID,
@@ -522,46 +522,46 @@ public class ModBlocks {
             () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> BLACKSTONE_SILL = Registration.BLOCKS.register(
             BlockID.BLACKSTONE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_SILL = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_SILL = Registration.BLOCKS.register(
             BlockID.CHISELED_POLISHED_BLACKSTONE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> GILDED_BLACKSTONE_SILL = Registration.BLOCKS.register(
             BlockID.GILDED_BLACKSTONE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GILDED_BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_SILL = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_BRICKS_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_SILL = Registration.BLOCKS.register(
             BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> DEEPSLATE_SILL = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_BRICKS_SILL = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_BRICKS_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_SILL = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_BRICKS_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> COBBLED_DEEPSLATE_SILL = Registration.BLOCKS.register(
             BlockID.COBBLED_DEEPSLATE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE)));
     public static final RegistryObject<Block> POLISHED_DEEPSLATE_SILL = Registration.BLOCKS.register(
             BlockID.POLISHED_DEEPSLATE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_DEEPSLATE)));
     public static final RegistryObject<Block> CHISELED_DEEPSLATE_SILL = Registration.BLOCKS.register(
             BlockID.CHISELED_DEEPSLATE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_TILES_SILL = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_TILES_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_TILES)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_SILL = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_TILES_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
+            () -> new SillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_TILES)));
 
     // double sill
     public static final RegistryObject<Block> STONE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.STONE_DOUBLE_SILL_ID,
@@ -628,46 +628,46 @@ public class ModBlocks {
             () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> BLACKSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.BLACKSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.CHISELED_POLISHED_BLACKSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> GILDED_BLACKSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.GILDED_BLACKSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GILDED_BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_BRICKS_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> DEEPSLATE_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_BRICKS_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_BRICKS_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> COBBLED_DEEPSLATE_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.COBBLED_DEEPSLATE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE)));
     public static final RegistryObject<Block> POLISHED_DEEPSLATE_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.POLISHED_DEEPSLATE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_DEEPSLATE)));
     public static final RegistryObject<Block> CHISELED_DEEPSLATE_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.CHISELED_DEEPSLATE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_TILES_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_TILES_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_TILES)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_DOUBLE_SILL = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_TILES_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
+            () -> new DoubleSillBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_TILES)));
 
 
     // Cornice
@@ -723,46 +723,46 @@ public class ModBlocks {
             () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> BLACKSTONE_CORNICE = Registration.BLOCKS.register(
             BlockID.BLACKSTONE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_CORNICE = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_CORNICE = Registration.BLOCKS.register(
             BlockID.CHISELED_POLISHED_BLACKSTONE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> GILDED_BLACKSTONE_CORNICE = Registration.BLOCKS.register(
             BlockID.GILDED_BLACKSTONE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GILDED_BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_CORNICE = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_BRICKS_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_CORNICE = Registration.BLOCKS.register(
             BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> DEEPSLATE_CORNICE = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_BRICKS_CORNICE = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_BRICKS_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_CORNICE = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_BRICKS_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> COBBLED_DEEPSLATE_CORNICE = Registration.BLOCKS.register(
             BlockID.COBBLED_DEEPSLATE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE)));
     public static final RegistryObject<Block> POLISHED_DEEPSLATE_CORNICE = Registration.BLOCKS.register(
             BlockID.POLISHED_DEEPSLATE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_DEEPSLATE)));
     public static final RegistryObject<Block> CHISELED_DEEPSLATE_CORNICE = Registration.BLOCKS.register(
             BlockID.CHISELED_DEEPSLATE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_TILES_CORNICE = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_TILES_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_TILES)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_CORNICE = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_TILES_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
+            () -> new CorniceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_TILES)));
 
     // crown molding
     public static final RegistryObject<Block> STONE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.STONE_CROWN_MOLDING_ID,
@@ -831,46 +831,46 @@ public class ModBlocks {
             () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> BLACKSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.BLACKSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.CHISELED_POLISHED_BLACKSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> GILDED_BLACKSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.GILDED_BLACKSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GILDED_BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_BRICKS_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> DEEPSLATE_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_BRICKS_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_BRICKS_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> COBBLED_DEEPSLATE_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.COBBLED_DEEPSLATE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE)));
     public static final RegistryObject<Block> POLISHED_DEEPSLATE_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.POLISHED_DEEPSLATE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_DEEPSLATE)));
     public static final RegistryObject<Block> CHISELED_DEEPSLATE_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.CHISELED_DEEPSLATE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_TILES_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_TILES_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_TILES)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_CROWN_MOLDING = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_TILES_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
+            () -> new CrownMoldingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_TILES)));
 
     // pillar base
     public static final RegistryObject<Block> STONE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.STONE_PILLAR_BASE_ID,
@@ -937,46 +937,46 @@ public class ModBlocks {
             () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> BLACKSTONE_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.BLACKSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.CHISELED_POLISHED_BLACKSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> GILDED_BLACKSTONE_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.GILDED_BLACKSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GILDED_BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_BRICKS_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> DEEPSLATE_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_BRICKS_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_BRICKS_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> COBBLED_DEEPSLATE_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.COBBLED_DEEPSLATE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE)));
     public static final RegistryObject<Block> POLISHED_DEEPSLATE_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.POLISHED_DEEPSLATE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_DEEPSLATE)));
     public static final RegistryObject<Block> CHISELED_DEEPSLATE_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.CHISELED_DEEPSLATE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_TILES_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_TILES_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_TILES)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_PILLAR_BASE = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_TILES_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
+            () -> new PillarBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_TILES)));
 
     // pillar
     public static final RegistryObject<Block> STONE_PILLAR = Registration.BLOCKS.register(BlockID.STONE_PILLAR_ID,
@@ -1031,46 +1031,46 @@ public class ModBlocks {
             () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> BLACKSTONE_PILLAR = Registration.BLOCKS.register(
             BlockID.BLACKSTONE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_PILLAR = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_PILLAR = Registration.BLOCKS.register(
             BlockID.CHISELED_POLISHED_BLACKSTONE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> GILDED_BLACKSTONE_PILLAR = Registration.BLOCKS.register(
             BlockID.GILDED_BLACKSTONE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GILDED_BLACKSTONE)));
     public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_PILLAR = Registration.BLOCKS.register(
             BlockID.POLISHED_BLACKSTONE_BRICKS_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_PILLAR = Registration.BLOCKS.register(
             BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
     public static final RegistryObject<Block> DEEPSLATE_PILLAR = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_BRICKS_PILLAR = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_BRICKS_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_PILLAR = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_BRICKS_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
     public static final RegistryObject<Block> COBBLED_DEEPSLATE_PILLAR = Registration.BLOCKS.register(
             BlockID.COBBLED_DEEPSLATE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE)));
     public static final RegistryObject<Block> POLISHED_DEEPSLATE_PILLAR = Registration.BLOCKS.register(
             BlockID.POLISHED_DEEPSLATE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_DEEPSLATE)));
     public static final RegistryObject<Block> CHISELED_DEEPSLATE_PILLAR = Registration.BLOCKS.register(
             BlockID.CHISELED_DEEPSLATE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_DEEPSLATE)));
     public static final RegistryObject<Block> DEEPSLATE_TILES_PILLAR = Registration.BLOCKS.register(
             BlockID.DEEPSLATE_TILES_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_TILES)));
     public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_PILLAR = Registration.BLOCKS.register(
             BlockID.CRACKED_DEEPSLATE_TILES_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
+            () -> new PillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_DEEPSLATE_TILES)));
 
     /**
      *

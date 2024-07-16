@@ -13,11 +13,10 @@ import net.minecraftforge.fml.common.Mod;
 public class ClientSetup {
 
     /**
-     * Register the {@link IBlockColor} handlers.
+     * Register the handlers.
      *
      * @param event The event
      */
-    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
         event.register(

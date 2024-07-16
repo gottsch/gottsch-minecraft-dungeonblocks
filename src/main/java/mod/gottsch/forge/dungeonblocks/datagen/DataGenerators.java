@@ -26,8 +26,8 @@ public class DataGenerators {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
         if (event.includeServer()) {
-            generator.addProvider(true, new Recipes(packOutput));
-            generator.addProvider(true, ModLootTableProvider.create(packOutput));
+            generator.addProvider(true, new Recipes(packOutput, lookupProvider));
+            generator.addProvider(true, ModLootTableProvider.create(packOutput, lookupProvider));
             ModBlockTagGenerator blockTagGenerator = generator.addProvider(event.includeServer(),
                 new ModBlockTagGenerator(packOutput, lookupProvider, existingFileHelper));
         }

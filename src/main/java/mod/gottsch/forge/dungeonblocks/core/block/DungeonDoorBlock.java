@@ -20,7 +20,7 @@ public class DungeonDoorBlock extends DoorBlock {
 
 
     public DungeonDoorBlock(Properties properties, BlockSetType setType) {
-        super(properties, setType);
+        super(setType, properties);
     }
 
     public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {

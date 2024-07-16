@@ -44,7 +44,7 @@ public class GrateTrapDoorBlock extends TrapDoorBlock {
     protected static final VoxelShape TOP_AABB = Block.box(0.0D, 14.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 
     public GrateTrapDoorBlock(Properties properties) {
-        super(properties, BlockSetType.STONE);
+        super(BlockSetType.STONE, properties);
     }
 
     @Override
