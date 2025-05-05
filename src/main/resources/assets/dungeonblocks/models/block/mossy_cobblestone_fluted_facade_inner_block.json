@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/fluted_facade_inner_block_base",
-    "textures": {
-        "bottom": "block/mossy_cobblestone",
-        "top": "block/mossy_cobblestone",
-        "0": "block/mossy_cobblestone"
-    }
-}

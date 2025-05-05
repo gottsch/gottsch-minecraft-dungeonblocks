@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/sill_block_base",
-    "textures": {
-		"0": "block/stone",
-        "top": "block/stone",            
-        "bottom": "block/stone"
-    }
-}

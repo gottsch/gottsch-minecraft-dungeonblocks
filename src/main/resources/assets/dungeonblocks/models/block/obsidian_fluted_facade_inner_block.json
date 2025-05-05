@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/fluted_facade_inner_block_base",
-    "textures": {
-        "bottom": "block/obsidian",
-        "top": "block/obsidian",
-        "0": "block/obsidian"
-    }
-}

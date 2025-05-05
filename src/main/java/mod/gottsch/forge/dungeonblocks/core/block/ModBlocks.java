@@ -59,12 +59,155 @@ public class ModBlocks {
             .forceSolidOn().strength(3.5F).sound(SoundType.METAL).lightLevel(BrazierBlock.LIGHT_EMISSION).noOcclusion()));
 
     // grate
-    public static final RegistryObject<Block> DARK_IRON_GRATE = Registration.BLOCKS.register("dark_iron_grate", () -> new GrateBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
-    public static final RegistryObject<Block> WEATHERED_COPPER_GRATE = Registration.BLOCKS.register("weathered_copper_grate", () -> new GrateBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
+    public static final RegistryObject<Block> DARK_IRON_GRATE = Registration.BLOCKS.register("dark_iron_grate", () -> new HeavyGrateBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
 
-    // grate trapdoor
-    public static final RegistryObject<Block> DARK_IRON_GRATE_TRAPDOOR = Registration.BLOCKS.register("dark_iron_grate_trapdoor", () -> new GrateTrapDoorBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
-    public static final RegistryObject<Block> WEATHERED_COPPER_GRATE_TRAPDOOR = Registration.BLOCKS.register("weathered_copper_grate_trapdoor", () -> new GrateTrapDoorBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
+    public static final RegistryObject<Block> COPPER_GRATE = Registration.BLOCKS.register("copper_grate", () -> {
+        return new WeatheringCopperGrateBlock(WeatheringCopper.WeatherState.UNAFFECTED, Properties.of().strength(3.0F, 6.0F).sound(SoundType.COPPER).mapColor(MapColor.WARPED_STEM).noOcclusion().requiresCorrectToolForDrops().isValidSpawn((a, b, c, d) -> {
+            return false;
+        }).isRedstoneConductor((a, b, c) -> {
+            return false;
+        }).isSuffocating((a, b, c) -> {
+            return false;
+        }).isViewBlocking((a, b, c) -> {
+            return false;
+        }));
+    });
+    public static final RegistryObject<Block> EXPOSED_COPPER_GRATE = Registration.BLOCKS.register("exposed_copper_grate", () -> {
+        return new WeatheringCopperGrateBlock(WeatheringCopper.WeatherState.EXPOSED, Properties.copy((BlockBehaviour)COPPER_GRATE.get()).mapColor(MapColor.TERRACOTTA_LIGHT_GRAY));
+    });
+    public static final RegistryObject<Block> WEATHERED_COPPER_GRATE = Registration.BLOCKS.register("weathered_copper_grate", () -> {
+        return new WeatheringCopperGrateBlock(WeatheringCopper.WeatherState.WEATHERED, Properties.copy((BlockBehaviour)COPPER_GRATE.get()).mapColor(MapColor.COLOR_ORANGE));
+    });
+    public static final RegistryObject<Block> OXIDIZED_COPPER_GRATE = Registration.BLOCKS.register("oxidized_copper_grate", () -> {
+        return new WeatheringCopperGrateBlock(WeatheringCopper.WeatherState.OXIDIZED, Properties.copy((BlockBehaviour)COPPER_GRATE.get()).mapColor(MapColor.WARPED_NYLIUM));
+    });
+    public static final RegistryObject<Block> WAXED_COPPER_GRATE = Registration.BLOCKS.register("waxed_copper_grate", () -> {
+        return new WaterloggedCubeBlock(Properties.copy((BlockBehaviour)COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_GRATE = Registration.BLOCKS.register("waxed_exposed_copper_grate", () -> {
+        return new WaterloggedCubeBlock(Properties.copy((BlockBehaviour)EXPOSED_COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_GRATE = Registration.BLOCKS.register("waxed_weathered_copper_grate", () -> {
+        return new WaterloggedCubeBlock(Properties.copy((BlockBehaviour)WEATHERED_COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_GRATE = Registration.BLOCKS.register("waxed_oxidized_copper_grate", () -> {
+        return new WaterloggedCubeBlock(Properties.copy((BlockBehaviour)COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> COPPER_HEAVY_GRATE = Registration.BLOCKS.register("copper_heavy_grate", () -> {
+        return new WeatheringHeavyGrateBlock(WeatheringCopper.WeatherState.UNAFFECTED, Properties.copy((BlockBehaviour)COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> EXPOSED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("exposed_copper_heavy_grate", () -> {
+        return new WeatheringHeavyGrateBlock(WeatheringCopper.WeatherState.EXPOSED, Properties.copy((BlockBehaviour)EXPOSED_COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> WEATHERED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("weathered_copper_heavy_grate", () -> {
+        return new WeatheringHeavyGrateBlock(WeatheringCopper.WeatherState.WEATHERED, Properties.copy((BlockBehaviour)WEATHERED_COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> OXIDIZED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("oxidized_copper_heavy_grate", () -> {
+        return new WeatheringHeavyGrateBlock(WeatheringCopper.WeatherState.OXIDIZED, Properties.copy((BlockBehaviour)OXIDIZED_COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> WAXED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("waxed_copper_heavy_grate", () -> {
+        return new HeavyGrateBlock(Properties.copy((BlockBehaviour)COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("waxed_exposed_copper_heavy_grate", () -> {
+        return new HeavyGrateBlock(Properties.copy((BlockBehaviour)EXPOSED_COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("waxed_weathered_copper_heavy_grate", () -> {
+        return new HeavyGrateBlock(Properties.copy((BlockBehaviour)WEATHERED_COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("waxed_oxidized_copper_heavy_grate", () -> {
+        return new HeavyGrateBlock(Properties.copy((BlockBehaviour)OXIDIZED_COPPER_GRATE.get()));
+    });
+
+
+    // trapdoor
+    public static final RegistryObject<Block> COPPER_TRAPDOOR = Registration.BLOCKS.register("copper_trapdoor", () -> {
+        return new WeatheringCopperTrapDoorBlock(WeatheringCopper.WeatherState.UNAFFECTED, Properties.copy((BlockBehaviour)COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> EXPOSED_COPPER_TRAPDOOR = Registration.BLOCKS.register("exposed_copper_trapdoor", () -> {
+        return new WeatheringCopperTrapDoorBlock(WeatheringCopper.WeatherState.EXPOSED, Properties.copy((BlockBehaviour)EXPOSED_COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> WEATHERED_COPPER_TRAPDOOR = Registration.BLOCKS.register("weathered_copper_trapdoor", () -> {
+        return new WeatheringCopperTrapDoorBlock(WeatheringCopper.WeatherState.WEATHERED, Properties.copy((BlockBehaviour)WEATHERED_COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> OXIDIZED_COPPER_TRAPDOOR = Registration.BLOCKS.register("oxidized_copper_trapdoor", () -> {
+        return new WeatheringCopperTrapDoorBlock(WeatheringCopper.WeatherState.OXIDIZED, Properties.copy((BlockBehaviour)OXIDIZED_COPPER_GRATE.get()));
+    });
+    public static final RegistryObject<Block> WAXED_COPPER_TRAPDOOR = Registration.BLOCKS.register("waxed_copper_trapdoor", () -> {
+        return new TrapDoorBlock(Properties.copy((BlockBehaviour)COPPER_GRATE.get()), BlockSetType.DARK_OAK);
+    });
+    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_TRAPDOOR = Registration.BLOCKS.register("waxed_exposed_copper_trapdoor", () -> {
+        return new TrapDoorBlock(Properties.copy((BlockBehaviour)EXPOSED_COPPER_GRATE.get()), BlockSetType.DARK_OAK);
+    });
+    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_TRAPDOOR = Registration.BLOCKS.register("waxed_weathered_copper_trapdoor", () -> {
+        return new TrapDoorBlock(Properties.copy((BlockBehaviour)WEATHERED_COPPER_GRATE.get()), BlockSetType.DARK_OAK);
+    });
+    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_TRAPDOOR = Registration.BLOCKS.register("waxed_oxidized_copper_trapdoor", () -> {
+        return new TrapDoorBlock(Properties.copy((BlockBehaviour)OXIDIZED_COPPER_GRATE.get()), BlockSetType.DARK_OAK);
+    });
+
+    // heavy trapdoor
+    public static final RegistryObject<Block> DARK_IRON_HEAVY_TRAPDOOR = Registration.BLOCKS.register("dark_iron_heavy_trapdoor", () -> {
+        return new HeavyTrapDoorBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion());
+    });
+
+    public static final RegistryObject<Block> COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("copper_heavy_trapdoor", () -> {
+        return new WeatheringHeavyTrapDoorBlock(WeatheringCopper.WeatherState.UNAFFECTED, Properties.copy((BlockBehaviour)COPPER_TRAPDOOR.get()));
+    });
+    public static final RegistryObject<Block> EXPOSED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("exposed_copper_heavy_trapdoor", () -> {
+        return new WeatheringHeavyTrapDoorBlock(WeatheringCopper.WeatherState.EXPOSED, Properties.copy((BlockBehaviour)EXPOSED_COPPER_TRAPDOOR.get()));
+    });
+    public static final RegistryObject<Block> WEATHERED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("weathered_copper_heavy_trapdoor", () -> {
+        return new WeatheringHeavyTrapDoorBlock(WeatheringCopper.WeatherState.WEATHERED, Properties.copy((BlockBehaviour)WEATHERED_COPPER_TRAPDOOR.get()));
+    });
+    public static final RegistryObject<Block> OXIDIZED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("oxidized_copper_heavy_trapdoor", () -> {
+        return new WeatheringHeavyTrapDoorBlock(WeatheringCopper.WeatherState.OXIDIZED, Properties.copy((BlockBehaviour)OXIDIZED_COPPER_TRAPDOOR.get()));
+    });
+    public static final RegistryObject<Block> WAXED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("waxed_copper_heavy_trapdoor", () -> {
+        return new HeavyTrapDoorBlock(Properties.copy((BlockBehaviour)COPPER_TRAPDOOR.get()));
+    });
+    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("waxed_exposed_copper_heavy_trapdoor", () -> {
+        return new HeavyTrapDoorBlock(Properties.copy((BlockBehaviour)EXPOSED_COPPER_TRAPDOOR.get()));
+    });
+    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("waxed_weathered_copper_heavy_trapdoor", () -> {
+        return new HeavyTrapDoorBlock(Properties.copy((BlockBehaviour)WEATHERED_COPPER_TRAPDOOR.get()));
+    });
+    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("waxed_oxidized_copper_heavy_trapdoor", () -> {
+        return new HeavyTrapDoorBlock(Properties.copy((BlockBehaviour)OXIDIZED_COPPER_TRAPDOOR.get()));
+    });
+
+    public static final RegistryObject<Block> SQUARE_STONE_BRICK = Registration.BLOCKS.register("square_stone_brick", () -> {
+        return new Block(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_STONE_BRICK = Registration.BLOCKS.register("mossy_square_stone_brick", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> LEFT_LARGE_STONE_BRICK = Registration.BLOCKS.register("left_large_stone_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> RIGHT_LARGE_STONE_BRICK = Registration.BLOCKS.register("right_large_stone_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_BRICKS = Registration.BLOCKS.register("mossy_bricks", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> LARGE_BRICKS = Registration.BLOCKS.register("large_bricks", () -> {
+        return new Block(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_LARGE_BRICKS = Registration.BLOCKS.register("mossy_large_bricks", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> SQUARE_BRICK = Registration.BLOCKS.register("square_brick", () -> {
+        return new Block(Properties.copy(Blocks.BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_BRICK = Registration.BLOCKS.register("mossy_square_brick", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> LEFT_LARGE_BRICK = Registration.BLOCKS.register("left_large_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.BRICKS));
+    });
+    public static final RegistryObject<Block> RIGHT_LARGE_BRICK = Registration.BLOCKS.register("right_large_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.BRICKS));
+    });
 
     // sewer
     public static final RegistryObject<Block> WEATHERED_COPPER_SEWER = Registration.BLOCKS.register("weathered_copper_sewer_block", () -> new SewerBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));

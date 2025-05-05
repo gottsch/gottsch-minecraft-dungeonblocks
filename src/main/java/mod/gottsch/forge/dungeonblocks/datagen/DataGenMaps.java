@@ -51,7 +51,7 @@ public class DataGenMaps {
 ////            "double_sill",
             "door",
 ////            "facade",
-////            "fluted",
+            "fluted",
             "grate",
 //            "keystone",
             "lantern",
@@ -61,7 +61,7 @@ public class DataGenMaps {
 ////            "quarter",
             "sconce",
             "sewer",
-////            "sill",
+            "sill",
             "hay",
             "wall_ring"
     );

@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/fluted_facade_inner_block_base",
-    "textures": {
-        "bottom": "block/andesite",
-        "top": "block/andesite",
-        "0": "block/andesite"
-    }
-}

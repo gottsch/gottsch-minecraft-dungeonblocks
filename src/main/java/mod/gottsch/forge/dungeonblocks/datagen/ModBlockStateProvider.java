@@ -4,19 +4,19 @@ import mod.gottsch.forge.dungeonblocks.core.block.*;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
 import mod.gottsch.forge.dungeonblocks.core.state.properties.FacadeShape;
+import mod.gottsch.forge.gottschcore.block.IFacingBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -46,69 +46,72 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 })
                 .forEach(b -> {
                     String name = b.getId().getPath();
+                    String material;
                     if (name.contains("barred_window_block")) {
-                        String material = b.getId().getPath().split("_barred_window_block")[0];
+                        material = b.getId().getPath().split("_barred_window_block")[0];
                         barredWindowBlock(b, maps.t2.get(material));
                     } else if (name.contains("barred_window_facade")) {
-                        String material = b.getId().getPath().split("_barred_window_facade_block")[0];
+                        material = b.getId().getPath().split("_barred_window_facade_block")[0];
 //                        DungeonBlocks.LOGGER.info("barred window facade processing material ->{} to texture ->{} ", material, maps.t2.get(material));
                         barredWindowFacadeBlock(b, maps.t2.get(material));
                     } else if (name.contains("corbel")) {
-                        String material = b.getId().getPath().split("_corbel_block")[0];
-                        DungeonBlocks.LOGGER.info("corbel processing material ->{} to texture ->{} ", material, maps.t2.get(material));
-                        modelSingleTexture(b, modLoc(ModelProvider.BLOCK_FOLDER + "/corbel_block"), maps.t2.get(material));
+                        material = b.getId().getPath().split("_corbel_block")[0];
+//                        DungeonBlocks.LOGGER.info("corbel processing material ->{} to texture ->{} ", material, maps.t2.get(material));
+                        horizontalSingleTexture(b, modLoc(ModelProvider.BLOCK_FOLDER + "/corbel_block"), maps.t2.get(material));
+                    } else if (name.contains("double_sill")) {
+                        material = b.getId().getPath().split("_double_sill_block")[0];
+//                        DungeonBlocks.LOGGER.info("double sill processing material ->{} to texture ->{} ", material, maps.t2.get(material));
+                        this.horizontalSingleTexture(b, this.modLoc("block/double_sill_block_base"), (ResourceLocation)maps.t2.get(material));
+                    } else if (name.contains("sill") && !name.contains("double")) {
+                        material = b.getId().getPath().split("_sill_block")[0];
+                        this.horizontalSingleTexture(b, this.modLoc("block/sill_block_base"), (ResourceLocation)maps.t2.get(material));
+                    } else if (name.contains("fluted_facade")) {
+                        material = b.getId().getPath().split("_fluted_facade_block")[0];
+                        this.flutedFacadeBlock(b, (ResourceLocation)maps.t2.get(material));
+                    } else if (name.contains("fluted") && !name.contains("facade")) {
+                        material = b.getId().getPath().split("_fluted_block")[0];
+                        this.simpleSingleTexture(b, this.modLoc("block/fluted_block_base"), (ResourceLocation)maps.t2.get(material));
                     } else if (name.contains("ledge")) {
-                        String material = b.getId().getPath().split("_ledge_block")[0];
+                        material = b.getId().getPath().split("_ledge_block")[0];
 //                        DungeonBlocks.LOGGER.info("ledge processing material ->{} to texture ->{} ", material, maps.t2.get(material));
                         ledgeBlock(b, maps.t2.get(material));
                     } else if (name.contains("keystone_block")) {
-                        String material = b.getId().getPath().split("_keystone_block")[0];
-                        modelSingleTexture(b, modLoc(name), maps.t2.get(material));
+                        material = b.getId().getPath().split("_keystone_block")[0];
+                        horizontalSingleTexture(b, modLoc(name), maps.t2.get(material));
                      } else if (name.contains("keystone_slab")) {
-                        String material = b.getId().getPath().split("_keystone_slab_block")[0];
-                        modelSingleTexture(b, modLoc(name), maps.t2.get(material));
+                        material = b.getId().getPath().split("_keystone_slab_block")[0];
+                        horizontalSingleTexture(b, modLoc(name), maps.t2.get(material));
                     }
                     // else do all the other types
                 });
 
-        // keystones
-        String name ;
-//        name = ModelProvider.BLOCK_FOLDER + "/keystone_block";
-//        modelSingleTexture(KeystoneBlocks.STONE_KEYSTONE, modLoc(name), mcLoc("block/stone"));
-//        modelSingleTexture(KeystoneBlocks.SMOOTH_STONE_KEYSTONE, modLoc(name), mcLoc("block/smooth_stone"));
-//        modelSingleTexture(KeystoneBlocks.COBBLESTONE_KEYSTONE, modLoc(name), mcLoc("block/cobblestone"));
-//        modelSingleTexture(KeystoneBlocks.MOSSY_COBBLESTONE_KEYSTONE, modLoc(name), mcLoc("block/mossy_cobblestone"));
-//        modelSingleTexture(KeystoneBlocks.BRICKS_KEYSTONE, modLoc(name), mcLoc("block/bricks"));
-//        modelSingleTexture(KeystoneBlocks.STONE_BRICKS_KEYSTONE, modLoc(name), mcLoc("block/stone_bricks"));
-//        modelSingleTexture(KeystoneBlocks.MOSSY_STONE_BRICKS_KEYSTONE, modLoc(name), mcLoc("block/mossy_stone_bricks"));
-//        modelSingleTexture(KeystoneBlocks.CRACKED_STONE_BRICKS_KEYSTONE, modLoc(name), mcLoc("block/cracked_stone_bricks"));
-//        modelSingleTexture(KeystoneBlocks.CHISELED_STONE_BRICKS_KEYSTONE, modLoc(name), mcLoc("block/chiseled_stone_bricks"));
-//        modelSingleTexture(KeystoneBlocks.OBSIDIAN_KEYSTONE, modLoc(name), mcLoc("block/obsidian"));
-//
-//        modelSingleTexture(KeystoneBlocks.LIGHT_GRAY_CONCRETE_KEYSTONE, modLoc(name), mcLoc("block/light_gray_concrete"));
-//
-//        modelSingleTexture(KeystoneBlocks.POLISHED_DIORITE_KEYSTONE, modLoc(ModelProvider.BLOCK_FOLDER + "/keystone_block"), mcLoc("block/polished_diorite"));
-//
-//        name = ModelProvider.BLOCK_FOLDER + "/keystone_slab_block";
-//        modelSingleTexture(KeystoneBlocks.STONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/stone"));
-//        modelSingleTexture(KeystoneBlocks.SMOOTH_STONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/smooth_stone"));
-//        modelSingleTexture(KeystoneBlocks.COBBLESTONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/cobblestone"));
-//        modelSingleTexture(KeystoneBlocks.MOSSY_COBBLESTONE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/mossy_cobblestone"));
-//        modelSingleTexture(KeystoneBlocks.BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/bricks"));
-//        modelSingleTexture(KeystoneBlocks.STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/stone_bricks"));
-//        modelSingleTexture(KeystoneBlocks.MOSSY_STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/mossy_stone_bricks"));
-//        modelSingleTexture(KeystoneBlocks.CRACKED_STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/cracked_stone_bricks"));
-//        modelSingleTexture(KeystoneBlocks.CHISELED_STONE_BRICKS_KEYSTONE_SLAB, modLoc(name), mcLoc("block/chiseled_stone_bricks"));
-//        modelSingleTexture(KeystoneBlocks.OBSIDIAN_KEYSTONE_SLAB, modLoc(name), mcLoc("block/obsidian"));
-//
-//        modelSingleTexture(KeystoneBlocks.LIGHT_GRAY_CONCRETE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/light_gray_concrete"));
-//        modelSingleTexture(KeystoneBlocks.POLISHED_DIORITE_KEYSTONE_SLAB, modLoc(name), mcLoc("block/polished_diorite"));
+        this.heavyTrapDoorBlock(ModBlocks.DARK_IRON_HEAVY_TRAPDOOR, this.modLoc("block/dark_iron"), true);
+        this.heavyTrapDoorBlock(ModBlocks.COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/copper_block"), true);
+        this.heavyTrapDoorBlock(ModBlocks.EXPOSED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/exposed_copper"), true);
+        this.heavyTrapDoorBlock(ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/weathered_copper"), true);
+        this.heavyTrapDoorBlock(ModBlocks.OXIDIZED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/oxidized_copper"), true);
+        this.heavyTrapDoorBlock(ModBlocks.WAXED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/copper_block"), true);
+        this.heavyTrapDoorBlock(ModBlocks.WAXED_EXPOSED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/exposed_copper"), true);
+        this.heavyTrapDoorBlock(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/weathered_copper"), true);
+        this.heavyTrapDoorBlock(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/oxidized_copper"), true);
+        this.simpleSingleTexture(ModBlocks.COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/copper_grate"));
+        this.simpleSingleTexture(ModBlocks.EXPOSED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/exposed_copper_grate"));
+        this.simpleSingleTexture(ModBlocks.WEATHERED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/weathered_copper_grate"));
+        this.simpleSingleTexture(ModBlocks.OXIDIZED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/oxidized_copper_grate"));
+        this.simpleSingleTexture(ModBlocks.WAXED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/copper_grate"));
+        this.simpleSingleTexture(ModBlocks.WAXED_EXPOSED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/exposed_copper_grate"));
+        this.simpleSingleTexture(ModBlocks.WAXED_WEATHERED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/weathered_copper_grate"));
+        this.simpleSingleTexture(ModBlocks.WAXED_OXIDIZED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/oxidized_copper_grate"));
+        this.heavyGrateBlock(ModBlocks.DARK_IRON_GRATE, this.modLoc("block/dark_iron"));
+        this.heavyGrateBlock(ModBlocks.COPPER_HEAVY_GRATE, this.mcLoc("block/copper_block"));
+        this.heavyGrateBlock(ModBlocks.EXPOSED_COPPER_HEAVY_GRATE, this.mcLoc("block/exposed_copper"));
+        this.heavyGrateBlock(ModBlocks.WEATHERED_COPPER_HEAVY_GRATE, this.mcLoc("block/weathered_copper"));
+        this.heavyGrateBlock(ModBlocks.OXIDIZED_COPPER_HEAVY_GRATE, this.mcLoc("block/oxidized_copper"));
+        this.heavyGrateBlock(ModBlocks.WAXED_COPPER_HEAVY_GRATE, this.mcLoc("block/copper_block"));
+        this.heavyGrateBlock(ModBlocks.WAXED_EXPOSED_COPPER_HEAVY_GRATE, this.mcLoc("block/exposed_copper"));
+        this.heavyGrateBlock(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_GRATE, this.mcLoc("block/weathered_copper"));
+        this.heavyGrateBlock(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_GRATE, this.mcLoc("block/oxidized_copper"));
 
-        grateTrapDoorBlock(ModBlocks.DARK_IRON_GRATE_TRAPDOOR, modLoc("block/dark_iron"), true);
-        grateTrapDoorBlock(ModBlocks.WEATHERED_COPPER_GRATE_TRAPDOOR, mcLoc("block/weathered_copper"), true);
-
-        grateBlock(ModBlocks.DARK_IRON_GRATE, modLoc("block/dark_iron"));
-        grateBlock(ModBlocks.WEATHERED_COPPER_GRATE, mcLoc("block/weathered_copper"));
         wallRingBlock(ModBlocks.WALL_RING);
         hayPatchBlock(ModBlocks.HAY_PATCH);
         hayPatchBlock(ModBlocks.DIRTY_HAY_PATCH, modLoc("block/dirty_hay"));
@@ -139,9 +142,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(blockRegistryObject.get());
     }
 
-    private void modelSingleTexture(RegistryObject<Block> block, ResourceLocation modelName, ResourceLocation texture) {
-        ModelFile model = models().singleTexture(block.getId().getPath(), modelName, "0", texture);
-        myHorizontalBlock(block.get(), model);
+    private void simpleSingleTexture(RegistryObject<Block> block, ResourceLocation modelName, ResourceLocation texture) {
+        ModelFile model = this.models().singleTexture(block.getId().getPath(), modelName, "0", texture);
+        this.simpleBlock((Block)block.get(), model);
+    }
+
+    private void horizontalSingleTexture(RegistryObject<Block> block, ResourceLocation modelName, ResourceLocation texture) {
+        ModelFile model = this.models().singleTexture(block.getId().getPath(), modelName, "0", texture);
+        this.myHorizontalBlock((Block)block.get(), (ModelFile)model);
     }
 
     private BlockModelBuilder barredWindow(String name, ResourceLocation texture) {
@@ -192,31 +200,33 @@ public class ModBlockStateProvider extends BlockStateProvider {
         myCandleSconceBlock(block.get(), empty, one_lit, one_unlit, two_lit, two_unlit, three_lit, three_unlit);
     }
 
+    public void flutedFacadeBlock(RegistryObject<Block> block, ResourceLocation texture) {
+        String name = block.getId().getPath();
+        ModelFile normal = ((BlockModelBuilder)this.models().withExistingParent(name, "dungeonblocks:block/fluted_facade_block_base")).texture("0", texture);
+        ModelFile inner = ((BlockModelBuilder)this.models().withExistingParent(name + "_inner", "dungeonblocks:block/fluted_facade_inner_block_base")).texture("0", texture);
+        ModelFile outer = ((BlockModelBuilder)this.models().withExistingParent(name + "_outer", "dungeonblocks:block/fluted_facade_outer_block_base")).texture("0", texture);
+        this.facadeBlock((Block)block.get(), normal, inner, outer);
+    }
+
     public void ledgeBlock(RegistryObject<Block> block, ResourceLocation texture) {
         String name = block.getId().getPath();
         ModelFile ledge = models().withExistingParent(name, "dungeonblocks:block/ledge_block").texture("0", texture);
         ModelFile inner = models().withExistingParent(name + "_inner", "dungeonblocks:block/" + "ledge_block_inner").texture("0", texture);
         ModelFile outer = models().withExistingParent(name + "_outer", "dungeonblocks:block/" + "ledge_block_outer").texture("0", texture);
-        ledgeBlock(block.get(), ledge, inner, outer);
+        facadeBlock(block.get(), ledge, inner, outer);
     }
 
-    public void ledgeBlock(Block block, ModelFile ledge, ModelFile inner, ModelFile outer) {
-        getVariantBuilder(block)
-                .forAllStatesExcept(state -> {
-                    Direction facing = state.getValue(LedgeBlock.FACING);
-                    FacadeShape shape = state.getValue(IFacadeShapeBlock.SHAPE);
-                    int yRot = (int) facing.getOpposite().toYRot();
-                    if ((facing == Direction.NORTH && (shape == FacadeShape.OUTER_RIGHT || shape == FacadeShape.INNER_LEFT))
-                            || (facing == Direction.SOUTH && (shape == FacadeShape.OUTER_LEFT || shape == FacadeShape.INNER_RIGHT))) {
-                        yRot += 90; // Left facing stairs are rotated 90 degrees clockwise
-                    }
+    public void facadeBlock(Block block, ModelFile normal, ModelFile inner, ModelFile outer) {
+        this.getVariantBuilder(block).forAllStatesExcept((state) -> {
+            Direction facing = (Direction)state.getValue(IFacingBlock.FACING);
+            FacadeShape shape = (FacadeShape)state.getValue(IFacadeShapeBlock.SHAPE);
+            int yRot = (int)facing.getOpposite().toYRot();
+            if (facing == Direction.NORTH && (shape == FacadeShape.OUTER_RIGHT || shape == FacadeShape.INNER_LEFT) || facing == Direction.SOUTH && (shape == FacadeShape.OUTER_LEFT || shape == FacadeShape.INNER_RIGHT)) {
+                yRot += 90;
+            }
 
-                    return ConfiguredModel.builder()
-                            .modelFile(shape == FacadeShape.STRAIGHT ? ledge : shape == FacadeShape.INNER_LEFT || shape == FacadeShape.INNER_RIGHT ? inner : outer)
-                            .rotationY(yRot)
-                            .uvLock(true)
-                            .build();
-                }, LedgeBlock.WATERLOGGED, WaterloggedNonCubeFacingBlock.WATERLOGGED, FacadeShapeBlock.WATERLOGGED);
+            return ConfiguredModel.builder().modelFile(shape == FacadeShape.STRAIGHT ? normal : (shape != FacadeShape.INNER_LEFT && shape != FacadeShape.INNER_RIGHT ? outer : inner)).rotationY(yRot).uvLock(true).build();
+        }, new Property[]{WaterloggedNonCubeFacingBlock.WATERLOGGED, FacadeShapeBlock.WATERLOGGED});
     }
 
     public void wallRingBlock(RegistryObject<Block> block) {
@@ -287,9 +297,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(block.get(), model);
     }
 
-    public void grateBlock(RegistryObject<Block> block, ResourceLocation texture) {
-        ModelFile model = models().singleTexture(block.getId().getPath(), modLoc(ModelProvider.BLOCK_FOLDER + "/template_grate_block"), "0", texture);
-        myDirectionalBlock(block.get(), model);
+    public void heavyGrateBlock(RegistryObject<Block> block, ResourceLocation texture) {
+        ModelFile model = this.models().singleTexture(block.getId().getPath(), this.modLoc("block/template_heavy_grate_block"), "0", texture);
+        this.myDirectionalBlock((Block)block.get(), (ModelFile)model);
     }
 
     @Deprecated
@@ -467,8 +477,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         return door(name, "dungeon_door_top_right_open", bottom, top);
     }
 
-    public void grateTrapDoorBlock(RegistryObject<Block> block, ResourceLocation texture, boolean orientable) {
-        myTrapdoorBlockInternal((TrapDoorBlock) block.get(), block.getId().getPath(), texture, orientable);
+    public void heavyTrapDoorBlock(RegistryObject<Block> block, ResourceLocation texture, boolean orientable) {
+        this.myTrapdoorBlockInternal((TrapDoorBlock)block.get(), block.getId().getPath(), texture, orientable);
     }
 
     private void myTrapdoorBlockInternal(TrapDoorBlock block, String baseName, ResourceLocation texture, boolean orientable) {
@@ -479,15 +489,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     public BlockModelBuilder myTrapdoorBottom(String name, ResourceLocation texture) {
-        return models().singleTexture(name, modLoc(ModelProvider.BLOCK_FOLDER + "/template_grate_trapdoor_block_bottom"), "1", texture);
+        return models().singleTexture(name, modLoc(ModelProvider.BLOCK_FOLDER + "/template_heavy_trapdoor_block_bottom"), "1", texture);
     }
 
     public BlockModelBuilder myTrapdoorTop(String name, ResourceLocation texture) {
-        return models().singleTexture(name, modLoc(ModelProvider.BLOCK_FOLDER + "/template_grate_trapdoor_block_top"), "1", texture);
+        return models().singleTexture(name, modLoc(ModelProvider.BLOCK_FOLDER + "/template_heavy_trapdoor_block_top"), "1", texture);
     }
 
     public BlockModelBuilder myTrapdoorOpen(String name, ResourceLocation texture) {
-        return models().singleTexture(name, modLoc(ModelProvider.BLOCK_FOLDER + "/template_grate_trapdoor_block_open"), "1", texture);
+        return models().singleTexture(name, modLoc(ModelProvider.BLOCK_FOLDER + "/template_heavy_trapdoor_block_open"), "1", texture);
     }
 
     public BlockModelBuilder twoTextures(String name, ResourceLocation parent,

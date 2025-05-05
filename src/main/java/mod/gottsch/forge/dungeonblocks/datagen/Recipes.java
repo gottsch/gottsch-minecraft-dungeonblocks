@@ -21,8 +21,6 @@ package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.BarredWindows;
-import mod.gottsch.forge.dungeonblocks.core.block.CorbelBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.LedgeBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -32,10 +30,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -104,13 +102,13 @@ public class Recipes extends RecipeProvider {
 					.save(recipe);
 
 			// grate trapdoors
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_GRATE_TRAPDOOR.get())
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_HEAVY_TRAPDOOR.get())
 					.requires(Blocks.IRON_TRAPDOOR)
 					.requires(Items.IRON_INGOT)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
 					.save(recipe);
 
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.WEATHERED_COPPER_GRATE_TRAPDOOR.get())
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR.get())
 					.requires(Blocks.IRON_TRAPDOOR)
 					.requires(Items.COPPER_INGOT)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
@@ -207,8 +205,8 @@ public class Recipes extends RecipeProvider {
 			ingredientMap.forEach((k,v) -> {
 				ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, v.get())
 						.requires(k)
-						.requires(Ingredient.of(ModBlocks.DARK_IRON_GRATE.get(), ModBlocks.DARK_IRON_GRATE_TRAPDOOR.get()))
-						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.DARK_IRON_GRATE.get(), ModBlocks.DARK_IRON_GRATE_TRAPDOOR.get()))
+						.requires(Ingredient.of(ModBlocks.DARK_IRON_GRATE.get(), ModBlocks.DARK_IRON_HEAVY_TRAPDOOR.get()))
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.DARK_IRON_GRATE.get(), ModBlocks.DARK_IRON_HEAVY_TRAPDOOR.get()))
 						.save(recipe);
 			});
 			ingredientMap.clear();
