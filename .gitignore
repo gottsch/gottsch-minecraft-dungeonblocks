@@ -12,4 +12,4 @@ gradle.log
 !*.json
 !*.gradlew
 !/models/
-/*.lock
+*.lock
