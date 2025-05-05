@@ -61,16 +61,16 @@ public class ModBlockStateProvider extends BlockStateProvider {
                     } else if (name.contains("double_sill")) {
                         material = b.getId().getPath().split("_double_sill_block")[0];
 //                        DungeonBlocks.LOGGER.info("double sill processing material ->{} to texture ->{} ", material, maps.t2.get(material));
-                        this.horizontalSingleTexture(b, this.modLoc("block/double_sill_block_base"), (ResourceLocation)maps.t2.get(material));
+                        horizontalSingleTexture(b, modLoc("block/double_sill_block_base"), (ResourceLocation)maps.t2.get(material));
                     } else if (name.contains("sill") && !name.contains("double")) {
                         material = b.getId().getPath().split("_sill_block")[0];
-                        this.horizontalSingleTexture(b, this.modLoc("block/sill_block_base"), (ResourceLocation)maps.t2.get(material));
+                        horizontalSingleTexture(b, modLoc("block/sill_block_base"), (ResourceLocation)maps.t2.get(material));
                     } else if (name.contains("fluted_facade")) {
                         material = b.getId().getPath().split("_fluted_facade_block")[0];
-                        this.flutedFacadeBlock(b, (ResourceLocation)maps.t2.get(material));
+                        flutedFacadeBlock(b, (ResourceLocation)maps.t2.get(material));
                     } else if (name.contains("fluted") && !name.contains("facade")) {
                         material = b.getId().getPath().split("_fluted_block")[0];
-                        this.simpleSingleTexture(b, this.modLoc("block/fluted_block_base"), (ResourceLocation)maps.t2.get(material));
+                        simpleSingleTexture(b, modLoc("block/fluted_block_base"), (ResourceLocation)maps.t2.get(material));
                     } else if (name.contains("ledge")) {
                         material = b.getId().getPath().split("_ledge_block")[0];
 //                        DungeonBlocks.LOGGER.info("ledge processing material ->{} to texture ->{} ", material, maps.t2.get(material));
@@ -85,32 +85,35 @@ public class ModBlockStateProvider extends BlockStateProvider {
                     // else do all the other types
                 });
 
-        this.heavyTrapDoorBlock(ModBlocks.DARK_IRON_HEAVY_TRAPDOOR, this.modLoc("block/dark_iron"), true);
-        this.heavyTrapDoorBlock(ModBlocks.COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/copper_block"), true);
-        this.heavyTrapDoorBlock(ModBlocks.EXPOSED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/exposed_copper"), true);
-        this.heavyTrapDoorBlock(ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/weathered_copper"), true);
-        this.heavyTrapDoorBlock(ModBlocks.OXIDIZED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/oxidized_copper"), true);
-        this.heavyTrapDoorBlock(ModBlocks.WAXED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/copper_block"), true);
-        this.heavyTrapDoorBlock(ModBlocks.WAXED_EXPOSED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/exposed_copper"), true);
-        this.heavyTrapDoorBlock(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/weathered_copper"), true);
-        this.heavyTrapDoorBlock(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_TRAPDOOR, this.mcLoc("block/oxidized_copper"), true);
-        this.simpleSingleTexture(ModBlocks.COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/copper_grate"));
-        this.simpleSingleTexture(ModBlocks.EXPOSED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/exposed_copper_grate"));
-        this.simpleSingleTexture(ModBlocks.WEATHERED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/weathered_copper_grate"));
-        this.simpleSingleTexture(ModBlocks.OXIDIZED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/oxidized_copper_grate"));
-        this.simpleSingleTexture(ModBlocks.WAXED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/copper_grate"));
-        this.simpleSingleTexture(ModBlocks.WAXED_EXPOSED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/exposed_copper_grate"));
-        this.simpleSingleTexture(ModBlocks.WAXED_WEATHERED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/weathered_copper_grate"));
-        this.simpleSingleTexture(ModBlocks.WAXED_OXIDIZED_COPPER_GRATE, this.modLoc("block/template_cube_cutout"), this.modLoc("block/oxidized_copper_grate"));
-        this.heavyGrateBlock(ModBlocks.DARK_IRON_GRATE, this.modLoc("block/dark_iron"));
-        this.heavyGrateBlock(ModBlocks.COPPER_HEAVY_GRATE, this.mcLoc("block/copper_block"));
-        this.heavyGrateBlock(ModBlocks.EXPOSED_COPPER_HEAVY_GRATE, this.mcLoc("block/exposed_copper"));
-        this.heavyGrateBlock(ModBlocks.WEATHERED_COPPER_HEAVY_GRATE, this.mcLoc("block/weathered_copper"));
-        this.heavyGrateBlock(ModBlocks.OXIDIZED_COPPER_HEAVY_GRATE, this.mcLoc("block/oxidized_copper"));
-        this.heavyGrateBlock(ModBlocks.WAXED_COPPER_HEAVY_GRATE, this.mcLoc("block/copper_block"));
-        this.heavyGrateBlock(ModBlocks.WAXED_EXPOSED_COPPER_HEAVY_GRATE, this.mcLoc("block/exposed_copper"));
-        this.heavyGrateBlock(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_GRATE, this.mcLoc("block/weathered_copper"));
-        this.heavyGrateBlock(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_GRATE, this.mcLoc("block/oxidized_copper"));
+        heavyTrapDoorBlock(ModBlocks.DARK_IRON_HEAVY_TRAPDOOR, modLoc("block/dark_iron"), true);
+        heavyTrapDoorBlock(ModBlocks.COPPER_HEAVY_TRAPDOOR, mcLoc("block/copper_block"), true);
+        heavyTrapDoorBlock(ModBlocks.EXPOSED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/exposed_copper"), true);
+        heavyTrapDoorBlock(ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/weathered_copper"), true);
+        heavyTrapDoorBlock(ModBlocks.OXIDIZED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/oxidized_copper"), true);
+        
+        heavyTrapDoorBlock(ModBlocks.WAXED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/copper_block"), true);
+        heavyTrapDoorBlock(ModBlocks.WAXED_EXPOSED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/exposed_copper"), true);
+        heavyTrapDoorBlock(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/weathered_copper"), true);
+        heavyTrapDoorBlock(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/oxidized_copper"), true);
+
+        simpleSingleTexture(ModBlocks.COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/copper_grate"));
+        simpleSingleTexture(ModBlocks.EXPOSED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/exposed_copper_grate"));
+        simpleSingleTexture(ModBlocks.WEATHERED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/weathered_copper_grate"));
+        simpleSingleTexture(ModBlocks.OXIDIZED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/oxidized_copper_grate"));
+        simpleSingleTexture(ModBlocks.WAXED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/copper_grate"));
+        simpleSingleTexture(ModBlocks.WAXED_EXPOSED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/exposed_copper_grate"));
+        simpleSingleTexture(ModBlocks.WAXED_WEATHERED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/weathered_copper_grate"));
+        simpleSingleTexture(ModBlocks.WAXED_OXIDIZED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/oxidized_copper_grate"));
+        heavyGrateBlock(ModBlocks.DARK_IRON_GRATE, modLoc("block/dark_iron"));
+
+        heavyGrateBlock(ModBlocks.COPPER_HEAVY_GRATE, mcLoc("block/copper_block"));
+        heavyGrateBlock(ModBlocks.EXPOSED_COPPER_HEAVY_GRATE, mcLoc("block/exposed_copper"));
+        heavyGrateBlock(ModBlocks.WEATHERED_COPPER_HEAVY_GRATE, mcLoc("block/weathered_copper"));
+        heavyGrateBlock(ModBlocks.OXIDIZED_COPPER_HEAVY_GRATE, mcLoc("block/oxidized_copper"));
+        heavyGrateBlock(ModBlocks.WAXED_COPPER_HEAVY_GRATE, mcLoc("block/copper_block"));
+        heavyGrateBlock(ModBlocks.WAXED_EXPOSED_COPPER_HEAVY_GRATE, mcLoc("block/exposed_copper"));
+        heavyGrateBlock(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_GRATE, mcLoc("block/weathered_copper"));
+        heavyGrateBlock(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_GRATE, mcLoc("block/oxidized_copper"));
 
         wallRingBlock(ModBlocks.WALL_RING);
         hayPatchBlock(ModBlocks.HAY_PATCH);
@@ -135,6 +138,19 @@ public class ModBlockStateProvider extends BlockStateProvider {
         torchSconceBlock(ModBlocks.TORCH_SCONCE);
         candleSconceBlock(ModBlocks.CANDLE_SCONCE);
         brazierBlock(ModBlocks.BRAZIER);
+
+        simpleBlock(ModBlocks.SQUARE_STONE_BRICK.get());
+        simpleBlock(ModBlocks.MOSSY_SQUARE_STONE_BRICK.get());
+        rectangleLeftHorizontalBlock(ModBlocks.LEFT_LARGE_STONE_BRICK, ModBlocks.RIGHT_LARGE_STONE_BRICK);
+        rectangleRightHorizontalBlock(ModBlocks.RIGHT_LARGE_STONE_BRICK, ModBlocks.LEFT_LARGE_STONE_BRICK);
+        simpleBlock(ModBlocks.MOSSY_BRICKS.get());
+        simpleBlock(ModBlocks.LARGE_BRICKS.get());
+        simpleBlock(ModBlocks.MOSSY_LARGE_BRICKS.get());
+        simpleBlock(ModBlocks.SQUARE_BRICK.get());
+        simpleBlock(ModBlocks.MOSSY_SQUARE_BRICK.get());
+        rectangleLeftHorizontalBlock(ModBlocks.LEFT_LARGE_BRICK, ModBlocks.RIGHT_LARGE_BRICK);
+        rectangleRightHorizontalBlock(ModBlocks.RIGHT_LARGE_BRICK, ModBlocks.LEFT_LARGE_BRICK);
+
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
@@ -143,13 +159,13 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     private void simpleSingleTexture(RegistryObject<Block> block, ResourceLocation modelName, ResourceLocation texture) {
-        ModelFile model = this.models().singleTexture(block.getId().getPath(), modelName, "0", texture);
-        this.simpleBlock((Block)block.get(), model);
+        ModelFile model = models().singleTexture(block.getId().getPath(), modelName, "0", texture);
+        simpleBlock((Block)block.get(), model);
     }
 
     private void horizontalSingleTexture(RegistryObject<Block> block, ResourceLocation modelName, ResourceLocation texture) {
-        ModelFile model = this.models().singleTexture(block.getId().getPath(), modelName, "0", texture);
-        this.myHorizontalBlock((Block)block.get(), (ModelFile)model);
+        ModelFile model = models().singleTexture(block.getId().getPath(), modelName, "0", texture);
+        myHorizontalBlock((Block)block.get(), (ModelFile)model);
     }
 
     private BlockModelBuilder barredWindow(String name, ResourceLocation texture) {
@@ -202,10 +218,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     public void flutedFacadeBlock(RegistryObject<Block> block, ResourceLocation texture) {
         String name = block.getId().getPath();
-        ModelFile normal = ((BlockModelBuilder)this.models().withExistingParent(name, "dungeonblocks:block/fluted_facade_block_base")).texture("0", texture);
-        ModelFile inner = ((BlockModelBuilder)this.models().withExistingParent(name + "_inner", "dungeonblocks:block/fluted_facade_inner_block_base")).texture("0", texture);
-        ModelFile outer = ((BlockModelBuilder)this.models().withExistingParent(name + "_outer", "dungeonblocks:block/fluted_facade_outer_block_base")).texture("0", texture);
-        this.facadeBlock((Block)block.get(), normal, inner, outer);
+        ModelFile normal = ((BlockModelBuilder)models().withExistingParent(name, "dungeonblocks:block/fluted_facade_block_base")).texture("0", texture);
+        ModelFile inner = ((BlockModelBuilder)models().withExistingParent(name + "_inner", "dungeonblocks:block/fluted_facade_inner_block_base")).texture("0", texture);
+        ModelFile outer = ((BlockModelBuilder)models().withExistingParent(name + "_outer", "dungeonblocks:block/fluted_facade_outer_block_base")).texture("0", texture);
+        facadeBlock((Block)block.get(), normal, inner, outer);
     }
 
     public void ledgeBlock(RegistryObject<Block> block, ResourceLocation texture) {
@@ -217,7 +233,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     public void facadeBlock(Block block, ModelFile normal, ModelFile inner, ModelFile outer) {
-        this.getVariantBuilder(block).forAllStatesExcept((state) -> {
+        getVariantBuilder(block).forAllStatesExcept((state) -> {
             Direction facing = (Direction)state.getValue(IFacingBlock.FACING);
             FacadeShape shape = (FacadeShape)state.getValue(IFacadeShapeBlock.SHAPE);
             int yRot = (int)facing.getOpposite().toYRot();
@@ -298,8 +314,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     public void heavyGrateBlock(RegistryObject<Block> block, ResourceLocation texture) {
-        ModelFile model = this.models().singleTexture(block.getId().getPath(), this.modLoc("block/template_heavy_grate_block"), "0", texture);
-        this.myDirectionalBlock((Block)block.get(), (ModelFile)model);
+        ModelFile model = models().singleTexture(block.getId().getPath(), modLoc("block/template_heavy_grate_block"), "0", texture);
+        myDirectionalBlock((Block)block.get(), (ModelFile)model);
     }
 
     @Deprecated
@@ -356,6 +372,24 @@ public class ModBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(block)
                 .partialState().with(BrazierBlock.LIT, true).addModels(new ConfiguredModel(brazier_lit))
                 .partialState().with(BrazierBlock.LIT, false).addModels(new ConfiguredModel(brazier));
+    }
+
+    public ModelFile rectangleLeft(String name, ResourceLocation texture, ResourceLocation texture2) {
+        return ((BlockModelBuilder)((BlockModelBuilder)models().withExistingParent(name, modLoc("block/rectangle_left"))).texture("left", texture)).texture("right", texture2);
+    }
+
+    public ModelFile rectangleRight(String name, ResourceLocation texture, ResourceLocation texture2) {
+        return ((BlockModelBuilder)((BlockModelBuilder)models().withExistingParent(name, modLoc("block/rectangle_right"))).texture("right", texture)).texture("left", texture2);
+    }
+
+    public void rectangleLeftHorizontalBlock(RegistryObject<Block> block, RegistryObject<Block> block2) {
+        ModelFile model = rectangleLeft(block.getId().getPath(), modLoc("block/" + block.getId().getPath()), modLoc("block/" + block2.getId().getPath()));
+        myHorizontalBlock((Block)block.get(), model);
+    }
+
+    public void rectangleRightHorizontalBlock(RegistryObject<Block> block, RegistryObject<Block> block2) {
+        ModelFile model = rectangleRight(block.getId().getPath(), modLoc("block/" + block.getId().getPath()), modLoc("block/" + block2.getId().getPath()));
+        myHorizontalBlock((Block)block.get(), model);
     }
 
     public void myHorizontalBlock(Block block, ModelFile model) {
@@ -478,7 +512,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     public void heavyTrapDoorBlock(RegistryObject<Block> block, ResourceLocation texture, boolean orientable) {
-        this.myTrapdoorBlockInternal((TrapDoorBlock)block.get(), block.getId().getPath(), texture, orientable);
+        myTrapdoorBlockInternal((TrapDoorBlock)block.get(), block.getId().getPath(), texture, orientable);
     }
 
     private void myTrapdoorBlockInternal(TrapDoorBlock block, String baseName, ResourceLocation texture, boolean orientable) {

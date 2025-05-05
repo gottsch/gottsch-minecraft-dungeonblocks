@@ -53,7 +53,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 					|| k.getId().getPath().contains("ledge")
 					|| k.getId().getPath().contains("corbel")
 					|| k.getId().getPath().contains("sill")
-					|| k.getId().getPath().contains("fluted_block")) {
+					|| k.getId().getPath().contains("fluted_block")
+					|| k.getId().getPath().contains("fluted_facade_block")) {
 				blockItemParent(v);
 			}
 		});
