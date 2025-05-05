@@ -232,6 +232,31 @@ public class ModBlocks {
     public static final RegistryObject<Block> DARK_OAK_DUNGEON_DOOR = Registration.BLOCKS.register("dark_oak_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK));
     public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR = Registration.BLOCKS.register("mangrove_dungeon_door", () -> new DoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE));
 
+    public static final RegistryObject<Block> COPPER_DOOR = Registration.BLOCKS.register("copper_door", () -> {
+        return new WeatheringCopperDoorBlock(BlockSetType.IRON, WeatheringCopper.WeatherState.UNAFFECTED, Properties.copy(Blocks.DARK_OAK_DOOR).mapColor(Blocks.COPPER_BLOCK.defaultMapColor()).strength(3.0F, 6.0F).sound(SoundType.COPPER));
+    });
+    public static final RegistryObject<Block> EXPOSED_COPPER_DOOR = Registration.BLOCKS.register("exposed_copper_door", () -> {
+        return new WeatheringCopperDoorBlock(BlockSetType.IRON, WeatheringCopper.WeatherState.EXPOSED, Properties.copy((BlockBehaviour)COPPER_DOOR.get()).mapColor(((Block)EXPOSED_COPPER_GRATE.get()).defaultMapColor()));
+    });
+    public static final RegistryObject<Block> WEATHERED_COPPER_DOOR = Registration.BLOCKS.register("weathered_copper_door", () -> {
+        return new WeatheringCopperDoorBlock(BlockSetType.IRON, WeatheringCopper.WeatherState.WEATHERED, Properties.copy((BlockBehaviour)COPPER_DOOR.get()).mapColor(((Block)WEATHERED_COPPER_GRATE.get()).defaultMapColor()));
+    });
+    public static final RegistryObject<Block> OXIDIZED_COPPER_DOOR = Registration.BLOCKS.register("oxidized_copper_door", () -> {
+        return new WeatheringCopperDoorBlock(BlockSetType.IRON, WeatheringCopper.WeatherState.OXIDIZED, Properties.copy((BlockBehaviour)COPPER_DOOR.get()).mapColor(((Block)OXIDIZED_COPPER_GRATE.get()).defaultMapColor()));
+    });
+    public static final RegistryObject<Block> WAXED_COPPER_DOOR = Registration.BLOCKS.register("waxed_copper_door", () -> {
+        return new WaxedCopperDoorBlock(Properties.copy((BlockBehaviour)COPPER_DOOR.get()), BlockSetType.IRON);
+    });
+    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_DOOR = Registration.BLOCKS.register("waxed_exposed_copper_door", () -> {
+        return new WaxedCopperDoorBlock(Properties.copy((BlockBehaviour)EXPOSED_COPPER_DOOR.get()), BlockSetType.IRON);
+    });
+    public static final RegistryObject<Block> WAX_WEATHERED_COPPER_DOOR = Registration.BLOCKS.register("waxed_weathered_copper_door", () -> {
+        return new WaxedCopperDoorBlock(Properties.copy((BlockBehaviour)WEATHERED_COPPER_DOOR.get()), BlockSetType.IRON);
+    });
+    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_DOOR = Registration.BLOCKS.register("waxed_oxidized_copper_door", () -> {
+        return new WaxedCopperDoorBlock(Properties.copy((BlockBehaviour)OXIDIZED_COPPER_DOOR.get()), BlockSetType.IRON);
+    });
+
     // facade
     public static final RegistryObject<Block> STONE_FACADE = Registration.BLOCKS.register(BlockID.STONE_FACADE_ID, () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> SMOOTH_STONE_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_FACADE_ID,
