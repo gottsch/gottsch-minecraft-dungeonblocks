@@ -33,13 +33,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  *
  */
 public class HeavyGrateBlock extends WaterloggedNonCubeBasedBlock {
-   private static final VoxelShape AABB = Block.box(0.0D, 0.0D, 0.0D, 15.99D, 15.99D, 15.99D);
-
    public HeavyGrateBlock(Properties properties) {
       super(properties);
-   }
-
-   public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
-      return AABB;
    }
 }

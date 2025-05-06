@@ -20,12 +20,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class WaterloggedCubeBlock extends Block implements SimpleWaterloggedBlock {
-   public static final BooleanProperty WATERLOGGED;
-   private static final VoxelShape DEFAULT_SHAPE;
+   public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+   private static final VoxelShape DEFAULT_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 15.99D, 15.99D, 15.99D);
+
 
    public WaterloggedCubeBlock(Properties properties) {
       super(properties);
-      this.registerDefaultState((BlockState)this.defaultBlockState().setValue(WATERLOGGED, false));
+      this.registerDefaultState(this.stateDefinition.any()
+              .setValue(WATERLOGGED, Boolean.valueOf(false)));
    }
 
    public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
@@ -33,29 +35,26 @@ public class WaterloggedCubeBlock extends Block implements SimpleWaterloggedBloc
    }
 
    @Nullable
-   public BlockState getStateForPlacement(BlockPlaceContext p_311201_) {
-      FluidState fluidstate = p_311201_.getLevel().getFluidState(p_311201_.getClickedPos());
-      return (BlockState)super.getStateForPlacement(p_311201_).setValue(WATERLOGGED, fluidstate.is(Fluids.WATER));
+   public BlockState getStateForPlacement(BlockPlaceContext context) {
+      FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
+      return (BlockState)super.getStateForPlacement(context).setValue(WATERLOGGED, fluidstate.is(Fluids.WATER));
    }
 
-   public BlockState updateShape(BlockState state, Direction direction, BlockState state1, LevelAccessor levelAccessor, BlockPos p_310038_, BlockPos p_309617_) {
+   public BlockState updateShape(BlockState state, Direction direction, BlockState newState, LevelAccessor levelAccessor, BlockPos pos, BlockPos pos1) {
       if ((Boolean)state.getValue(WATERLOGGED)) {
-         levelAccessor.scheduleTick(p_310038_, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
+         levelAccessor.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
       }
 
-      return super.updateShape(state, direction, state1, levelAccessor, p_310038_, p_309617_);
+      return super.updateShape(state, direction, newState, levelAccessor, pos, pos1);
    }
 
-   public FluidState getFluidState(BlockState state) {
-      return (Boolean)state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+   @Override
+   public FluidState getFluidState(BlockState blockState) {
+      return blockState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(blockState);
    }
 
-   protected void createBlockStateDefinition(Builder<Block, BlockState> stateBuilder) {
-      stateBuilder.add(new Property[]{WATERLOGGED});
-   }
-
-   static {
-      WATERLOGGED = BlockStateProperties.WATERLOGGED;
-      DEFAULT_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 15.99D, 15.99D, 15.99D);
+   protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+      super.createBlockStateDefinition(builder);
+      builder.add(WATERLOGGED);
    }
 }

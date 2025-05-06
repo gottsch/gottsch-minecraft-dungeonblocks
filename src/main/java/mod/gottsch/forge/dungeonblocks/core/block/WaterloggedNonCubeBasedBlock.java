@@ -96,8 +96,8 @@ public class WaterloggedNonCubeBasedBlock extends BasedBlock implements SimpleWa
 		BlockPos blockPos = context.getClickedPos();
 		FluidState fluidState = context.getLevel().getFluidState(blockPos);
 
-		BlockState blockState = this.defaultBlockState().setValue(BASE, context.getClickedFace());
-		blockState.setValue(WATERLOGGED, Boolean.valueOf(fluidState.getType() == Fluids.WATER));
+		BlockState blockState = super.getStateForPlacement(context).setValue(BASE, context.getClickedFace());
+		blockState.setValue(WATERLOGGED,  fluidState.is(Fluids.WATER));
 
 		return blockState;
 	}
@@ -115,8 +115,8 @@ public class WaterloggedNonCubeBasedBlock extends BasedBlock implements SimpleWa
 		return blockState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(blockState);
 	}
 	
-	@Override
-	public boolean useShapeForLightOcclusion(BlockState state) {
-		return true;
-	}
+//	@Override
+//	public boolean useShapeForLightOcclusion(BlockState state) {
+//		return true;
+//	}
 }
