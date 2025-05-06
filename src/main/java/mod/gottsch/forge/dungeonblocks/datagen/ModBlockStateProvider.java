@@ -52,15 +52,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
                         barredWindowBlock(b, maps.t2.get(material));
                     } else if (name.contains("barred_window_facade")) {
                         material = b.getId().getPath().split("_barred_window_facade_block")[0];
-//                        DungeonBlocks.LOGGER.info("barred window facade processing material ->{} to texture ->{} ", material, maps.t2.get(material));
                         barredWindowFacadeBlock(b, maps.t2.get(material));
                     } else if (name.contains("corbel")) {
                         material = b.getId().getPath().split("_corbel_block")[0];
-//                        DungeonBlocks.LOGGER.info("corbel processing material ->{} to texture ->{} ", material, maps.t2.get(material));
                         horizontalSingleTexture(b, modLoc(ModelProvider.BLOCK_FOLDER + "/corbel_block"), maps.t2.get(material));
                     } else if (name.contains("double_sill")) {
                         material = b.getId().getPath().split("_double_sill_block")[0];
-//                        DungeonBlocks.LOGGER.info("double sill processing material ->{} to texture ->{} ", material, maps.t2.get(material));
                         horizontalSingleTexture(b, modLoc("block/double_sill_block_base"), (ResourceLocation)maps.t2.get(material));
                     } else if (name.contains("sill") && !name.contains("double")) {
                         material = b.getId().getPath().split("_sill_block")[0];
@@ -75,14 +72,25 @@ public class ModBlockStateProvider extends BlockStateProvider {
                         material = b.getId().getPath().split("_ledge_block")[0];
 //                        DungeonBlocks.LOGGER.info("ledge processing material ->{} to texture ->{} ", material, maps.t2.get(material));
                         ledgeBlock(b, maps.t2.get(material));
-                    } else if (name.contains("keystone_block")) {
-                        material = b.getId().getPath().split("_keystone_block")[0];
-                        horizontalSingleTexture(b, modLoc(name), maps.t2.get(material));
-                     } else if (name.contains("keystone_slab")) {
-                        material = b.getId().getPath().split("_keystone_slab_block")[0];
-                        horizontalSingleTexture(b, modLoc(name), maps.t2.get(material));
+                    } else if (name.contains("cornice")) {
+                        material = b.getId().getPath().split("_cornice")[0];
+                        facadeBlock(b, "cornice", maps.t2.get(material));
+                    } else if (name.contains("crown_molding")) {
+                        material = b.getId().getPath().split("_crown_molding")[0];
+                        facadeBlock(b, "crown_molding", maps.t2.get(material));
+                    } else if (name.contains("quarter_facade")) {
+                            material = b.getId().getPath().split("_quarter_facade")[0];
+                            facadeBlock(b, "quarter_facade", maps.t2.get(material));
+                    } else if (name.contains("facade")) {
+                        material = b.getId().getPath().split("_facade")[0];
+                        facadeBlock(b, "facade", maps.t2.get(material));
+                    } else if (name.contains("pillar_base")) {
+                        material = b.getId().getPath().split("_pillar_base")[0];
+                        simpleSingleTexture(b, modLoc("block/pillar_base_block_base"), (ResourceLocation)maps.t2.get(material));
+                    } else if (name.contains("pillar_block")) {
+                        material = b.getId().getPath().split("_pillar_block")[0];
+                        basedBlock(b, "pillar_block_base", (ResourceLocation)maps.t2.get(material));
                     }
-                    // else do all the other types
                 });
 
         heavyTrapDoorBlock(ModBlocks.DARK_IRON_HEAVY_TRAPDOOR, modLoc("block/dark_iron"), true);
@@ -216,6 +224,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         myCandleSconceBlock(block.get(), empty, one_lit, one_unlit, two_lit, two_unlit, three_lit, three_unlit);
     }
 
+    @Deprecated
     public void flutedFacadeBlock(RegistryObject<Block> block, ResourceLocation texture) {
         String name = block.getId().getPath();
         ModelFile normal = ((BlockModelBuilder)models().withExistingParent(name, "dungeonblocks:block/fluted_facade_block_base")).texture("0", texture);
@@ -224,12 +233,22 @@ public class ModBlockStateProvider extends BlockStateProvider {
         facadeBlock((Block)block.get(), normal, inner, outer);
     }
 
+    @Deprecated
     public void ledgeBlock(RegistryObject<Block> block, ResourceLocation texture) {
         String name = block.getId().getPath();
         ModelFile ledge = models().withExistingParent(name, "dungeonblocks:block/ledge_block").texture("0", texture);
         ModelFile inner = models().withExistingParent(name + "_inner", "dungeonblocks:block/" + "ledge_block_inner").texture("0", texture);
         ModelFile outer = models().withExistingParent(name + "_outer", "dungeonblocks:block/" + "ledge_block_outer").texture("0", texture);
         facadeBlock(block.get(), ledge, inner, outer);
+    }
+
+    // TODO all _block_base models should be renamed to template_[BLOCK_NAME]
+    public void facadeBlock(RegistryObject<Block> block, String baseName, ResourceLocation texture) {
+        String name = block.getId().getPath();
+        ModelFile base = models().withExistingParent(name, "dungeonblocks:block/" + baseName + "_block_base").texture("0", texture);
+        ModelFile inner = models().withExistingParent(name + "_inner", "dungeonblocks:block/" + baseName + "_inner_block_base").texture("0", texture);
+        ModelFile outer = models().withExistingParent(name + "_outer", "dungeonblocks:block/" + baseName + "_outer_block_base").texture("0", texture);
+        facadeBlock(block.get(), base, inner, outer);
     }
 
     public void facadeBlock(Block block, ModelFile normal, ModelFile inner, ModelFile outer) {
@@ -243,6 +262,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
             return ConfiguredModel.builder().modelFile(shape == FacadeShape.STRAIGHT ? normal : (shape != FacadeShape.INNER_LEFT && shape != FacadeShape.INNER_RIGHT ? outer : inner)).rotationY(yRot).uvLock(true).build();
         }, new Property[]{WaterloggedNonCubeFacingBlock.WATERLOGGED, FacadeShapeBlock.WATERLOGGED});
+    }
+
+    public void basedBlock(RegistryObject<Block> block, String baseName, ResourceLocation texture) {
+        ModelFile model = models().singleTexture(block.getId().getPath(), modLoc("block/" + baseName), "0", texture);
+        myDirectionalBlock((Block)block.get(), (ModelFile)model);
     }
 
     public void wallRingBlock(RegistryObject<Block> block) {

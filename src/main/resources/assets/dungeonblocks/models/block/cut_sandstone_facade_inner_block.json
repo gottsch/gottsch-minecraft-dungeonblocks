@@ -1,9 +1,0 @@
-{
-    "parent": "dungeonblocks:block/facade_inner_base",
-    "textures": {
-        "bottom": "block/cut_sandstone",
-        "top": "block/cut_sandstone",
-        "side": "block/cut_sandstone",
-        "north": "block/cut_sandstone"
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/crown_molding_inner_block_base",
-    "textures": {
-        "bottom": "block/deepslate_bricks",
-        "top": "block/deepslate_bricks",
-        "0": "block/deepslate_bricks"
-    }
-}

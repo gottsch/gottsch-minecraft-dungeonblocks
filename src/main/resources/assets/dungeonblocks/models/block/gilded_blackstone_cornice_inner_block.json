@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/cornice_inner_block_base",
-    "textures": {
-        "bottom": "block/gilded_blackstone",
-        "top": "block/gilded_blackstone",
-        "0": "block/gilded_blackstone"
-    }
-}

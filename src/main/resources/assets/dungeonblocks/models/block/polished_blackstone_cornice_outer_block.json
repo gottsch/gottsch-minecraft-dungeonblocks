@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/cornice_outer_block_base",
-    "textures": {
-        "bottom": "block/polished_blackstone",
-        "top": "block/polished_blackstone",
-        "0": "block/polished_blackstone"
-    }
-}

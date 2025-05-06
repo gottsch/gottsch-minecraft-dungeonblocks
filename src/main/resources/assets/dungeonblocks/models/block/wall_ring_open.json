@@ -1,5 +1,5 @@
 {
-	"parent": "parent",
+	"parent": "block/block",
 	"textures": {
 		"0": "dungeonblocks:block/dark_iron",
 		"particle": "dungeonblocks:block/dark_iron"

@@ -1,9 +1,0 @@
-{
-    "parent": "dungeonblocks:block/facade_base",
-    "textures": {
-        "bottom": "block/blackstone",
-        "top": "block/blackstone",
-        "side": "block/blackstone",
-        "north": "block/blackstone"
-    }
-}

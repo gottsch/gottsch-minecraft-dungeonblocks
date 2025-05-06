@@ -1,6 +1,0 @@
-{
-    "parent": "dungeonblocks:block/wall_sconce_block_base",
-    "textures": {
-        "0": "block/granite"
-    }
-}

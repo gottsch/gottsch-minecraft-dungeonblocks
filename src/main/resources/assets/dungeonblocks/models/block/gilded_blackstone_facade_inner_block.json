@@ -1,9 +1,0 @@
-{
-    "parent": "dungeonblocks:block/facade_inner_base",
-    "textures": {
-        "bottom": "block/gilded_blackstone",
-        "top": "block/gilded_blackstone",
-        "side": "block/gilded_blackstone",
-        "north": "block/gilded_blackstone"
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/crown_molding_inner_block_base",
-    "textures": {
-        "bottom": "block/chiseled_stone_bricks",
-        "top": "block/chiseled_stone_bricks",
-        "0": "block/chiseled_stone_bricks"
-    }
-}

@@ -49,12 +49,17 @@ public class ItemModelsProvider extends ItemModelProvider {
 		ModBlocks.MAP.forEach((k, v) -> {
 			if (k.getId().getPath().contains("barred_window")
 					|| k.getId().getPath().contains("greek_block")
-					|| k.getId().getPath().contains("keystone")
-					|| k.getId().getPath().contains("ledge")
+						|| k.getId().getPath().contains("ledge")
 					|| k.getId().getPath().contains("corbel")
 					|| k.getId().getPath().contains("sill")
 					|| k.getId().getPath().contains("fluted_block")
-					|| k.getId().getPath().contains("fluted_facade_block")) {
+					|| k.getId().getPath().contains("fluted_facade_block")
+					|| k.getId().getPath().contains("cornice")
+					|| k.getId().getPath().contains("facade_block")
+					|| k.getId().getPath().contains("crown_molding")
+					|| k.getId().getPath().contains("pillar")
+					|| k.getId().getPath().contains("quarter")
+			) {
 				blockItemParent(v);
 			}
 		});

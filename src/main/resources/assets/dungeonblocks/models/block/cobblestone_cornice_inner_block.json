@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/cornice_inner_block_base",
-    "textures": {
-        "bottom": "block/cobblestone",
-        "top": "block/cobblestone",
-        "0": "block/cobblestone"
-    }
-}

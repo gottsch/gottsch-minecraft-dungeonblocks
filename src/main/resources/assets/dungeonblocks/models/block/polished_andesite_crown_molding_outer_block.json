@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/crown_molding_outer_block_base",
-    "textures": {
-        "bottom": "block/polished_andesite",
-        "top": "block/polished_andesite",
-        "0": "block/polished_andesite"
-    }
-}
