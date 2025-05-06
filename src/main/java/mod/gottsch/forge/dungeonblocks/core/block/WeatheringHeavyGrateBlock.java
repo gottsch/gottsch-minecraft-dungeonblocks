@@ -1,0 +1,30 @@
+package mod.gottsch.forge.dungeonblocks.core.block;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.WeatheringCopper;
+import net.minecraft.world.level.block.WeatheringCopper.WeatherState;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
+public class WeatheringHeavyGrateBlock extends HeavyGrateBlock implements WeatheringCopper {
+   private final WeatherState weatherState;
+
+   public WeatheringHeavyGrateBlock(WeatherState weatherState, Properties properties) {
+      super(properties);
+      this.weatherState = weatherState;
+   }
+
+   public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource randomSource) {
+      this.onRandomTick(state, level, pos, randomSource);
+   }
+
+   public boolean isRandomlyTicking(BlockState state) {
+      return WeatheringCopper.getNext(state.getBlock()).isPresent();
+   }
+
+   public WeatherState getAge() {
+      return this.weatherState;
+   }
+}

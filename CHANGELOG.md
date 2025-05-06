@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2025-05-05
+
+### Changed
+
+- now use DataGen for Double Sill, Sill, Fluted, and Fluted Facade blocks, items, and loot tables.
+- rename Grate block to Heavy Grate.
+- rename Grate Trapdoor block to Heavy Trapdoor.
+
+### Added
+
+- Square Brick block
+- Mossy Square Brick block
+- Square Stone Brick block
+- Mossy Square Stone Brick block
+- Left & Right Large Brick block
+- Left & Right Large Stone Brick block
+- Mossy Bricks block
+- Large Bricks block
+- Mossy Large Bricks block
+- Copper Door variants (from 1.21)
+- Copper Grate variants (from 1.21)
+- Copper Trapdoor variants (from 1.21)
+- Copper Heavy Grate variants
+- Copper Heavy Trapdoor variants
+
 ## [2.1.0] - 2023-12-24
 
 ### Changed

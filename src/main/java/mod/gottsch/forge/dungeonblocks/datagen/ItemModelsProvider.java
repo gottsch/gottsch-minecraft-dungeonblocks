@@ -47,19 +47,49 @@ public class ItemModelsProvider extends ItemModelProvider {
 		 * block items
 		 */
 		ModBlocks.MAP.forEach((k, v) -> {
-			if (k.getId().getPath().contains("barred_window") ||
-					k.getId().getPath().contains("greek_block") || k.getId().getPath().contains("keystone") ||
-			k.getId().getPath().contains("ledge") || k.getId().getPath().contains("corbel")) {
+			if (k.getId().getPath().contains("barred_window")
+					|| k.getId().getPath().contains("greek_block")
+					|| k.getId().getPath().contains("keystone")
+					|| k.getId().getPath().contains("ledge")
+					|| k.getId().getPath().contains("corbel")
+					|| k.getId().getPath().contains("sill")
+					|| k.getId().getPath().contains("fluted_block")
+					|| k.getId().getPath().contains("fluted_facade_block")) {
 				blockItemParent(v);
 			}
 		});
+
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.TORCH_SCONCE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.CANDLE_SCONCE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.BRAZIER));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.COPPER_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_GRATE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_GRATE));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_GRATE_TRAPDOOR), modLoc("block/dark_iron_grate_trapdoor_bottom"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_GRATE_TRAPDOOR), modLoc("block/weathered_copper_grate_trapdoor_bottom"));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.COPPER_HEAVY_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_HEAVY_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_HEAVY_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_HEAVY_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_HEAVY_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_HEAVY_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_GRATE));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.COPPER_HEAVY_TRAPDOOR), modLoc("block/copper_heavy_trapdoor_bottom"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_HEAVY_TRAPDOOR), modLoc("block/exposed_copper_heavy_trapdoor_bottom"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR), modLoc("block/weathered_copper_heavy_trapdoor_bottom"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_HEAVY_TRAPDOOR), modLoc("block/oxidized_copper_heavy_trapdoor_bottom"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_HEAVY_TRAPDOOR), modLoc("block/copper_heavy_trapdoor_bottom"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_HEAVY_TRAPDOOR), modLoc("block/exposed_copper_heavy_trapdoor_bottom"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_TRAPDOOR), modLoc("block/weathered_copper_heavy_trapdoor_bottom"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_TRAPDOOR), modLoc("block/oxidized_copper_heavy_trapdoor_bottom"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_HEAVY_TRAPDOOR), modLoc("block/dark_iron_heavy_trapdoor_bottom"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR), modLoc("block/weathered_copper_heavy_trapdoor_bottom"));
+
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.WALL_RING));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.PLATE_BRACKET_BLOCK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_SEWER));
@@ -73,6 +103,17 @@ public class ItemModelsProvider extends ItemModelProvider {
 		basicItem(ModBlocks.MAP.get(ModBlocks.MANGROVE_DUNGEON_DOOR), mcLoc("item/mangrove_door"));
 		basicItem(ModBlocks.MAP.get(ModBlocks.SPRUCE_DUNGEON_DOOR), mcLoc("item/spruce_door"));
 
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.LEFT_LARGE_STONE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_STONE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.LARGE_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LARGE_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.LEFT_LARGE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_BRICK));
 	}
 
 	public ItemModelBuilder basicItem(RegistryObject<Item> item, ResourceLocation texture) {

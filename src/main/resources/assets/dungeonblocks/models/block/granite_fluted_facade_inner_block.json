@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/fluted_facade_inner_block_base",
-    "textures": {
-        "bottom": "block/granite",
-        "top": "block/granite",
-        "0": "block/granite"
-    }
-}

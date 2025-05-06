@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/fluted_facade_inner_block_base",
-    "textures": {
-        "bottom": "block/polished_diorite",
-        "top": "block/polished_diorite",
-        "0": "block/polished_diorite"
-    }
-}

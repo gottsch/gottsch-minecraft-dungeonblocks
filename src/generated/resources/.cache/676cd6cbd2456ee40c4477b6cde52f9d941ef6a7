@@ -1,0 +1,4 @@
+// 1.20.1	2025-05-03T14:42:51.8768701	Tags for minecraft:block mod id dungeonblocks
+422d870888c6e1446d2bbdb96a00abde44e94f5f data/minecraft/tags/blocks/mineable/pickaxe.json
+e3fbaf2a8c4dec1ddef13cdbbeec023698792d42 data/minecraft/tags/blocks/needs_diamond_tool.json
+75cd12cf2889756f710eeac1507ecaa0d85dcc26 data/minecraft/tags/blocks/needs_stone_tool.json
