@@ -56,6 +56,7 @@ public class DataGenMaps {
             "lantern",
             "ledge",
             "plate_bracket",
+            "angle_plate_bracket",
             "pillar",
             "quarter",
             "sconce",
@@ -77,7 +78,13 @@ public class DataGenMaps {
             "fluted",
             "pillar",
             "quarter",
-            "sill"
+            "sill",
+            "large",
+            "brick",
+            "left",
+            "right",
+            "square",
+            "chain"
             );
 
     public List<String> wood_names = Arrays.asList(

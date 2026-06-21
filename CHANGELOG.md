@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2025-05-12
+
+### Changed
+
+- now use DataGen for Cornice, Crown Molding, Facade, Pillar, Pillar Base, and Quarter Facade blocks, items, and loot tables.
+- fixed weathering of all Copper variant blocks.
+- remodeled Plate Bracket block slightly.
+- uses GottschCore 2.4.0 (required)
+
+### Added
+
+- Angle Plate Bracket block
+- Corner Plate Bracket block
+- Copper variants for Plate, Angle Plate, and Corner Plate Bracket blocks.
+
 ## [2.2.0] - 2025-05-05
 
 ### Changed

@@ -21,6 +21,7 @@ package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
+import mod.gottsch.forge.dungeonblocks.core.item.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -84,6 +85,16 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_HEAVY_GRATE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_GRATE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_GRATE));
+
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.COPPER_VALVE_WHEEL));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_VALVE_WHEEL));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_VALVE_WHEEL));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_VALVE_WHEEL));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_VALVE_WHEEL));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_VALVE_WHEEL));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_VALVE_WHEEL));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_VALVE_WHEEL));
+
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.COPPER_HEAVY_TRAPDOOR), modLoc("block/copper_heavy_trapdoor_bottom"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_HEAVY_TRAPDOOR), modLoc("block/exposed_copper_heavy_trapdoor_bottom"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR), modLoc("block/weathered_copper_heavy_trapdoor_bottom"));
@@ -95,8 +106,41 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_HEAVY_TRAPDOOR), modLoc("block/dark_iron_heavy_trapdoor_bottom"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR), modLoc("block/weathered_copper_heavy_trapdoor_bottom"));
 
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.DARK_IRON_CORNER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.EXPOSED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WEATHERED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.OXIDIZED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
+
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_EXPOSED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_WEATHERED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_OXIDIZED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
+
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.IRON_PLATE_BRACKET), modLoc("block/" + ModBlocks.IRON_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_PLATE_BRACKET), modLoc("block/" + ModBlocks.DARK_IRON_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.COPPER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.EXPOSED_COPPER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WEATHERED_COPPER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.OXIDIZED_COPPER_PLATE_BRACKET.getId().getPath()));
+
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_COPPER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_EXPOSED_COPPER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_WEATHERED_COPPER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_OXIDIZED_COPPER_PLATE_BRACKET.getId().getPath()));
+
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.DARK_IRON_CORNER_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.EXPOSED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.WEATHERED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.OXIDIZED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
+
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_EXPOSED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_WEATHERED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_OXIDIZED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
+
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.WALL_RING));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.PLATE_BRACKET_BLOCK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_SEWER));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.TERRACOTTA_SEWER));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.HAY_PATCH));
@@ -112,13 +156,28 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.LEFT_LARGE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_STONE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LEFT_LARGE_STONE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_RIGHT_LARGE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.LARGE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LARGE_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.LARGE_BRICK_STAIRS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LARGE_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.LEFT_LARGE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LEFT_LARGE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_RIGHT_LARGE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.COBBLESTONE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_COBBLESTONE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.GRAVEL_BRICK));
+
+		basicItem(ModItems.LICHEN, modLoc("block/lichen"));
+		basicItem(ModItems.MOLD, modLoc("block/mold"));
+
+		basicItem(ModItems.SKELETON, modLoc("item/skeleton"));
 	}
 
 	public ItemModelBuilder basicItem(RegistryObject<Item> item, ResourceLocation texture) {

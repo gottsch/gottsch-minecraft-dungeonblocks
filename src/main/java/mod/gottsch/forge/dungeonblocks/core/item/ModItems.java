@@ -30,6 +30,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.function.Supplier;
+
 /**
  * @author Mark Gottschling on Jan 13, 2020
  * This class has the register event handler for all custom items.
@@ -41,16 +43,25 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModItems {
 	
 	public static final Item.Properties ITEM_PROPERTIES = new Item.Properties();
+	public static final Supplier<Item.Properties> ITEM_PROPS_SUPPLIER = Item.Properties::new;
 
 	public static final RegistryObject<Item> LOGO = Registration.ITEMS.register("dungeonblocks_logo", () -> new Item(new Item.Properties()));
 
 	static {
 		// create items
 		Registration.BLOCKS.getEntries().forEach(block -> {
-			ModBlocks.MAP.put(block, fromBlock(block, ModItems.ITEM_PROPERTIES));
+			if (block != ModBlocks.MOLD && block != ModBlocks.LICHEN
+			&& block != ModBlocks.SKELETON) {
+				ModBlocks.MAP.put(block, fromBlock(block, ModItems.ITEM_PROPERTIES));
+			}
 		});	
 	}
-	
+
+	// static referenced items
+	public static RegistryObject<Item> MOLD = fromBlock(ModBlocks.MOLD, ITEM_PROPERTIES);
+	public static RegistryObject<Item> LICHEN = fromBlock(ModBlocks.LICHEN, ITEM_PROPERTIES);
+	public static RegistryObject<Item> SKELETON = Registration.ITEMS.register("skeleton", () -> new SkeletonItem(ModBlocks.SKELETON.get(), new Item.Properties()));
+
 	/**
 	 * 
 	 */
