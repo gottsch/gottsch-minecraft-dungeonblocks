@@ -24,6 +24,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
@@ -43,7 +44,7 @@ public class ModCreativeModeTabs {
 	public static final RegistryObject<CreativeModeTab> MOD_TAB = TABS.register("treasure_tab",
 			() -> CreativeModeTab.builder()
 					.title(Component.translatable("itemGroup.dungeonblocks"))
-					.icon(ModItems.LOGO.get()::getDefaultInstance)
+					.icon(() -> new ItemStack(Blocks.MOSSY_STONE_BRICKS))
 					.displayItems((displayParams, output) -> {
 						// add all items
 						Registration.ITEMS.getEntries().forEach(item -> {

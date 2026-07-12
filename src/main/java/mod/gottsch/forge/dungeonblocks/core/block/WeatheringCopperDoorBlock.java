@@ -29,7 +29,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DoorBlock;
-import net.minecraft.world.level.block.WeatheringCopper;
+import net.minecraft.world.level.block.WeatheringCopper.WeatherState;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -38,7 +38,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 
-public class WeatheringCopperDoorBlock extends DoorBlock implements WeatheringCopper {
+public class WeatheringCopperDoorBlock extends DoorBlock implements ModWeatheringCopper {
    private final WeatherState weatherState;
 
    public WeatheringCopperDoorBlock(BlockSetType blockSetType, WeatherState weatherState, Properties properties) {
@@ -55,7 +55,7 @@ public class WeatheringCopperDoorBlock extends DoorBlock implements WeatheringCo
 
    @Override
    public boolean isRandomlyTicking(BlockState state) {
-      return WeatheringCopper.getNext(state.getBlock()).isPresent();
+      return ModWeatheringCopper.getNext(state.getBlock()).isPresent();
    }
 
    @Override

@@ -20,14 +20,16 @@
 package mod.gottsch.forge.dungeonblocks.core.block;
 
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import com.google.common.collect.Maps;
 
-import mod.gottsch.forge.dungeonblocks.core.config.DungeonBlocksConfig.BlockID;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
 import mod.gottsch.forge.gottschcore.block.FacingBlock;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.WeatheringCopper.WeatherState;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -41,6 +43,25 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModBlocks {
     // map from registry block to registry item
     public static final Map<RegistryObject<Block>, RegistryObject<Item>> MAP = Maps.newHashMap();
+
+    // ------------------------------------------------------------------
+    // Copper helpers. Weathering copper has 4 ages (unaffected -> exposed ->
+    // weathered -> oxidized) plus a waxed counterpart per age. Properties are
+    // always copied from an EXPLICIT source block named right at the call site,
+    // so a waxed block can never accidentally copy the wrong weather state.
+    // ------------------------------------------------------------------
+
+    /** Register a weathering-copper block of the given age, copying properties from {@code propsFrom}. */
+    private static RegistryObject<Block> weathering(String id, RegistryObject<Block> propsFrom,
+            WeatherState age, BiFunction<WeatherState, Properties, Block> factory) {
+        return Registration.BLOCKS.register(id, () -> factory.apply(age, Properties.copy(propsFrom.get())));
+    }
+
+    /** Register a block whose properties are copied from {@code propsFrom} (waxed copper variants, etc.). */
+    private static RegistryObject<Block> copperLike(String id, RegistryObject<Block> propsFrom,
+            Function<Properties, Block> factory) {
+        return Registration.BLOCKS.register(id, () -> factory.apply(Properties.copy(propsFrom.get())));
+    }
 
     // NEW 10/26/2023
     // wall sconce
@@ -72,108 +93,59 @@ public class ModBlocks {
             return false;
         }));
     });
-    public static final RegistryObject<Block> EXPOSED_COPPER_GRATE = Registration.BLOCKS.register("exposed_copper_grate", () -> {
-        return new WeatheringCopperGrateBlock(WeatheringCopper.WeatherState.EXPOSED, Properties.copy((BlockBehaviour)COPPER_GRATE.get()).mapColor(MapColor.TERRACOTTA_LIGHT_GRAY));
-    });
-    public static final RegistryObject<Block> WEATHERED_COPPER_GRATE = Registration.BLOCKS.register("weathered_copper_grate", () -> {
-        return new WeatheringCopperGrateBlock(WeatheringCopper.WeatherState.WEATHERED, Properties.copy((BlockBehaviour)COPPER_GRATE.get()).mapColor(MapColor.COLOR_ORANGE));
-    });
-    public static final RegistryObject<Block> OXIDIZED_COPPER_GRATE = Registration.BLOCKS.register("oxidized_copper_grate", () -> {
-        return new WeatheringCopperGrateBlock(WeatheringCopper.WeatherState.OXIDIZED, Properties.copy((BlockBehaviour)COPPER_GRATE.get()).mapColor(MapColor.WARPED_NYLIUM));
-    });
-    public static final RegistryObject<Block> WAXED_COPPER_GRATE = Registration.BLOCKS.register("waxed_copper_grate", () -> {
-        return new WaterloggedCubeBlock(Properties.copy((BlockBehaviour)COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_GRATE = Registration.BLOCKS.register("waxed_exposed_copper_grate", () -> {
-        return new WaterloggedCubeBlock(Properties.copy((BlockBehaviour)EXPOSED_COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_GRATE = Registration.BLOCKS.register("waxed_weathered_copper_grate", () -> {
-        return new WaterloggedCubeBlock(Properties.copy((BlockBehaviour)WEATHERED_COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_GRATE = Registration.BLOCKS.register("waxed_oxidized_copper_grate", () -> {
-        return new WaterloggedCubeBlock(Properties.copy((BlockBehaviour)COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> COPPER_HEAVY_GRATE = Registration.BLOCKS.register("copper_heavy_grate", () -> {
-        return new WeatheringHeavyGrateBlock(WeatheringCopper.WeatherState.UNAFFECTED, Properties.copy((BlockBehaviour)COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> EXPOSED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("exposed_copper_heavy_grate", () -> {
-        return new WeatheringHeavyGrateBlock(WeatheringCopper.WeatherState.EXPOSED, Properties.copy((BlockBehaviour)EXPOSED_COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> WEATHERED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("weathered_copper_heavy_grate", () -> {
-        return new WeatheringHeavyGrateBlock(WeatheringCopper.WeatherState.WEATHERED, Properties.copy((BlockBehaviour)WEATHERED_COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> OXIDIZED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("oxidized_copper_heavy_grate", () -> {
-        return new WeatheringHeavyGrateBlock(WeatheringCopper.WeatherState.OXIDIZED, Properties.copy((BlockBehaviour)OXIDIZED_COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> WAXED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("waxed_copper_heavy_grate", () -> {
-        return new HeavyGrateBlock(Properties.copy((BlockBehaviour)COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("waxed_exposed_copper_heavy_grate", () -> {
-        return new HeavyGrateBlock(Properties.copy((BlockBehaviour)EXPOSED_COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("waxed_weathered_copper_heavy_grate", () -> {
-        return new HeavyGrateBlock(Properties.copy((BlockBehaviour)WEATHERED_COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_HEAVY_GRATE = Registration.BLOCKS.register("waxed_oxidized_copper_heavy_grate", () -> {
-        return new HeavyGrateBlock(Properties.copy((BlockBehaviour)OXIDIZED_COPPER_GRATE.get()));
-    });
+    public static final RegistryObject<Block> EXPOSED_COPPER_GRATE = copperLike("exposed_copper_grate", COPPER_GRATE,
+            p -> new WeatheringCopperGrateBlock(WeatherState.EXPOSED, p.mapColor(MapColor.TERRACOTTA_LIGHT_GRAY)));
+    public static final RegistryObject<Block> WEATHERED_COPPER_GRATE = copperLike("weathered_copper_grate", COPPER_GRATE,
+            p -> new WeatheringCopperGrateBlock(WeatherState.WEATHERED, p.mapColor(MapColor.COLOR_ORANGE)));
+    public static final RegistryObject<Block> OXIDIZED_COPPER_GRATE = copperLike("oxidized_copper_grate", COPPER_GRATE,
+            p -> new WeatheringCopperGrateBlock(WeatherState.OXIDIZED, p.mapColor(MapColor.WARPED_NYLIUM)));
+    public static final RegistryObject<Block> WAXED_COPPER_GRATE = copperLike("waxed_copper_grate", COPPER_GRATE, WaterloggedCubeBlock::new);
+    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_GRATE = copperLike("waxed_exposed_copper_grate", EXPOSED_COPPER_GRATE, WaterloggedCubeBlock::new);
+    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_GRATE = copperLike("waxed_weathered_copper_grate", WEATHERED_COPPER_GRATE, WaterloggedCubeBlock::new);
+    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_GRATE = copperLike("waxed_oxidized_copper_grate", OXIDIZED_COPPER_GRATE, WaterloggedCubeBlock::new);
 
+    public static final RegistryObject<Block> COPPER_HEAVY_GRATE = weathering("copper_heavy_grate", COPPER_GRATE, WeatherState.UNAFFECTED, WeatheringHeavyGrateBlock::new);
+    public static final RegistryObject<Block> EXPOSED_COPPER_HEAVY_GRATE = weathering("exposed_copper_heavy_grate", EXPOSED_COPPER_GRATE, WeatherState.EXPOSED, WeatheringHeavyGrateBlock::new);
+    public static final RegistryObject<Block> WEATHERED_COPPER_HEAVY_GRATE = weathering("weathered_copper_heavy_grate", WEATHERED_COPPER_GRATE, WeatherState.WEATHERED, WeatheringHeavyGrateBlock::new);
+    public static final RegistryObject<Block> OXIDIZED_COPPER_HEAVY_GRATE = weathering("oxidized_copper_heavy_grate", OXIDIZED_COPPER_GRATE, WeatherState.OXIDIZED, WeatheringHeavyGrateBlock::new);
+    public static final RegistryObject<Block> WAXED_COPPER_HEAVY_GRATE = copperLike("waxed_copper_heavy_grate", COPPER_GRATE, HeavyGrateBlock::new);
+    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_HEAVY_GRATE = copperLike("waxed_exposed_copper_heavy_grate", EXPOSED_COPPER_GRATE, HeavyGrateBlock::new);
+    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_HEAVY_GRATE = copperLike("waxed_weathered_copper_heavy_grate", WEATHERED_COPPER_GRATE, HeavyGrateBlock::new);
+    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_HEAVY_GRATE = copperLike("waxed_oxidized_copper_heavy_grate", OXIDIZED_COPPER_GRATE, HeavyGrateBlock::new);
+
+    // valve wheel
+    public static final RegistryObject<Block> COPPER_VALVE_WHEEL = weathering("copper_valve_wheel", COPPER_GRATE, WeatherState.UNAFFECTED, WeatheringCopperValveWheelBlock::new);
+    public static final RegistryObject<Block> EXPOSED_COPPER_VALVE_WHEEL = weathering("exposed_copper_valve_wheel", EXPOSED_COPPER_GRATE, WeatherState.EXPOSED, WeatheringCopperValveWheelBlock::new);
+    public static final RegistryObject<Block> WEATHERED_COPPER_VALVE_WHEEL = weathering("weathered_copper_valve_wheel", WEATHERED_COPPER_GRATE, WeatherState.WEATHERED, WeatheringCopperValveWheelBlock::new);
+    public static final RegistryObject<Block> OXIDIZED_COPPER_VALVE_WHEEL = weathering("oxidized_copper_valve_wheel", OXIDIZED_COPPER_GRATE, WeatherState.OXIDIZED, WeatheringCopperValveWheelBlock::new);
+    public static final RegistryObject<Block> WAXED_COPPER_VALVE_WHEEL = copperLike("waxed_copper_valve_wheel", COPPER_GRATE, ValveWheelBlock::new);
+    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_VALVE_WHEEL = copperLike("waxed_exposed_copper_valve_wheel", EXPOSED_COPPER_GRATE, ValveWheelBlock::new);
+    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_VALVE_WHEEL = copperLike("waxed_weathered_copper_valve_wheel", WEATHERED_COPPER_GRATE, ValveWheelBlock::new);
+    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_VALVE_WHEEL = copperLike("waxed_oxidized_copper_valve_wheel", OXIDIZED_COPPER_GRATE, ValveWheelBlock::new);
 
     // trapdoor
-    public static final RegistryObject<Block> COPPER_TRAPDOOR = Registration.BLOCKS.register("copper_trapdoor", () -> {
-        return new WeatheringCopperTrapDoorBlock(WeatheringCopper.WeatherState.UNAFFECTED, Properties.copy((BlockBehaviour)COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> EXPOSED_COPPER_TRAPDOOR = Registration.BLOCKS.register("exposed_copper_trapdoor", () -> {
-        return new WeatheringCopperTrapDoorBlock(WeatheringCopper.WeatherState.EXPOSED, Properties.copy((BlockBehaviour)EXPOSED_COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> WEATHERED_COPPER_TRAPDOOR = Registration.BLOCKS.register("weathered_copper_trapdoor", () -> {
-        return new WeatheringCopperTrapDoorBlock(WeatheringCopper.WeatherState.WEATHERED, Properties.copy((BlockBehaviour)WEATHERED_COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> OXIDIZED_COPPER_TRAPDOOR = Registration.BLOCKS.register("oxidized_copper_trapdoor", () -> {
-        return new WeatheringCopperTrapDoorBlock(WeatheringCopper.WeatherState.OXIDIZED, Properties.copy((BlockBehaviour)OXIDIZED_COPPER_GRATE.get()));
-    });
-    public static final RegistryObject<Block> WAXED_COPPER_TRAPDOOR = Registration.BLOCKS.register("waxed_copper_trapdoor", () -> {
-        return new TrapDoorBlock(Properties.copy((BlockBehaviour)COPPER_GRATE.get()), BlockSetType.DARK_OAK);
-    });
-    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_TRAPDOOR = Registration.BLOCKS.register("waxed_exposed_copper_trapdoor", () -> {
-        return new TrapDoorBlock(Properties.copy((BlockBehaviour)EXPOSED_COPPER_GRATE.get()), BlockSetType.DARK_OAK);
-    });
-    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_TRAPDOOR = Registration.BLOCKS.register("waxed_weathered_copper_trapdoor", () -> {
-        return new TrapDoorBlock(Properties.copy((BlockBehaviour)WEATHERED_COPPER_GRATE.get()), BlockSetType.DARK_OAK);
-    });
-    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_TRAPDOOR = Registration.BLOCKS.register("waxed_oxidized_copper_trapdoor", () -> {
-        return new TrapDoorBlock(Properties.copy((BlockBehaviour)OXIDIZED_COPPER_GRATE.get()), BlockSetType.DARK_OAK);
-    });
+    public static final RegistryObject<Block> COPPER_TRAPDOOR = weathering("copper_trapdoor", COPPER_GRATE, WeatherState.UNAFFECTED, WeatheringCopperTrapDoorBlock::new);
+    public static final RegistryObject<Block> EXPOSED_COPPER_TRAPDOOR = weathering("exposed_copper_trapdoor", EXPOSED_COPPER_GRATE, WeatherState.EXPOSED, WeatheringCopperTrapDoorBlock::new);
+    public static final RegistryObject<Block> WEATHERED_COPPER_TRAPDOOR = weathering("weathered_copper_trapdoor", WEATHERED_COPPER_GRATE, WeatherState.WEATHERED, WeatheringCopperTrapDoorBlock::new);
+    public static final RegistryObject<Block> OXIDIZED_COPPER_TRAPDOOR = weathering("oxidized_copper_trapdoor", OXIDIZED_COPPER_GRATE, WeatherState.OXIDIZED, WeatheringCopperTrapDoorBlock::new);
+    public static final RegistryObject<Block> WAXED_COPPER_TRAPDOOR = copperLike("waxed_copper_trapdoor", COPPER_GRATE, p -> new TrapDoorBlock(p, BlockSetType.DARK_OAK));
+    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_TRAPDOOR = copperLike("waxed_exposed_copper_trapdoor", EXPOSED_COPPER_GRATE, p -> new TrapDoorBlock(p, BlockSetType.DARK_OAK));
+    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_TRAPDOOR = copperLike("waxed_weathered_copper_trapdoor", WEATHERED_COPPER_GRATE, p -> new TrapDoorBlock(p, BlockSetType.DARK_OAK));
+    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_TRAPDOOR = copperLike("waxed_oxidized_copper_trapdoor", OXIDIZED_COPPER_GRATE, p -> new TrapDoorBlock(p, BlockSetType.DARK_OAK));
 
     // heavy trapdoor
     public static final RegistryObject<Block> DARK_IRON_HEAVY_TRAPDOOR = Registration.BLOCKS.register("dark_iron_heavy_trapdoor", () -> {
         return new HeavyTrapDoorBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion());
     });
 
-    public static final RegistryObject<Block> COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("copper_heavy_trapdoor", () -> {
-        return new WeatheringHeavyTrapDoorBlock(WeatheringCopper.WeatherState.UNAFFECTED, Properties.copy((BlockBehaviour)COPPER_TRAPDOOR.get()));
-    });
-    public static final RegistryObject<Block> EXPOSED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("exposed_copper_heavy_trapdoor", () -> {
-        return new WeatheringHeavyTrapDoorBlock(WeatheringCopper.WeatherState.EXPOSED, Properties.copy((BlockBehaviour)EXPOSED_COPPER_TRAPDOOR.get()));
-    });
-    public static final RegistryObject<Block> WEATHERED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("weathered_copper_heavy_trapdoor", () -> {
-        return new WeatheringHeavyTrapDoorBlock(WeatheringCopper.WeatherState.WEATHERED, Properties.copy((BlockBehaviour)WEATHERED_COPPER_TRAPDOOR.get()));
-    });
-    public static final RegistryObject<Block> OXIDIZED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("oxidized_copper_heavy_trapdoor", () -> {
-        return new WeatheringHeavyTrapDoorBlock(WeatheringCopper.WeatherState.OXIDIZED, Properties.copy((BlockBehaviour)OXIDIZED_COPPER_TRAPDOOR.get()));
-    });
-    public static final RegistryObject<Block> WAXED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("waxed_copper_heavy_trapdoor", () -> {
-        return new HeavyTrapDoorBlock(Properties.copy((BlockBehaviour)COPPER_TRAPDOOR.get()));
-    });
-    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("waxed_exposed_copper_heavy_trapdoor", () -> {
-        return new HeavyTrapDoorBlock(Properties.copy((BlockBehaviour)EXPOSED_COPPER_TRAPDOOR.get()));
-    });
-    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("waxed_weathered_copper_heavy_trapdoor", () -> {
-        return new HeavyTrapDoorBlock(Properties.copy((BlockBehaviour)WEATHERED_COPPER_TRAPDOOR.get()));
-    });
-    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_HEAVY_TRAPDOOR = Registration.BLOCKS.register("waxed_oxidized_copper_heavy_trapdoor", () -> {
-        return new HeavyTrapDoorBlock(Properties.copy((BlockBehaviour)OXIDIZED_COPPER_TRAPDOOR.get()));
-    });
+    public static final RegistryObject<Block> COPPER_HEAVY_TRAPDOOR = weathering("copper_heavy_trapdoor", COPPER_TRAPDOOR, WeatherState.UNAFFECTED, WeatheringHeavyTrapDoorBlock::new);
+    public static final RegistryObject<Block> EXPOSED_COPPER_HEAVY_TRAPDOOR = weathering("exposed_copper_heavy_trapdoor", EXPOSED_COPPER_TRAPDOOR, WeatherState.EXPOSED, WeatheringHeavyTrapDoorBlock::new);
+    public static final RegistryObject<Block> WEATHERED_COPPER_HEAVY_TRAPDOOR = weathering("weathered_copper_heavy_trapdoor", WEATHERED_COPPER_TRAPDOOR, WeatherState.WEATHERED, WeatheringHeavyTrapDoorBlock::new);
+    public static final RegistryObject<Block> OXIDIZED_COPPER_HEAVY_TRAPDOOR = weathering("oxidized_copper_heavy_trapdoor", OXIDIZED_COPPER_TRAPDOOR, WeatherState.OXIDIZED, WeatheringHeavyTrapDoorBlock::new);
+    public static final RegistryObject<Block> WAXED_COPPER_HEAVY_TRAPDOOR = copperLike("waxed_copper_heavy_trapdoor", COPPER_TRAPDOOR, HeavyTrapDoorBlock::new);
+    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_HEAVY_TRAPDOOR = copperLike("waxed_exposed_copper_heavy_trapdoor", EXPOSED_COPPER_TRAPDOOR, HeavyTrapDoorBlock::new);
+    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_HEAVY_TRAPDOOR = copperLike("waxed_weathered_copper_heavy_trapdoor", WEATHERED_COPPER_TRAPDOOR, HeavyTrapDoorBlock::new);
+    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_HEAVY_TRAPDOOR = copperLike("waxed_oxidized_copper_heavy_trapdoor", OXIDIZED_COPPER_TRAPDOOR, HeavyTrapDoorBlock::new);
 
     public static final RegistryObject<Block> SQUARE_STONE_BRICK = Registration.BLOCKS.register("square_stone_brick", () -> {
         return new Block(Properties.copy(Blocks.STONE_BRICKS));
@@ -187,14 +159,29 @@ public class ModBlocks {
     public static final RegistryObject<Block> RIGHT_LARGE_STONE_BRICK = Registration.BLOCKS.register("right_large_stone_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
     });
+    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_STONE_BRICK = Registration.BLOCKS.register("mossy_left_large_stone_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_STONE_BRICK = Registration.BLOCKS.register("mossy_right_large_stone_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
+    });
     public static final RegistryObject<Block> MOSSY_BRICKS = Registration.BLOCKS.register("mossy_bricks", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_BRICK_STAIRS = Registration.BLOCKS.register("mossy_brick_stairs", () -> {
+        return new StairBlock(Blocks.BRICKS.defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
     });
     public static final RegistryObject<Block> LARGE_BRICKS = Registration.BLOCKS.register("large_bricks", () -> {
         return new Block(Properties.copy(Blocks.STONE_BRICKS));
     });
     public static final RegistryObject<Block> MOSSY_LARGE_BRICKS = Registration.BLOCKS.register("mossy_large_bricks", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    public static final RegistryObject<StairBlock> LARGE_BRICK_STAIRS = Registration.BLOCKS.register("large_brick_stairs", () -> {
+        return new StairBlock(LARGE_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.STONE_BRICK_STAIRS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_LARGE_BRICK_STAIRS = Registration.BLOCKS.register("mossy_large_brick_stairs", () -> {
+        return new StairBlock(MOSSY_LARGE_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
     });
     public static final RegistryObject<Block> SQUARE_BRICK = Registration.BLOCKS.register("square_brick", () -> {
         return new Block(Properties.copy(Blocks.BRICKS));
@@ -208,14 +195,80 @@ public class ModBlocks {
     public static final RegistryObject<Block> RIGHT_LARGE_BRICK = Registration.BLOCKS.register("right_large_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.BRICKS));
     });
+    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_BRICK = Registration.BLOCKS.register("mossy_left_large_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_BRICK = Registration.BLOCKS.register("mossy_right_large_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
+    });
 
+    public static final RegistryObject<Block> COBBLESTONE_BRICK = Registration.BLOCKS.register("cobblestone_brick", () -> {
+        return new Block(Properties.copy(Blocks.COBBLESTONE));
+    });
+    public static final RegistryObject<Block> MOSSY_COBBLESTONE_BRICK = Registration.BLOCKS.register("mossy_cobblestone_brick", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_COBBLESTONE));
+    });
+    public static final RegistryObject<Block> GRAVEL_BRICK = Registration.BLOCKS.register("gravel_brick", () -> {
+        return new GravelBlock(Properties.copy(Blocks.GRAVEL));
+    });
+    ///// plants /////
+    // mold / moss
+    public static final RegistryObject<Block> MOLD = Registration.BLOCKS.register("mold", () -> {
+        return new Mold(Properties.copy(Blocks.GLOW_LICHEN).lightLevel(GlowLichenBlock.emission(0)));
+    });
+    public static final RegistryObject<Block> LICHEN = Registration.BLOCKS.register("lichen", () -> {
+        return new Lichen(Properties.copy(Blocks.GLOW_LICHEN).lightLevel(GlowLichenBlock.emission(0)));
+    });
+
+    public static final RegistryObject<Block> ROOTS = Registration.BLOCKS.register("roots_head", () -> new RootsHeadBlock(BlockBehaviour.Properties.copy(Blocks.WEEPING_VINES)));
+    public static final RegistryObject<Block> ROOTS_BODY = Registration.BLOCKS.register("roots_body", () -> new RootsBodyBlock(BlockBehaviour.Properties.copy(Blocks.WEEPING_VINES_PLANT)));
+
+    ///// end of plants /////
+    ///
     // sewer
     public static final RegistryObject<Block> WEATHERED_COPPER_SEWER = Registration.BLOCKS.register("weathered_copper_sewer_block", () -> new SewerBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> TERRACOTTA_SEWER = Registration.BLOCKS.register("terracotta_sewer_block", () -> new SewerBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
 
-
+    // wall ring
     public static final RegistryObject<Block> WALL_RING = Registration.BLOCKS.register("wall_ring", () -> new WallRingBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> PLATE_BRACKET_BLOCK = Registration.BLOCKS.register("plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
+
+    // plate bracket
+    public static final RegistryObject<Block> IRON_PLATE_BRACKET = Registration.BLOCKS.register("iron_plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
+    public static final RegistryObject<Block> DARK_IRON_PLATE_BRACKET = Registration.BLOCKS.register("dark_iron_plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
+    public static final RegistryObject<Block> COPPER_PLATE_BRACKET = weathering("copper_plate_bracket_block", COPPER_TRAPDOOR, WeatherState.UNAFFECTED, WeatheringPlateBracketBlock::new);
+    public static final RegistryObject<Block> EXPOSED_COPPER_PLATE_BRACKET = weathering("exposed_copper_plate_bracket_block", EXPOSED_COPPER_TRAPDOOR, WeatherState.EXPOSED, WeatheringPlateBracketBlock::new);
+    public static final RegistryObject<Block> WEATHERED_COPPER_PLATE_BRACKET = weathering("weathered_copper_plate_bracket_block", WEATHERED_COPPER_TRAPDOOR, WeatherState.WEATHERED, WeatheringPlateBracketBlock::new);
+    public static final RegistryObject<Block> OXIDIZED_COPPER_PLATE_BRACKET = weathering("oxidized_copper_plate_bracket_block", OXIDIZED_COPPER_TRAPDOOR, WeatherState.OXIDIZED, WeatheringPlateBracketBlock::new);
+    public static final RegistryObject<Block> WAXED_COPPER_PLATE_BRACKET = copperLike("waxed_copper_plate_bracket_block", COPPER_GRATE, PlateBracketBlock::new);
+    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_PLATE_BRACKET = copperLike("waxed_exposed_copper_plate_bracket_block", EXPOSED_COPPER_GRATE, PlateBracketBlock::new);
+    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_PLATE_BRACKET = copperLike("waxed_weathered_copper_plate_bracket_block", WEATHERED_COPPER_GRATE, PlateBracketBlock::new);
+    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_PLATE_BRACKET = copperLike("waxed_oxidized_copper_plate_bracket_block", OXIDIZED_COPPER_GRATE, PlateBracketBlock::new);
+
+    // angle/elbow plate bracket
+    public static final RegistryObject<Block> IRON_ANGLE_PLATE_BRACKET = Registration.BLOCKS.register("iron_angle_plate_bracket_block", () -> new AnglePlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
+    public static final RegistryObject<Block> DARK_IRON_ANGLE_PLATE_BRACKET = Registration.BLOCKS.register("dark_iron_angle_plate_bracket_block", () -> new AnglePlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
+    public static final RegistryObject<Block> COPPER_ANGLE_PLATE_BRACKET = weathering("copper_angle_plate_bracket_block", COPPER_TRAPDOOR, WeatherState.UNAFFECTED, WeatheringAnglePlateBracketBlock::new);
+    public static final RegistryObject<Block> EXPOSED_COPPER_ANGLE_PLATE_BRACKET = weathering("exposed_copper_angle_plate_bracket_block", EXPOSED_COPPER_TRAPDOOR, WeatherState.EXPOSED, WeatheringAnglePlateBracketBlock::new);
+    public static final RegistryObject<Block> WEATHERED_COPPER_ANGLE_PLATE_BRACKET = weathering("weathered_copper_angle_plate_bracket_block", WEATHERED_COPPER_TRAPDOOR, WeatherState.WEATHERED, WeatheringAnglePlateBracketBlock::new);
+    public static final RegistryObject<Block> OXIDIZED_COPPER_ANGLE_PLATE_BRACKET = weathering("oxidized_copper_angle_plate_bracket_block", OXIDIZED_COPPER_TRAPDOOR, WeatherState.OXIDIZED, WeatheringAnglePlateBracketBlock::new);
+    public static final RegistryObject<Block> WAXED_COPPER_ANGLE_PLATE_BRACKET = copperLike("waxed_copper_angle_plate_bracket_block", COPPER_GRATE, AnglePlateBracketBlock::new);
+    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_ANGLE_PLATE_BRACKET = copperLike("waxed_exposed_copper_angle_plate_bracket_block", EXPOSED_COPPER_GRATE, AnglePlateBracketBlock::new);
+    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_ANGLE_PLATE_BRACKET = copperLike("waxed_weathered_copper_angle_plate_bracket_block", WEATHERED_COPPER_GRATE, AnglePlateBracketBlock::new);
+    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_ANGLE_PLATE_BRACKET = copperLike("waxed_oxidized_copper_angle_plate_bracket_block", OXIDIZED_COPPER_GRATE, AnglePlateBracketBlock::new);
+
+
+    // corner plate bracket
+    public static final RegistryObject<Block> IRON_CORNER_PLATE_BRACKET = Registration.BLOCKS.register("iron_corner_plate_bracket_block", () -> new CornerPlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
+    public static final RegistryObject<Block> DARK_IRON_CORNER_PLATE_BRACKET = Registration.BLOCKS.register("dark_iron_corner_plate_bracket_block", () -> new CornerPlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
+
+    public static final RegistryObject<Block> COPPER_CORNER_PLATE_BRACKET = weathering("copper_corner_plate_bracket_block", COPPER_TRAPDOOR, WeatherState.UNAFFECTED, WeatheringCornerPlateBracketBlock::new);
+    public static final RegistryObject<Block> EXPOSED_COPPER_CORNER_PLATE_BRACKET = weathering("exposed_copper_corner_plate_bracket_block", EXPOSED_COPPER_TRAPDOOR, WeatherState.EXPOSED, WeatheringCornerPlateBracketBlock::new);
+    public static final RegistryObject<Block> WEATHERED_COPPER_CORNER_PLATE_BRACKET = weathering("weathered_copper_corner_plate_bracket_block", WEATHERED_COPPER_TRAPDOOR, WeatherState.WEATHERED, WeatheringCornerPlateBracketBlock::new);
+    public static final RegistryObject<Block> OXIDIZED_COPPER_CORNER_PLATE_BRACKET = weathering("oxidized_copper_corner_plate_bracket_block", OXIDIZED_COPPER_TRAPDOOR, WeatherState.OXIDIZED, WeatheringCornerPlateBracketBlock::new);
+    public static final RegistryObject<Block> WAXED_COPPER_CORNER_PLATE_BRACKET = copperLike("waxed_copper_corner_plate_bracket_block", COPPER_GRATE, CornerPlateBracketBlock::new);
+    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_CORNER_PLATE_BRACKET = copperLike("waxed_exposed_copper_corner_plate_bracket_block", EXPOSED_COPPER_GRATE, CornerPlateBracketBlock::new);
+    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_CORNER_PLATE_BRACKET = copperLike("waxed_weathered_copper_corner_plate_bracket_block", WEATHERED_COPPER_GRATE, CornerPlateBracketBlock::new);
+    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_CORNER_PLATE_BRACKET = copperLike("waxed_oxidized_copper_corner_plate_bracket_block", OXIDIZED_COPPER_GRATE, CornerPlateBracketBlock::new);
 
     // hay patches
     public static final RegistryObject<Block> HAY_PATCH = Registration.BLOCKS.register("hay_patch_block", () -> new CarpetBlock(Properties.copy(Blocks.YELLOW_CARPET)));
@@ -257,988 +310,31 @@ public class ModBlocks {
         return new WaxedCopperDoorBlock(Properties.copy((BlockBehaviour)OXIDIZED_COPPER_DOOR.get()), BlockSetType.IRON);
     });
 
-    // facade
-    public static final RegistryObject<Block> STONE_FACADE = Registration.BLOCKS.register(BlockID.STONE_FACADE_ID, () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> SMOOTH_STONE_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> COBBLESTONE_FACADE = Registration.BLOCKS.register(BlockID.COBBLESTONE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_COBBLESTONE_FACADE = Registration.BLOCKS.register(BlockID.MOSSY_COBBLESTONE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> BRICKS_FACADE = Registration.BLOCKS.register(BlockID.BRICKS_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.STONE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CRACKED_STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
-    public static final RegistryObject<Block> CHISELED_STONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> OBSIDIAN_FACADE = Registration.BLOCKS.register(BlockID.OBSIDIAN_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.OBSIDIAN)));
-
-    public static final RegistryObject<Block> SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.SANDSTONE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_SANDSTONE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_SANDSTONE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> RED_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_RED_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_RED_SANDSTONE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_RED_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_RED_SANDSTONE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_RED_SANDSTONE_FACADE = Registration.BLOCKS.register(BlockID.CUT_RED_SANDSTONE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-
-    public static final RegistryObject<Block> GRANITE_FACADE = Registration.BLOCKS.register(BlockID.GRANITE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_GRANITE_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_GRANITE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> DIORITE_FACADE = Registration.BLOCKS.register(BlockID.DIORITE_FACADE_ID,
-            () -> new FacadeBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_DIORITE_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DIORITE)));
-    public static final RegistryObject<Block> ANDESITE_FACADE = Registration.BLOCKS.register(BlockID.ANDESITE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.ANDESITE)));
-    public static final RegistryObject<Block> POLISHED_ANDESITE_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_ANDESITE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.ANDESITE)));
-
-    public static final RegistryObject<Block> BLACKSTONE_FACADE = Registration.BLOCKS.register(BlockID.BLACKSTONE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_BLACKSTONE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-    public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_POLISHED_BLACKSTONE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-    public static final RegistryObject<Block> GILDED_BLACKSTONE_FACADE = Registration.BLOCKS.register(BlockID.GILDED_BLACKSTONE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_BLACKSTONE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-    public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-
-    public static final RegistryObject<Block> DEEPSLATE_FACADE = Registration.BLOCKS.register(BlockID.DEEPSLATE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.DEEPSLATE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_FACADE = Registration.BLOCKS.register(BlockID.CRACKED_DEEPSLATE_BRICKS_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> COBBLED_DEEPSLATE_FACADE = Registration.BLOCKS.register(BlockID.COBBLED_DEEPSLATE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> POLISHED_DEEPSLATE_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_DEEPSLATE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> CHISELED_DEEPSLATE_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_DEEPSLATE_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_TILES_FACADE = Registration.BLOCKS.register(BlockID.DEEPSLATE_TILES_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_FACADE = Registration.BLOCKS.register(BlockID.CRACKED_DEEPSLATE_TILES_FACADE_ID,
-            () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-
-
-    // quarter facade
-    public static RegistryObject<Block> STONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.STONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.STONE)));
-    public static RegistryObject<Block> SMOOTH_STONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static RegistryObject<Block> COBBLESTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.COBBLESTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static RegistryObject<Block> MOSSY_COBBLESTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.MOSSY_COBBLESTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
-    public static RegistryObject<Block> BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.BRICKS_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
-    public static RegistryObject<Block> STONE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.STONE_BRICKS_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static RegistryObject<Block> MOSSY_STONE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static RegistryObject<Block> CRACKED_STONE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static RegistryObject<Block> CHISELED_STONE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static RegistryObject<Block> OBSIDIAN_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.OBSIDIAN_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
-
-    public static RegistryObject<Block> SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.SANDSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static RegistryObject<Block> SMOOTH_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_SANDSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static RegistryObject<Block> CHISELED_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_SANDSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static RegistryObject<Block> CUT_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static RegistryObject<Block> RED_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static RegistryObject<Block> SMOOTH_RED_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_RED_SANDSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static RegistryObject<Block> CHISELED_RED_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.CHISELED_RED_SANDSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static RegistryObject<Block> CUT_RED_SANDSTONE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.CUT_RED_SANDSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-
-    public static RegistryObject<Block> GRANITE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.GRANITE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static RegistryObject<Block> POLISHED_GRANITE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_GRANITE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static RegistryObject<Block> DIORITE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.DIORITE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static RegistryObject<Block> POLISHED_DIORITE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static RegistryObject<Block> ANDESITE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.ANDESITE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static RegistryObject<Block> POLISHED_ANDESITE_QUARTER_FACADE = Registration.BLOCKS.register(BlockID.POLISHED_ANDESITE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static RegistryObject<Block> BLACKSTONE_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.BLACKSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-    public static RegistryObject<Block> POLISHED_BLACKSTONE_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
-    public static RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.CHISELED_POLISHED_BLACKSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
-    public static RegistryObject<Block> GILDED_BLACKSTONE_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.GILDED_BLACKSTONE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
-    public static RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
-    public static RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
-    public static RegistryObject<Block> DEEPSLATE_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static RegistryObject<Block> DEEPSLATE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_BRICKS_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
-    public static RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_BRICKS_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
-    public static RegistryObject<Block> COBBLED_DEEPSLATE_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.COBBLED_DEEPSLATE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
-    public static RegistryObject<Block> POLISHED_DEEPSLATE_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.POLISHED_DEEPSLATE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
-    public static RegistryObject<Block> CHISELED_DEEPSLATE_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.CHISELED_DEEPSLATE_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
-    public static RegistryObject<Block> DEEPSLATE_TILES_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_TILES_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
-    public static RegistryObject<Block> CRACKED_DEEPSLATE_TILES_QUARTER_FACADE = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_TILES_QUARTER_FACADE_ID,
-            () -> new QuarterFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
-
-    // fluted
-    public static final RegistryObject<Block> STONE_FLUTED = Registration.BLOCKS.register(BlockID.STONE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> SMOOTH_STONE_FLUTED = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> COBBLESTONE_FLUTED = Registration.BLOCKS.register(BlockID.COBBLESTONE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_COBBLESTONE_FLUTED = Registration.BLOCKS.register(BlockID.MOSSY_COBBLESTONE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> BRICKS_FLUTED = Registration.BLOCKS.register(BlockID.BRICKS_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> STONE_BRICKS_FLUTED = Registration.BLOCKS.register(BlockID.STONE_BRICKS_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_STONE_BRICKS_FLUTED = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CRACKED_STONE_BRICKS_FLUTED = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CHISELED_STONE_BRICKS_FLUTED = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> OBSIDIAN_FLUTED = Registration.BLOCKS.register(BlockID.OBSIDIAN_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
-
-    public static final RegistryObject<Block> SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.SANDSTONE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.SMOOTH_SANDSTONE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.CHISELED_SANDSTONE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> RED_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_RED_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.SMOOTH_RED_SANDSTONE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_RED_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.CHISELED_RED_SANDSTONE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_RED_SANDSTONE_FLUTED = Registration.BLOCKS.register(BlockID.CUT_RED_SANDSTONE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-
-    public static final RegistryObject<Block> GRANITE_FLUTED = Registration.BLOCKS.register(BlockID.GRANITE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_GRANITE_FLUTED = Registration.BLOCKS.register(BlockID.POLISHED_GRANITE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> DIORITE_FLUTED = Registration.BLOCKS.register(BlockID.DIORITE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_DIORITE_FLUTED = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> ANDESITE_FLUTED = Registration.BLOCKS.register(BlockID.ANDESITE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_ANDESITE_FLUTED = Registration.BLOCKS.register(BlockID.POLISHED_ANDESITE_FLUTED_ID,
-            () -> new FlutedBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-
-    public static final RegistryObject<Block> BLACKSTONE_FLUTED = Registration.BLOCKS.register(
-            BlockID.BLACKSTONE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_FLUTED = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_FLUTED = Registration.BLOCKS.register(
-            BlockID.CHISELED_POLISHED_BLACKSTONE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> GILDED_BLACKSTONE_FLUTED = Registration.BLOCKS.register(
-            BlockID.GILDED_BLACKSTONE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_FLUTED = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_BRICKS_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED = Registration.BLOCKS.register(
-            BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> DEEPSLATE_FLUTED = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_BRICKS_FLUTED = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_BRICKS_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_FLUTED = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_BRICKS_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> COBBLED_DEEPSLATE_FLUTED = Registration.BLOCKS.register(
-            BlockID.COBBLED_DEEPSLATE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
-    public static final RegistryObject<Block> POLISHED_DEEPSLATE_FLUTED = Registration.BLOCKS.register(
-            BlockID.POLISHED_DEEPSLATE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
-    public static final RegistryObject<Block> CHISELED_DEEPSLATE_FLUTED = Registration.BLOCKS.register(
-            BlockID.CHISELED_DEEPSLATE_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_TILES_FLUTED = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_TILES_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_FLUTED = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_TILES_FLUTED_ID,
-            () -> new FlutedBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
-
-    // fluted facade
-    public static final RegistryObject<Block> STONE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.STONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(STONE_FLUTED.get())));
-    public static final RegistryObject<Block> SMOOTH_STONE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(SMOOTH_STONE_FLUTED.get())));
-    public static final RegistryObject<Block> COBBLESTONE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.COBBLESTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_COBBLESTONE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.MOSSY_COBBLESTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.BRICKS_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> STONE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.STONE_BRICKS_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_STONE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.MOSSY_STONE_BRICKS_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CRACKED_STONE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.CRACKED_STONE_BRICKS_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CHISELED_STONE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.CHISELED_STONE_BRICKS_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> OBSIDIAN_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.OBSIDIAN_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
-
-    public static final RegistryObject<Block> SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.SANDSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.SMOOTH_SANDSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.CHISELED_SANDSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.CUT_SANDSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> RED_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.RED_SANDSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_RED_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.SMOOTH_RED_SANDSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_RED_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.CHISELED_RED_SANDSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_RED_SANDSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.CUT_RED_SANDSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-
-    public static final RegistryObject<Block> GRANITE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.GRANITE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_GRANITE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.POLISHED_GRANITE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> DIORITE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.DIORITE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_DIORITE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.POLISHED_DIORITE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> ANDESITE_FLUTED_FACADE = Registration.BLOCKS.register(BlockID.ANDESITE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_ANDESITE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.POLISHED_ANDESITE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-
-    public static final RegistryObject<Block> BLACKSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.BLACKSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.CHISELED_POLISHED_BLACKSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> GILDED_BLACKSTONE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.GILDED_BLACKSTONE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> DEEPSLATE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_BRICKS_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_BRICKS_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> COBBLED_DEEPSLATE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.COBBLED_DEEPSLATE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
-    public static final RegistryObject<Block> POLISHED_DEEPSLATE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.POLISHED_DEEPSLATE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
-    public static final RegistryObject<Block> CHISELED_DEEPSLATE_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.CHISELED_DEEPSLATE_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_TILES_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_TILES_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_FLUTED_FACADE = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_TILES_FLUTED_FACADE_ID,
-            () -> new FlutedFacadeBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
-
-    // sill
-    public static final RegistryObject<Block> STONE_SILL = Registration.BLOCKS.register(BlockID.STONE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F).noOcclusion()));
-    public static final RegistryObject<Block> SMOOTH_STONE_SILL = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> COBBLESTONE_SILL = Registration.BLOCKS.register(BlockID.COBBLESTONE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_COBBLESTONE_SILL = Registration.BLOCKS.register(BlockID.MOSSY_COBBLESTONE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> BRICKS_SILL = Registration.BLOCKS.register(BlockID.BRICKS_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> STONE_BRICKS_SILL = Registration.BLOCKS.register(BlockID.STONE_BRICKS_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_STONE_BRICKS_SILL = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CRACKED_STONE_BRICKS_SILL = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CHISELED_STONE_BRICKS_SILL = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> OBSIDIAN_SILL = Registration.BLOCKS.register(BlockID.OBSIDIAN_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
-
-    public static final RegistryObject<Block> SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.SANDSTONE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.SMOOTH_SANDSTONE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.CHISELED_SANDSTONE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> RED_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_RED_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.SMOOTH_RED_SANDSTONE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_RED_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.CHISELED_RED_SANDSTONE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_RED_SANDSTONE_SILL = Registration.BLOCKS.register(BlockID.CUT_RED_SANDSTONE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-
-    public static final RegistryObject<Block> GRANITE_SILL = Registration.BLOCKS.register(BlockID.GRANITE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_GRANITE_SILL = Registration.BLOCKS.register(BlockID.POLISHED_GRANITE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> DIORITE_SILL = Registration.BLOCKS.register(BlockID.DIORITE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_DIORITE_SILL = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> ANDESITE_SILL = Registration.BLOCKS.register(BlockID.ANDESITE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_ANDESITE_SILL = Registration.BLOCKS.register(BlockID.POLISHED_ANDESITE_SILL_ID,
-            () -> new SillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> BLACKSTONE_SILL = Registration.BLOCKS.register(
-            BlockID.BLACKSTONE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_SILL = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_SILL = Registration.BLOCKS.register(
-            BlockID.CHISELED_POLISHED_BLACKSTONE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> GILDED_BLACKSTONE_SILL = Registration.BLOCKS.register(
-            BlockID.GILDED_BLACKSTONE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_SILL = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_BRICKS_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_SILL = Registration.BLOCKS.register(
-            BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> DEEPSLATE_SILL = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_BRICKS_SILL = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_BRICKS_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_SILL = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_BRICKS_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> COBBLED_DEEPSLATE_SILL = Registration.BLOCKS.register(
-            BlockID.COBBLED_DEEPSLATE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
-    public static final RegistryObject<Block> POLISHED_DEEPSLATE_SILL = Registration.BLOCKS.register(
-            BlockID.POLISHED_DEEPSLATE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
-    public static final RegistryObject<Block> CHISELED_DEEPSLATE_SILL = Registration.BLOCKS.register(
-            BlockID.CHISELED_DEEPSLATE_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_TILES_SILL = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_TILES_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_SILL = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_TILES_SILL_ID,
-            () -> new SillBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
-
-    // double sill
-    public static final RegistryObject<Block> STONE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.STONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> SMOOTH_STONE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> COBBLESTONE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.COBBLESTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_COBBLESTONE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.MOSSY_COBBLESTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.BRICKS_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> STONE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.STONE_BRICKS_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_STONE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.MOSSY_STONE_BRICKS_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CRACKED_STONE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.CRACKED_STONE_BRICKS_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CHISELED_STONE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.CHISELED_STONE_BRICKS_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> OBSIDIAN_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.OBSIDIAN_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
-
-    public static final RegistryObject<Block> SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.SANDSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.SMOOTH_SANDSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.CHISELED_SANDSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> RED_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_RED_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.SMOOTH_RED_SANDSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_RED_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.CHISELED_RED_SANDSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_RED_SANDSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.CUT_RED_SANDSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-
-    public static final RegistryObject<Block> GRANITE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.GRANITE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_GRANITE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.POLISHED_GRANITE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> DIORITE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.DIORITE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_DIORITE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.POLISHED_DIORITE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> ANDESITE_DOUBLE_SILL = Registration.BLOCKS.register(BlockID.ANDESITE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_ANDESITE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.POLISHED_ANDESITE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> BLACKSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.BLACKSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.CHISELED_POLISHED_BLACKSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> GILDED_BLACKSTONE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.GILDED_BLACKSTONE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_BRICKS_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> DEEPSLATE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_BRICKS_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_BRICKS_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> COBBLED_DEEPSLATE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.COBBLED_DEEPSLATE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
-    public static final RegistryObject<Block> POLISHED_DEEPSLATE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.POLISHED_DEEPSLATE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
-    public static final RegistryObject<Block> CHISELED_DEEPSLATE_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.CHISELED_DEEPSLATE_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_TILES_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_TILES_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_DOUBLE_SILL = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_TILES_DOUBLE_SILL_ID,
-            () -> new DoubleSillBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
-
-
-    // Cornice
-    public static final RegistryObject<Block> STONE_CORNICE = Registration.BLOCKS.register(BlockID.STONE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> SMOOTH_STONE_CORNICE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> COBBLESTONE_CORNICE = Registration.BLOCKS.register(BlockID.COBBLESTONE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_COBBLESTONE_CORNICE = Registration.BLOCKS.register(BlockID.MOSSY_COBBLESTONE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> BRICKS_CORNICE = Registration.BLOCKS.register(BlockID.BRICKS_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> STONE_BRICKS_CORNICE = Registration.BLOCKS.register(BlockID.STONE_BRICKS_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_STONE_BRICKS_CORNICE = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CRACKED_STONE_BRICKS_CORNICE = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CHISELED_STONE_BRICKS_CORNICE = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> OBSIDIAN_CORNICE = Registration.BLOCKS.register(BlockID.OBSIDIAN_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
-
-    public static final RegistryObject<Block> SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.SANDSTONE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.SMOOTH_SANDSTONE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.CHISELED_SANDSTONE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> RED_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_RED_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.SMOOTH_RED_SANDSTONE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_RED_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.CHISELED_RED_SANDSTONE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_RED_SANDSTONE_CORNICE = Registration.BLOCKS.register(BlockID.CUT_RED_SANDSTONE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-
-    public static final RegistryObject<Block> GRANITE_CORNICE = Registration.BLOCKS.register(BlockID.GRANITE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_GRANITE_CORNICE = Registration.BLOCKS.register(BlockID.POLISHED_GRANITE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> DIORITE_CORNICE = Registration.BLOCKS.register(BlockID.DIORITE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_DIORITE_CORNICE = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> ANDESITE_CORNICE = Registration.BLOCKS.register(BlockID.ANDESITE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_ANDESITE_CORNICE = Registration.BLOCKS.register(BlockID.POLISHED_ANDESITE_CORNICE_ID,
-            () -> new CorniceBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> BLACKSTONE_CORNICE = Registration.BLOCKS.register(
-            BlockID.BLACKSTONE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_CORNICE = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_CORNICE = Registration.BLOCKS.register(
-            BlockID.CHISELED_POLISHED_BLACKSTONE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> GILDED_BLACKSTONE_CORNICE = Registration.BLOCKS.register(
-            BlockID.GILDED_BLACKSTONE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_CORNICE = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_BRICKS_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_CORNICE = Registration.BLOCKS.register(
-            BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> DEEPSLATE_CORNICE = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_BRICKS_CORNICE = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_BRICKS_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_CORNICE = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_BRICKS_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> COBBLED_DEEPSLATE_CORNICE = Registration.BLOCKS.register(
-            BlockID.COBBLED_DEEPSLATE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
-    public static final RegistryObject<Block> POLISHED_DEEPSLATE_CORNICE = Registration.BLOCKS.register(
-            BlockID.POLISHED_DEEPSLATE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
-    public static final RegistryObject<Block> CHISELED_DEEPSLATE_CORNICE = Registration.BLOCKS.register(
-            BlockID.CHISELED_DEEPSLATE_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_TILES_CORNICE = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_TILES_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_CORNICE = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_TILES_CORNICE_ID,
-            () -> new CorniceBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
-
-    // crown molding
-    public static final RegistryObject<Block> STONE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.STONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> SMOOTH_STONE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> COBBLESTONE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.COBBLESTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_COBBLESTONE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.MOSSY_COBBLESTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.BRICKS_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> STONE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.STONE_BRICKS_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_STONE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.MOSSY_STONE_BRICKS_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CRACKED_STONE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.CRACKED_STONE_BRICKS_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CHISELED_STONE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.CHISELED_STONE_BRICKS_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> OBSIDIAN_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.OBSIDIAN_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
-
-    public static final RegistryObject<Block> SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.SANDSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.SMOOTH_SANDSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.CHISELED_SANDSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.CUT_SANDSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> RED_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.RED_SANDSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_RED_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.SMOOTH_RED_SANDSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_RED_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.CHISELED_RED_SANDSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_RED_SANDSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.CUT_RED_SANDSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-
-    public static final RegistryObject<Block> GRANITE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.GRANITE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_GRANITE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.POLISHED_GRANITE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> DIORITE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.DIORITE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_DIORITE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.POLISHED_DIORITE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> ANDESITE_CROWN_MOLDING = Registration.BLOCKS.register(BlockID.ANDESITE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_ANDESITE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.POLISHED_ANDESITE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> BLACKSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.BLACKSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.CHISELED_POLISHED_BLACKSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> GILDED_BLACKSTONE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.GILDED_BLACKSTONE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_BRICKS_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> DEEPSLATE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_BRICKS_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_BRICKS_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> COBBLED_DEEPSLATE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.COBBLED_DEEPSLATE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
-    public static final RegistryObject<Block> POLISHED_DEEPSLATE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.POLISHED_DEEPSLATE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
-    public static final RegistryObject<Block> CHISELED_DEEPSLATE_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.CHISELED_DEEPSLATE_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_TILES_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_TILES_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_CROWN_MOLDING = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_TILES_CROWN_MOLDING_ID,
-            () -> new CrownMoldingBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
-
-    // pillar base
-    public static final RegistryObject<Block> STONE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.STONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> SMOOTH_STONE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> COBBLESTONE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.COBBLESTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_COBBLESTONE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.MOSSY_COBBLESTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> BRICKS_PILLAR_BASE = Registration.BLOCKS.register(BlockID.BRICKS_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> STONE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(BlockID.STONE_BRICKS_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_STONE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.MOSSY_STONE_BRICKS_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CRACKED_STONE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.CRACKED_STONE_BRICKS_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CHISELED_STONE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.CHISELED_STONE_BRICKS_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> OBSIDIAN_PILLAR_BASE = Registration.BLOCKS.register(BlockID.OBSIDIAN_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
-
-    public static final RegistryObject<Block> SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.SANDSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.SMOOTH_SANDSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.CHISELED_SANDSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> RED_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_RED_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.SMOOTH_RED_SANDSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_RED_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.CHISELED_RED_SANDSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_RED_SANDSTONE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.CUT_RED_SANDSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-
-    public static final RegistryObject<Block> GRANITE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.GRANITE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_GRANITE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.POLISHED_GRANITE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> DIORITE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.DIORITE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_DIORITE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.POLISHED_DIORITE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> ANDESITE_PILLAR_BASE = Registration.BLOCKS.register(BlockID.ANDESITE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_ANDESITE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.POLISHED_ANDESITE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> BLACKSTONE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.BLACKSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.CHISELED_POLISHED_BLACKSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> GILDED_BLACKSTONE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.GILDED_BLACKSTONE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_BRICKS_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> DEEPSLATE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_BRICKS_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_BRICKS_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> COBBLED_DEEPSLATE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.COBBLED_DEEPSLATE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
-    public static final RegistryObject<Block> POLISHED_DEEPSLATE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.POLISHED_DEEPSLATE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
-    public static final RegistryObject<Block> CHISELED_DEEPSLATE_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.CHISELED_DEEPSLATE_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_TILES_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_TILES_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_PILLAR_BASE = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_TILES_PILLAR_BASE_ID,
-            () -> new PillarBaseBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
-
-    // pillar
-    public static final RegistryObject<Block> STONE_PILLAR = Registration.BLOCKS.register(BlockID.STONE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> SMOOTH_STONE_PILLAR = Registration.BLOCKS.register(BlockID.SMOOTH_STONE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> COBBLESTONE_PILLAR = Registration.BLOCKS.register(BlockID.COBBLESTONE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_COBBLESTONE_PILLAR = Registration.BLOCKS.register(BlockID.MOSSY_COBBLESTONE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> BRICKS_PILLAR = Registration.BLOCKS.register(BlockID.BRICKS_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(2.0F, 6.0F)));
-    public static final RegistryObject<Block> STONE_BRICKS_PILLAR = Registration.BLOCKS.register(BlockID.STONE_BRICKS_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> MOSSY_STONE_BRICKS_PILLAR = Registration.BLOCKS.register(BlockID.MOSSY_STONE_BRICKS_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CRACKED_STONE_BRICKS_PILLAR = Registration.BLOCKS.register(BlockID.CRACKED_STONE_BRICKS_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> CHISELED_STONE_BRICKS_PILLAR = Registration.BLOCKS.register(BlockID.CHISELED_STONE_BRICKS_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> OBSIDIAN_PILLAR = Registration.BLOCKS.register(BlockID.OBSIDIAN_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(50.0F, 1200.0F)));
-
-    public static final RegistryObject<Block> SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.SANDSTONE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.SMOOTH_SANDSTONE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.CHISELED_SANDSTONE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.CUT_SANDSTONE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> RED_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.RED_SANDSTONE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> SMOOTH_RED_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.SMOOTH_RED_SANDSTONE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CHISELED_RED_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.CHISELED_RED_SANDSTONE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-    public static final RegistryObject<Block> CUT_RED_SANDSTONE_PILLAR = Registration.BLOCKS.register(BlockID.CUT_RED_SANDSTONE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.SAND).strength(0.8F)));
-
-    public static final RegistryObject<Block> GRANITE_PILLAR = Registration.BLOCKS.register(BlockID.GRANITE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_GRANITE_PILLAR = Registration.BLOCKS.register(BlockID.POLISHED_GRANITE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> DIORITE_PILLAR = Registration.BLOCKS.register(BlockID.DIORITE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_DIORITE_PILLAR = Registration.BLOCKS.register(BlockID.POLISHED_DIORITE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.QUARTZ).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> ANDESITE_PILLAR = Registration.BLOCKS.register(BlockID.ANDESITE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> POLISHED_ANDESITE_PILLAR = Registration.BLOCKS.register(BlockID.POLISHED_ANDESITE_PILLAR_ID,
-            () -> new PillarBlock(Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> BLACKSTONE_PILLAR = Registration.BLOCKS.register(
-            BlockID.BLACKSTONE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_PILLAR = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> CHISELED_POLISHED_BLACKSTONE_PILLAR = Registration.BLOCKS.register(
-            BlockID.CHISELED_POLISHED_BLACKSTONE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_POLISHED_BLACKSTONE)));
-    public static final RegistryObject<Block> GILDED_BLACKSTONE_PILLAR = Registration.BLOCKS.register(
-            BlockID.GILDED_BLACKSTONE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)));
-    public static final RegistryObject<Block> POLISHED_BLACKSTONE_BRICKS_PILLAR = Registration.BLOCKS.register(
-            BlockID.POLISHED_BLACKSTONE_BRICKS_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_POLISHED_BLACKSTONE_BRICKS_PILLAR = Registration.BLOCKS.register(
-            BlockID.CRACKED_POLISHED_BLACKSTONE_BRICKS_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)));
-    public static final RegistryObject<Block> DEEPSLATE_PILLAR = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_BRICKS_PILLAR = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_BRICKS_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_BRICKS_PILLAR = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_BRICKS_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> COBBLED_DEEPSLATE_PILLAR = Registration.BLOCKS.register(
-            BlockID.COBBLED_DEEPSLATE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.COBBLED_DEEPSLATE)));
-    public static final RegistryObject<Block> POLISHED_DEEPSLATE_PILLAR = Registration.BLOCKS.register(
-            BlockID.POLISHED_DEEPSLATE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_DEEPSLATE)));
-    public static final RegistryObject<Block> CHISELED_DEEPSLATE_PILLAR = Registration.BLOCKS.register(
-            BlockID.CHISELED_DEEPSLATE_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.CHISELED_DEEPSLATE)));
-    public static final RegistryObject<Block> DEEPSLATE_TILES_PILLAR = Registration.BLOCKS.register(
-            BlockID.DEEPSLATE_TILES_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_TILES)));
-    public static final RegistryObject<Block> CRACKED_DEEPSLATE_TILES_PILLAR = Registration.BLOCKS.register(
-            BlockID.CRACKED_DEEPSLATE_TILES_PILLAR_ID,
-            () -> new PillarBlock(BlockBehaviour.Properties.copy(Blocks.CRACKED_DEEPSLATE_TILES)));
+    // bones & bodies
+    public static final RegistryObject<Block> SKELETON = Registration.BLOCKS.register("skeleton", () -> new SkeletonBlock(Block.Properties.copy(Blocks.STONE)));
+    
+    // ------------------------------------------------------------------
+    // Stone block families (data-driven). See ModMaterials.STONE.
+    // Add a material   -> one entry in ModMaterials.STONE.
+    // Add a block-type -> one register(...) line in this loop.
+    // Properties are normalized to Properties.copy(material base block).
+    // ------------------------------------------------------------------
+    static {
+        for (ModMaterials.Material m : ModMaterials.STONE) {
+            String id = m.name();
+            Registration.BLOCKS.register(id + "_facade_block",         () -> new FacadeBlock(m.props()));
+            Registration.BLOCKS.register(id + "_quarter_facade_block", () -> new QuarterFacadeBlock(m.props()));
+            Registration.BLOCKS.register(id + "_fluted_block",         () -> new FlutedBlock(m.props()));
+            Registration.BLOCKS.register(id + "_fluted_facade_block",  () -> new FlutedFacadeBlock(m.props()));
+            Registration.BLOCKS.register(id + "_sill_block",           () -> new SillBlock(m.props()));
+            Registration.BLOCKS.register(id + "_double_sill_block",    () -> new DoubleSillBlock(m.props()));
+            Registration.BLOCKS.register(id + "_cornice_block",        () -> new CorniceBlock(m.props()));
+            Registration.BLOCKS.register(id + "_crown_molding_block",  () -> new CrownMoldingBlock(m.props()));
+            Registration.BLOCKS.register(id + "_pillar_base_block",    () -> new PillarBaseBlock(m.props()));
+            Registration.BLOCKS.register(id + "_pillar_block",         () -> new PillarBlock(m.props()));
+            Registration.BLOCKS.register(id + "_arrow_slit_block",     () -> new FacingBlock(m.props()));
+        }
+    }
 
     /**
      *

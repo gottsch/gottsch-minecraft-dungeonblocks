@@ -19,6 +19,7 @@ package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
+import mod.gottsch.forge.dungeonblocks.core.item.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 import org.apache.commons.lang3.text.WordUtils;
@@ -39,18 +40,23 @@ public class LanguageGen extends LanguageProvider {
     	// tabs
         add("itemGroup." + DungeonBlocks.MOD_ID, "DungeonBlocks");
 
-//        add(ModBlocks.STONE_BARRED_WINDOW.get(), "Stone Barred Window");
-//        add(ModBlocks.SMOOTH_STONE_BARRED_WINDOW.get(), "Smooth Stone Barred Window");
-//        add(ModBlocks.COBBLESTONE_BARRED_WINDOW.get(), "Cobblestone Barred Window");
-//        add(ModBlocks.MOSSY_COBBLESTONE_BARRED_WINDOW.get(), "Mossy Cobblestone Barred Window");
-//        add(ModBlocks.BRICKS_BARRED_WINDOW.get(), "Bricks Barred Window");
-
         ModBlocks.MAP.forEach((k, v) -> {
-//            if (k.getId().getPath().contains("barred_window")) {
-                String s = k.getId().getPath().replace("_", " ").replace("block", "");
-                s = WordUtils.capitalizeFully(s);
-                add(k.get(), s);
-//            }
+            // these are given custom display names below
+            if (k == ModBlocks.ROOTS || k == ModBlocks.ROOTS_BODY) {
+                return;
+            }
+            String s = k.getId().getPath().replace("_block", "").replace("_", " ").trim();
+            s = WordUtils.capitalizeFully(s);
+            add(k.get(), s);
         });
+
+        // unmapped resources
+        add(ModBlocks.MOLD.get(), "Mold");
+        add(ModBlocks.LICHEN.get(), "Lichen");
+        add(ModItems.SKELETON.get(), "Skeleton");
+
+        add(ModBlocks.ROOTS.get(), "Roots");
+        add(ModBlocks.ROOTS_BODY.get(), "Roots");
+
     }
 }

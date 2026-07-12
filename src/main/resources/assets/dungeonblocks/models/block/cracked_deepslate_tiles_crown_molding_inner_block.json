@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/crown_molding_inner_block_base",
-    "textures": {
-        "bottom": "block/cracked_deepslate_tiles",
-        "top": "block/cracked_deepslate_tiles",
-        "0": "block/cracked_deepslate_tiles"
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/cornice_outer_block_base",
-    "textures": {
-        "bottom": "block/red_sandstone_top",
-        "top": "block/red_sandstone_top",
-        "0": "block/red_sandstone_top"
-    }
-}

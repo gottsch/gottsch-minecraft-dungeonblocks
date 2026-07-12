@@ -77,7 +77,7 @@ public class Recipes extends RecipeProvider {
 					.save(recipe);
 
 			// plate bracket
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.PLATE_BRACKET_BLOCK.get())
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_PLATE_BRACKET.get())
 					.requires(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE)
 					.requires(Items.IRON_INGOT)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))

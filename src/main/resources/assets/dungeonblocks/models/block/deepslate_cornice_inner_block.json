@@ -1,8 +1,0 @@
-{
-    "parent": "dungeonblocks:block/cornice_inner_block_base",
-    "textures": {
-        "bottom": "block/deepslate",
-        "top": "block/deepslate",
-        "0": "block/deepslate"
-    }
-}

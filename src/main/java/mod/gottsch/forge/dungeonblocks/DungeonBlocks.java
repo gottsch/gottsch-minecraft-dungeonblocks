@@ -20,6 +20,7 @@
 package mod.gottsch.forge.dungeonblocks;
 
 import mod.gottsch.forge.dungeonblocks.core.item.ModCreativeModeTabs;
+import mod.gottsch.forge.dungeonblocks.core.particle.ModParticles;
 import net.minecraftforge.eventbus.api.IEventBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,6 +56,7 @@ public class DungeonBlocks {
 		// register the deferred registries
 		ModBlocks.register();
 		ModItems.register();
+		ModParticles.register(modEventBus);
 
 		ModCreativeModeTabs.TABS.register(modEventBus);
 
