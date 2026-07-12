@@ -2,7 +2,7 @@
   "type": "minecraft:stonecutting",
   "count": 1,
   "ingredient": {
-    "item": "minecraft:stripped_oak_log"
+    "item": "minecraft:stripped_dark_oak_log"
   },
   "result": "dungeonblocks:stripped_dark_oak_corbel_block"
 }

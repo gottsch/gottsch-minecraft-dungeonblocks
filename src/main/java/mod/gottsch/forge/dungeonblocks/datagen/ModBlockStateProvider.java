@@ -49,7 +49,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .forEach(b -> {
                     String name = b.getId().getPath();
                     String material;
-                    if (name.contains("barred_window_block")) {
+                    if (name.contains("arrow_slit")) {
+                        material = b.getId().getPath().split("_arrow_slit_block")[0];
+                        arrowSlitBlock(b, maps.t2.get(material));
+                    } else if (name.contains("barred_window_block")) {
                         material = b.getId().getPath().split("_barred_window_block")[0];
                         barredWindowBlock(b, maps.t2.get(material));
                     } else if (name.contains("barred_window_facade")) {
@@ -146,6 +149,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         plateBracketBlock(ModBlocks.WAXED_WEATHERED_COPPER_PLATE_BRACKET, mcLoc("block/weathered_copper"));
         plateBracketBlock(ModBlocks.WAXED_OXIDIZED_COPPER_PLATE_BRACKET, mcLoc("block/oxidized_copper"));
 
+        anglePlateBracketBlock(ModBlocks.IRON_ANGLE_PLATE_BRACKET, modLoc("block/iron_plate"));
         anglePlateBracketBlock(ModBlocks.DARK_IRON_ANGLE_PLATE_BRACKET, modLoc("block/dark_iron"));
         anglePlateBracketBlock(ModBlocks.COPPER_ANGLE_PLATE_BRACKET, mcLoc("block/copper_block"));
         anglePlateBracketBlock(ModBlocks.EXPOSED_COPPER_ANGLE_PLATE_BRACKET, mcLoc("block/exposed_copper"));
@@ -157,6 +161,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         anglePlateBracketBlock(ModBlocks.WAXED_WEATHERED_COPPER_ANGLE_PLATE_BRACKET, mcLoc("block/weathered_copper"));
         anglePlateBracketBlock(ModBlocks.WAXED_OXIDIZED_COPPER_ANGLE_PLATE_BRACKET, mcLoc("block/oxidized_copper"));
 
+        cornerPlateBracketBlock(ModBlocks.IRON_CORNER_PLATE_BRACKET, modLoc("block/iron_plate"));
         cornerPlateBracketBlock(ModBlocks.DARK_IRON_CORNER_PLATE_BRACKET, modLoc("block/dark_iron"));
         cornerPlateBracketBlock(ModBlocks.COPPER_CORNER_PLATE_BRACKET, mcLoc("block/copper_block"));
         cornerPlateBracketBlock(ModBlocks.EXPOSED_COPPER_CORNER_PLATE_BRACKET, mcLoc("block/exposed_copper"));
@@ -180,6 +185,30 @@ public class ModBlockStateProvider extends BlockStateProvider {
         greekBlock(ModBlocks.STONE_GREEK_BLOCK, modLoc("block/stone_greek_block"));
         greekBlock(ModBlocks.ANDESITE_GREEK_BLOCK, modLoc("block/andesite_greek_block"));
         greekBlock(ModBlocks.POLISHED_BASALT_GREEK_BLOCK, modLoc("block/polished_basalt_greek_block"));
+
+        // roots (weeping-vines style hanging plants): cross model, cutout render
+        simpleBlock(ModBlocks.ROOTS.get(), models().cross("roots_head", modLoc("block/roots_head")).renderType("minecraft:cutout"));
+        simpleBlock(ModBlocks.ROOTS_BODY.get(), models().cross("roots_body", modLoc("block/roots_body")).renderType("minecraft:cutout"));
+
+        // copper doors (waxed variants reuse the un-waxed door textures)
+        copperDoor(ModBlocks.COPPER_DOOR, "copper_door");
+        copperDoor(ModBlocks.EXPOSED_COPPER_DOOR, "exposed_copper_door");
+        copperDoor(ModBlocks.WEATHERED_COPPER_DOOR, "weathered_copper_door");
+        copperDoor(ModBlocks.OXIDIZED_COPPER_DOOR, "oxidized_copper_door");
+        copperDoor(ModBlocks.WAXED_COPPER_DOOR, "copper_door");
+        copperDoor(ModBlocks.WAXED_EXPOSED_COPPER_DOOR, "exposed_copper_door");
+        copperDoor(ModBlocks.WAX_WEATHERED_COPPER_DOOR, "weathered_copper_door");
+        copperDoor(ModBlocks.WAXED_OXIDIZED_COPPER_DOOR, "oxidized_copper_door");
+
+        // copper trapdoors (waxed variants reuse the un-waxed trapdoor textures)
+        copperTrapDoor(ModBlocks.COPPER_TRAPDOOR, "copper_trapdoor");
+        copperTrapDoor(ModBlocks.EXPOSED_COPPER_TRAPDOOR, "exposed_copper_trapdoor");
+        copperTrapDoor(ModBlocks.WEATHERED_COPPER_TRAPDOOR, "weathered_copper_trapdoor");
+        copperTrapDoor(ModBlocks.OXIDIZED_COPPER_TRAPDOOR, "oxidized_copper_trapdoor");
+        copperTrapDoor(ModBlocks.WAXED_COPPER_TRAPDOOR, "copper_trapdoor");
+        copperTrapDoor(ModBlocks.WAXED_EXPOSED_COPPER_TRAPDOOR, "exposed_copper_trapdoor");
+        copperTrapDoor(ModBlocks.WAXED_WEATHERED_COPPER_TRAPDOOR, "weathered_copper_trapdoor");
+        copperTrapDoor(ModBlocks.WAXED_OXIDIZED_COPPER_TRAPDOOR, "oxidized_copper_trapdoor");
 
         // doors
         dungeonDoorBlock((DoorBlock)ModBlocks.SPRUCE_DUNGEON_DOOR.get(), mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_top"));
@@ -259,6 +288,24 @@ public class ModBlockStateProvider extends BlockStateProvider {
     public void greekBlock(RegistryObject<Block> block, ResourceLocation texture) {
         ModelFile model = models().cubeAll(block.getId().getPath(), texture);
         myHorizontalBlock(block.get(), model);
+    }
+
+    public void arrowSlitBlock(RegistryObject<Block> block, ResourceLocation texture) {
+        ModelFile model = models().singleTexture(block.getId().getPath(), modLoc(ModelProvider.BLOCK_FOLDER + "/arrow_slit_block"), "0", texture);
+        myHorizontalBlock(block.get(), model);
+    }
+
+    /** Generates the full vanilla-style door blockstate + models (cutout) from the named bottom/top textures. */
+    public void copperDoor(RegistryObject<Block> block, String textureName) {
+        doorBlockWithRenderType((DoorBlock) block.get(),
+                modLoc("block/" + textureName + "_bottom"),
+                modLoc("block/" + textureName + "_top"), "minecraft:cutout");
+    }
+
+    /** Generates the full vanilla-style (orientable) trapdoor blockstate + models (cutout) from the named texture. */
+    public void copperTrapDoor(RegistryObject<Block> block, String textureName) {
+        trapdoorBlockWithRenderType((TrapDoorBlock) block.get(),
+                modLoc("block/" + textureName), true, "minecraft:cutout");
     }
 
     public void torchSconceBlock(RegistryObject<Block> block) {

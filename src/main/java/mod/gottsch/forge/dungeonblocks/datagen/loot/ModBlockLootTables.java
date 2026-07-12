@@ -20,15 +20,11 @@
 package mod.gottsch.forge.dungeonblocks.datagen.loot;
 
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
-import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
-import mod.gottsch.forge.dungeonblocks.datagen.DataGenMaps;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 public class ModBlockLootTables extends BlockLootSubProvider {
@@ -36,22 +32,11 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         super(Set.of(), FeatureFlags.REGISTRY.allFlags());
     }
 
-    private DataGenMaps maps = new DataGenMaps();
-
     @Override
     protected void generate() {
-
-
-        ModBlocks.MAP.forEach((k, v) -> {
-            String name = k.getId().getPath();
-            for(String n : maps.names) {
-                if (name.contains(n)) {
-                    dropSelf(k.get());
-                    break;
-                }
-            }
-        });
-
+        // every registered block-item drops itself. ModBlocks.MAP already excludes
+        // blocks that are handled specially (mold, lichen, skeleton).
+        ModBlocks.MAP.keySet().forEach(block -> dropSelf(block.get()));
     }
 
 //    protected LootTable.Builder createCopperLikeOreDrops(Block pBlock, Item item) {
@@ -64,17 +49,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return Registration.BLOCKS.getEntries().stream()
-                // only process these block
-                .filter(b -> {
-                    String name = b.getId().getPath();
-                    for(String n : maps.names) {
-                        if (name.contains(n)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                    })
+        // must match exactly the set of blocks handled in generate()
+        return ModBlocks.MAP.keySet().stream()
                 .map(RegistryObject::get)::iterator;
     }
 }

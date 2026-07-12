@@ -41,16 +41,22 @@ public class LanguageGen extends LanguageProvider {
         add("itemGroup." + DungeonBlocks.MOD_ID, "DungeonBlocks");
 
         ModBlocks.MAP.forEach((k, v) -> {
-//            if (k.getId().getPath().contains("barred_window")) {
-                String s = k.getId().getPath().replace("_", " ").replace("block", "");
-                s = WordUtils.capitalizeFully(s);
-                add(k.get(), s);
-//            }
+            // these are given custom display names below
+            if (k == ModBlocks.ROOTS || k == ModBlocks.ROOTS_BODY) {
+                return;
+            }
+            String s = k.getId().getPath().replace("_block", "").replace("_", " ").trim();
+            s = WordUtils.capitalizeFully(s);
+            add(k.get(), s);
         });
 
         // unmapped resources
         add(ModBlocks.MOLD.get(), "Mold");
         add(ModBlocks.LICHEN.get(), "Lichen");
         add(ModItems.SKELETON.get(), "Skeleton");
+
+        add(ModBlocks.ROOTS.get(), "Roots");
+        add(ModBlocks.ROOTS_BODY.get(), "Roots");
+
     }
 }

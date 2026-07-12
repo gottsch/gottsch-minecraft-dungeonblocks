@@ -7,22 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.3.0] - 2025-05-12
 
-### Changed
+### ⚙️ Changed
 
 - now use DataGen for Cornice, Crown Molding, Facade, Pillar, Pillar Base, and Quarter Facade blocks, items, and loot tables.
 - fixed weathering of all Copper variant blocks.
 - remodeled Plate Bracket block slightly.
 - uses GottschCore 2.4.0 (required)
+- stone block families are now registered from a single data-driven material table, making new material variants a one-line addition (internal; no gameplay change).
+- normalized stone-family block properties (hardness, blast resistance, sound, and tool requirement) to match their base vanilla material.
+- copper Door and Trapdoor blockstates and models are now generated via DataGen (internal; no gameplay change).
 
 ### Added
 
 - Angle Plate Bracket block
 - Corner Plate Bracket block
 - Copper variants for Plate, Angle Plate, and Corner Plate Bracket blocks.
+- Tuff variants for all stone block types (Facade, Quarter Facade, Fluted, Fluted Facade, Sill, Double Sill, Cornice, Crown Molding, Pillar, and Pillar Base).
+- Iron Angle Plate Bracket block
+- Iron Corner Plate Bracket block
+- Roots block (weeping-vines style hanging plant)
+- Arrow Slit block for all stone material types
+
+### 🛠️ Fixed
+
+- Valve Wheels, Greek Blocks, and the Square/Large/Cobblestone/Gravel Brick blocks now drop when mined (they previously had no loot table and dropped nothing).
+- Waxed Oxidized Copper Grate now uses the correct oxidized map color.
+- corrected Stripped Cherry, Stripped Dark Oak, and Stripped Jungle Corbel textures and stonecutting recipes.
+- Dark Iron Angle Plate Bracket now shows the correct (angle) model as its inventory icon instead of the corner model.
+- Corner Plate Bracket and Valve Wheel blocks no longer render a missing-texture (magenta/black) speck on a small face (model referenced an undefined texture slot).
+- Creative tab icon no longer appears jagged (now uses the Mossy Stone Bricks block instead of the non-square logo texture).
 
 ## [2.2.0] - 2025-05-05
 
-### Changed
+### ⚙️ Changed
 
 - now use DataGen for Double Sill, Sill, Fluted, and Fluted Facade blocks, items, and loot tables.
 - rename Grate block to Heavy Grate.
@@ -47,13 +64,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.1.0] - 2023-12-24
 
-### Changed
+### ⚙️ Changed
 
 - Fixed tool requirements for blocks
 
 ## [2.0.0] - 2023-12-15
 
-### Changed
+### ⚙️ Changed
 
 - Removed all variants of wall sconce
 - Replaced wall sconce's torches with candles
@@ -80,6 +97,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0] - 2023-10-24
 
-### Changed
+### ⚙️ Changed
 
 - Port from 1.19.3-1.2.0
