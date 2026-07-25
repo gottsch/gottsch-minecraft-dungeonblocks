@@ -3,6 +3,7 @@ package mod.gottsch.forge.dungeonblocks.datagen;
 import mod.gottsch.forge.dungeonblocks.core.block.*;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
+import mod.gottsch.forge.dungeonblocks.core.state.properties.DoorSegment;
 import mod.gottsch.forge.dungeonblocks.core.state.properties.FacadeShape;
 import mod.gottsch.forge.gottschcore.block.FacingHalfBlock;
 import mod.gottsch.forge.gottschcore.block.IFacingBlock;
@@ -11,6 +12,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -215,6 +217,25 @@ public class ModBlockStateProvider extends BlockStateProvider {
         dungeonDoorBlock((DoorBlock)ModBlocks.DARK_OAK_DUNGEON_DOOR.get(), mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_top"));
         dungeonDoorBlock((DoorBlock)ModBlocks.CRIMSON_DUNGEON_DOOR.get(), mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_top"));
         dungeonDoorBlock((DoorBlock)ModBlocks.MANGROVE_DUNGEON_DOOR.get(), mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_top"));
+
+        // tall doors - reusing each door's own bottom texture as a placeholder middle texture
+        // until real tiling art exists; swap the middle ResourceLocation when it does.
+        tallDungeonDoorBlock((TallDoorBlock)ModBlocks.SPRUCE_DUNGEON_DOOR_3.get(),
+                mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_top"));
+        tallDungeonDoorBlock((TallDoorBlock)ModBlocks.SPRUCE_DUNGEON_DOOR_4.get(),
+                mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_top"));
+        tallDungeonDoorBlock((TallDoorBlock)ModBlocks.CRIMSON_DUNGEON_DOOR_3.get(),
+                mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_top"));
+        tallDungeonDoorBlock((TallDoorBlock)ModBlocks.CRIMSON_DUNGEON_DOOR_4.get(),
+                mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_top"));
+        tallDungeonDoorBlock((TallDoorBlock)ModBlocks.DARK_OAK_DUNGEON_DOOR_3.get(),
+                mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_top"));
+        tallDungeonDoorBlock((TallDoorBlock)ModBlocks.DARK_OAK_DUNGEON_DOOR_4.get(),
+                mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_top"));
+        tallDungeonDoorBlock((TallDoorBlock)ModBlocks.MANGROVE_DUNGEON_DOOR_3.get(),
+                mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_top"));
+        tallDungeonDoorBlock((TallDoorBlock)ModBlocks.MANGROVE_DUNGEON_DOOR_4.get(),
+                mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_top"));
 
         // light source
         torchSconceBlock(ModBlocks.TORCH_SCONCE);
@@ -619,6 +640,69 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModelFile topRight = doorTopRight(baseName + "_top_right", bottom, top);
         ModelFile topRightOpen = doorTopRightOpen(baseName + "_top_right_open", bottom, top);
         doorBlock(block, bottomLeft, bottomLeftOpen, bottomRight, bottomRightOpen, topLeft, topLeftOpen, topRight, topRightOpen);
+    }
+
+    /**
+     * Blockstate/model generation for {@link TallDoorBlock}. The BOTTOM and TOP models reuse the
+     * same ornate-hinge templates as the 2-tall dungeon doors; every MIDDLE segment - regardless
+     * of how many a given door has - shares one of just two models (mirrored left/right, same as
+     * BOTTOM/TOP), rotation-agnostic since it needs no separate open state, so a 3-tall and a
+     * 4-tall door of the same wood need no extra models between them.
+     */
+    public void tallDungeonDoorBlock(TallDoorBlock block, ResourceLocation bottom, ResourceLocation middle, ResourceLocation top) {
+        String baseName = key(block).toString();
+        ModelFile bottomLeft = doorBottomLeft(baseName + "_bottom_left", bottom, top);
+        ModelFile bottomLeftOpen = doorBottomLeftOpen(baseName + "_bottom_left_open", bottom, top);
+        ModelFile bottomRight = doorBottomRight(baseName + "_bottom_right", bottom, top);
+        ModelFile bottomRightOpen = doorBottomRightOpen(baseName + "_bottom_right_open", bottom, top);
+        ModelFile topLeft = doorTopLeft(baseName + "_top_left", bottom, top);
+        ModelFile topLeftOpen = doorTopLeftOpen(baseName + "_top_left_open", bottom, top);
+        ModelFile topRight = doorTopRight(baseName + "_top_right", bottom, top);
+        ModelFile topRightOpen = doorTopRightOpen(baseName + "_top_right_open", bottom, top);
+        ModelFile middleLeft = models().withExistingParent(baseName + "_middle_left", "dungeonblocks:block/dungeon_door_middle_left")
+                .texture("middle", middle);
+        ModelFile middleRight = models().withExistingParent(baseName + "_middle_right", "dungeonblocks:block/dungeon_door_middle_right")
+                .texture("middle", middle);
+        tallDoorBlock(block, bottomLeft, bottomLeftOpen, bottomRight, bottomRightOpen,
+                middleLeft, middleRight, topLeft, topLeftOpen, topRight, topRightOpen);
+    }
+
+    /**
+     * Generalizes the vanilla-style door blockstate (normally emitted by the built-in
+     * {@code BlockStateProvider#doorBlock}, which is hardwired to the 2-value HALF property) to
+     * {@link TallDoorBlock}'s 3-value SEGMENT property. The Y-rotation formula is reverse-engineered
+     * from the vanilla/dungeon-door blockstate output: a closed door rotates with FACING
+     * ({@code (facing.toYRot() + 90) % 360}), and an open door additionally rotates +90 (hinge
+     * LEFT) or -90 (hinge RIGHT) off of that, since the open model is pre-built swung into the room.
+     */
+    private void tallDoorBlock(TallDoorBlock block,
+            ModelFile bottomLeft, ModelFile bottomLeftOpen, ModelFile bottomRight, ModelFile bottomRightOpen,
+            ModelFile middleLeft, ModelFile middleRight,
+            ModelFile topLeft, ModelFile topLeftOpen, ModelFile topRight, ModelFile topRightOpen) {
+        getVariantBuilder(block).forAllStatesExcept(state -> {
+            DoorSegment segment = state.getValue(TallDoorBlock.SEGMENT);
+            boolean open = state.getValue(TallDoorBlock.OPEN);
+            boolean hingeRight = state.getValue(TallDoorBlock.HINGE) == DoorHingeSide.RIGHT;
+            Direction facing = state.getValue(TallDoorBlock.FACING);
+
+            ModelFile model;
+            switch (segment) {
+                case BOTTOM:
+                    model = hingeRight ? (open ? bottomRightOpen : bottomRight) : (open ? bottomLeftOpen : bottomLeft);
+                    break;
+                case TOP:
+                    model = hingeRight ? (open ? topRightOpen : topRight) : (open ? topLeftOpen : topLeft);
+                    break;
+                default:
+                    model = hingeRight ? middleRight : middleLeft;
+                    break;
+            }
+
+            int closedYRot = ((int) facing.toYRot() + 90) % 360;
+            int yRot = open ? (closedYRot + (hingeRight ? 270 : 90)) % 360 : closedYRot;
+
+            return ConfiguredModel.builder().modelFile(model).rotationY(yRot).build();
+        }, TallDoorBlock.POWERED);
     }
 
     private BlockModelBuilder door(String name, String model, ResourceLocation bottom, ResourceLocation top) {

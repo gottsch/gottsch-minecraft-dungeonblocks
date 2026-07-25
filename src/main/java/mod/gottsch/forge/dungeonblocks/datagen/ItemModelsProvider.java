@@ -155,6 +155,14 @@ public class ItemModelsProvider extends ItemModelProvider {
 		basicItem(ModBlocks.MAP.get(ModBlocks.DARK_OAK_DUNGEON_DOOR), mcLoc("item/dark_oak_door"));
 		basicItem(ModBlocks.MAP.get(ModBlocks.MANGROVE_DUNGEON_DOOR), mcLoc("item/mangrove_door"));
 		basicItem(ModBlocks.MAP.get(ModBlocks.SPRUCE_DUNGEON_DOOR), mcLoc("item/spruce_door"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.SPRUCE_DUNGEON_DOOR_3), mcLoc("item/spruce_door"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.SPRUCE_DUNGEON_DOOR_4), mcLoc("item/spruce_door"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.CRIMSON_DUNGEON_DOOR_3), mcLoc("item/crimson_door"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.CRIMSON_DUNGEON_DOOR_4), mcLoc("item/crimson_door"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.DARK_OAK_DUNGEON_DOOR_3), mcLoc("item/dark_oak_door"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.DARK_OAK_DUNGEON_DOOR_4), mcLoc("item/dark_oak_door"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.MANGROVE_DUNGEON_DOOR_3), mcLoc("item/mangrove_door"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.MANGROVE_DUNGEON_DOOR_4), mcLoc("item/mangrove_door"));
 
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK));
@@ -205,6 +213,10 @@ public class ItemModelsProvider extends ItemModelProvider {
 		basicItem(ModItems.MOLD, modLoc("block/mold"));
 
 		basicItem(ModItems.SKELETON, modLoc("item/skeleton"));
+
+		// placeholder icons until real Blockbench-derived art exists
+		basicItem(ModItems.POT, mcLoc("item/flower_pot"));
+		basicItem(ModItems.POT_SHARD, mcLoc("item/brick"));
 	}
 
 	public ItemModelBuilder basicItem(RegistryObject<Item> item, ResourceLocation texture) {

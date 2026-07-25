@@ -62,6 +62,9 @@ public class ModItems {
 	public static RegistryObject<Item> LICHEN = fromBlock(ModBlocks.LICHEN, ITEM_PROPERTIES);
 	public static RegistryObject<Item> SKELETON = Registration.ITEMS.register("skeleton", () -> new SkeletonItem(ModBlocks.SKELETON.get(), new Item.Properties()));
 
+	public static final RegistryObject<Item> POT = Registration.ITEMS.register("pot", () -> new PotItem(new Item.Properties()));
+	public static final RegistryObject<Item> POT_SHARD = Registration.ITEMS.register("pot_shard", () -> new Item(new Item.Properties()));
+
 	/**
 	 * 
 	 */

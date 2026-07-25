@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-07-20
+
+### Added
+
+- Tall (3-block and 4-block) variants of the Spruce, Crimson, Dark Oak, and Mangrove Dungeon Doors, backported from the NeoForge 1.21.1 version. Placed and broken as a single unit like a vanilla door, generalized to any number of segments; the interior of the door reuses a single middle model/texture regardless of height, so a 3-tall and a 4-tall door of the same wood add no extra assets between them.
+
+### Known limitations
+
+- Tall doors currently reuse each door's own bottom texture as a placeholder for the middle segment texture pending dedicated tiling art.
+- Tall doors have no crafting recipe yet (obtainable via creative/give only).
+
+## [2.3.1] - 2026-07-12
+
+### 🛠️ Fixed
+
+- Pillar Base blocks now render facing the direction they were placed against (previously always rendered in the default orientation, though the collision box rotated correctly).
+
 ## [2.3.0] - 2025-05-12
 
 ### ⚙️ Changed

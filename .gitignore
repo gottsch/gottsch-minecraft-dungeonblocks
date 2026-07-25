@@ -1,15 +1,27 @@
-/*
-gradle.log
-!/src/
-!.gitignore
-!gradlew*
-!/gradle/
-!/LICENSE.txt
-!/*.md
-!*.gradle
-!/gradle.properties
-!.gitattributes
-!*.json
-!*.gradlew
-!/models/
-*.lock
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+logs
+nul
+
+# Files from Forge MDK
+forge*changelog.txt

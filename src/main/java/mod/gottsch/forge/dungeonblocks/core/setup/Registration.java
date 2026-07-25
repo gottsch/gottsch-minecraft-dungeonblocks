@@ -22,6 +22,7 @@ import mod.gottsch.forge.dungeonblocks.core.block.BarredWindows;
 import mod.gottsch.forge.dungeonblocks.core.block.CorbelBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.LedgeBlocks;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -41,6 +42,7 @@ public class Registration {
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, DungeonBlocks.MOD_ID);
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, DungeonBlocks.MOD_ID);
 	public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, DungeonBlocks.MOD_ID);
+	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, DungeonBlocks.MOD_ID);
 
 	/**
 	 * 
@@ -66,5 +68,9 @@ public class Registration {
 
 	public static void registerParticles(IEventBus bus) {
 		PARTICLES.register(bus);
+	}
+
+	public static void registerEntityTypes(IEventBus bus) {
+		ENTITY_TYPES.register(bus);
 	}
 }

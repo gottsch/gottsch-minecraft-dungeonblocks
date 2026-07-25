@@ -2,9 +2,13 @@ package mod.gottsch.forge.dungeonblocks.core.setup;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
+import mod.gottsch.forge.dungeonblocks.core.entity.ModEntityTypes;
+import mod.gottsch.forge.dungeonblocks.core.entity.client.PotModel;
+import mod.gottsch.forge.dungeonblocks.core.entity.client.PotRenderer;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,5 +30,17 @@ public class ClientSetup {
                 },
                 ModBlocks.WEATHERED_COPPER_SEWER.get(),
                 ModBlocks.TERRACOTTA_SEWER.get());
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(PotModel.LAYER_LOCATION, PotModel::createBodyLayer);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(ModEntityTypes.POT.get(), PotRenderer::new);
     }
 }

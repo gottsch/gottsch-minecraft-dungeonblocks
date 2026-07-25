@@ -285,6 +285,16 @@ public class ModBlocks {
     public static final RegistryObject<Block> DARK_OAK_DUNGEON_DOOR = Registration.BLOCKS.register("dark_oak_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK));
     public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR = Registration.BLOCKS.register("mangrove_dungeon_door", () -> new DoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE));
 
+    // tall (3/4-block) doors - placeholder middle textures, see handoff notes
+    public static final RegistryObject<Block> SPRUCE_DUNGEON_DOOR_3 = Registration.BLOCKS.register("spruce_dungeon_door_3", () -> new TallDoorBlock(Properties.copy(Blocks.SPRUCE_DOOR), BlockSetType.SPRUCE, 3));
+    public static final RegistryObject<Block> SPRUCE_DUNGEON_DOOR_4 = Registration.BLOCKS.register("spruce_dungeon_door_4", () -> new TallDoorBlock(Properties.copy(Blocks.SPRUCE_DOOR), BlockSetType.SPRUCE, 4));
+    public static final RegistryObject<Block> CRIMSON_DUNGEON_DOOR_3 = Registration.BLOCKS.register("crimson_dungeon_door_3", () -> new TallDoorBlock(Properties.copy(Blocks.CRIMSON_DOOR), BlockSetType.CRIMSON, 3));
+    public static final RegistryObject<Block> CRIMSON_DUNGEON_DOOR_4 = Registration.BLOCKS.register("crimson_dungeon_door_4", () -> new TallDoorBlock(Properties.copy(Blocks.CRIMSON_DOOR), BlockSetType.CRIMSON, 4));
+    public static final RegistryObject<Block> DARK_OAK_DUNGEON_DOOR_3 = Registration.BLOCKS.register("dark_oak_dungeon_door_3", () -> new TallDoorBlock(Properties.copy(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK, 3));
+    public static final RegistryObject<Block> DARK_OAK_DUNGEON_DOOR_4 = Registration.BLOCKS.register("dark_oak_dungeon_door_4", () -> new TallDoorBlock(Properties.copy(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK, 4));
+    public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR_3 = Registration.BLOCKS.register("mangrove_dungeon_door_3", () -> new TallDoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE, 3));
+    public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR_4 = Registration.BLOCKS.register("mangrove_dungeon_door_4", () -> new TallDoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE, 4));
+
     public static final RegistryObject<Block> COPPER_DOOR = Registration.BLOCKS.register("copper_door", () -> {
         return new WeatheringCopperDoorBlock(BlockSetType.IRON, WeatheringCopper.WeatherState.UNAFFECTED, Properties.copy(Blocks.DARK_OAK_DOOR).mapColor(Blocks.COPPER_BLOCK.defaultMapColor()).strength(3.0F, 6.0F).sound(SoundType.COPPER));
     });

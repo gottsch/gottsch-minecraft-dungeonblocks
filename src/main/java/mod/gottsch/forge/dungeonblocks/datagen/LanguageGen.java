@@ -58,5 +58,9 @@ public class LanguageGen extends LanguageProvider {
         add(ModBlocks.ROOTS.get(), "Roots");
         add(ModBlocks.ROOTS_BODY.get(), "Roots");
 
+        add(ModItems.POT.get(), "Ceramic Pot");
+        add(ModItems.POT_SHARD.get(), "Pot Shard");
+        add("entity.dungeonblocks.pot", "Ceramic Pot");
+
     }
 }
