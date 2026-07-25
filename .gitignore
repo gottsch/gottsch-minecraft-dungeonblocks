@@ -16,6 +16,10 @@ out
 # gradle
 build
 .gradle
+run-data
+
+# datagen bookkeeping (HashCache), not shipped content
+src/generated/resources/.cache
 
 # other
 eclipse
