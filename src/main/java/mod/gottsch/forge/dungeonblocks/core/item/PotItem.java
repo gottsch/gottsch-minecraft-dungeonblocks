@@ -44,14 +44,22 @@ public class PotItem extends Item {
 		Level level = context.getLevel();
 		BlockPos placedOn = context.getClickedPos();
 		Direction face = context.getClickedFace();
-		BlockPos spawnPos = face == Direction.UP ? placedOn.above() : placedOn.relative(face);
+		BlockPos spawnPos = placedOn.relative(face);
+		// clicked a wall (N/S/E/W) -> the pot lies on its side; top/bottom -> it stands upright
+		boolean onSide = face.getAxis().isHorizontal();
 
 		Player player = context.getPlayer();
 
 		if (!level.isClientSide) {
 			PotEntity pot = new PotEntity(ModEntityTypes.POT.get(), level);
 			pot.setPos(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D);
-			if (player != null) {
+			if (onSide) {
+				// set before addFreshEntity so it's already in the spawn packet's synced data —
+				// the pot appears on its side immediately instead of tipping over after spawning.
+				pot.setTumbled(true);
+				// orient off the wall rather than wherever the player happened to be facing
+				pot.setYRot(face.toYRot());
+			} else if (player != null) {
 				pot.setYRot(player.getYRot());
 			}
 			level.addFreshEntity(pot);

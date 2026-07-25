@@ -32,7 +32,15 @@ public class ModEntityTypes {
 			() -> EntityType.Builder.of(PotEntity::new, MobCategory.MISC)
 					.sized(0.5F, 0.6F)
 					.clientTrackingRange(10)
+					.updateInterval(1)
 					.build("pot"));
+
+	public static final RegistryObject<EntityType<PotShardEntity>> POT_SHARD = Registration.ENTITY_TYPES.register("pot_shard",
+			() -> EntityType.Builder.<PotShardEntity>of(PotShardEntity::new, MobCategory.MISC)
+					.sized(0.25F, 0.25F)
+					.clientTrackingRange(6)
+					.updateInterval(1)
+					.build("pot_shard"));
 
 	public static void register(IEventBus bus) {
 		Registration.registerEntityTypes(bus);

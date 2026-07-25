@@ -37,6 +37,11 @@ public class PotRenderer extends EntityRenderer<PotEntity> {
 	private static final ResourceLocation TEXTURE =
 			new ResourceLocation(DungeonBlocks.MOD_ID, "textures/entity/pot.png");
 
+	// half the pot's total modeled height (base + neck + lip = 14px = 0.875 blocks),
+	// used as the pivot point so a tumble rotates it flat onto the ground rather than
+	// through the floor.
+	private static final double HALF_HEIGHT = 0.4375D;
+
 	private final PotModel model;
 
 	public PotRenderer(EntityRendererProvider.Context context) {
@@ -54,6 +59,15 @@ public class PotRenderer extends EntityRenderer<PotEntity> {
 			MultiBufferSource buffer, int packedLight) {
 		poseStack.pushPose();
 		poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - entityYaw));
+
+		float tumbleProgress = entity.getTumbleProgress(partialTicks);
+		if (tumbleProgress > 0.0F) {
+			float tipSign = (entity.getId() % 2 == 0) ? 1.0F : -1.0F;
+			poseStack.translate(0.0D, HALF_HEIGHT, 0.0D);
+			poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F * tipSign * tumbleProgress));
+			poseStack.translate(0.0D, -HALF_HEIGHT, 0.0D);
+		}
+
 		// mirror + drop to match the Blockbench-exported PartPose.offset(0, 24, 0) root pivot
 		// convention (the same transform LivingEntityRenderer applies for vanilla mob models).
 		poseStack.scale(-1.0F, -1.0F, 1.0F);

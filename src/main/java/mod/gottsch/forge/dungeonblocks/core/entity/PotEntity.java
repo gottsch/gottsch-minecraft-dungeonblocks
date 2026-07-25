@@ -17,37 +17,50 @@
  */
 package mod.gottsch.forge.dungeonblocks.core.entity;
 
-import mod.gottsch.forge.dungeonblocks.core.item.ModItems;
+import mod.gottsch.forge.dungeonblocks.core.particle.ModParticles;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 /**
  * A decorative, physics-driven prop entity: gravity pulls it down, it can be
  * shoved around by living entities ({@link #isPushable()}), and it shatters
- * into shard items on the first hit or a hard enough fall.
+ * into a non-explosive spray of shard items on a hard enough hit, collision,
+ * or fall. A moderate-speed collision instead tips it over ({@link #isTumbled()}).
  *
  * @author Mark Gottschling on Jul 25, 2026
  */
 public class PotEntity extends Entity {
 
+	private static final EntityDataAccessor<Boolean> DATA_TUMBLED =
+			SynchedEntityData.defineId(PotEntity.class, EntityDataSerializers.BOOLEAN);
+
+	// exactly vanilla FallingBlockEntity (sand/gravel/anvil) — accelerates, so it reads as a real drop
 	private static final float GRAVITY = 0.04F;
 	private static final float AIR_DRAG = 0.98F;
 	private static final double SETTLE_THRESHOLD = 0.003D;
-	private static final float FALL_BREAK_DISTANCE = 3.0F;
-	private static final int MIN_SHARDS = 2;
-	private static final int MAX_SHARDS = 4;
+	private static final float FALL_BREAK_DISTANCE = 2.0F;
+	private static final int MIN_SHARDS = 3;
+	private static final int MAX_SHARDS = 6;
+	// walking is ~0.216 blocks/tick, sprinting ~0.28: tumble on a walk-into or a plain sprint-into,
+	// reserve shattering for something faster still (sprint-jump, a mount, knockback).
+	private static final double TUMBLE_SPEED = 0.1D;
+	private static final double SHATTER_SPEED = 0.35D;
 
 	private double lerpX;
 	private double lerpY;
@@ -56,6 +69,18 @@ public class PotEntity extends Entity {
 	private float lerpXRot;
 	private int lerpSteps;
 
+	// tracked independently of Entity's built-in fall-damage plumbing (that hook is geared toward
+	// LivingEntity and isn't reliably invoked for a plain physics Entity) so a hard fall reliably breaks it.
+	private double fallStartY = Double.NaN;
+
+	private static final int TUMBLE_ANIM_TICKS = 8;
+
+	// client-side only: tick the tumble flag flipped, so the renderer can ease into the tip instead of
+	// snapping. -1 means "already tumbled when this entity appeared" (load/spawn) — render fully tipped,
+	// no animation replay.
+	private int tumbleStartTick = -1;
+	private boolean tickedOnce;
+
 	public PotEntity(EntityType<? extends PotEntity> type, Level level) {
 		super(type, level);
 		this.blocksBuilding = false;
@@ -63,12 +88,47 @@ public class PotEntity extends Entity {
 
 	@Override
 	protected void defineSynchedData() {
-		// no synced data needed for v1
+		this.entityData.define(DATA_TUMBLED, false);
+	}
+
+	public boolean isTumbled() {
+		return this.entityData.get(DATA_TUMBLED);
+	}
+
+	/**
+	 * Set before the entity is added to the world (e.g. placing against a wall) to spawn it already
+	 * on its side — the tip animation is skipped in that case, since it only replays for a pot that
+	 * tips over during play (see {@link #getTumbleProgress}).
+	 */
+	public void setTumbled(boolean tumbled) {
+		this.entityData.set(DATA_TUMBLED, tumbled);
+	}
+
+	@Override
+	public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+		super.onSyncedDataUpdated(key);
+		if (DATA_TUMBLED.equals(key) && this.isTumbled()) {
+			this.tumbleStartTick = this.tickedOnce ? this.tickCount : -1;
+		}
+	}
+
+	/** Eased 0..1 progress through the tip animation; 1.0 immediately if already tumbled at spawn/load. */
+	public float getTumbleProgress(float partialTicks) {
+		if (!this.isTumbled()) {
+			return 0.0F;
+		}
+		if (this.tumbleStartTick < 0) {
+			return 1.0F;
+		}
+		float t = Mth.clamp((this.tickCount - this.tumbleStartTick + partialTicks) / (float) TUMBLE_ANIM_TICKS,
+				0.0F, 1.0F);
+		return 1.0F - (1.0F - t) * (1.0F - t);
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
+		this.tickedOnce = true;
 
 		if (this.level().isClientSide) {
 			if (this.lerpSteps > 0) {
@@ -77,14 +137,33 @@ public class PotEntity extends Entity {
 			return;
 		}
 
-		Vec3 motion = this.getDeltaMovement();
-
-		if (!this.onGround() && !this.isNoGravity()) {
-			motion = motion.add(0.0D, -GRAVITY, 0.0D);
+		if (this.checkCollisionEffects()) {
+			return;
 		}
 
-		this.move(MoverType.SELF, motion);
-		motion = this.getDeltaMovement();
+		if (!this.onGround() && Double.isNaN(this.fallStartY)) {
+			this.fallStartY = this.getY();
+		}
+
+		// Gravity must go into the deltaMovement FIELD, not a local passed to move(): move() never
+		// writes its argument back to deltaMovement (it only zeroes components on collision), so
+		// accumulating into a local silently discards it every tick -- giving a constant-velocity
+		// fall with no acceleration. This is the vanilla FallingBlockEntity idiom.
+		if (!this.onGround() && !this.isNoGravity()) {
+			this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -GRAVITY, 0.0D));
+		}
+
+		this.move(MoverType.SELF, this.getDeltaMovement());
+		Vec3 motion = this.getDeltaMovement();
+
+		if (this.onGround() && !Double.isNaN(this.fallStartY)) {
+			double fallDistance = this.fallStartY - this.getY();
+			this.fallStartY = Double.NaN;
+			if (fallDistance > FALL_BREAK_DISTANCE) {
+				this.breakAndDrop();
+				return;
+			}
+		}
 
 		double drag = AIR_DRAG;
 		if (this.onGround()) {
@@ -112,7 +191,11 @@ public class PotEntity extends Entity {
 		this.lerpZ = z;
 		this.lerpYRot = yRot;
 		this.lerpXRot = xRot;
-		this.lerpSteps = 10;
+		// short window: with per-tick position sync (see ModEntityTypes), a long lerp window makes the
+		// render trail noticeably behind the true position during a fast fall — it can even look like
+		// the pot vanishes above the floor since the break happens at the true (lower) position while
+		// the smoothed render is still catching up.
+		this.lerpSteps = 3;
 	}
 
 	private void lerpPositionAndRotation() {
@@ -130,6 +213,29 @@ public class PotEntity extends Entity {
 	@Override
 	public boolean isPushable() {
 		return true;
+	}
+
+	/**
+	 * Scans for overlapping living entities and reacts to how fast they're moving,
+	 * rather than relying on vanilla's {@code Entity#push} callback (which is only
+	 * invoked from the pushing entity's own AI step, on its own schedule).
+	 *
+	 * @return true if the pot broke this tick (caller should skip further physics)
+	 */
+	private boolean checkCollisionEffects() {
+		List<LivingEntity> colliders = this.level().getEntitiesOfClass(LivingEntity.class,
+				this.getBoundingBox().inflate(0.05D), LivingEntity::isAlive);
+
+		for (LivingEntity collider : colliders) {
+			double speed = collider.getDeltaMovement().horizontalDistance();
+			if (speed >= SHATTER_SPEED) {
+				this.breakAndDrop();
+				return true;
+			} else if (speed >= TUMBLE_SPEED && !this.isTumbled()) {
+				this.setTumbled(true);
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -161,23 +267,35 @@ public class PotEntity extends Entity {
 
 		Level level = this.level();
 		if (!level.isClientSide) {
+			// non-explosive shrapnel burst: shards spray outward in every direction
+			// (dome-biased upward) rather than just tumbling out, no blast/damage/block breakage.
 			int shardCount = MIN_SHARDS + this.random.nextInt(MAX_SHARDS - MIN_SHARDS + 1);
 			for (int i = 0; i < shardCount; i++) {
-				ItemEntity shard = new ItemEntity(level, this.getX(), this.getY() + 0.1D, this.getZ(),
-						new ItemStack(ModItems.POT_SHARD.get()));
+				PotShardEntity shard = new PotShardEntity(level, this.getX(), this.getY() + this.getBbHeight() * 0.5D,
+						this.getZ());
+
+				// GMM's Bloater flings its cosmetic arm shrapnel at ~0.28 blocks/tick total
+				// speed ("low velocity -- they don't travel far") -- matching that scale here.
+				double speed = 0.1D + this.random.nextDouble() * 0.12D;
+				double yawAngle = this.random.nextDouble() * Math.PI * 2.0D;
+				double pitchAngle = this.random.nextDouble() * (Math.PI / 4.0D);
+				double horizontalSpeed = Math.cos(pitchAngle) * speed;
+
 				shard.setDeltaMovement(
-						(this.random.nextDouble() - 0.5D) * 0.3D,
-						0.2D + this.random.nextDouble() * 0.2D,
-						(this.random.nextDouble() - 0.5D) * 0.3D);
+						Math.cos(yawAngle) * horizontalSpeed,
+						Math.sin(pitchAngle) * speed + 0.02D,
+						Math.sin(yawAngle) * horizontalSpeed);
 				level.addFreshEntity(shard);
 			}
 
 			level.playSound(null, this.blockPosition(), SoundEvents.DECORATED_POT_SHATTER,
 					SoundSource.BLOCKS, 1.0F, 0.9F + this.random.nextFloat() * 0.2F);
 
-			if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
-				serverLevel.sendParticles(ParticleTypes.POOF, this.getX(), this.getY() + this.getBbHeight() * 0.5D,
-						this.getZ(), 8, 0.2D, 0.2D, 0.2D, 0.02D);
+			if (level instanceof ServerLevel serverLevel) {
+				// custom terracotta grit — small enough to not hide the shards (see PotDustParticle)
+				serverLevel.sendParticles(ModParticles.POT_DUST_PARTICLE.get(),
+						this.getX(), this.getY() + this.getBbHeight() * 0.5D, this.getZ(),
+						8, 0.15D, 0.15D, 0.15D, 0.02D);
 			}
 		}
 
@@ -186,11 +304,11 @@ public class PotEntity extends Entity {
 
 	@Override
 	protected void readAdditionalSaveData(CompoundTag compound) {
-		// no persisted data for v1
+		this.setTumbled(compound.getBoolean("Tumbled"));
 	}
 
 	@Override
 	protected void addAdditionalSaveData(CompoundTag compound) {
-		// no persisted data for v1
+		compound.putBoolean("Tumbled", this.isTumbled());
 	}
 }
