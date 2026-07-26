@@ -232,14 +232,16 @@ public class ModBlocks {
     // wall ring
     public static final RegistryObject<Block> WALL_RING = Registration.BLOCKS.register("wall_ring", () -> new WallRingBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
 
-    // swinging chain: one anchor block, the length property says how far it hangs.
+    // swinging chain: one block per segment, stacked like a vanilla chain.
     // noOcclusion + noCollission because it's drawn by a BlockEntityRenderer and walked through.
+    // Light comes from whatever fixture is attached, so it has to be a function of the state.
     public static final RegistryObject<Block> SWINGING_CHAIN = Registration.BLOCKS.register("swinging_chain",
             () -> new SwingingChainBlock(Properties.of().mapColor(MapColor.METAL)
                     .strength(1.5F, 6.0F)
                     .sound(SoundType.CHAIN)
                     .noOcclusion()
-                    .noCollission()));
+                    .noCollission()
+                    .lightLevel(SwingingChainBlock::lightEmission)));
 
     // plate bracket
     public static final RegistryObject<Block> IRON_PLATE_BRACKET = Registration.BLOCKS.register("iron_plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));

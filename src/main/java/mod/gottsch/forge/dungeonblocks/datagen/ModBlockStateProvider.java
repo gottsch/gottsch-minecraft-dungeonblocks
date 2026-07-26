@@ -273,8 +273,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
     /**
      * The swinging chain has no baked geometry at all — {@code SwingingChainRenderer} draws every
      * segment, because a static model can't sway. The generated model exists only to give the block a
-     * particle texture for break/step effects, and the blockstate maps every {@code length} value to
-     * it (a single {@code ""} variant would not match a block that has properties).
+     * particle texture for break/step effects, and both {@code top} values map to it (a single
+     * {@code ""} variant would not match a block that has properties).
      */
     private void swingingChainBlock(RegistryObject<Block> block) {
         BlockModelBuilder model = models()
