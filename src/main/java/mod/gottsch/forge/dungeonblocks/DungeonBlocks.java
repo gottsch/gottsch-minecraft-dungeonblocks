@@ -19,6 +19,7 @@
  */
 package mod.gottsch.forge.dungeonblocks;
 
+import mod.gottsch.forge.dungeonblocks.core.blockentity.ModBlockEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.entity.ModEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.item.ModCreativeModeTabs;
 import mod.gottsch.forge.dungeonblocks.core.particle.ModParticles;
@@ -59,6 +60,7 @@ public class DungeonBlocks {
 		ModItems.register();
 		ModParticles.register(modEventBus);
 		ModEntityTypes.register(modEventBus);
+		ModBlockEntityTypes.register(modEventBus);
 
 		ModCreativeModeTabs.TABS.register(modEventBus);
 

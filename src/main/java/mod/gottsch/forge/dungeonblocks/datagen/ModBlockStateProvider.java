@@ -266,6 +266,22 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.COBBLESTONE_BRICK.get());
         simpleBlock(ModBlocks.MOSSY_COBBLESTONE_BRICK.get());
         simpleBlock(ModBlocks.GRAVEL_BRICK.get());
+
+        swingingChainBlock(ModBlocks.SWINGING_CHAIN);
+    }
+
+    /**
+     * The swinging chain has no baked geometry at all — {@code SwingingChainRenderer} draws every
+     * segment, because a static model can't sway. The generated model exists only to give the block a
+     * particle texture for break/step effects, and the blockstate maps every {@code length} value to
+     * it (a single {@code ""} variant would not match a block that has properties).
+     */
+    private void swingingChainBlock(RegistryObject<Block> block) {
+        BlockModelBuilder model = models()
+                .withExistingParent(block.getId().getPath(), mcLoc("block/block"))
+                .texture("particle", mcLoc("block/chain"));
+        getVariantBuilder(block.get())
+                .forAllStates(state -> ConfiguredModel.builder().modelFile(model).build());
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {

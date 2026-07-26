@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "length=1": {
+      "model": "dungeonblocks:block/swinging_chain"
+    },
+    "length=2": {
+      "model": "dungeonblocks:block/swinging_chain"
+    },
+    "length=3": {
+      "model": "dungeonblocks:block/swinging_chain"
+    },
+    "length=4": {
+      "model": "dungeonblocks:block/swinging_chain"
+    },
+    "length=5": {
+      "model": "dungeonblocks:block/swinging_chain"
+    },
+    "length=6": {
+      "model": "dungeonblocks:block/swinging_chain"
+    },
+    "length=7": {
+      "model": "dungeonblocks:block/swinging_chain"
+    },
+    "length=8": {
+      "model": "dungeonblocks:block/swinging_chain"
+    }
+  }
+}

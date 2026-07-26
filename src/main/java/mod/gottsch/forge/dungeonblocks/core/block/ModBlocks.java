@@ -232,6 +232,15 @@ public class ModBlocks {
     // wall ring
     public static final RegistryObject<Block> WALL_RING = Registration.BLOCKS.register("wall_ring", () -> new WallRingBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
 
+    // swinging chain: one anchor block, the length property says how far it hangs.
+    // noOcclusion + noCollission because it's drawn by a BlockEntityRenderer and walked through.
+    public static final RegistryObject<Block> SWINGING_CHAIN = Registration.BLOCKS.register("swinging_chain",
+            () -> new SwingingChainBlock(Properties.of().mapColor(MapColor.METAL)
+                    .strength(1.5F, 6.0F)
+                    .sound(SoundType.CHAIN)
+                    .noOcclusion()
+                    .noCollission()));
+
     // plate bracket
     public static final RegistryObject<Block> IRON_PLATE_BRACKET = Registration.BLOCKS.register("iron_plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> DARK_IRON_PLATE_BRACKET = Registration.BLOCKS.register("dark_iron_plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));

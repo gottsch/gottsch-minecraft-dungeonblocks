@@ -2,6 +2,9 @@ package mod.gottsch.forge.dungeonblocks.core.setup;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
+import mod.gottsch.forge.dungeonblocks.core.blockentity.ModBlockEntityTypes;
+import mod.gottsch.forge.dungeonblocks.core.blockentity.client.ChainSegmentModel;
+import mod.gottsch.forge.dungeonblocks.core.blockentity.client.SwingingChainRenderer;
 import mod.gottsch.forge.dungeonblocks.core.entity.ModEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.PotItemRenderer;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.PotModel;
@@ -62,6 +65,7 @@ public class ClientSetup {
         event.registerLayerDefinition(PotModel.LAYER_LOCATION, PotModel::createBodyLayer);
         event.registerLayerDefinition(SquatClayPotModel.LAYER_LOCATION, SquatClayPotModel::createBodyLayer);
         event.registerLayerDefinition(ThinClayPotModel.LAYER_LOCATION, ThinClayPotModel::createBodyLayer);
+        event.registerLayerDefinition(ChainSegmentModel.LAYER_LOCATION, ChainSegmentModel::createBodyLayer);
         // hand the shape table to the inventory renderer now that the layers exist
         PotItemRenderer.setVariants(POT_VARIANTS);
         for (int i = 0; i < PotShardModel.LAYERS.length; i++) {
@@ -81,5 +85,6 @@ public class ClientSetup {
                                 variant.modelFactory().apply(context.bakeLayer(variant.layer())),
                                 variant.texture(), variant.halfHeight())));
         event.registerEntityRenderer(ModEntityTypes.POT_SHARD.get(), PotShardRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityTypes.SWINGING_CHAIN.get(), SwingingChainRenderer::new);
     }
 }

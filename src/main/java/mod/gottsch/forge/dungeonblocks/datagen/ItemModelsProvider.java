@@ -215,6 +215,10 @@ public class ItemModelsProvider extends ItemModelProvider {
 
 		basicItem(ModItems.SKELETON, modLoc("item/skeleton"));
 
+		// the chain block is drawn by a BlockEntityRenderer and has no baked model to inherit from,
+		// so its item uses vanilla's chain sprite
+		basicItem(ModBlocks.MAP.get(ModBlocks.SWINGING_CHAIN), mcLoc("item/chain"));
+
 		// pot props render as real 3D geometry in the inventory, not as sprites — see PotItemRenderer
 		potItem(ModItems.POT);
 		potItem(ModItems.SQUAT_CLAY_POT);
