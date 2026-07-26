@@ -17,26 +17,57 @@
  */
 package mod.gottsch.forge.dungeonblocks.core.item;
 
-import mod.gottsch.forge.dungeonblocks.core.entity.ModEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.entity.PotEntity;
+import mod.gottsch.forge.dungeonblocks.core.entity.client.PotItemRenderer;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Places a {@link PotEntity} upright on the clicked block face, mirroring
- * vanilla's boat/armor-stand placement items.
+ * vanilla's boat/armor-stand placement items. The pot shape is decided by the
+ * {@link EntityType} this item is constructed with, so every pot variant reuses
+ * this class.
  *
  * @author Mark Gottschling on Jul 25, 2026
  */
 public class PotItem extends Item {
 
-	public PotItem(Properties properties) {
+	private final Supplier<EntityType<PotEntity>> entityType;
+
+	public PotItem(Supplier<EntityType<PotEntity>> entityType, Properties properties) {
 		super(properties);
+		this.entityType = entityType;
+	}
+
+	/** Which pot shape this item places; also how the inventory renderer picks its model. */
+	public EntityType<PotEntity> getEntityType() {
+		return this.entityType.get();
+	}
+
+	/**
+	 * Renders the item as 3D geometry rather than a flat sprite — see {@link PotItemRenderer}. Forge
+	 * only invokes this client-side (and skips it during datagen), so the client-only types below are
+	 * never loaded on a server.
+	 */
+	@Override
+	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+		consumer.accept(new IClientItemExtensions() {
+			@Override
+			public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+				return PotItemRenderer.getInstance();
+			}
+		});
 	}
 
 	@Override
@@ -51,7 +82,7 @@ public class PotItem extends Item {
 		Player player = context.getPlayer();
 
 		if (!level.isClientSide) {
-			PotEntity pot = new PotEntity(ModEntityTypes.POT.get(), level);
+			PotEntity pot = new PotEntity(this.entityType.get(), level);
 			pot.setPos(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D);
 			if (onSide) {
 				// set before addFreshEntity so it's already in the spawn packet's synced data —

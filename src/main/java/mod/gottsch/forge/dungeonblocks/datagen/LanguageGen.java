@@ -39,6 +39,7 @@ public class LanguageGen extends LanguageProvider {
     protected void addTranslations() {
     	// tabs
         add("itemGroup." + DungeonBlocks.MOD_ID, "DungeonBlocks");
+        add("itemGroup." + DungeonBlocks.MOD_ID + ".entities", "DungeonBlocks Entities");
 
         ModBlocks.MAP.forEach((k, v) -> {
             // these are given custom display names below
@@ -58,9 +59,14 @@ public class LanguageGen extends LanguageProvider {
         add(ModBlocks.ROOTS.get(), "Roots");
         add(ModBlocks.ROOTS_BODY.get(), "Roots");
 
-        add(ModItems.POT.get(), "Ceramic Pot");
-        add(ModItems.POT_SHARD.get(), "Pot Shard");
-        add("entity.dungeonblocks.pot", "Ceramic Pot");
+        // "pot" is the original tall shape; the squat one is now the plain "Ceramic Pot"
+        add(ModItems.POT.get(), "Tall Ceramic Pot");
+        add(ModItems.SQUAT_CLAY_POT.get(), "Ceramic Pot");
+        add(ModItems.THIN_CLAY_POT.get(), "Thin Ceramic Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".pot", "Tall Ceramic Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".squat_clay_pot", "Ceramic Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".thin_clay_pot", "Thin Ceramic Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".pot_shard", "Pot Shard");
 
     }
 }

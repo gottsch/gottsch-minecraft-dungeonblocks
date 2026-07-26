@@ -46,13 +46,30 @@ public class ModCreativeModeTabs {
 					.title(Component.translatable("itemGroup.dungeonblocks"))
 					.icon(() -> new ItemStack(Blocks.MOSSY_STONE_BRICKS))
 					.displayItems((displayParams, output) -> {
-						// add all items
+						// add all items except the logo and the decorative-entity props,
+						// which live in ENTITIES_TAB
 						Registration.ITEMS.getEntries().forEach(item -> {
-							if (!item.equals(ModItems.LOGO)) {
+							if (!item.equals(ModItems.LOGO) && !ModItems.ENTITY_ITEMS.contains(item)) {
 								output.accept(item.get(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
 							}
 						});
 					})
+					.build()
+	);
+
+	/**
+	 * Home for the entity-backed decorative props (pots today; crates, braziers and rubble to
+	 * follow). Kept separate from the block tab because these are Entities, not Blocks, and behave
+	 * differently in-world — and because the block tab is already large.
+	 */
+	public static final RegistryObject<CreativeModeTab> ENTITIES_TAB = TABS.register("entities_tab",
+			() -> CreativeModeTab.builder()
+					.title(Component.translatable("itemGroup.dungeonblocks.entities"))
+					.icon(() -> new ItemStack(ModItems.POT.get()))
+					.withTabsBefore(MOD_TAB.getKey())
+					.displayItems((displayParams, output) ->
+							ModItems.ENTITY_ITEMS.forEach(item ->
+									output.accept(item.get(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)))
 					.build()
 	);
 

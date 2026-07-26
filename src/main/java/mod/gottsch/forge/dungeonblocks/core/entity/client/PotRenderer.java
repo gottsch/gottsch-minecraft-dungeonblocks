@@ -20,8 +20,8 @@ package mod.gottsch.forge.dungeonblocks.core.entity.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.entity.PotEntity;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -30,28 +30,34 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
 /**
+ * Shared renderer for every pot-shaped prop: the tumble pivot and the
+ * Blockbench root-pivot transform are identical across shapes, only the model,
+ * texture and modeled height differ — so each registered pot {@code EntityType}
+ * supplies those three and reuses this class (see {@code ClientSetup}).
+ *
  * @author Mark Gottschling on Jul 25, 2026
  */
 public class PotRenderer extends EntityRenderer<PotEntity> {
 
-	private static final ResourceLocation TEXTURE =
-			new ResourceLocation(DungeonBlocks.MOD_ID, "textures/entity/pot.png");
+	private final EntityModel<PotEntity> model;
+	private final ResourceLocation texture;
+	/**
+	 * Half the pot's total modeled height, used as the pivot point so a tumble rotates it
+	 * flat onto the ground rather than through the floor.
+	 */
+	private final double halfHeight;
 
-	// half the pot's total modeled height (base + neck + lip = 14px = 0.875 blocks),
-	// used as the pivot point so a tumble rotates it flat onto the ground rather than
-	// through the floor.
-	private static final double HALF_HEIGHT = 0.4375D;
-
-	private final PotModel model;
-
-	public PotRenderer(EntityRendererProvider.Context context) {
+	public PotRenderer(EntityRendererProvider.Context context, EntityModel<PotEntity> model,
+			ResourceLocation texture, double halfHeight) {
 		super(context);
-		this.model = new PotModel(context.bakeLayer(PotModel.LAYER_LOCATION));
+		this.model = model;
+		this.texture = texture;
+		this.halfHeight = halfHeight;
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(PotEntity entity) {
-		return TEXTURE;
+		return this.texture;
 	}
 
 	@Override
@@ -63,9 +69,9 @@ public class PotRenderer extends EntityRenderer<PotEntity> {
 		float tumbleProgress = entity.getTumbleProgress(partialTicks);
 		if (tumbleProgress > 0.0F) {
 			float tipSign = (entity.getId() % 2 == 0) ? 1.0F : -1.0F;
-			poseStack.translate(0.0D, HALF_HEIGHT, 0.0D);
+			poseStack.translate(0.0D, this.halfHeight, 0.0D);
 			poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F * tipSign * tumbleProgress));
-			poseStack.translate(0.0D, -HALF_HEIGHT, 0.0D);
+			poseStack.translate(0.0D, -this.halfHeight, 0.0D);
 		}
 
 		// mirror + drop to match the Blockbench-exported PartPose.offset(0, 24, 0) root pivot

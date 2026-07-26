@@ -25,6 +25,7 @@ import mod.gottsch.forge.dungeonblocks.core.item.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -214,15 +215,47 @@ public class ItemModelsProvider extends ItemModelProvider {
 
 		basicItem(ModItems.SKELETON, modLoc("item/skeleton"));
 
-		// placeholder icons until real Blockbench-derived art exists
-		basicItem(ModItems.POT, mcLoc("item/flower_pot"));
-		basicItem(ModItems.POT_SHARD, mcLoc("item/brick"));
+		// pot props render as real 3D geometry in the inventory, not as sprites — see PotItemRenderer
+		potItem(ModItems.POT);
+		potItem(ModItems.SQUAT_CLAY_POT);
+		potItem(ModItems.THIN_CLAY_POT);
 	}
 
 	public ItemModelBuilder basicItem(RegistryObject<Item> item, ResourceLocation texture) {
 		return getBuilder(item.getId().toString())
 				.parent(new ModelFile.UncheckedModelFile("item/generated"))
 				.texture("layer0", texture);
+	}
+
+	/**
+	 * Item model for an entity-backed prop that should render as 3D geometry rather than a flat
+	 * sprite.
+	 *
+	 * <p>{@code builtin/entity} bakes to a vanilla {@code BuiltInModel}, whose
+	 * {@code isCustomRenderer()} is true — that is what routes rendering to the item's
+	 * {@code IClientItemExtensions} renderer. It carries no geometry and no texture of its own, so the
+	 * {@code display} block below (copied from vanilla {@code block/block.json}) is what positions the
+	 * prop per context, giving it block-identical placement in the GUI, in hand, on the ground and in
+	 * item frames.
+	 */
+	public ItemModelBuilder potItem(RegistryObject<Item> item) {
+		ItemModelBuilder builder = getBuilder(item.getId().toString())
+				.parent(new ModelFile.UncheckedModelFile("builtin/entity"));
+		builder.transforms()
+				.transform(ItemDisplayContext.GUI)
+						.rotation(30, 225, 0).scale(0.625F).end()
+				.transform(ItemDisplayContext.GROUND)
+						.translation(0, 3, 0).scale(0.25F).end()
+				.transform(ItemDisplayContext.FIXED)
+						.scale(0.5F).end()
+				.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
+						.rotation(75, 45, 0).translation(0, 2.5F, 0).scale(0.375F).end()
+				.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
+						.rotation(0, 45, 0).scale(0.4F).end()
+				.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND)
+						.rotation(0, 225, 0).scale(0.4F).end()
+				.end();
+		return builder;
 	}
 
 	/** Trapdoor item model parents to the block's generated "_bottom" model. */

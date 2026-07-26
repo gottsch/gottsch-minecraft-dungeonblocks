@@ -682,8 +682,13 @@
   "block.dungeonblocks.weathered_copper_sewer_block": "Weathered Copper Sewer",
   "block.dungeonblocks.weathered_copper_trapdoor": "Weathered Copper Trapdoor",
   "block.dungeonblocks.weathered_copper_valve_wheel": "Weathered Copper Valve Wheel",
-  "entity.dungeonblocks.pot": "Ceramic Pot",
-  "item.dungeonblocks.pot": "Ceramic Pot",
-  "item.dungeonblocks.pot_shard": "Pot Shard",
-  "itemGroup.dungeonblocks": "DungeonBlocks"
+  "entity.dungeonblocks.pot": "Tall Ceramic Pot",
+  "entity.dungeonblocks.pot_shard": "Pot Shard",
+  "entity.dungeonblocks.squat_clay_pot": "Ceramic Pot",
+  "entity.dungeonblocks.thin_clay_pot": "Thin Ceramic Pot",
+  "item.dungeonblocks.pot": "Tall Ceramic Pot",
+  "item.dungeonblocks.squat_clay_pot": "Ceramic Pot",
+  "item.dungeonblocks.thin_clay_pot": "Thin Ceramic Pot",
+  "itemGroup.dungeonblocks": "DungeonBlocks",
+  "itemGroup.dungeonblocks.entities": "DungeonBlocks Entities"
 }

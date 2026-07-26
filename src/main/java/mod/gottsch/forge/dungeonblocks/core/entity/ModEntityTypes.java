@@ -28,12 +28,30 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public class ModEntityTypes {
 
+	// both pot shapes share PotEntity — only geometry, texture and hitbox differ, so they are
+	// distinct EntityTypes (separate renderer + default loot table) over one behaviour class.
 	public static final RegistryObject<EntityType<PotEntity>> POT = Registration.ENTITY_TYPES.register("pot",
 			() -> EntityType.Builder.of(PotEntity::new, MobCategory.MISC)
 					.sized(0.5F, 0.6F)
 					.clientTrackingRange(10)
 					.updateInterval(1)
 					.build("pot"));
+
+	public static final RegistryObject<EntityType<PotEntity>> SQUAT_CLAY_POT = Registration.ENTITY_TYPES.register("squat_clay_pot",
+			() -> EntityType.Builder.of(PotEntity::new, MobCategory.MISC)
+					// 10px wide x 10px tall modeled -> 0.625 blocks square
+					.sized(0.625F, 0.625F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("squat_clay_pot"));
+
+	public static final RegistryObject<EntityType<PotEntity>> THIN_CLAY_POT = Registration.ENTITY_TYPES.register("thin_clay_pot",
+			() -> EntityType.Builder.of(PotEntity::new, MobCategory.MISC)
+					// 6px wide x 12px tall modeled
+					.sized(0.375F, 0.75F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("thin_clay_pot"));
 
 	public static final RegistryObject<EntityType<PotShardEntity>> POT_SHARD = Registration.ENTITY_TYPES.register("pot_shard",
 			() -> EntityType.Builder.<PotShardEntity>of(PotShardEntity::new, MobCategory.MISC)

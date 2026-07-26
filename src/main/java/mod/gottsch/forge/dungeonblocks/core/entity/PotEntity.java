@@ -20,21 +20,31 @@ package mod.gottsch.forge.dungeonblocks.core.entity;
 import mod.gottsch.forge.dungeonblocks.core.particle.ModParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -80,6 +90,14 @@ public class PotEntity extends Entity {
 	// no animation replay.
 	private int tumbleStartTick = -1;
 	private boolean tickedOnce;
+
+	// per-pot loot override. Null means "use the EntityType's default table"
+	// (dungeonblocks:entities/<id>), which is what a hand-placed pot gets. A structure or a
+	// worldgen feature can point an individual pot at a richer table instead — same NBT keys
+	// vanilla containers use, so existing tooling and /data commands work unchanged.
+	@Nullable
+	private ResourceLocation lootTable;
+	private long lootTableSeed;
 
 	public PotEntity(EntityType<? extends PotEntity> type, Level level) {
 		super(type, level);
@@ -160,7 +178,7 @@ public class PotEntity extends Entity {
 			double fallDistance = this.fallStartY - this.getY();
 			this.fallStartY = Double.NaN;
 			if (fallDistance > FALL_BREAK_DISTANCE) {
-				this.breakAndDrop();
+				this.breakAndDrop(this.damageSources().fall());
 				return;
 			}
 		}
@@ -229,13 +247,33 @@ public class PotEntity extends Entity {
 		for (LivingEntity collider : colliders) {
 			double speed = collider.getDeltaMovement().horizontalDistance();
 			if (speed >= SHATTER_SPEED) {
-				this.breakAndDrop();
+				// attribute the break to whoever ran into it, so the loot table sees a killer/player
+				this.breakAndDrop(collider instanceof Player player
+						? this.damageSources().playerAttack(player)
+						: this.damageSources().mobAttack(collider));
 				return true;
 			} else if (speed >= TUMBLE_SPEED && !this.isTumbled()) {
 				this.setTumbled(true);
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Points this individual pot at a specific loot table instead of its type's default.
+	 * Call before the pot is added to the world (structure placement, worldgen).
+	 *
+	 * @param lootTable table id, or null to fall back to the type default
+	 * @param seed      fixed roll seed, or 0 for a random roll
+	 */
+	public void setLootTable(@Nullable ResourceLocation lootTable, long seed) {
+		this.lootTable = lootTable;
+		this.lootTableSeed = seed;
+	}
+
+	/** The table this pot rolls on shatter: its override if set, else the {@link EntityType} default. */
+	public ResourceLocation getLootTableId() {
+		return this.lootTable != null ? this.lootTable : this.getType().getDefaultLootTable();
 	}
 
 	@Override
@@ -248,25 +286,27 @@ public class PotEntity extends Entity {
 		if (this.isInvulnerableTo(damageSource) || this.isRemoved()) {
 			return false;
 		}
-		this.breakAndDrop();
+		this.breakAndDrop(damageSource);
 		return true;
 	}
 
 	@Override
 	public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
 		if (distance >= FALL_BREAK_DISTANCE) {
-			this.breakAndDrop();
+			this.breakAndDrop(source);
 		}
 		return false;
 	}
 
-	private void breakAndDrop() {
+	private void breakAndDrop(DamageSource damageSource) {
 		if (this.isRemoved()) {
 			return;
 		}
 
 		Level level = this.level();
 		if (!level.isClientSide) {
+			this.dropLoot(damageSource);
+
 			// non-explosive shrapnel burst: shards spray outward in every direction
 			// (dome-biased upward) rather than just tumbling out, no blast/damage/block breakage.
 			int shardCount = MIN_SHARDS + this.random.nextInt(MAX_SHARDS - MIN_SHARDS + 1);
@@ -292,23 +332,72 @@ public class PotEntity extends Entity {
 					SoundSource.BLOCKS, 1.0F, 0.9F + this.random.nextFloat() * 0.2F);
 
 			if (level instanceof ServerLevel serverLevel) {
-				// custom terracotta grit — small enough to not hide the shards (see PotDustParticle)
+				// a scaled-down POOF — see PotDustParticle. The low speed here is deliberate:
+				// the particle adds its own +/-0.05 jitter on top.
 				serverLevel.sendParticles(ModParticles.POT_DUST_PARTICLE.get(),
 						this.getX(), this.getY() + this.getBbHeight() * 0.5D, this.getZ(),
-						8, 0.15D, 0.15D, 0.15D, 0.02D);
+						10, 0.15D, 0.15D, 0.15D, 0.02D);
 			}
 		}
 
 		this.discard();
 	}
 
+	/**
+	 * Rolls {@link #getLootTableId()} and spills the result on the ground. Uses the vanilla
+	 * {@code ENTITY} param set, whose parameters are a superset of the {@code CHEST} set — so an
+	 * override pointing at a plain chest-style dungeon table resolves here too.
+	 */
+	private void dropLoot(DamageSource damageSource) {
+		// a creative-mode builder clearing props shouldn't carpet the floor with shards —
+		// same exemption vanilla hanging entities make. The shatter effects still play.
+		if (damageSource.getEntity() instanceof Player player && player.getAbilities().instabuild) {
+			return;
+		}
+
+		ResourceLocation tableId = this.getLootTableId();
+		if (tableId == null || BuiltInLootTables.EMPTY.equals(tableId)
+				|| !(this.level() instanceof ServerLevel serverLevel)) {
+			return;
+		}
+
+		LootTable table = serverLevel.getServer().getLootData().getLootTable(tableId);
+		LootParams.Builder builder = new LootParams.Builder(serverLevel)
+				.withParameter(LootContextParams.ORIGIN, this.position())
+				.withParameter(LootContextParams.THIS_ENTITY, this)
+				.withParameter(LootContextParams.DAMAGE_SOURCE, damageSource)
+				.withOptionalParameter(LootContextParams.KILLER_ENTITY, damageSource.getEntity())
+				.withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, damageSource.getDirectEntity());
+
+		if (damageSource.getEntity() instanceof Player player) {
+			builder = builder.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
+					.withLuck(player.getLuck());
+		}
+
+		LootParams params = builder.create(LootContextParamSets.ENTITY);
+		List<ItemStack> loot = this.lootTableSeed == 0L
+				? table.getRandomItems(params)
+				: table.getRandomItems(params, this.lootTableSeed);
+		loot.forEach(this::spawnAtLocation);
+	}
+
 	@Override
 	protected void readAdditionalSaveData(CompoundTag compound) {
 		this.setTumbled(compound.getBoolean("Tumbled"));
+		this.lootTable = compound.contains("LootTable", Tag.TAG_STRING)
+				? new ResourceLocation(compound.getString("LootTable"))
+				: null;
+		this.lootTableSeed = compound.getLong("LootTableSeed");
 	}
 
 	@Override
 	protected void addAdditionalSaveData(CompoundTag compound) {
 		compound.putBoolean("Tumbled", this.isTumbled());
+		if (this.lootTable != null) {
+			compound.putString("LootTable", this.lootTable.toString());
+			if (this.lootTableSeed != 0L) {
+				compound.putLong("LootTableSeed", this.lootTableSeed);
+			}
+		}
 	}
 }

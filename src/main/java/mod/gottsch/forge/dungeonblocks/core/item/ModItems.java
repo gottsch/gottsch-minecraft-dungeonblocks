@@ -21,6 +21,7 @@ package mod.gottsch.forge.dungeonblocks.core.item;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
+import mod.gottsch.forge.dungeonblocks.core.entity.ModEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -62,8 +64,21 @@ public class ModItems {
 	public static RegistryObject<Item> LICHEN = fromBlock(ModBlocks.LICHEN, ITEM_PROPERTIES);
 	public static RegistryObject<Item> SKELETON = Registration.ITEMS.register("skeleton", () -> new SkeletonItem(ModBlocks.SKELETON.get(), new Item.Properties()));
 
-	public static final RegistryObject<Item> POT = Registration.ITEMS.register("pot", () -> new PotItem(new Item.Properties()));
-	public static final RegistryObject<Item> POT_SHARD = Registration.ITEMS.register("pot_shard", () -> new Item(new Item.Properties()));
+	// entity-backed decorative props. The lambdas defer ModEntityTypes' class init so it isn't
+	// forced during ModItems' own static initialization.
+	public static final RegistryObject<Item> POT = Registration.ITEMS.register("pot",
+			() -> new PotItem(() -> ModEntityTypes.POT.get(), new Item.Properties()));
+	public static final RegistryObject<Item> SQUAT_CLAY_POT = Registration.ITEMS.register("squat_clay_pot",
+			() -> new PotItem(() -> ModEntityTypes.SQUAT_CLAY_POT.get(), new Item.Properties()));
+	public static final RegistryObject<Item> THIN_CLAY_POT = Registration.ITEMS.register("thin_clay_pot",
+			() -> new PotItem(() -> ModEntityTypes.THIN_CLAY_POT.get(), new Item.Properties()));
+
+	/**
+	 * Items belonging to the decorative-entity subsystem. These are pulled out of the main
+	 * DungeonBlocks tab (which otherwise sweeps up every registered item) and shown in the
+	 * DungeonBlocks Entities tab instead — see {@link ModCreativeModeTabs}.
+	 */
+	public static final List<RegistryObject<Item>> ENTITY_ITEMS = List.of(POT, SQUAT_CLAY_POT, THIN_CLAY_POT);
 
 	/**
 	 * 
