@@ -1,5 +1,7 @@
 {
   "values": [
+    "dungeonblocks:stone_bricks_slab_table",
+    "dungeonblocks:mossy_stone_bricks_slab_table",
     "dungeonblocks:square_stone_brick",
     "dungeonblocks:mossy_square_stone_brick",
     "dungeonblocks:left_large_stone_brick",
@@ -547,6 +549,7 @@
     "dungeonblocks:deepslate_bricks_corbel_block",
     "dungeonblocks:cobbled_deepslate_corbel_block",
     "dungeonblocks:polished_deepslate_corbel_block",
-    "dungeonblocks:deepslate_tiles_corbel_block"
+    "dungeonblocks:deepslate_tiles_corbel_block",
+    "dungeonblocks:skeleton"
   ]
 }

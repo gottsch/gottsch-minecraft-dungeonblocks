@@ -16,13 +16,12 @@
 package mod.gottsch.forge.dungeonblocks.core.block;
 
 import mod.gottsch.forge.gottschcore.block.FacingBlock;
-import mod.gottsch.forge.gottschcore.spatial.Coords;
-import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.gottschcore.world.WorldInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -65,13 +64,16 @@ public class SkeletonBlock extends FacingBlock implements SimpleWaterloggedBlock
 				.setValue(WATERLOGGED, Boolean.valueOf(false))
 				.setValue(PART, EnumPartType.BOTTOM));
 
-		VoxelShape shape = Block.box(1, 0, 0, 15, 6, 16);
+		// the sprawl is 14 wide across the body and 16 along its length, so the footprint swaps
+		// axes on the east/west facings rather than being the same box four times
+		VoxelShape lengthwiseZ = Block.box(1, 0, 0, 15, 6, 16);
+		VoxelShape lengthwiseX = Block.box(0, 0, 1, 16, 6, 15);
 		setBounds(
 				new VoxelShape[] {
-						shape, 	// N
-						shape,  	// E
-						shape,  	// S
-						shape	// W
+						lengthwiseZ, 	// N
+						lengthwiseX,  	// E
+						lengthwiseZ,  	// S
+						lengthwiseX	// W
 				});
 	}
 
@@ -158,25 +160,51 @@ public class SkeletonBlock extends FacingBlock implements SimpleWaterloggedBlock
 	 * Called before the Block is set to air in the world. Called regardless of if
 	 * the player's tool can actually collect this block
 	 */
+	/**
+	 * Destroying one half destroys the other, so the pair always breaks as a unit.
+	 *
+	 * <p>The {@code !newState.is(this)} guard is essential: the server calls {@code onRemove} for
+	 * <em>every</em> state change at a position, not only removals, so without it any same-block
+	 * property change ran the cascade. Waterlogging is exactly such a change - filling a skeleton
+	 * with water destroyed both halves instead of flooding them.
+	 */
 	@Override
 	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-		Direction facing = (Direction) state.getValue(FACING);
-		if (state.getValue(PART) == EnumPartType.BOTTOM) {
-			ICoords coords = new Coords(pos);
-			BlockPos blockPos = coords.add(facing.getOpposite(), 1).toPos();
-//			BlockPos blockPos = pos.relative(facing.getOpposite());
-
+		if (!newState.is(this)) {
+			BlockPos blockPos = pos.relative(towardOtherHalf(state));
 			if (level.getBlockState(blockPos).getBlock() == this) {
 				Block.updateOrDestroy(state, Blocks.AIR.defaultBlockState(), level, blockPos, 3);
 			}
 		}
-		else {
-			BlockPos blockPos = pos.relative(facing);
-			if (level.getBlockState(blockPos).getBlock() == this) {
-				Block.updateOrDestroy(state, Blocks.AIR.defaultBlockState(), level, blockPos, 3);
+		super.onRemove(state, level, pos, newState, isMoving);
+	}
 
+	/**
+	 * In survival the surviving half is destroyed by {@link #onRemove} and the loot table decides
+	 * what drops. Creative has to clear it explicitly with the no-drop flag, because that cascade
+	 * runs {@code destroyBlock} with drops enabled and the BOTTOM's loot condition would otherwise
+	 * be satisfied - handing the player a free skeleton for breaking one in creative.
+	 */
+	@Override
+	public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+		if (!level.isClientSide && player.isCreative()) {
+			BlockPos otherPos = pos.relative(towardOtherHalf(state));
+			BlockState otherState = level.getBlockState(otherPos);
+			if (otherState.is(this) && otherState.getValue(PART) != state.getValue(PART)) {
+				level.setBlock(otherPos, Blocks.AIR.defaultBlockState(), 35);
+				level.levelEvent(player, 2001, otherPos, Block.getId(otherState));
 			}
 		}
+		super.playerWillDestroy(level, pos, state, player);
+	}
+
+	/**
+	 * Direction from this half toward its partner. The BOTTOM is the placed half and FACING points
+	 * back at the player, so its partner sits the other way.
+	 */
+	private static Direction towardOtherHalf(BlockState state) {
+		Direction facing = state.getValue(FACING);
+		return state.getValue(PART) == EnumPartType.BOTTOM ? facing.getOpposite() : facing;
 	}
 
    @Deprecated

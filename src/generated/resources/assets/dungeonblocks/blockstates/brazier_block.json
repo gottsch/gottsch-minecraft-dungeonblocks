@@ -3,8 +3,11 @@
     "lit=false": {
       "model": "dungeonblocks:block/brazier_block"
     },
-    "lit=true": {
+    "lit=true,soul=false": {
       "model": "dungeonblocks:block/brazier_lit_block"
+    },
+    "lit=true,soul=true": {
+      "model": "dungeonblocks:block/brazier_soul_lit_block"
     }
   }
 }

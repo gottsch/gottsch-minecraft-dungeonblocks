@@ -1,5 +1,7 @@
 {
   "values": [
+    "dungeonblocks:stone_bricks_slab_table",
+    "dungeonblocks:mossy_stone_bricks_slab_table",
     "dungeonblocks:square_stone_brick",
     "dungeonblocks:mossy_square_stone_brick",
     "dungeonblocks:left_large_stone_brick",

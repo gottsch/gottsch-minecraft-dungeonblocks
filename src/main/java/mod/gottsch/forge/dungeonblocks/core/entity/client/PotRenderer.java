@@ -42,17 +42,17 @@ public class PotRenderer extends EntityRenderer<PotEntity> {
 	private final EntityModel<PotEntity> model;
 	private final ResourceLocation texture;
 	/**
-	 * Half the pot's total modeled height, used as the pivot point so a tumble rotates it
-	 * flat onto the ground rather than through the floor.
+	 * Height of the pivot the tumble rotates about — half the pot's <em>width</em>, so a fully
+	 * tipped pot comes to rest with its body on the floor. See {@link PotVariant#tumblePivot()}.
 	 */
-	private final double halfHeight;
+	private final double tumblePivot;
 
 	public PotRenderer(EntityRendererProvider.Context context, EntityModel<PotEntity> model,
-			ResourceLocation texture, double halfHeight) {
+			ResourceLocation texture, double tumblePivot) {
 		super(context);
 		this.model = model;
 		this.texture = texture;
-		this.halfHeight = halfHeight;
+		this.tumblePivot = tumblePivot;
 	}
 
 	@Override
@@ -69,9 +69,9 @@ public class PotRenderer extends EntityRenderer<PotEntity> {
 		float tumbleProgress = entity.getTumbleProgress(partialTicks);
 		if (tumbleProgress > 0.0F) {
 			float tipSign = (entity.getId() % 2 == 0) ? 1.0F : -1.0F;
-			poseStack.translate(0.0D, this.halfHeight, 0.0D);
+			poseStack.translate(0.0D, this.tumblePivot, 0.0D);
 			poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F * tipSign * tumbleProgress));
-			poseStack.translate(0.0D, -this.halfHeight, 0.0D);
+			poseStack.translate(0.0D, -this.tumblePivot, 0.0D);
 		}
 
 		// mirror + drop to match the Blockbench-exported PartPose.offset(0, 24, 0) root pivot

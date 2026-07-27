@@ -111,5 +111,13 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                         }
                     }
                 });
+
+        // The skeleton matches nothing in stone_blocks, so the loop above skips it - but it still
+        // inherits requiresCorrectToolForDrops from Properties.copy(STONE), and a block that
+        // requires the correct tool while belonging to no tool tag can never be mined for drops by
+        // anything. Tagged explicitly rather than by adding "skeleton" to stone_blocks, which would
+        // also pull it into the stone family's model and recipe generation.
+        // No tier tag: vanilla bone block is mineable with any pickaxe.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.SKELETON.get());
     }
 }

@@ -219,6 +219,12 @@ public class ItemModelsProvider extends ItemModelProvider {
 		// so its item uses vanilla's chain sprite
 		basicItem(ModBlocks.MAP.get(ModBlocks.SWINGING_CHAIN), mcLoc("item/chain"));
 
+		slabTableItem(ModBlocks.STONE_SLAB_TABLE);
+		slabTableItem(ModBlocks.STONE_BRICKS_SLAB_TABLE);
+		slabTableItem(ModBlocks.MOSSY_STONE_BRICKS_SLAB_TABLE);
+		slabTableItem(ModBlocks.SMOOTH_STONE_SLAB_TABLE);
+		slabTableItem(ModBlocks.SMOOTH_SANDSTONE_SLAB_TABLE);
+
 		// pot props render as real 3D geometry in the inventory, not as sprites — see PotItemRenderer
 		potItem(ModItems.POT);
 		potItem(ModItems.SQUAT_CLAY_POT);
@@ -260,6 +266,15 @@ public class ItemModelsProvider extends ItemModelProvider {
 						.rotation(0, 225, 0).scale(0.4F).end()
 				.end();
 		return builder;
+	}
+
+	/**
+	 * The slab table has no model under its own name — only "_foot" and "_head" halves — so the item
+	 * shows the foot, which is the half that lands where the player clicks.
+	 */
+	public ItemModelBuilder slabTableItem(RegistryObject<Block> block) {
+		String name = block.getId().getPath();
+		return withExistingParent(name, modLoc("block/" + name + "_foot"));
 	}
 
 	/** Trapdoor item model parents to the block's generated "_bottom" model. */

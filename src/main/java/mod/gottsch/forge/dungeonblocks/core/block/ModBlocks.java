@@ -79,6 +79,24 @@ public class ModBlocks {
     public static final RegistryObject<Block> BRAZIER = Registration.BLOCKS.register("brazier_block", () -> new BrazierBlock(Properties.of().mapColor(MapColor.METAL)
             .forceSolidOn().strength(3.5F).sound(SoundType.METAL).lightLevel(BrazierBlock.LIGHT_EMISSION).noOcclusion()));
 
+    // ------------------------------------------------------------------
+    // Slab tables. Bed-like two-block furniture, so they are registered explicitly rather than
+    // through the ModMaterials.STONE loop - a table per material would add two blockstates and an
+    // item for all ~30 stones. Adding one is a register(...) line here plus a slabTableBlock(...)
+    // line in ModBlockStateProvider and a slabTableItem(...) line in ItemModelsProvider.
+    // PushReaction.DESTROY keeps a piston from separating the halves.
+    // ------------------------------------------------------------------
+    private static RegistryObject<Block> slabTable(String id, Block propsFrom) {
+        return Registration.BLOCKS.register(id, () -> new SlabTableBlock(
+                Properties.copy(propsFrom).noOcclusion().pushReaction(PushReaction.DESTROY)));
+    }
+
+    public static final RegistryObject<Block> STONE_SLAB_TABLE = slabTable("stone_slab_table", Blocks.STONE);
+    public static final RegistryObject<Block> STONE_BRICKS_SLAB_TABLE = slabTable("stone_bricks_slab_table", Blocks.STONE_BRICKS);
+    public static final RegistryObject<Block> MOSSY_STONE_BRICKS_SLAB_TABLE = slabTable("mossy_stone_bricks_slab_table", Blocks.MOSSY_STONE_BRICKS);
+    public static final RegistryObject<Block> SMOOTH_STONE_SLAB_TABLE = slabTable("smooth_stone_slab_table", Blocks.SMOOTH_STONE);
+    public static final RegistryObject<Block> SMOOTH_SANDSTONE_SLAB_TABLE = slabTable("smooth_sandstone_slab_table", Blocks.SMOOTH_SANDSTONE);
+
     // grate
     public static final RegistryObject<Block> DARK_IRON_GRATE = Registration.BLOCKS.register("dark_iron_grate", () -> new HeavyGrateBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
 
@@ -332,7 +350,11 @@ public class ModBlocks {
     });
 
     // bones & bodies
-    public static final RegistryObject<Block> SKELETON = Registration.BLOCKS.register("skeleton", () -> new SkeletonBlock(Block.Properties.copy(Blocks.STONE)));
+    // copy(STONE) alone left canOcclude=true, which is wrong for a 6px-tall sprawl: it culled the
+    // neighbouring faces, shaded the bones as if they filled the cell, and hid the water of a
+    // waterlogged skeleton entirely. noOcclusion() is what makes the waterlogging visible.
+    public static final RegistryObject<Block> SKELETON = Registration.BLOCKS.register("skeleton",
+            () -> new SkeletonBlock(Block.Properties.copy(Blocks.STONE).noOcclusion().sound(SoundType.BONE_BLOCK)));
     
     // ------------------------------------------------------------------
     // Stone block families (data-driven). See ModMaterials.STONE.

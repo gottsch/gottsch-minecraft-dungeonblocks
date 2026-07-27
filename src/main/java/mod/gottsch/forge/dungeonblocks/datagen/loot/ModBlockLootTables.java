@@ -20,12 +20,16 @@
 package mod.gottsch.forge.dungeonblocks.datagen.loot;
 
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.SkeletonBlock;
+import mod.gottsch.forge.dungeonblocks.core.block.SlabTableBlock;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class ModBlockLootTables extends BlockLootSubProvider {
     public ModBlockLootTables() {
@@ -36,7 +40,24 @@ public class ModBlockLootTables extends BlockLootSubProvider {
     protected void generate() {
         // every registered block-item drops itself. ModBlocks.MAP already excludes
         // blocks that are handled specially (mold, lichen, skeleton).
-        ModBlocks.MAP.keySet().forEach(block -> dropSelf(block.get()));
+        ModBlocks.MAP.keySet().forEach(block -> {
+            Block b = block.get();
+            if (b instanceof SlabTableBlock) {
+                // two blocks, one item: only the HEAD half carries the drop, exactly as vanilla beds
+                // do. Breaking either half destroys the other, and the destroyed FOOT fails this
+                // condition, so the pair yields exactly one table whichever end is broken.
+                add(b, createSinglePropConditionTable(b, SlabTableBlock.PART, BedPart.HEAD));
+            } else {
+                dropSelf(b);
+            }
+        });
+
+        // The skeleton is not in ModBlocks.MAP (its BlockItem is registered by hand as
+        // ModItems.SKELETON), so the sweep above never reached it and it had no table at all -
+        // placing one was a one-way trip. Same two-blocks-one-item shape as the slab table.
+        Block skeleton = ModBlocks.SKELETON.get();
+        add(skeleton, createSinglePropConditionTable(skeleton, SkeletonBlock.PART,
+                SkeletonBlock.EnumPartType.BOTTOM));
     }
 
 //    protected LootTable.Builder createCopperLikeOreDrops(Block pBlock, Item item) {
@@ -50,7 +71,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
     @Override
     protected Iterable<Block> getKnownBlocks() {
         // must match exactly the set of blocks handled in generate()
-        return ModBlocks.MAP.keySet().stream()
-                .map(RegistryObject::get)::iterator;
+        return Stream.concat(
+                ModBlocks.MAP.keySet().stream().map(RegistryObject::get),
+                Stream.of(ModBlocks.SKELETON.get()))::iterator;
     }
 }

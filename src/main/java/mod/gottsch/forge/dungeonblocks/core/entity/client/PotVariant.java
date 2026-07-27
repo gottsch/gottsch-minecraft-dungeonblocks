@@ -39,8 +39,11 @@ import java.util.function.Supplier;
  * @param layer         the baked layer holding this shape's geometry
  * @param modelFactory  wraps a baked {@link ModelPart} in the matching model class
  * @param texture       entity texture
- * @param modeledHeight total modeled height in blocks (base + neck + lip), used both as the tumble
- *                      pivot (half of it) and to centre the pot in its inventory slot
+ * @param modeledHeight total modeled height in blocks (base + neck + lip), used to centre the pot
+ *                      in its inventory slot
+ * @param modeledWidth  width of the widest part in blocks - always the body box, since neck and lip
+ *                      are narrower on every shape. This is the part that meets the floor once the
+ *                      pot is on its side, so half of it is the tumble pivot
  *
  * @author Mark Gottschling on Jul 26, 2026
  */
@@ -50,11 +53,25 @@ public record PotVariant(
 		ModelLayerLocation layer,
 		Function<ModelPart, EntityModel<PotEntity>> modelFactory,
 		ResourceLocation texture,
-		float modeledHeight) {
+		float modeledHeight,
+		float modeledWidth) {
 
-	/** Pivot for the tumble rotation: rotating about the pot's mid-height lays it flat on the floor. */
+	/** Vertical centre of the upright pot, used to centre it in an inventory slot. */
 	public double halfHeight() {
 		return this.modeledHeight / 2.0D;
+	}
+
+	/**
+	 * Pivot for the tumble rotation.
+	 *
+	 * <p>Half the <em>width</em>, not half the height: rotating 90&deg; about a point at height
+	 * {@code y} leaves the body's axis at that height, and the body then hangs half its width below.
+	 * Pivoting at half-height therefore parks a pot {@code (height - width) / 2} above the floor -
+	 * 3px of hover on every shape except the squat pot, which is as wide as it is tall and so was
+	 * the only one that ever looked right.
+	 */
+	public double tumblePivot() {
+		return this.modeledWidth / 2.0D;
 	}
 
 	public static ResourceLocation entityTexture(String name) {

@@ -12,6 +12,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Half;
@@ -268,6 +269,16 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.GRAVEL_BRICK.get());
 
         swingingChainBlock(ModBlocks.SWINGING_CHAIN);
+
+        // slab tables. The two textures are the FOOT half and the HEAD half, in that order - pass
+        // different ones to get a table that reads differently at each end.
+        slabTableBlock(ModBlocks.STONE_SLAB_TABLE, mcLoc("block/stone"), mcLoc("block/stone"));
+        slabTableBlock(ModBlocks.STONE_BRICKS_SLAB_TABLE, mcLoc("block/stone_bricks"), mcLoc("block/stone_bricks"));
+        slabTableBlock(ModBlocks.MOSSY_STONE_BRICKS_SLAB_TABLE, mcLoc("block/mossy_stone_bricks"), mcLoc("block/mossy_stone_bricks"));
+        slabTableBlock(ModBlocks.SMOOTH_STONE_SLAB_TABLE, mcLoc("block/smooth_stone"), mcLoc("block/smooth_stone"));
+        // smooth sandstone has no texture of its own — vanilla draws it with sandstone_top,
+        // the same override ModMaterials.STONE carries for it
+        slabTableBlock(ModBlocks.SMOOTH_SANDSTONE_SLAB_TABLE, mcLoc("block/sandstone_top"), mcLoc("block/sandstone_top"));
     }
 
     /**
@@ -549,14 +560,41 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     public void brazierBlock(RegistryObject<Block> block) {
         ModelFile brazier_lit = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/brazier_lit_block"));
+        ModelFile brazier_soul_lit = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/brazier_soul_lit_block"));
         ModelFile brazier = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/brazier_block"));
-        brazierBlock(block.get(), brazier, brazier_lit);
+        brazierBlock(block.get(), brazier, brazier_lit, brazier_soul_lit);
     }
 
-    public void brazierBlock(Block block, ModelFile brazier, ModelFile brazier_lit) {
+    public void brazierBlock(Block block, ModelFile brazier, ModelFile brazier_lit, ModelFile brazier_soul_lit) {
+        // SOUL is left unspecified while unlit: an unlit brazier looks the same either way,
+        // and the partial state keeps all soul values covered.
         getVariantBuilder(block)
-                .partialState().with(BrazierBlock.LIT, true).addModels(new ConfiguredModel(brazier_lit))
+                .partialState().with(BrazierBlock.LIT, true).with(BrazierBlock.SOUL, false).addModels(new ConfiguredModel(brazier_lit))
+                .partialState().with(BrazierBlock.LIT, true).with(BrazierBlock.SOUL, true).addModels(new ConfiguredModel(brazier_soul_lit))
                 .partialState().with(BrazierBlock.LIT, false).addModels(new ConfiguredModel(brazier));
+    }
+
+    /**
+     * A bed-like two-block table. Both halves share the {@code block/slab_table} geometry - it is
+     * symmetric in both horizontal axes, so the HEAD needs no separate rotation - and differ only in
+     * the texture their child model resolves.
+     *
+     * <p>The template is authored facing NORTH while {@link Direction#toYRot()} puts SOUTH at 0, so
+     * the +180 offset is what makes facing=north come out unrotated.
+     */
+    public void slabTableBlock(RegistryObject<Block> block, ResourceLocation footTexture, ResourceLocation headTexture) {
+        String name = block.getId().getPath();
+        ModelFile foot = slabTableHalf(name + "_foot", footTexture);
+        ModelFile head = slabTableHalf(name + "_head", headTexture);
+
+        getVariantBuilder(block.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(state.getValue(SlabTableBlock.PART) == BedPart.FOOT ? foot : head)
+                .rotationY(((int) state.getValue(SlabTableBlock.FACING).toYRot() + 180) % 360)
+                .build());
+    }
+
+    private ModelFile slabTableHalf(String name, ResourceLocation texture) {
+        return models().withExistingParent(name, modLoc("block/slab_table")).texture("all", texture);
     }
 
     public ModelFile rectangleLeft(String name, ResourceLocation texture, ResourceLocation texture2) {

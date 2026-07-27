@@ -34,13 +34,14 @@ public class ClientSetup {
      * <p>The float is the total modeled height in blocks (base + neck + lip): 14px, 10px and 12px
      * respectively.
      */
+    // heights and widths are the modeled extents in blocks: 14x8, 10x10 and 12x6 pixels
     private static final List<PotVariant> POT_VARIANTS = List.of(
             new PotVariant(ModEntityTypes.POT, PotModel.LAYER_LOCATION, PotModel::new,
-                    PotVariant.entityTexture("pot"), 0.875F),
+                    PotVariant.entityTexture("pot"), 0.875F, 0.5F),
             new PotVariant(ModEntityTypes.SQUAT_CLAY_POT, SquatClayPotModel.LAYER_LOCATION, SquatClayPotModel::new,
-                    PotVariant.entityTexture("squat_clay_pot"), 0.625F),
+                    PotVariant.entityTexture("squat_clay_pot"), 0.625F, 0.625F),
             new PotVariant(ModEntityTypes.THIN_CLAY_POT, ThinClayPotModel.LAYER_LOCATION, ThinClayPotModel::new,
-                    PotVariant.entityTexture("thin_clay_pot"), 0.75F));
+                    PotVariant.entityTexture("thin_clay_pot"), 0.75F, 0.375F));
 
     /**
      * Register the {@link IBlockColor} handlers.
@@ -75,13 +76,12 @@ public class ClientSetup {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        // PotRenderer is shape-agnostic: each variant supplies its model, texture and the
-        // half-height used as the tumble pivot.
+        // PotRenderer is shape-agnostic: each variant supplies its model, texture and tumble pivot.
         POT_VARIANTS.forEach(variant ->
                 event.registerEntityRenderer(variant.entityType().get(),
                         context -> new PotRenderer(context,
                                 variant.modelFactory().apply(context.bakeLayer(variant.layer())),
-                                variant.texture(), variant.halfHeight())));
+                                variant.texture(), variant.tumblePivot())));
         event.registerEntityRenderer(ModEntityTypes.POT_SHARD.get(), PotShardRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.SWINGING_CHAIN.get(), SwingingChainRenderer::new);
     }

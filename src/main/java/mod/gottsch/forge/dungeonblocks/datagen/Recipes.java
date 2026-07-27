@@ -121,6 +121,13 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
 					.save(recipe);
 
+			// slab tables — a trestle: three slabs of top laid across two uprights
+			slabTable(recipe, ModBlocks.STONE_SLAB_TABLE, Blocks.STONE_SLAB, Blocks.STONE);
+			slabTable(recipe, ModBlocks.STONE_BRICKS_SLAB_TABLE, Blocks.STONE_BRICK_SLAB, Blocks.STONE_BRICKS);
+			slabTable(recipe, ModBlocks.MOSSY_STONE_BRICKS_SLAB_TABLE, Blocks.MOSSY_STONE_BRICK_SLAB, Blocks.MOSSY_STONE_BRICKS);
+			slabTable(recipe, ModBlocks.SMOOTH_STONE_SLAB_TABLE, Blocks.SMOOTH_STONE_SLAB, Blocks.SMOOTH_STONE);
+			slabTable(recipe, ModBlocks.SMOOTH_SANDSTONE_SLAB_TABLE, Blocks.SMOOTH_SANDSTONE_SLAB, Blocks.SMOOTH_SANDSTONE);
+
 			// wall ring
 			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.WALL_RING.get())
 					.pattern(" x ")
@@ -315,5 +322,19 @@ public class Recipes extends RecipeProvider {
 
 					});
 
+		}
+
+		/**
+		 * One item places the whole two-block table, so the recipe yields a single output for what
+		 * reads as a trestle: a run of slabs over two uprights.
+		 */
+		private static void slabTable(Consumer<FinishedRecipe> recipe, RegistryObject<Block> table, Block slab, Block base) {
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, table.get())
+					.pattern("xxx")
+					.pattern("y y")
+					.define('x', slab)
+					.define('y', base)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(base))
+					.save(recipe);
 		}
 }
