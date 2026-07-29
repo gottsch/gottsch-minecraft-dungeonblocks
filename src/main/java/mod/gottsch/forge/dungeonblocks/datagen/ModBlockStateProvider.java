@@ -407,12 +407,26 @@ public class ModBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(block).forAllStatesExcept((state) -> {
             Direction facing = (Direction)state.getValue(IFacingBlock.FACING);
             FacadeShape shape = (FacadeShape)state.getValue(IFacadeShapeBlock.SHAPE);
+
+            /*
+             * The models are drawn for a north-facing block, so the base rotation just
+             * turns the piece to its facing. LEFT and RIGHT are relative to that facing,
+             * and a left-hand corner is the right-hand model given one more quarter-turn
+             * clockwise - the same rule for all four facings, and the same extra 90
+             * degrees IFacadeShapeBlock#getBlockShapeIndex gives the collision box.
+             */
             int yRot = (int)facing.getOpposite().toYRot();
-            if (facing == Direction.NORTH && (shape == FacadeShape.OUTER_RIGHT || shape == FacadeShape.INNER_LEFT) || facing == Direction.SOUTH && (shape == FacadeShape.OUTER_LEFT || shape == FacadeShape.INNER_RIGHT)) {
-                yRot += 90;
+            if (shape == FacadeShape.INNER_LEFT || shape == FacadeShape.OUTER_LEFT) {
+                yRot = (yRot + 90) % 360;
             }
 
-            return ConfiguredModel.builder().modelFile(shape == FacadeShape.STRAIGHT ? normal : (shape != FacadeShape.INNER_LEFT && shape != FacadeShape.INNER_RIGHT ? outer : inner)).rotationY(yRot).uvLock(true).build();
+            ModelFile model = switch (shape) {
+                case STRAIGHT -> normal;
+                case INNER_LEFT, INNER_RIGHT -> inner;
+                case OUTER_LEFT, OUTER_RIGHT -> outer;
+            };
+
+            return ConfiguredModel.builder().modelFile(model).rotationY(yRot).uvLock(true).build();
         }, new Property[]{WaterloggedNonCubeFacingBlock.WATERLOGGED, FacadeShapeBlock.WATERLOGGED});
     }
 

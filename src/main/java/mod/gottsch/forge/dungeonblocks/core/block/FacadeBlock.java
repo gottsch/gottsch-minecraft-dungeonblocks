@@ -40,48 +40,21 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  */
 public class FacadeBlock extends FacadeShapeBlock {
 
-	// Voxels are like the bounding boxes (AABBs)
-	// Shapes names are based on the FACING direction. ex. NORTH_SHAPE faces north.
-	private static final VoxelShape NORTH_FACING_SHAPE = Block.box(0.0D, 0.0D, 8.0D, 16.0D, 16.0D, 16.0D);
-	private static final VoxelShape EAST_FACING_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 8.0D, 16.0D, 16.0D);
-	private static final VoxelShape SOUTH_FACING_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 8.0D);
-	private static final VoxelShape WEST_FACING_SHAPE = Block.box(8.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	/*
+	 * Voxels are like the bounding boxes (AABBs). All canonical geometry is authored
+	 * for a NORTH-facing block - ie the orientation the models are drawn in at
+	 * y-rotation 0. The other three facings, and both handednesses of each corner,
+	 * are turned out of these.
+	 */
+	private static final VoxelShape STRAIGHT_SHAPE = Block.box(0.0D, 0.0D, 8.0D, 16.0D, 16.0D, 16.0D);
 
-	// outer corners
-	private static final VoxelShape TOP_LEFT_OUTER_SHAPE = Block.box(8.0D, 0D, 8.0D, 16.0D, 16.0D, 16.0D);
-	private static final VoxelShape TOP_RIGHT_OUTER_SHAPE = Block.box(0D, 0D, 8.0D, 8.0D, 16.0D, 16.0D);
-
-	private static final VoxelShape BOTTOM_LEFT_OUTER_SHAPE = Block.box(8.0D, 0D, 0D, 16.0D, 16.0D, 8.0D);
-	private static final VoxelShape BOTTOM_RIGHT_OUTER_SHAPE = Block.box(0D, 0D, 0D, 8.0D, 16.0D, 8.0D);
-
-	// inner corners
-	private static final VoxelShape TOP_LEFT_INNER_SHAPE = Shapes.or(SOUTH_FACING_SHAPE,
-			Block.box(0.0D, 0D, 8.0D, 8.0D, 16.0D, 16.0D));
-	private static final VoxelShape TOP_RIGHT_INNER_SHAPE = Shapes.or(SOUTH_FACING_SHAPE,
-			Block.box(8.0D, 0D, 8.0D, 16.0D, 16.0D, 16.0D));
-
-	private static final VoxelShape BOTTOM_LEFT_INNER_SHAPE = Shapes.or(NORTH_FACING_SHAPE,
-			Block.box(0.0D, 0D, 0.0D, 8.0D, 16.0D, 8.0D));
-	private static final VoxelShape BOTTOM_RIGHT_INNER_SHAPE = Shapes.or(NORTH_FACING_SHAPE,
+	private static final VoxelShape INNER_SHAPE = Shapes.or(STRAIGHT_SHAPE,
 			Block.box(8.0D, 0D, 0D, 16.0D, 16.0D, 8.0D));
 
-	// SWNE = 0,1,2,3
-	private VoxelShape voxelShapes[] = {
-			// straight
-			SOUTH_FACING_SHAPE, WEST_FACING_SHAPE, NORTH_FACING_SHAPE, EAST_FACING_SHAPE,
+	private static final VoxelShape OUTER_SHAPE = Block.box(8.0D, 0D, 8.0D, 16.0D, 16.0D, 16.0D);
 
-			// inner left
-			TOP_LEFT_INNER_SHAPE, // 4
-			BOTTOM_LEFT_INNER_SHAPE,
-			// inner right
-			TOP_RIGHT_INNER_SHAPE, // 6
-			BOTTOM_RIGHT_INNER_SHAPE, // 7
-
-			// outer left
-			TOP_LEFT_OUTER_SHAPE, BOTTOM_LEFT_OUTER_SHAPE,
-
-			// outer right
-			TOP_RIGHT_OUTER_SHAPE, BOTTOM_RIGHT_OUTER_SHAPE };
+	private static final VoxelShape[] VOXEL_SHAPES =
+			IFacadeShapeBlock.buildShapeTable(STRAIGHT_SHAPE, INNER_SHAPE, OUTER_SHAPE);
 
 	/**
 	 * 
@@ -92,13 +65,12 @@ public class FacadeBlock extends FacadeShapeBlock {
 	}
 
 	/**
-	 * Returns the VoxelShape (ie bounding box) of the block in the correctposition.
-	 * NOTE if shape != STRAIGHT, then facing index can only == North || South
+	 * Returns the VoxelShape (ie bounding box) of the block in the correct position.
 	 */
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
 		int shapeIndex = getBlockShapeIndex(state, getter, pos, context);
-		return voxelShapes[shapeIndex];
+		return VOXEL_SHAPES[shapeIndex];
 	}
 
 	/**

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.0.0] - 2026-07-26
 
+### ⚠️ Breaking changes
+
+- **Corner pieces on Ledge, Facade, Fluted Facade, Quarter Facade, Cornice, and Crown Molding blocks change meaning.** Their corner shape is now defined *relative to the direction the block faces*, the way vanilla stairs do it, instead of by absolute compass direction. This is what makes east- and west-facing corners work at all — previously only north–south runs rendered and collided correctly. There is no upgrade path: **corner pieces already placed in existing worlds will visibly change orientation** and need to be re-placed. Straight (non-corner) pieces are unaffected.
+
 ### Added
 
 - **Decorative entity props** — a new category of content. These are entities rather than blocks, so they sit anywhere in a block, react to being walked into, and are not limited to the block grid.
@@ -20,6 +24,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### ⚙️ Changed
 
 - Ceramic Pot items render as 3D models in the inventory, in hand, on the ground and in item frames, the way block items do, instead of as flat sprites.
+
+### 🛠️ Fixed
+
+- East- and west-facing corner pieces on Ledge, Facade, Fluted Facade, Quarter Facade, Cornice, and Crown Molding blocks now render at the correct rotation and have the correct collision box. Previously the two corner variants of an east- or west-facing run were drawn identically, and both fell back to a south-facing corner's collision box.
+- Corner pieces inside a rotated structure keep their shape. A dungeon room placed at a 90 or 270 degree rotation used to come out with its corner pieces turned the wrong way.
+- Corner pieces are now handled correctly in mirrored structure placements, which previously left the piece untouched.
+- The collision box of a Crown Molding outer corner now matches its model; its lower moulding was two pixels shallower than it looked.
 
 ### Known limitations
 

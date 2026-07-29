@@ -34,71 +34,25 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  */
 public class CorniceBlock extends FacadeShapeBlock {
 
-	// Voxels are like the bounding boxes (AABBs) NF= North Facing, SF = South
-	// Facing, etc
-	private static final VoxelShape NORTH_FACING_SHAPE = Shapes.or(
+	/*
+	 * Voxels are like the bounding boxes (AABBs). All canonical geometry is authored
+	 * for a NORTH-facing block - ie the orientation the models are drawn in at
+	 * y-rotation 0. The other three facings, and both handednesses of each corner,
+	 * are turned out of these.
+	 */
+	private static final VoxelShape STRAIGHT_SHAPE = Shapes.or(
 			Block.box(0.0D, 0.0D, 8.0D, 16.0D, 12.0D, 16.0D),
 			Block.box(0.0D, 12.0D, 3.0D, 16.0D, 16.0D, 16.0D));
 
-	private static final VoxelShape WEST_FACING_SHAPE = Shapes.or(
-			Block.box(8.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
-			Block.box(3.0D, 12.0D, 0.0D, 16.0D, 16.0D, 16.0D));
-
-	private static final VoxelShape SOUTH_FACING_SHAPE = Shapes.or(
-			Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 8.0D),
-			Block.box(0.0D, 12.0D, 0.0D, 16.0D, 16.0D, 13.0D));
-
-	private static final VoxelShape EAST_FACING_SHAPE = Shapes.or(
-			Block.box(0.0D, 0.0D, 0.0D, 8.0D, 12.0D, 16.0D),
-			Block.box(0.0D, 12.0D, 0.0D, 13.0D, 16.0D, 16.0D));
-
-	// outer corners
-	private static final VoxelShape TOP_LEFT_OUTER_SHAPE = Shapes.or(
-			Block.box(8.0D, 0D, 8.0D, 16.0D, 12.0D, 16.0D),
-			Block.box(3.0D, 12D, 3.0D, 16.0D, 16.0D, 16.0D));
-	private static final VoxelShape TOP_RIGHT_OUTER_SHAPE = Shapes.or(
-			Block.box(0D, 0D, 8.0D, 8.0D, 12.0D, 16.0D),
-			Block.box(0D, 12D, 3.0D, 13.0D, 16.0D, 16.0D));
-
-	private static final VoxelShape BOTTOM_LEFT_OUTER_SHAPE = Shapes.or(
-			Block.box(8.0D, 0D, 0D, 16.0D, 12.0D, 8.0D),
-			Block.box(3D, 12D, 0D, 16.0D, 16.0D, 13.0D));
-	private static final VoxelShape BOTTOM_RIGHT_OUTER_SHAPE = Shapes.or(
-			Block.box(0D, 0D, 0D, 8.0D, 12.0D, 8.0D),
-			Block.box(0D, 12D, 0D, 13.0D, 16.0D, 13.0D));
-
-	// inner corners
-	private static final VoxelShape TOP_LEFT_INNER_SHAPE = Shapes.or(SOUTH_FACING_SHAPE,
-			Block.box(0.0D, 0D, 8.0D, 8.0D, 12.0D, 16.0D),
-			Block.box(0D, 12D, 13D, 13D, 16D, 16D));
-	private static final VoxelShape TOP_RIGHT_INNER_SHAPE = Shapes.or(SOUTH_FACING_SHAPE,
-			Block.box(8.0D, 0D, 8.0D, 16.0D, 12.0D, 16.0D),
-			Block.box(3D, 12D, 13D, 16D, 16D, 16D));
-
-	private static final VoxelShape BOTTOM_LEFT_INNER_SHAPE = Shapes.or(NORTH_FACING_SHAPE,
-			Block.box(0.0D, 0D, 0.0D, 8.0D, 12.0D, 8.0D), Block.box(0D, 12D, 0D, 13D, 16D, 3D));
-	private static final VoxelShape BOTTOM_RIGHT_INNER_SHAPE = Shapes.or(NORTH_FACING_SHAPE,
+	private static final VoxelShape INNER_SHAPE = Shapes.or(STRAIGHT_SHAPE,
 			Block.box(8.0D, 0D, 0D, 16.0D, 12.0D, 8.0D), Block.box(3D, 12D, 0D, 16D, 16D, 3D));
 
-	// SWNE = 0,1,2,3
-	private VoxelShape voxelShapes[] = {
-			// straight
-			SOUTH_FACING_SHAPE, WEST_FACING_SHAPE, NORTH_FACING_SHAPE, EAST_FACING_SHAPE,
+	private static final VoxelShape OUTER_SHAPE = Shapes.or(
+			Block.box(8.0D, 0D, 8.0D, 16.0D, 12.0D, 16.0D),
+			Block.box(3.0D, 12D, 3.0D, 16.0D, 16.0D, 16.0D));
 
-			// inner left
-			TOP_LEFT_INNER_SHAPE, // 4
-			BOTTOM_LEFT_INNER_SHAPE, // 5
-
-			// inner right
-			TOP_RIGHT_INNER_SHAPE, // 6
-			BOTTOM_RIGHT_INNER_SHAPE, // 7
-
-			// outer left
-			TOP_LEFT_OUTER_SHAPE, // 8
-			BOTTOM_LEFT_OUTER_SHAPE, //9
-
-			// outer right
-			TOP_RIGHT_OUTER_SHAPE, BOTTOM_RIGHT_OUTER_SHAPE };
+	private static final VoxelShape[] VOXEL_SHAPES =
+			IFacadeShapeBlock.buildShapeTable(STRAIGHT_SHAPE, INNER_SHAPE, OUTER_SHAPE);
 
 	/**
 	 * 
@@ -110,12 +64,11 @@ public class CorniceBlock extends FacadeShapeBlock {
 
 	/**
 	 * Returns the VoxelShape (ie bounding box) of the block in the correct position.
-	 * NOTE if shape != STRAIGHT, then facing index can only == North || South
 	 */
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
 		int shapeIndex = getBlockShapeIndex(state, getter, pos, context);
-		return voxelShapes[shapeIndex];
+		return VOXEL_SHAPES[shapeIndex];
 	}
 
 	/**

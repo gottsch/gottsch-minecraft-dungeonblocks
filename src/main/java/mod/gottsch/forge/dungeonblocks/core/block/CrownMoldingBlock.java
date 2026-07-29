@@ -33,85 +33,30 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  *
  */
 public class CrownMoldingBlock extends FacadeShapeBlock {
-	// Voxels are like the bounding boxes (AABBs) NF= North Facing, SF = South
-	// Facing, etc
-	private static final VoxelShape NORTH_FACING_SHAPE = Shapes.or(
+	/*
+	 * Voxels are like the bounding boxes (AABBs). All canonical geometry is authored
+	 * for a NORTH-facing block - ie the orientation the models are drawn in at
+	 * y-rotation 0. The other three facings, and both handednesses of each corner,
+	 * are turned out of these.
+	 */
+	private static final VoxelShape STRAIGHT_SHAPE = Shapes.or(
 			Block.box(0.0D, 0.0D, 12.0D, 16.0D, 3.0D, 16.0D), // bottom (16x3x4)
 			Block.box(0.0D, 9.0D, 10.0D, 16.0D, 16.0D, 16.0D), // top (16x7x6)
 			Block.box(0.0D, 8.0D, 12.0D, 16.0D, 9.0D, 14.0D), // notch (16x1x2)
 			Block.box(0.0D, 3.0D, 14.0D, 16.0D, 9.0D, 16.0D)); // middle (16x6x2)
 
-	private static final VoxelShape EAST_FACING_SHAPE = Shapes.or(
-			Block.box(0.0D, 0.0D, 0.0D, 4.0D, 3.0D, 16.0D),
-			Block.box(0.0D, 9.0D, 0.0D, 6.0D, 16.0D, 16.0D),
-			Block.box(2.0D, 8.0D, 0.0D, 4.0D, 9.0D, 16.0D),
-			Block.box(0.0D, 3.0D, 0.0D, 2.0D, 9.0D, 16.0D));
-
-	private static final VoxelShape SOUTH_FACING_SHAPE = Shapes.or(Block.box(0, 0, 0, 16, 3, 4),
-			Block.box(0, 9, 0, 16, 16, 6), Block.box(0, 8, 2, 16, 9, 4),
-			Block.box(0, 3, 0, 16, 9, 2));
-
-	private static final VoxelShape WEST_FACING_SHAPE = Shapes.or(Block.box(12, 0, 0, 16, 3, 16),
-			Block.box(10, 9, 0, 16, 16, 16), Block.box(12, 8, 0, 14, 9, 16),
-			Block.box(14, 3, 0, 16, 9, 16));
-
-	// outer corners
-	private static final VoxelShape TOP_LEFT_OUTER_SHAPE = Shapes.or(Block.box(10, 9, 10, 16, 16, 16), // top
-			Block.box(14, 3, 14, 16, 9, 16), // middle
-			Block.box(12, 8, 12, 16, 9, 14), // notch
-			Block.box(12, 8, 14, 14, 9, 16), // notch2
-			Block.box(12, 0, 14, 16, 3, 16)); // bottom
-
-	private static final VoxelShape TOP_RIGHT_OUTER_SHAPE = Shapes.or(Block.box(0, 9, 10, 6, 16, 16),
-			Block.box(0, 3, 14, 2, 9, 16), Block.box(2, 8, 12, 4, 16, 16),
-			Block.box(0, 8, 12, 2, 16, 14), Block.box(0, 0, 12, 4, 3, 16));
-
-	private static final VoxelShape BOTTOM_LEFT_OUTER_SHAPE = Shapes.or(Block.box(10, 9, 0, 16, 16, 6),
-			Block.box(14, 3, 0, 16, 9, 2), Block.box(12, 8, 0, 16, 16, 4),
-			Block.box(14, 8, 2, 16, 16, 4), Block.box(12, 0, 0, 16, 3, 4));
-
-	private static final VoxelShape BOTTOM_RIGHT_OUTER_SHAPE = Shapes.or(Block.box(0, 9, 0, 6, 16, 6), // top
-			Block.box(0, 3, 0, 2, 9, 2), // middle
-			Block.box(0, 8, 2, 4, 16, 4), // notch
-			Block.box(2, 8, 0, 4, 16, 2), // notch2
-			Block.box(0, 0, 0, 4, 3, 4) // bottom
-	);
-
-	// inner corners
-	private static final VoxelShape TOP_LEFT_INNER_SHAPE = Shapes.or(SOUTH_FACING_SHAPE,
-			Block.box(0, 9, 6, 6, 16, 16), Block.box(0, 3, 2, 2, 9, 16),
-			Block.box(2, 8, 4, 4, 9, 16), Block.box(0, 0, 4, 4, 3, 16));
-
-	private static final VoxelShape TOP_RIGHT_INNER_SHAPE = Shapes.or(SOUTH_FACING_SHAPE,
-			Block.box(10, 9, 6, 16, 16, 16), Block.box(14, 3, 2, 16, 9, 16),
-			Block.box(12, 8, 4, 16, 9, 16), Block.box(12, 0, 4, 16, 3, 16));
-
-	private static final VoxelShape BOTTOM_LEFT_INNER_SHAPE = Shapes.or(NORTH_FACING_SHAPE,
-			Block.box(0, 9, 0, 6, 16, 10), Block.box(0, 3, 0, 2, 9, 14),
-			Block.box(2, 8, 0, 4, 9, 12), Block.box(0, 0, 0, 4, 3, 12));
-
-	private static final VoxelShape BOTTOM_RIGHT_INNER_SHAPE = Shapes.or(NORTH_FACING_SHAPE,
+	private static final VoxelShape INNER_SHAPE = Shapes.or(STRAIGHT_SHAPE,
 			Block.box(10, 9, 0, 16, 16, 10), Block.box(14, 3, 0, 16, 9, 14),
 			Block.box(12, 8, 0, 16, 9, 12), Block.box(12, 0, 0, 16, 3, 12));
 
-	// SWNE = 0,1,2,3
-	private VoxelShape voxelShapes[] = {
-			// straight
-			SOUTH_FACING_SHAPE, WEST_FACING_SHAPE, NORTH_FACING_SHAPE, EAST_FACING_SHAPE,
+	private static final VoxelShape OUTER_SHAPE = Shapes.or(Block.box(10, 9, 10, 16, 16, 16), // top
+			Block.box(14, 3, 14, 16, 9, 16), // middle
+			Block.box(12, 8, 12, 16, 9, 14), // notch
+			Block.box(12, 8, 14, 14, 9, 16), // notch2
+			Block.box(12, 0, 12, 16, 3, 16)); // bottom - 4x4, matching the model element
 
-			// inner left
-			TOP_LEFT_INNER_SHAPE, // 4
-			BOTTOM_LEFT_INNER_SHAPE, // 5
-
-			// inner right
-			TOP_RIGHT_INNER_SHAPE, // 6
-			BOTTOM_RIGHT_INNER_SHAPE, // 7
-
-			// outer left
-			TOP_LEFT_OUTER_SHAPE, BOTTOM_LEFT_OUTER_SHAPE,
-
-			// outer right
-			TOP_RIGHT_OUTER_SHAPE, BOTTOM_RIGHT_OUTER_SHAPE };
+	private static final VoxelShape[] VOXEL_SHAPES =
+			IFacadeShapeBlock.buildShapeTable(STRAIGHT_SHAPE, INNER_SHAPE, OUTER_SHAPE);
 
 	/**
 	 * 
@@ -122,13 +67,12 @@ public class CrownMoldingBlock extends FacadeShapeBlock {
 	}
 
 	/**
-	 * Returns the VoxelShape (ie bounding box) of the block in the correctposition.
-	 * NOTE if shape != STRAIGHT, then facing index can only == North || South
+	 * Returns the VoxelShape (ie bounding box) of the block in the correct position.
 	 */
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
 		int shapeIndex = getBlockShapeIndex(state, getter, pos, context);
-		return voxelShapes[shapeIndex];
+		return VOXEL_SHAPES[shapeIndex];
 	}
 
 	/**

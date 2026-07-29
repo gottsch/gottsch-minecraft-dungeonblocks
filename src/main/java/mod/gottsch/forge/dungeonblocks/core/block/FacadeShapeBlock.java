@@ -19,12 +19,14 @@
  */
 package mod.gottsch.forge.dungeonblocks.core.block;
 
+import mod.gottsch.forge.dungeonblocks.core.state.properties.FacadeShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 
@@ -74,6 +76,32 @@ public abstract class FacadeShapeBlock extends WaterloggedNonCubeFacingBlock imp
 		return placementBlockState;
 	}
 	
+	/*
+	 * NOTE rotate() is inherited unchanged from FacingBlock, which turns FACING and
+	 * leaves SHAPE alone. That is correct precisely because LEFT/RIGHT are relative
+	 * to FACING - a rotated corner is still the same corner.
+	 */
+
+	/**
+	 * A mirror reverses handedness, so on top of flipping FACING every corner has to
+	 * swap left for right.
+	 */
+	@Override
+	public BlockState mirror(BlockState state, Mirror mirror) {
+		BlockState mirrored = state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
+		if (mirror == Mirror.NONE || state.getValue(FACING).getAxis().isVertical()) {
+			return mirrored;
+		}
+
+		return switch (state.getValue(SHAPE)) {
+		case INNER_LEFT -> mirrored.setValue(SHAPE, FacadeShape.INNER_RIGHT);
+		case INNER_RIGHT -> mirrored.setValue(SHAPE, FacadeShape.INNER_LEFT);
+		case OUTER_LEFT -> mirrored.setValue(SHAPE, FacadeShape.OUTER_RIGHT);
+		case OUTER_RIGHT -> mirrored.setValue(SHAPE, FacadeShape.OUTER_LEFT);
+		default -> mirrored;
+		};
+	}
+
 	/**
 	 * Checks if a block is same as FacadeBlock
 	 */
