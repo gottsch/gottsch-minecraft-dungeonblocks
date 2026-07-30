@@ -31,6 +31,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Corner pieces inside a rotated structure keep their shape. A dungeon room placed at a 90 or 270 degree rotation used to come out with its corner pieces turned the wrong way.
 - Corner pieces are now handled correctly in mirrored structure placements, which previously left the piece untouched.
 - The collision box of a Crown Molding outer corner now matches its model; its lower moulding was two pixels shallower than it looked.
+- Sill, Double Sill, Skeleton, Brazier (all three), Wall Sconce, and Candle Sconce (all variants) blocks no longer show an almost-black face where they sit against a neighbouring block. These models have steeply angled parts that reach the edge of their block, and shading them against the block next door darkened them far too much.
+- The tops of the candles on a Candle Sconce are no longer black. Every sconce except a north-facing one had its candle tops mapped onto an empty region of the candle texture, so they drew as solid black. North-facing sconces were the only ones unaffected.
+- Two-candle and three-candle Candle Sconce models were also missing their transparency setting, so see-through parts of the candle texture were drawn as solid black. The one-candle model was already correct.
+- The top face of each candle on a Candle Sconce now shows the wax top of the candle rather than a slice of the candle's side.
+- The third arm of the Candle Sconce sat almost entirely outside its own block, roughly three pixels into the neighbouring block. It is now positioned as a true mirror of the first arm, so the three arms are evenly spaced.
 
 ### Known limitations
 

@@ -1,5 +1,7 @@
 {
 	"parent": "block/block",
+	"__comment_ao": "AO off, same reason as sill_block_base: the four leg elements are tilted +/-22.5 degrees and reach the block's side boundaries (as do the wings at y=15), and ambient occlusion shades an angled face like that almost black against an adjacent block.",
+	"ambientocclusion": false,
 	"textures": {
 		"0": "dungeonblocks:block/dark_iron",
 		"1": "dungeonblocks:block/brazier",

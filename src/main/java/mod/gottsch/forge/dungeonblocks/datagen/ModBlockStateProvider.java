@@ -690,10 +690,16 @@ public class ModBlockStateProvider extends BlockStateProvider {
             } else if (candles == 3) {
                 model = isLit ? threeLit : threeUnlit;
             }
+            // NO uvLock. uvLock rotates the UVs of faces perpendicular to the rotation axis, so with a
+            // y rotation it only touches up/down faces. The candle texture (minecraft:block/candle*)
+            // only has pixels in columns 0-1, so a rotated UV lands in the empty right-hand side of the
+            // sheet and every candle top sampled fully transparent texels - rendering black in the solid
+            // layer, or invisible once the models correctly declared render_type cutout. torch_sconce
+            // never set uvLock and has always been fine. uvLock is for world-aligned tiling textures
+            // (see the facade corner code), not for a hand-authored model like this one.
             return ConfiguredModel.builder()
                     .modelFile(model)
                     .rotationY((int) facing.getOpposite().toYRot())
-                    .uvLock(true)
                     .build();
         }, SconceBlock.WATERLOGGED);
     }

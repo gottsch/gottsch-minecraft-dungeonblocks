@@ -1,6 +1,8 @@
 {
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
 	"parent": "block/block",    
+	"__comment_ao": "AO off, same reason as sill_block_base: the arm-3 elements (pillar/cup) are tilted -22.5 degrees and cross the +x block boundary, so ambient occlusion shades them almost black against the neighbouring wall block.",
+	"ambientocclusion": false,
     "textures": {
         "1": "block/anvil",
         "2": "block/torch",
