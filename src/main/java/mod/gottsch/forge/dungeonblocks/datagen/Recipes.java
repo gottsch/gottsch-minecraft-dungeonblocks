@@ -66,6 +66,16 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
 					.save(recipe);
 
+			// angle cobwebs
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.ANGLE_COBWEB_1.get())
+					.requires(Items.STRING, 4)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.STRING))
+					.save(recipe);
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.ANGLE_COBWEB_2.get())
+					.requires(Items.STRING, 2)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.STRING))
+					.save(recipe);
+
 			// candle sconce
 			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.CANDLE_SCONCE.get(), 3)
 					.pattern("ccc")

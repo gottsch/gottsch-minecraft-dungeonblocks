@@ -69,6 +69,11 @@ public class ItemModelsProvider extends ItemModelProvider {
 		});
 
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.TORCH_SCONCE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_CHISELED_STONE_BRICKS));
+		// flat vanilla cobweb icon, not the 3D block render blockItemParent would give - the thin
+		// cutout planes look wrong/invisible from the fixed GUI isometric angle
+		basicItem(ModBlocks.MAP.get(ModBlocks.ANGLE_COBWEB_1), mcLoc("block/cobweb"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.ANGLE_COBWEB_2), mcLoc("block/cobweb"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.CANDLE_SCONCE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.BRAZIER));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_GRATE));

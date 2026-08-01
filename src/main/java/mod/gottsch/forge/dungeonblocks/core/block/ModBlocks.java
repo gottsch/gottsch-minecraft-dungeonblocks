@@ -71,6 +71,12 @@ public class ModBlocks {
                         return 14;
                     }).sound(SoundType.WOOD)));
 
+    // purely decorative corner webbing - no vanilla cobweb slowdown/break behavior, see AngleCobwebBlock
+    public static final RegistryObject<Block> ANGLE_COBWEB_1 = Registration.BLOCKS.register("angle_cobweb_1",
+            () -> new AngleCobwebBlock(Properties.copy(Blocks.COBWEB).noCollission()));
+    public static final RegistryObject<Block> ANGLE_COBWEB_2 = Registration.BLOCKS.register("angle_cobweb_2",
+            () -> new AngleCobwebBlock(Properties.copy(Blocks.COBWEB).noCollission()));
+
     public static final RegistryObject<Block> CANDLE_SCONCE = Registration.BLOCKS.register("candle_sconce_block",
             () -> new SconceBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion().lightLevel(SconceBlock.LIGHT_EMISSION)));
     public static final RegistryObject<Block> DUNGEON_LANTERN = Registration.BLOCKS.register("dungeon_lantern", () -> new DungeonLanternBlock(Properties.of().mapColor(MapColor.METAL)

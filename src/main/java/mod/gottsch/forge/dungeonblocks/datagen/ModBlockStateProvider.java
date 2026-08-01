@@ -240,6 +240,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         // light source
         torchSconceBlock(ModBlocks.TORCH_SCONCE);
+        angleCobwebBlock(ModBlocks.ANGLE_COBWEB_1);
+        angleCobwebBlock(ModBlocks.ANGLE_COBWEB_2);
         candleSconceBlock(ModBlocks.CANDLE_SCONCE);
         brazierBlock(ModBlocks.BRAZIER);
 
@@ -360,6 +362,33 @@ public class ModBlockStateProvider extends BlockStateProvider {
     public void torchSconceBlock(RegistryObject<Block> block) {
         ModelFile model = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/torch_sconce_block"));
         myHorizontalBlock(block.get(), model);
+    }
+
+    /**
+     * Like {@link #allDirectionBlock}, but also applies AngleCobwebBlock.ROTATION as the yaw for the
+     * UP/DOWN states, so a floor or ceiling mount still has all four quarter-turns instead of
+     * collapsing to one fixed orientation.
+     */
+    public void angleCobwebBlock(RegistryObject<Block> block) {
+        ModelFile model = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/" + block.getId().getPath()));
+        getVariantBuilder(block.get()).forAllStates(state -> {
+            Direction dir = state.getValue(FACING);
+            int xRot = 0;
+            int yRot;
+            if (dir == Direction.DOWN) {
+                xRot = 90;
+                yRot = state.getValue(AngleCobwebBlock.ROTATION) * 90;
+            } else if (dir == Direction.UP) {
+                xRot = -90;
+                yRot = state.getValue(AngleCobwebBlock.ROTATION) * 90;
+            } else {
+                yRot = ((int) dir.toYRot() + 180) % 360;
+            }
+            return ConfiguredModel.builder().modelFile(model)
+                    .rotationX(xRot)
+                    .rotationY(yRot % 360)
+                    .build();
+        });
     }
 
     public void candleSconceBlock(RegistryObject<Block> block) {
