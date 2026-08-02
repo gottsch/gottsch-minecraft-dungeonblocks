@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Two-candle and three-candle Candle Sconce models were also missing their transparency setting, so see-through parts of the candle texture were drawn as solid black. The one-candle model was already correct.
 - The top face of each candle on a Candle Sconce now shows the wax top of the candle rather than a slice of the candle's side.
 - The third arm of the Candle Sconce sat almost entirely outside its own block, roughly three pixels into the neighbouring block. It is now positioned as a true mirror of the first arm, so the three arms are evenly spaced.
+- 265 block models across 20 base models no longer render one or more faces as a magenta/black missing-texture checkerboard. Affected: every Crown Molding piece, Corbel, Barred Window Facade, Ledge inner corners, five Dungeon Door pieces, three Heavy Trapdoor pieces, two Sewer pieces, Wall Ring, Torch Sconce, and all three Braziers. The models referenced a texture variable nothing in their parent chain ever declared.
 
 ### Known limitations
 
