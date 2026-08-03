@@ -183,7 +183,7 @@ SewerBlock extends NonCubeFacingBlock {
     public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor level, BlockPos blockPos, BlockPos blockPos2) {
         BlockState placementBlockState = super.updateShape(blockState, direction, blockState2, level, blockPos, blockPos2);
         // custom method to get block state
-        placementBlockState = getBlockStateForPlacement((Level)level, placementBlockState, blockPos);
+        placementBlockState = getBlockStateForPlacement(level, placementBlockState, blockPos);
         return placementBlockState;
     }
 
@@ -194,7 +194,7 @@ SewerBlock extends NonCubeFacingBlock {
      * @param blockPos
      * @return
      */
-    public BlockState getBlockStateForPlacement(Level level, BlockState blockState, BlockPos blockPos) {
+    public BlockState getBlockStateForPlacement(LevelAccessor level, BlockState blockState, BlockPos blockPos) {
         Direction direction = blockState.getValue(FACING);
         BlockState newState = blockState;
 
@@ -219,7 +219,7 @@ SewerBlock extends NonCubeFacingBlock {
      * @param blockState
      * @return
      */
-    BlockState getStateForSouthDirection(Level level, BlockPos blockPos, BlockState blockState) {
+    BlockState getStateForSouthDirection(LevelAccessor level, BlockPos blockPos, BlockState blockState) {
         BlockState neighborState;
         Block neighborBlock;
         Direction neighborFacing;

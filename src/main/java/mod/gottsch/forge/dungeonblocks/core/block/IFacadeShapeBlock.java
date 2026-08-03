@@ -126,8 +126,15 @@ public interface IFacadeShapeBlock extends IFacingBlock {
 	/**
 	 * Picks the corner shape for a block from its neighbours. Works off the block's
 	 * own facing, so all four horizontal facings are handled by the one rule.
+	 *
+	 * <p>Takes a {@link LevelAccessor}, not a {@code Level}, because {@code updateShape} is handed
+	 * one and during <strong>worldgen</strong> it is a {@code WorldGenRegion}, which is not a
+	 * {@code Level}. Casting instead of widening threw {@code ClassCastException} from inside
+	 * vanilla's {@code Block.updateFromNeighbourShapes}, surfacing as a "Feature placement"
+	 * ReportedException that killed chunk generation for any structure placing these blocks.
+	 * Nothing here needs more than block reads, which {@code LevelAccessor} already provides.</p>
 	 */
-	default public BlockState getBlockStateForPlacement(Level level, BlockState blockState, BlockPos blockPos) {
+	default public BlockState getBlockStateForPlacement(LevelAccessor level, BlockState blockState, BlockPos blockPos) {
 		Direction facing = blockState.getValue(FACING);
 		if (facing.getAxis().isVertical()) {
 			return blockState.setValue(SHAPE, FacadeShape.STRAIGHT);
