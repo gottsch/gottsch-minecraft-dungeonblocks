@@ -605,17 +605,18 @@ public class ModBlockStateProvider extends BlockStateProvider {
     public void brazierBlock(RegistryObject<Block> block) {
         ModelFile brazier_lit = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/brazier_lit_block"));
         ModelFile brazier_soul_lit = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/brazier_soul_lit_block"));
+        ModelFile brazier_embers = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/brazier_embers_block"));
         ModelFile brazier = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/brazier_block"));
-        brazierBlock(block.get(), brazier, brazier_lit, brazier_soul_lit);
+        brazierBlock(block.get(), brazier, brazier_embers, brazier_lit, brazier_soul_lit);
     }
 
-    public void brazierBlock(Block block, ModelFile brazier, ModelFile brazier_lit, ModelFile brazier_soul_lit) {
-        // SOUL is left unspecified while unlit: an unlit brazier looks the same either way,
-        // and the partial state keeps all soul values covered.
+    public void brazierBlock(Block block, ModelFile brazier, ModelFile brazier_embers, ModelFile brazier_lit, ModelFile brazier_soul_lit) {
+        // one model per FIRE value; WATERLOGGED is left unspecified since it changes no geometry.
         getVariantBuilder(block)
-                .partialState().with(BrazierBlock.LIT, true).with(BrazierBlock.SOUL, false).addModels(new ConfiguredModel(brazier_lit))
-                .partialState().with(BrazierBlock.LIT, true).with(BrazierBlock.SOUL, true).addModels(new ConfiguredModel(brazier_soul_lit))
-                .partialState().with(BrazierBlock.LIT, false).addModels(new ConfiguredModel(brazier));
+                .partialState().with(BrazierBlock.FIRE, BrazierBlock.BrazierFire.NONE).addModels(new ConfiguredModel(brazier))
+                .partialState().with(BrazierBlock.FIRE, BrazierBlock.BrazierFire.EMBERS).addModels(new ConfiguredModel(brazier_embers))
+                .partialState().with(BrazierBlock.FIRE, BrazierBlock.BrazierFire.SOUL).addModels(new ConfiguredModel(brazier_soul_lit))
+                .partialState().with(BrazierBlock.FIRE, BrazierBlock.BrazierFire.LIT).addModels(new ConfiguredModel(brazier_lit));
     }
 
     /**

@@ -1,12 +1,15 @@
 {
   "variants": {
-    "lit=false": {
-      "model": "dungeonblocks:block/brazier_block"
+    "fire=embers": {
+      "model": "dungeonblocks:block/brazier_embers_block"
     },
-    "lit=true,soul=false": {
+    "fire=lit": {
       "model": "dungeonblocks:block/brazier_lit_block"
     },
-    "lit=true,soul=true": {
+    "fire=none": {
+      "model": "dungeonblocks:block/brazier_block"
+    },
+    "fire=soul": {
       "model": "dungeonblocks:block/brazier_soul_lit_block"
     }
   }
