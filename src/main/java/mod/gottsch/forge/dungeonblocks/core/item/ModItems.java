@@ -72,13 +72,35 @@ public class ModItems {
 			() -> new PotItem(() -> ModEntityTypes.SQUAT_CLAY_POT.get(), new Item.Properties()));
 	public static final RegistryObject<Item> THIN_CLAY_POT = Registration.ITEMS.register("thin_clay_pot",
 			() -> new PotItem(() -> ModEntityTypes.THIN_CLAY_POT.get(), new Item.Properties()));
+	public static final RegistryObject<Item> STONE_POT = Registration.ITEMS.register("stone_pot",
+			() -> new PotItem(() -> ModEntityTypes.STONE_POT.get(), new Item.Properties()));
+	public static final RegistryObject<Item> SQUAT_STONE_POT = Registration.ITEMS.register("squat_stone_pot",
+			() -> new PotItem(() -> ModEntityTypes.SQUAT_STONE_POT.get(), new Item.Properties()));
+	public static final RegistryObject<Item> THIN_STONE_POT = Registration.ITEMS.register("thin_stone_pot",
+			() -> new PotItem(() -> ModEntityTypes.THIN_STONE_POT.get(), new Item.Properties()));
+	public static final RegistryObject<Item> RED_POT = Registration.ITEMS.register("red_pot",
+			() -> new PotItem(() -> ModEntityTypes.RED_POT.get(), new Item.Properties()));
+	public static final RegistryObject<Item> SQUAT_RED_POT = Registration.ITEMS.register("squat_red_pot",
+			() -> new PotItem(() -> ModEntityTypes.SQUAT_RED_POT.get(), new Item.Properties()));
+	public static final RegistryObject<Item> THIN_RED_POT = Registration.ITEMS.register("thin_red_pot",
+			() -> new PotItem(() -> ModEntityTypes.THIN_RED_POT.get(), new Item.Properties()));
+	public static final RegistryObject<Item> BLUE_POT = Registration.ITEMS.register("blue_pot",
+			() -> new PotItem(() -> ModEntityTypes.BLUE_POT.get(), new Item.Properties()));
+	public static final RegistryObject<Item> SQUAT_BLUE_POT = Registration.ITEMS.register("squat_blue_pot",
+			() -> new PotItem(() -> ModEntityTypes.SQUAT_BLUE_POT.get(), new Item.Properties()));
+	public static final RegistryObject<Item> THIN_BLUE_POT = Registration.ITEMS.register("thin_blue_pot",
+			() -> new PotItem(() -> ModEntityTypes.THIN_BLUE_POT.get(), new Item.Properties()));
 
 	/**
 	 * Items belonging to the decorative-entity subsystem. These are pulled out of the main
 	 * DungeonBlocks tab (which otherwise sweeps up every registered item) and shown in the
 	 * DungeonBlocks Entities tab instead — see {@link ModCreativeModeTabs}.
 	 */
-	public static final List<RegistryObject<Item>> ENTITY_ITEMS = List.of(POT, SQUAT_CLAY_POT, THIN_CLAY_POT);
+	public static final List<RegistryObject<Item>> ENTITY_ITEMS = List.of(
+			POT, SQUAT_CLAY_POT, THIN_CLAY_POT,
+			STONE_POT, SQUAT_STONE_POT, THIN_STONE_POT,
+			RED_POT, SQUAT_RED_POT, THIN_RED_POT,
+			BLUE_POT, SQUAT_BLUE_POT, THIN_BLUE_POT);
 
 	/**
 	 * 

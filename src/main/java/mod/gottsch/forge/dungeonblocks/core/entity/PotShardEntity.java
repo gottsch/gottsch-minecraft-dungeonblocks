@@ -44,6 +44,10 @@ public class PotShardEntity extends Entity {
 
 	private static final EntityDataAccessor<Byte> DATA_VARIANT =
 			SynchedEntityData.defineId(PotShardEntity.class, EntityDataSerializers.BYTE);
+	// which material's shard texture to draw. Synced rather than derived: a shard is its own entity
+	// type regardless of what shattered, so the client has nothing else to read the colour from.
+	private static final EntityDataAccessor<Byte> DATA_MATERIAL =
+			SynchedEntityData.defineId(PotShardEntity.class, EntityDataSerializers.BYTE);
 	// synced because the client never runs the physics step below, so its own onGround() can't be
 	// trusted to tell the renderer when to stop the tumble.
 	private static final EntityDataAccessor<Boolean> DATA_LANDED =
@@ -72,19 +76,29 @@ public class PotShardEntity extends Entity {
 		super(type, level);
 	}
 
-	public PotShardEntity(Level level, double x, double y, double z) {
+	public PotShardEntity(Level level, double x, double y, double z, PotMaterial material) {
 		this(ModEntityTypes.POT_SHARD.get(), level);
 		this.setPos(x, y, z);
 		this.lifeTicks = MIN_LIFE_TICKS + this.random.nextInt(MAX_LIFE_TICKS - MIN_LIFE_TICKS + 1);
 		if (!level.isClientSide) {
 			this.setVariant((byte) this.random.nextInt(VARIANTS));
+			this.setMaterial(material);
 		}
 	}
 
 	@Override
 	protected void defineSynchedData() {
 		this.entityData.define(DATA_VARIANT, (byte) 0);
+		this.entityData.define(DATA_MATERIAL, (byte) PotMaterial.TERRACOTTA.ordinal());
 		this.entityData.define(DATA_LANDED, false);
+	}
+
+	public void setMaterial(PotMaterial material) {
+		this.entityData.set(DATA_MATERIAL, (byte) material.ordinal());
+	}
+
+	public PotMaterial getMaterial() {
+		return PotMaterial.byOrdinal(this.entityData.get(DATA_MATERIAL));
 	}
 
 	public void setVariant(byte variant) {
@@ -193,6 +207,7 @@ public class PotShardEntity extends Entity {
 	protected void readAdditionalSaveData(CompoundTag compound) {
 		this.lifeTicks = compound.getInt("Life");
 		this.setVariant(compound.getByte("Variant"));
+		this.setMaterial(PotMaterial.byOrdinal(compound.getByte("Material")));
 		this.entityData.set(DATA_LANDED, compound.getBoolean("Landed"));
 	}
 
@@ -200,6 +215,7 @@ public class PotShardEntity extends Entity {
 	protected void addAdditionalSaveData(CompoundTag compound) {
 		compound.putInt("Life", this.lifeTicks);
 		compound.putByte("Variant", (byte) this.getVariant());
+		compound.putByte("Material", (byte) this.getMaterial().ordinal());
 		compound.putBoolean("Landed", this.isLanded());
 	}
 }

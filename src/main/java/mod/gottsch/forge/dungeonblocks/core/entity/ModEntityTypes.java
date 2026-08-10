@@ -28,17 +28,17 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public class ModEntityTypes {
 
-	// both pot shapes share PotEntity — only geometry, texture and hitbox differ, so they are
+	// every pot shares PotEntity — only geometry, texture, hitbox and material differ, so they are
 	// distinct EntityTypes (separate renderer + default loot table) over one behaviour class.
 	public static final RegistryObject<EntityType<PotEntity>> POT = Registration.ENTITY_TYPES.register("pot",
-			() -> EntityType.Builder.of(PotEntity::new, MobCategory.MISC)
+			() -> EntityType.Builder.of(potOf(PotMaterial.TERRACOTTA), MobCategory.MISC)
 					.sized(0.5F, 0.6F)
 					.clientTrackingRange(10)
 					.updateInterval(1)
 					.build("pot"));
 
 	public static final RegistryObject<EntityType<PotEntity>> SQUAT_CLAY_POT = Registration.ENTITY_TYPES.register("squat_clay_pot",
-			() -> EntityType.Builder.of(PotEntity::new, MobCategory.MISC)
+			() -> EntityType.Builder.of(potOf(PotMaterial.TERRACOTTA), MobCategory.MISC)
 					// 10px wide x 10px tall modeled -> 0.625 blocks square
 					.sized(0.625F, 0.625F)
 					.clientTrackingRange(10)
@@ -46,12 +46,86 @@ public class ModEntityTypes {
 					.build("squat_clay_pot"));
 
 	public static final RegistryObject<EntityType<PotEntity>> THIN_CLAY_POT = Registration.ENTITY_TYPES.register("thin_clay_pot",
-			() -> EntityType.Builder.of(PotEntity::new, MobCategory.MISC)
+			() -> EntityType.Builder.of(potOf(PotMaterial.TERRACOTTA), MobCategory.MISC)
 					// 6px wide x 12px tall modeled
 					.sized(0.375F, 0.75F)
 					.clientTrackingRange(10)
 					.updateInterval(1)
 					.build("thin_clay_pot"));
+
+	// the stone set: same three shapes and hitboxes as the terracotta pots above, differing only in
+	// texture (supplied by ClientSetup) and in the material the shatter debris takes its colour from.
+	public static final RegistryObject<EntityType<PotEntity>> STONE_POT = Registration.ENTITY_TYPES.register("stone_pot",
+			() -> EntityType.Builder.of(potOf(PotMaterial.STONE), MobCategory.MISC)
+					.sized(0.5F, 0.6F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("stone_pot"));
+
+	public static final RegistryObject<EntityType<PotEntity>> SQUAT_STONE_POT = Registration.ENTITY_TYPES.register("squat_stone_pot",
+			() -> EntityType.Builder.of(potOf(PotMaterial.STONE), MobCategory.MISC)
+					.sized(0.625F, 0.625F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("squat_stone_pot"));
+
+	public static final RegistryObject<EntityType<PotEntity>> THIN_STONE_POT = Registration.ENTITY_TYPES.register("thin_stone_pot",
+			() -> EntityType.Builder.of(potOf(PotMaterial.STONE), MobCategory.MISC)
+					.sized(0.375F, 0.75F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("thin_stone_pot"));
+
+	public static final RegistryObject<EntityType<PotEntity>> RED_POT = Registration.ENTITY_TYPES.register("red_pot",
+			() -> EntityType.Builder.of(potOf(PotMaterial.RED), MobCategory.MISC)
+					.sized(0.5F, 0.6F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("red_pot"));
+
+	public static final RegistryObject<EntityType<PotEntity>> SQUAT_RED_POT = Registration.ENTITY_TYPES.register("squat_red_pot",
+			() -> EntityType.Builder.of(potOf(PotMaterial.RED), MobCategory.MISC)
+					.sized(0.625F, 0.625F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("squat_red_pot"));
+
+	public static final RegistryObject<EntityType<PotEntity>> THIN_RED_POT = Registration.ENTITY_TYPES.register("thin_red_pot",
+			() -> EntityType.Builder.of(potOf(PotMaterial.RED), MobCategory.MISC)
+					.sized(0.375F, 0.75F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("thin_red_pot"));
+
+	public static final RegistryObject<EntityType<PotEntity>> BLUE_POT = Registration.ENTITY_TYPES.register("blue_pot",
+			() -> EntityType.Builder.of(potOf(PotMaterial.BLUE), MobCategory.MISC)
+					.sized(0.5F, 0.6F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("blue_pot"));
+
+	public static final RegistryObject<EntityType<PotEntity>> SQUAT_BLUE_POT = Registration.ENTITY_TYPES.register("squat_blue_pot",
+			() -> EntityType.Builder.of(potOf(PotMaterial.BLUE), MobCategory.MISC)
+					.sized(0.625F, 0.625F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("squat_blue_pot"));
+
+	public static final RegistryObject<EntityType<PotEntity>> THIN_BLUE_POT = Registration.ENTITY_TYPES.register("thin_blue_pot",
+			() -> EntityType.Builder.of(potOf(PotMaterial.BLUE), MobCategory.MISC)
+					.sized(0.375F, 0.75F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("thin_blue_pot"));
+
+	/**
+	 * Factory that stamps a material onto every pot of a type. Going through the {@code EntityType}
+	 * factory rather than a lookup table means a pot is built with its material however it comes into
+	 * existence — placed from an item, loaded from disk, or spawned by a command.
+	 */
+	private static EntityType.EntityFactory<PotEntity> potOf(PotMaterial material) {
+		return (type, level) -> new PotEntity(type, level, material);
+	}
 
 	public static final RegistryObject<EntityType<PotShardEntity>> POT_SHARD = Registration.ENTITY_TYPES.register("pot_shard",
 			() -> EntityType.Builder.<PotShardEntity>of(PotShardEntity::new, MobCategory.MISC)

@@ -21,6 +21,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.entity.PotMaterial;
 import mod.gottsch.forge.dungeonblocks.core.entity.PotShardEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -37,8 +38,9 @@ import net.minecraft.resources.ResourceLocation;
  */
 public class PotShardRenderer extends EntityRenderer<PotShardEntity> {
 
-	private static final ResourceLocation TEXTURE =
-			new ResourceLocation(DungeonBlocks.MOD_ID, "textures/entity/pot_shard.png");
+	// one texture per pot material, indexed by ordinal — a new pot colour is a PotMaterial constant
+	// and its shard PNG, nothing here.
+	private static final ResourceLocation[] TEXTURES = buildTextures();
 
 	private final PotShardModel[] models;
 
@@ -50,9 +52,19 @@ public class PotShardRenderer extends EntityRenderer<PotShardEntity> {
 		}
 	}
 
+	private static ResourceLocation[] buildTextures() {
+		PotMaterial[] materials = PotMaterial.values();
+		ResourceLocation[] textures = new ResourceLocation[materials.length];
+		for (int i = 0; i < materials.length; i++) {
+			textures[i] = new ResourceLocation(DungeonBlocks.MOD_ID,
+					"textures/entity/" + materials[i].getShardTexture() + ".png");
+		}
+		return textures;
+	}
+
 	@Override
 	public ResourceLocation getTextureLocation(PotShardEntity entity) {
-		return TEXTURE;
+		return TEXTURES[entity.getMaterial().ordinal()];
 	}
 
 	@Override
@@ -67,7 +79,7 @@ public class PotShardRenderer extends EntityRenderer<PotShardEntity> {
 		poseStack.mulPose(Axis.ZP.rotationDegrees(spin * 19.0F));
 
 		PotShardModel model = this.models[Math.floorMod(entity.getVariant(), this.models.length)];
-		VertexConsumer vertexConsumer = buffer.getBuffer(model.renderType(TEXTURE));
+		VertexConsumer vertexConsumer = buffer.getBuffer(model.renderType(this.getTextureLocation(entity)));
 		model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY,
 				1.0F, 1.0F, 1.0F, 1.0F);
 

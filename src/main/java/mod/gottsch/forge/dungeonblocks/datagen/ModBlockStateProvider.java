@@ -222,21 +222,21 @@ public class ModBlockStateProvider extends BlockStateProvider {
         // tall doors - reusing each door's own bottom texture as a placeholder middle texture
         // until real tiling art exists; swap the middle ResourceLocation when it does.
         tallDungeonDoorBlock((TallDoorBlock)ModBlocks.SPRUCE_DUNGEON_DOOR_3.get(),
-                mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_top"));
+                mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_top"), mcLoc("block/spruce_door_top"));
         tallDungeonDoorBlock((TallDoorBlock)ModBlocks.SPRUCE_DUNGEON_DOOR_4.get(),
-                mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_top"));
+                mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_top"), mcLoc("block/spruce_door_top"));
         tallDungeonDoorBlock((TallDoorBlock)ModBlocks.CRIMSON_DUNGEON_DOOR_3.get(),
-                mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_top"));
+                mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_top"), mcLoc("block/crimson_door_top"));
         tallDungeonDoorBlock((TallDoorBlock)ModBlocks.CRIMSON_DUNGEON_DOOR_4.get(),
-                mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_top"));
+                mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_top"), mcLoc("block/crimson_door_top"));
         tallDungeonDoorBlock((TallDoorBlock)ModBlocks.DARK_OAK_DUNGEON_DOOR_3.get(),
-                mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_top"));
+                mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_top"), mcLoc("block/dark_oak_door_top"));
         tallDungeonDoorBlock((TallDoorBlock)ModBlocks.DARK_OAK_DUNGEON_DOOR_4.get(),
-                mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_top"));
+                mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_top"), mcLoc("block/dark_oak_door_top"));
         tallDungeonDoorBlock((TallDoorBlock)ModBlocks.MANGROVE_DUNGEON_DOOR_3.get(),
-                mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_top"));
+                mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_top"), mcLoc("block/mangrove_door_top"));
         tallDungeonDoorBlock((TallDoorBlock)ModBlocks.MANGROVE_DUNGEON_DOOR_4.get(),
-                mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_top"));
+                mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_top"), mcLoc("block/mangrove_door_top"));
 
         // light source
         torchSconceBlock(ModBlocks.TORCH_SCONCE);

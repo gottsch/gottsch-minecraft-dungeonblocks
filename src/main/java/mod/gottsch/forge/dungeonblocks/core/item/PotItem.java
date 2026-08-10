@@ -82,7 +82,13 @@ public class PotItem extends Item {
 		Player player = context.getPlayer();
 
 		if (!level.isClientSide) {
-			PotEntity pot = new PotEntity(this.entityType.get(), level);
+			// built through the EntityType factory, not `new PotEntity(...)`, so the type's material
+			// (see ModEntityTypes#potOf) is applied — a directly constructed pot would be terracotta
+			// whatever its type says.
+			PotEntity pot = this.entityType.get().create(level);
+			if (pot == null) {
+				return InteractionResult.PASS;
+			}
 			pot.setPos(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D);
 			if (onSide) {
 				// set before addFreshEntity so it's already in the spawn packet's synced data —

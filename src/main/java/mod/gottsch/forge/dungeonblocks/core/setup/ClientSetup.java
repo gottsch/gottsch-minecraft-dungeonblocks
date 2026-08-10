@@ -34,14 +34,34 @@ public class ClientSetup {
      * <p>The float is the total modeled height in blocks (base + neck + lip): 14px, 10px and 12px
      * respectively.
      */
-    // heights and widths are the modeled extents in blocks: 14x8, 10x10 and 12x6 pixels
+    // heights and widths are the modeled extents in blocks: 14x8, 10x10 and 12x6 pixels.
+    // The stone set reuses the terracotta set's geometry outright — a material is purely a
+    // reskin, so it is three more entries here against the same three layers, no new model class.
     private static final List<PotVariant> POT_VARIANTS = List.of(
             new PotVariant(ModEntityTypes.POT, PotModel.LAYER_LOCATION, PotModel::new,
                     PotVariant.entityTexture("pot"), 0.875F, 0.5F),
             new PotVariant(ModEntityTypes.SQUAT_CLAY_POT, SquatClayPotModel.LAYER_LOCATION, SquatClayPotModel::new,
                     PotVariant.entityTexture("squat_clay_pot"), 0.625F, 0.625F),
             new PotVariant(ModEntityTypes.THIN_CLAY_POT, ThinClayPotModel.LAYER_LOCATION, ThinClayPotModel::new,
-                    PotVariant.entityTexture("thin_clay_pot"), 0.75F, 0.375F));
+                    PotVariant.entityTexture("thin_clay_pot"), 0.75F, 0.375F),
+            new PotVariant(ModEntityTypes.STONE_POT, PotModel.LAYER_LOCATION, PotModel::new,
+                    PotVariant.entityTexture("stone_pot"), 0.875F, 0.5F),
+            new PotVariant(ModEntityTypes.SQUAT_STONE_POT, SquatClayPotModel.LAYER_LOCATION, SquatClayPotModel::new,
+                    PotVariant.entityTexture("squat_stone_pot"), 0.625F, 0.625F),
+            new PotVariant(ModEntityTypes.THIN_STONE_POT, ThinClayPotModel.LAYER_LOCATION, ThinClayPotModel::new,
+                    PotVariant.entityTexture("thin_stone_pot"), 0.75F, 0.375F),
+            new PotVariant(ModEntityTypes.RED_POT, PotModel.LAYER_LOCATION, PotModel::new,
+                    PotVariant.entityTexture("red_pot"), 0.875F, 0.5F),
+            new PotVariant(ModEntityTypes.SQUAT_RED_POT, SquatClayPotModel.LAYER_LOCATION, SquatClayPotModel::new,
+                    PotVariant.entityTexture("squat_red_pot"), 0.625F, 0.625F),
+            new PotVariant(ModEntityTypes.THIN_RED_POT, ThinClayPotModel.LAYER_LOCATION, ThinClayPotModel::new,
+                    PotVariant.entityTexture("thin_red_pot"), 0.75F, 0.375F),
+            new PotVariant(ModEntityTypes.BLUE_POT, PotModel.LAYER_LOCATION, PotModel::new,
+                    PotVariant.entityTexture("blue_pot"), 0.875F, 0.5F),
+            new PotVariant(ModEntityTypes.SQUAT_BLUE_POT, SquatClayPotModel.LAYER_LOCATION, SquatClayPotModel::new,
+                    PotVariant.entityTexture("squat_blue_pot"), 0.625F, 0.625F),
+            new PotVariant(ModEntityTypes.THIN_BLUE_POT, ThinClayPotModel.LAYER_LOCATION, ThinClayPotModel::new,
+                    PotVariant.entityTexture("thin_blue_pot"), 0.75F, 0.375F));
 
     /**
      * Register the {@link IBlockColor} handlers.

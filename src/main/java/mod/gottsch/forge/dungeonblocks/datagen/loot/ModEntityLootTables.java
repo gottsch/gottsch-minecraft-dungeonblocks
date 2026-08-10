@@ -45,6 +45,15 @@ public class ModEntityLootTables implements LootTableSubProvider {
 		noDrops(consumer, ModEntityTypes.POT.get());
 		noDrops(consumer, ModEntityTypes.SQUAT_CLAY_POT.get());
 		noDrops(consumer, ModEntityTypes.THIN_CLAY_POT.get());
+		noDrops(consumer, ModEntityTypes.STONE_POT.get());
+		noDrops(consumer, ModEntityTypes.SQUAT_STONE_POT.get());
+		noDrops(consumer, ModEntityTypes.THIN_STONE_POT.get());
+		noDrops(consumer, ModEntityTypes.RED_POT.get());
+		noDrops(consumer, ModEntityTypes.SQUAT_RED_POT.get());
+		noDrops(consumer, ModEntityTypes.THIN_RED_POT.get());
+		noDrops(consumer, ModEntityTypes.BLUE_POT.get());
+		noDrops(consumer, ModEntityTypes.SQUAT_BLUE_POT.get());
+		noDrops(consumer, ModEntityTypes.THIN_BLUE_POT.get());
 	}
 
 	/** A pool-less table: valid, resolvable, and yields nothing. */

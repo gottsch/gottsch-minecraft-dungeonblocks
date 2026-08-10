@@ -234,6 +234,15 @@ public class ItemModelsProvider extends ItemModelProvider {
 		potItem(ModItems.POT);
 		potItem(ModItems.SQUAT_CLAY_POT);
 		potItem(ModItems.THIN_CLAY_POT);
+		potItem(ModItems.STONE_POT);
+		potItem(ModItems.SQUAT_STONE_POT);
+		potItem(ModItems.THIN_STONE_POT);
+		potItem(ModItems.RED_POT);
+		potItem(ModItems.SQUAT_RED_POT);
+		potItem(ModItems.THIN_RED_POT);
+		potItem(ModItems.BLUE_POT);
+		potItem(ModItems.SQUAT_BLUE_POT);
+		potItem(ModItems.THIN_BLUE_POT);
 	}
 
 	public ItemModelBuilder basicItem(RegistryObject<Item> item, ResourceLocation texture) {

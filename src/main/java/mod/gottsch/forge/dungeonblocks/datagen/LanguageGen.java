@@ -59,13 +59,35 @@ public class LanguageGen extends LanguageProvider {
         add(ModBlocks.ROOTS.get(), "Roots");
         add(ModBlocks.ROOTS_BODY.get(), "Roots");
 
-        // "pot" is the original tall shape; the squat one is now the plain "Ceramic Pot"
-        add(ModItems.POT.get(), "Tall Ceramic Pot");
-        add(ModItems.SQUAT_CLAY_POT.get(), "Ceramic Pot");
-        add(ModItems.THIN_CLAY_POT.get(), "Thin Ceramic Pot");
-        add("entity." + DungeonBlocks.MOD_ID + ".pot", "Tall Ceramic Pot");
-        add("entity." + DungeonBlocks.MOD_ID + ".squat_clay_pot", "Ceramic Pot");
-        add("entity." + DungeonBlocks.MOD_ID + ".thin_clay_pot", "Thin Ceramic Pot");
+        // every clay pot shape shares one display name - the shapes are a visual variation of the
+        // same prop, not three things a player needs to tell apart by name.
+        add(ModItems.POT.get(), "Terracotta Pot");
+        add(ModItems.SQUAT_CLAY_POT.get(), "Terracotta Pot");
+        add(ModItems.THIN_CLAY_POT.get(), "Terracotta Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".pot", "Terracotta Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".squat_clay_pot", "Terracotta Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".thin_clay_pot", "Terracotta Pot");
+        add(ModItems.STONE_POT.get(), "Stone Pot");
+        add(ModItems.SQUAT_STONE_POT.get(), "Stone Pot");
+        add(ModItems.THIN_STONE_POT.get(), "Stone Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".stone_pot", "Stone Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".squat_stone_pot", "Stone Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".thin_stone_pot", "Stone Pot");
+
+        add(ModItems.RED_POT.get(), "Red Pot");
+        add(ModItems.SQUAT_RED_POT.get(), "Red Pot");
+        add(ModItems.THIN_RED_POT.get(), "Red Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".red_pot", "Red Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".squat_red_pot", "Red Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".thin_red_pot", "Red Pot");
+
+        add(ModItems.BLUE_POT.get(), "Blue Pot");
+        add(ModItems.SQUAT_BLUE_POT.get(), "Blue Pot");
+        add(ModItems.THIN_BLUE_POT.get(), "Blue Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".blue_pot", "Blue Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".squat_blue_pot", "Blue Pot");
+        add("entity." + DungeonBlocks.MOD_ID + ".thin_blue_pot", "Blue Pot");
+
         add("entity." + DungeonBlocks.MOD_ID + ".pot_shard", "Pot Shard");
 
     }

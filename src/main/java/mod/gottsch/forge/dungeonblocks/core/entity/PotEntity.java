@@ -99,9 +99,24 @@ public class PotEntity extends Entity {
 	private ResourceLocation lootTable;
 	private long lootTableSeed;
 
-	public PotEntity(EntityType<? extends PotEntity> type, Level level) {
+	// what this pot is made of. Fixed by the EntityType rather than synced or saved: every pot of a
+	// given type is the same material, so the client already knows it from the type alone. Its only
+	// runtime job is telling the shards what colour to be — see #shatter.
+	private final PotMaterial material;
+
+	/**
+	 * Material is required rather than defaulted: every pot is built through its {@code EntityType}
+	 * factory (see {@code ModEntityTypes#potOf}), and a no-material overload would be an easy way to
+	 * end up with a stone pot that throws terracotta shards.
+	 */
+	public PotEntity(EntityType<? extends PotEntity> type, Level level, PotMaterial material) {
 		super(type, level);
+		this.material = material;
 		this.blocksBuilding = false;
+	}
+
+	public PotMaterial getMaterial() {
+		return this.material;
 	}
 
 	@Override
@@ -312,7 +327,7 @@ public class PotEntity extends Entity {
 			int shardCount = MIN_SHARDS + this.random.nextInt(MAX_SHARDS - MIN_SHARDS + 1);
 			for (int i = 0; i < shardCount; i++) {
 				PotShardEntity shard = new PotShardEntity(level, this.getX(), this.getY() + this.getBbHeight() * 0.5D,
-						this.getZ());
+						this.getZ(), this.material);
 
 				// GMM's Bloater flings its cosmetic arm shrapnel at ~0.28 blocks/tick total
 				// speed ("low velocity -- they don't travel far") -- matching that scale here.
