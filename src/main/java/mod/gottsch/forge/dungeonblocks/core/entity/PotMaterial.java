@@ -34,7 +34,8 @@ public enum PotMaterial {
 	TERRACOTTA("pot_shard"),
 	STONE("stone_pot_shard"),
 	RED("red_pot_shard"),
-	BLUE("blue_pot_shard");
+	BLUE("blue_pot_shard"),
+	GLASS("glass_pot_shard");
 
 	private final String shardTexture;
 

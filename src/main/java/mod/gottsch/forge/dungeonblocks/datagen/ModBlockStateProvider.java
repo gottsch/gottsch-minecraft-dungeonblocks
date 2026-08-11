@@ -368,9 +368,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
      * Like {@link #allDirectionBlock}, but also applies AngleCobwebBlock.ROTATION as the yaw for the
      * UP/DOWN states, so a floor or ceiling mount still has all four quarter-turns instead of
      * collapsing to one fixed orientation.
+     *
+     * <p>{@link AngleCobwebBlock#HALF} picks the <em>model</em> rather than a rotation:
+     * {@code TOP} gathers the web at the ceiling, {@code BOTTOM} at the floor, and the two differ
+     * only in the strand's vertical uv. It cannot be a rotation &mdash; blockstates rotate about x
+     * and y only, and an {@code x: 180} flip would carry the sheet round to the opposite face of
+     * the cell and so change which wall the web belongs to.</p>
      */
     public void angleCobwebBlock(RegistryObject<Block> block) {
-        ModelFile model = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/" + block.getId().getPath()));
+        String path = block.getId().getPath();
+        ModelFile ceilingModel = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/" + path));
+        ModelFile floorModel = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/" + path + "_floor"));
         getVariantBuilder(block.get()).forAllStates(state -> {
             Direction dir = state.getValue(FACING);
             int xRot = 0;
@@ -384,6 +392,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
             } else {
                 yRot = ((int) dir.toYRot() + 180) % 360;
             }
+            ModelFile model = state.getValue(AngleCobwebBlock.HALF) == Half.TOP ? ceilingModel : floorModel;
             return ConfiguredModel.builder().modelFile(model)
                     .rotationX(xRot)
                     .rotationY(yRot % 360)

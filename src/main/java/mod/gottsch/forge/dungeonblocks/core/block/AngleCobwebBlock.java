@@ -28,13 +28,23 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 /**
  * A purely decorative, walk-through corner cobweb. No collision (see
  * {@code Properties.noCollission()} at registration) and no vanilla cobweb slowdown/break behavior -
- * it is a plain {@link Block} dressed up with a custom model, mounted flush against whichever
- * surface (wall, floor or ceiling) is behind it, like {@link PlateBracketBlock}.
+ * it is a plain {@link Block} dressed up with a custom model.
+ *
+ * <p><strong>It spans the ANGLE between two perpendicular surfaces</strong> - wall and ceiling, or
+ * wall and floor - as a triangular web that gathers into that junction and tapers away from it.
+ * {@link #FACING} names the surface it is anchored to (its support is behind
+ * {@code FACING.getOpposite()}, like {@link PlateBracketBlock}) and {@link #HALF} names which of the
+ * two junctions it fills. <em>It is not a flush single-surface mount</em>: the support test in
+ * {@link #canSurvive} concerns only what holds it up and says nothing about what the model draws.
+ * Placed mid-wall, with no floor or ceiling to gather into, it reads as a sheet hanging in mid-air.
  *
  * @author Mark Gottschling on Aug 1, 2026
  */
@@ -48,14 +58,31 @@ public class AngleCobwebBlock extends NonCubeFacingBlock {
 	 */
 	public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 3);
 
+	/**
+	 * Which half of the cell the web gathers in, and therefore which junction it fills:
+	 * {@link Half#TOP} where the wall meets the CEILING, {@link Half#BOTTOM} where it meets the
+	 * FLOOR. The two use different models -- {@code angle_cobweb_N} and {@code angle_cobweb_N_floor}
+	 * -- differing only in the strand's vertical uv.
+	 *
+	 * <p>A property is needed because the flip <strong>cannot be reached by rotation</strong>.
+	 * Blockstates only rotate about x and y; a z-rotation would be the natural one and does not
+	 * exist, and an {@code x: 180} flip would carry the web sheet round to the opposite face of the
+	 * cell, changing which wall it belongs to. ROTATION was the other candidate -- it is inert for
+	 * the four horizontal facings -- but {@link #getStateForPlacement} derives it from the player's
+	 * horizontal look, so on a wall mount its value tracks which wall is being faced. Overloading it
+	 * would make a hand-placed web come out as a floor or ceiling one depending on the wall.</p>
+	 */
+	public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
+
 	public AngleCobwebBlock(Properties properties) {
 		super(properties);
+		this.registerDefaultState(this.defaultBlockState().setValue(HALF, Half.TOP));
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
-		builder.add(ROTATION);
+		builder.add(ROTATION, HALF);
 	}
 
 	/**
@@ -67,9 +94,14 @@ public class AngleCobwebBlock extends NonCubeFacingBlock {
 	 */
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		// HALF comes from WHERE on the block the player clicked -- upper half spins the web into the
+		// ceiling corner, lower half into the floor corner. Deliberately not taken from pitch, which
+		// would fight the FACING the same look direction already decides.
+		double withinBlock = context.getClickLocation().y - context.getClickedPos().getY();
 		return this.defaultBlockState()
 				.setValue(FACING, context.getNearestLookingDirection().getOpposite())
-				.setValue(ROTATION, context.getHorizontalDirection().get2DDataValue());
+				.setValue(ROTATION, context.getHorizontalDirection().get2DDataValue())
+				.setValue(HALF, withinBlock > 0.5D ? Half.TOP : Half.BOTTOM);
 	}
 
 	@Override

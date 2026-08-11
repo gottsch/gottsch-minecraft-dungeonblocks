@@ -90,6 +90,10 @@ public class ModItems {
 			() -> new PotItem(() -> ModEntityTypes.SQUAT_BLUE_POT.get(), new Item.Properties()));
 	public static final RegistryObject<Item> THIN_BLUE_POT = Registration.ITEMS.register("thin_blue_pot",
 			() -> new PotItem(() -> ModEntityTypes.THIN_BLUE_POT.get(), new Item.Properties()));
+	public static final RegistryObject<Item> BIG_RED_POTION = Registration.ITEMS.register("big_red_potion",
+			() -> new PotItem(() -> ModEntityTypes.BIG_RED_POTION.get(), new Item.Properties()));
+	public static final RegistryObject<Item> RED_FLASK = Registration.ITEMS.register("red_flask",
+			() -> new PotItem(() -> ModEntityTypes.RED_FLASK.get(), new Item.Properties()));
 
 	/**
 	 * Items belonging to the decorative-entity subsystem. These are pulled out of the main
@@ -100,7 +104,8 @@ public class ModItems {
 			POT, SQUAT_CLAY_POT, THIN_CLAY_POT,
 			STONE_POT, SQUAT_STONE_POT, THIN_STONE_POT,
 			RED_POT, SQUAT_RED_POT, THIN_RED_POT,
-			BLUE_POT, SQUAT_BLUE_POT, THIN_BLUE_POT);
+			BLUE_POT, SQUAT_BLUE_POT, THIN_BLUE_POT,
+			BIG_RED_POTION, RED_FLASK);
 
 	/**
 	 * 

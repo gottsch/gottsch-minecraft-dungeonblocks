@@ -39,6 +39,20 @@ import net.minecraft.resources.ResourceLocation;
  */
 public class PotRenderer extends EntityRenderer<PotEntity> {
 
+	/**
+	 * Render-only lift off the floor, in blocks. A prop rests with its outermost wall exactly on the
+	 * surface it stands on — upright it is the base of the model, tipped over it is whichever side
+	 * the tumble pivot parks on the ground — and that wall then sits in the same plane as the
+	 * supporting block's top face, with nothing for the depth buffer to break the tie on. On an
+	 * opaque pot the touching wall is hidden anyway, but the potion's glass is cutout, so you see
+	 * straight through it to the inner surface of that wall and the two flicker against each other.
+	 *
+	 * <p>Two thousandths of a block clears it at any view distance and is about a thirtieth of a
+	 * texture pixel — far below what any camera angle can show. Purely visual: collision, physics and
+	 * the entity's real position are untouched.
+	 */
+	private static final double FLOOR_CLEARANCE = 0.002D;
+
 	private final EntityModel<PotEntity> model;
 	private final ResourceLocation texture;
 	/**
@@ -46,13 +60,21 @@ public class PotRenderer extends EntityRenderer<PotEntity> {
 	 * tipped pot comes to rest with its body on the floor. See {@link PotVariant#tumblePivot()}.
 	 */
 	private final double tumblePivot;
+	/** Uniform world render scale — see {@link PotVariant#scale()}. */
+	private final float scale;
 
 	public PotRenderer(EntityRendererProvider.Context context, EntityModel<PotEntity> model,
 			ResourceLocation texture, double tumblePivot) {
+		this(context, model, texture, tumblePivot, 1.0F);
+	}
+
+	public PotRenderer(EntityRendererProvider.Context context, EntityModel<PotEntity> model,
+			ResourceLocation texture, double tumblePivot, float scale) {
 		super(context);
 		this.model = model;
 		this.texture = texture;
 		this.tumblePivot = tumblePivot;
+		this.scale = scale;
 	}
 
 	@Override
@@ -64,14 +86,25 @@ public class PotRenderer extends EntityRenderer<PotEntity> {
 	public void render(PotEntity entity, float entityYaw, float partialTicks, PoseStack poseStack,
 			MultiBufferSource buffer, int packedLight) {
 		poseStack.pushPose();
+		// before everything else, so it lifts the prop the same amount whichever way it is lying
+		poseStack.translate(0.0D, FLOOR_CLEARANCE, 0.0D);
 		poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - entityYaw));
 
 		float tumbleProgress = entity.getTumbleProgress(partialTicks);
 		if (tumbleProgress > 0.0F) {
+			// the pivot is a world-space height, so it takes the render scale too — otherwise a
+			// shrunken prop would tip about a point well above itself and swing into the air.
+			double pivot = this.tumblePivot * this.scale;
 			float tipSign = (entity.getId() % 2 == 0) ? 1.0F : -1.0F;
-			poseStack.translate(0.0D, this.tumblePivot, 0.0D);
+			poseStack.translate(0.0D, pivot, 0.0D);
 			poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F * tipSign * tumbleProgress));
-			poseStack.translate(0.0D, -this.tumblePivot, 0.0D);
+			poseStack.translate(0.0D, -pivot, 0.0D);
+		}
+
+		// applied before the root transform below so the 24px pivot offset scales with the geometry
+		// and the prop still stands on the entity's feet rather than floating or sinking.
+		if (this.scale != 1.0F) {
+			poseStack.scale(this.scale, this.scale, this.scale);
 		}
 
 		// mirror + drop to match the Blockbench-exported PartPose.offset(0, 24, 0) root pivot

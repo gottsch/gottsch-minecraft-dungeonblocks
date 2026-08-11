@@ -243,6 +243,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		potItem(ModItems.BLUE_POT);
 		potItem(ModItems.SQUAT_BLUE_POT);
 		potItem(ModItems.THIN_BLUE_POT);
+		potItem(ModItems.BIG_RED_POTION);
+		potItem(ModItems.RED_FLASK);
 	}
 
 	public ItemModelBuilder basicItem(RegistryObject<Item> item, ResourceLocation texture) {

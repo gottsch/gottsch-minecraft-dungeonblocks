@@ -72,13 +72,6 @@ public class PotEntity extends Entity {
 	private static final double TUMBLE_SPEED = 0.1D;
 	private static final double SHATTER_SPEED = 0.35D;
 
-	private double lerpX;
-	private double lerpY;
-	private double lerpZ;
-	private float lerpYRot;
-	private float lerpXRot;
-	private int lerpSteps;
-
 	// tracked independently of Entity's built-in fall-damage plumbing (that hook is geared toward
 	// LivingEntity and isn't reliably invoked for a plain physics Entity) so a hard fall reliably breaks it.
 	private double fallStartY = Double.NaN;
@@ -164,9 +157,6 @@ public class PotEntity extends Entity {
 		this.tickedOnce = true;
 
 		if (this.level().isClientSide) {
-			if (this.lerpSteps > 0) {
-				this.lerpPositionAndRotation();
-			}
 			return;
 		}
 
@@ -217,31 +207,13 @@ public class PotEntity extends Entity {
 		this.setDeltaMovement(motion);
 	}
 
-	@Override
-	public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps, boolean teleport) {
-		this.lerpX = x;
-		this.lerpY = y;
-		this.lerpZ = z;
-		this.lerpYRot = yRot;
-		this.lerpXRot = xRot;
-		// short window: with per-tick position sync (see ModEntityTypes), a long lerp window makes the
-		// render trail noticeably behind the true position during a fast fall — it can even look like
-		// the pot vanishes above the floor since the break happens at the true (lower) position while
-		// the smoothed render is still catching up.
-		this.lerpSteps = 3;
-	}
-
-	private void lerpPositionAndRotation() {
-		double newX = this.getX() + (this.lerpX - this.getX()) / this.lerpSteps;
-		double newY = this.getY() + (this.lerpY - this.getY()) / this.lerpSteps;
-		double newZ = this.getZ() + (this.lerpZ - this.getZ()) / this.lerpSteps;
-		double yRotDelta = Mth.wrapDegrees(this.lerpYRot - this.getYRot());
-		float newYRot = (float) (this.getYRot() + yRotDelta / this.lerpSteps);
-		float newXRot = (float) (this.getXRot() + (this.lerpXRot - this.getXRot()) / this.lerpSteps);
-		this.lerpSteps--;
-		this.setPos(newX, newY, newZ);
-		this.setRot(newYRot, newXRot);
-	}
+	// No lerpTo override: the inherited Entity#lerpTo snaps straight to the server position, which is
+	// what vanilla's own falling props do. Smoothing here was actively harmful — this type syncs
+	// every tick (see ModEntityTypes#updateInterval), so each packet reset the smoothing window
+	// before it could finish and the render settled a fixed two ticks behind the truth. During a
+	// fast fall that is most of a block, and since the pot breaks at its real position the client
+	// would draw it vanishing in mid-air short of the floor. Snapping loses nothing: the renderer
+	// still interpolates xOld -> x across partial ticks, so movement stays smooth.
 
 	@Override
 	public boolean isPushable() {
@@ -313,6 +285,16 @@ public class PotEntity extends Entity {
 		return false;
 	}
 
+	/**
+	 * What this prop leaves behind when it breaks. A plain pot rolls its loot table; subclasses that
+	 * carry something other than items — see {@code PotionEntity} — override this instead of
+	 * duplicating the shard/sound/particle work in {@link #breakAndDrop}, which is identical for
+	 * everything in the family. Server side only.
+	 */
+	protected void releasePayload(DamageSource damageSource) {
+		this.dropLoot(damageSource);
+	}
+
 	private void breakAndDrop(DamageSource damageSource) {
 		if (this.isRemoved()) {
 			return;
@@ -320,7 +302,7 @@ public class PotEntity extends Entity {
 
 		Level level = this.level();
 		if (!level.isClientSide) {
-			this.dropLoot(damageSource);
+			this.releasePayload(damageSource);
 
 			// non-explosive shrapnel burst: shards spray outward in every direction
 			// (dome-biased upward) rather than just tumbling out, no blast/damage/block breakage.

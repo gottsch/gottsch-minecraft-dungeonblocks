@@ -44,6 +44,13 @@ import java.util.function.Supplier;
  * @param modeledWidth  width of the widest part in blocks - always the body box, since neck and lip
  *                      are narrower on every shape. This is the part that meets the floor once the
  *                      pot is on its side, so half of it is the tumble pivot
+ * @param scale         uniform render scale applied in the world. 1.0 for the pots, which are
+ *                      modeled at the size they are meant to be; the potion prop is modeled at pot
+ *                      size and shrunk here instead of being re-modeled. Note that
+ *                      {@code modeledHeight} and {@code modeledWidth} stay the <em>unscaled</em>
+ *                      Blockbench extents - the world renderer applies the scale itself, and the
+ *                      inventory renderer deliberately ignores it so a small prop still fills its
+ *                      slot the way every other item does
  *
  * @author Mark Gottschling on Jul 26, 2026
  */
@@ -54,7 +61,15 @@ public record PotVariant(
 		Function<ModelPart, EntityModel<PotEntity>> modelFactory,
 		ResourceLocation texture,
 		float modeledHeight,
-		float modeledWidth) {
+		float modeledWidth,
+		float scale) {
+
+	/** A variant rendered at its modeled size, which is every pot. */
+	public PotVariant(Supplier<EntityType<PotEntity>> entityType, ModelLayerLocation layer,
+			Function<ModelPart, EntityModel<PotEntity>> modelFactory, ResourceLocation texture,
+			float modeledHeight, float modeledWidth) {
+		this(entityType, layer, modelFactory, texture, modeledHeight, modeledWidth, 1.0F);
+	}
 
 	/** Vertical centre of the upright pot, used to centre it in an inventory slot. */
 	public double halfHeight() {

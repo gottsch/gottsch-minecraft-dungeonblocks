@@ -88,6 +88,13 @@ public class LanguageGen extends LanguageProvider {
         add("entity." + DungeonBlocks.MOD_ID + ".squat_blue_pot", "Blue Pot");
         add("entity." + DungeonBlocks.MOD_ID + ".thin_blue_pot", "Blue Pot");
 
+        // a potion prop carries no effect of its own - what it does is set per placed instance -
+        // so the name describes the bottle, not an effect
+        add(ModItems.BIG_RED_POTION.get(), "Big Red Potion");
+        add("entity." + DungeonBlocks.MOD_ID + ".big_red_potion", "Big Red Potion");
+        add(ModItems.RED_FLASK.get(), "Red Flask");
+        add("entity." + DungeonBlocks.MOD_ID + ".red_flask", "Red Flask");
+
         add("entity." + DungeonBlocks.MOD_ID + ".pot_shard", "Pot Shard");
 
     }

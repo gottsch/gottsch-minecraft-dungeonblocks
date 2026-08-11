@@ -5,12 +5,14 @@ import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.ModBlockEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.SwingingChainRenderer;
 import mod.gottsch.forge.dungeonblocks.core.entity.ModEntityTypes;
+import mod.gottsch.forge.dungeonblocks.core.entity.client.BigRedPotionModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.PotItemRenderer;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.PotModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.PotRenderer;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.PotShardModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.PotShardRenderer;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.PotVariant;
+import mod.gottsch.forge.dungeonblocks.core.entity.client.RedFlaskModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.SquatClayPotModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.ThinClayPotModel;
 import net.minecraft.client.renderer.BiomeColors;
@@ -61,7 +63,12 @@ public class ClientSetup {
             new PotVariant(ModEntityTypes.SQUAT_BLUE_POT, SquatClayPotModel.LAYER_LOCATION, SquatClayPotModel::new,
                     PotVariant.entityTexture("squat_blue_pot"), 0.625F, 0.625F),
             new PotVariant(ModEntityTypes.THIN_BLUE_POT, ThinClayPotModel.LAYER_LOCATION, ThinClayPotModel::new,
-                    PotVariant.entityTexture("thin_blue_pot"), 0.75F, 0.375F));
+                    PotVariant.entityTexture("thin_blue_pot"), 0.75F, 0.375F),
+            // modeled at tall-pot size and halved at render time rather than re-modeled
+            new PotVariant(ModEntityTypes.BIG_RED_POTION, BigRedPotionModel.LAYER_LOCATION, BigRedPotionModel::new,
+                    PotVariant.entityTexture("big_red_potion"), 0.875F, 0.5F, 0.5F),
+            new PotVariant(ModEntityTypes.RED_FLASK, RedFlaskModel.LAYER_LOCATION, RedFlaskModel::new,
+                    PotVariant.entityTexture("red_flask"), 0.8125F, 0.4375F, 0.5F));
 
     /**
      * Register the {@link IBlockColor} handlers.
@@ -85,6 +92,8 @@ public class ClientSetup {
         event.registerLayerDefinition(PotModel.LAYER_LOCATION, PotModel::createBodyLayer);
         event.registerLayerDefinition(SquatClayPotModel.LAYER_LOCATION, SquatClayPotModel::createBodyLayer);
         event.registerLayerDefinition(ThinClayPotModel.LAYER_LOCATION, ThinClayPotModel::createBodyLayer);
+        event.registerLayerDefinition(BigRedPotionModel.LAYER_LOCATION, BigRedPotionModel::createBodyLayer);
+        event.registerLayerDefinition(RedFlaskModel.LAYER_LOCATION, RedFlaskModel::createBodyLayer);
         // hand the shape table to the inventory renderer now that the layers exist
         PotItemRenderer.setVariants(POT_VARIANTS);
         for (int i = 0; i < PotShardModel.LAYERS.length; i++) {
@@ -101,7 +110,7 @@ public class ClientSetup {
                 event.registerEntityRenderer(variant.entityType().get(),
                         context -> new PotRenderer(context,
                                 variant.modelFactory().apply(context.bakeLayer(variant.layer())),
-                                variant.texture(), variant.tumblePivot())));
+                                variant.texture(), variant.tumblePivot(), variant.scale())));
         event.registerEntityRenderer(ModEntityTypes.POT_SHARD.get(), PotShardRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.SWINGING_CHAIN.get(), SwingingChainRenderer::new);
     }

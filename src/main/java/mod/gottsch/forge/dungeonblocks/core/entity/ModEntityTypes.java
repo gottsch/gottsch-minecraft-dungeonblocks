@@ -118,6 +118,24 @@ public class ModEntityTypes {
 					.updateInterval(1)
 					.build("thin_blue_pot"));
 
+	// A potion prop: PotEntity physics, but it releases a lingering effect cloud instead of loot.
+	// Hitbox is half the tall pot's, matching the half render scale — and like the pots it covers the
+	// bottle's body only, not the neck and cork above it.
+	public static final RegistryObject<EntityType<PotEntity>> BIG_RED_POTION = Registration.ENTITY_TYPES.register("big_red_potion",
+			() -> EntityType.Builder.of(potionOf(PotMaterial.GLASS), MobCategory.MISC)
+					.sized(0.25F, 0.3125F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("big_red_potion"));
+
+	// hitbox covers the flask's 7x9x6 body only, halved to match the half render scale
+	public static final RegistryObject<EntityType<PotEntity>> RED_FLASK = Registration.ENTITY_TYPES.register("red_flask",
+			() -> EntityType.Builder.of(potionOf(PotMaterial.GLASS), MobCategory.MISC)
+					.sized(0.21875F, 0.28125F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("red_flask"));
+
 	/**
 	 * Factory that stamps a material onto every pot of a type. Going through the {@code EntityType}
 	 * factory rather than a lookup table means a pot is built with its material however it comes into
@@ -125,6 +143,11 @@ public class ModEntityTypes {
 	 */
 	private static EntityType.EntityFactory<PotEntity> potOf(PotMaterial material) {
 		return (type, level) -> new PotEntity(type, level, material);
+	}
+
+	/** As {@link #potOf}, for the {@link PotionEntity} subclass. */
+	private static EntityType.EntityFactory<PotEntity> potionOf(PotMaterial material) {
+		return (type, level) -> new PotionEntity(type, level, material);
 	}
 
 	public static final RegistryObject<EntityType<PotShardEntity>> POT_SHARD = Registration.ENTITY_TYPES.register("pot_shard",
