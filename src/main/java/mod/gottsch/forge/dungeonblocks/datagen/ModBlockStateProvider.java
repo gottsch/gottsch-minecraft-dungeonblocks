@@ -268,6 +268,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         simpleBlock(ModBlocks.COBBLESTONE_BRICK.get());
         simpleBlock(ModBlocks.MOSSY_COBBLESTONE_BRICK.get());
+        simpleBlock(ModBlocks.RUBBLE.get());
+        simpleBlock(ModBlocks.MOSSY_RUBBLE.get());
         simpleBlock(ModBlocks.GRAVEL_BRICK.get());
         simpleBlock(ModBlocks.MOSSY_CHISELED_STONE_BRICKS.get());
 

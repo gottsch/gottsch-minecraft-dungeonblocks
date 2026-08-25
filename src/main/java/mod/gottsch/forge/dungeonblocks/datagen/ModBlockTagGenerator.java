@@ -119,5 +119,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // also pull it into the stone family's model and recipe generation.
         // No tier tag: vanilla bone block is mineable with any pickaxe.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.SKELETON.get());
+
+        // same reason as the skeleton above: "rubble" matches nothing in stone_blocks, so
+        // the loop skips it, but it copies requiresCorrectToolForDrops from cobblestone.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.RUBBLE.get(), ModBlocks.MOSSY_RUBBLE.get());
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.RUBBLE.get(), ModBlocks.MOSSY_RUBBLE.get());
     }
 }

@@ -538,6 +538,8 @@
     "dungeonblocks:deepslate_bricks_corbel_block",
     "dungeonblocks:cobbled_deepslate_corbel_block",
     "dungeonblocks:polished_deepslate_corbel_block",
-    "dungeonblocks:deepslate_tiles_corbel_block"
+    "dungeonblocks:deepslate_tiles_corbel_block",
+    "dungeonblocks:rubble",
+    "dungeonblocks:mossy_rubble"
   ]
 }

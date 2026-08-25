@@ -232,6 +232,13 @@ public class ModBlocks {
     public static final RegistryObject<Block> MOSSY_COBBLESTONE_BRICK = Registration.BLOCKS.register("mossy_cobblestone_brick", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_COBBLESTONE));
     });
+    // rubble: plain full blocks, cobblestone-grade properties
+    public static final RegistryObject<Block> RUBBLE = Registration.BLOCKS.register("rubble", () -> {
+        return new Block(Properties.copy(Blocks.COBBLESTONE));
+    });
+    public static final RegistryObject<Block> MOSSY_RUBBLE = Registration.BLOCKS.register("mossy_rubble", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_COBBLESTONE));
+    });
     // base block for the mossy_chiseled_stone_bricks material family (ModMaterials.STONE) -
     // unlike the other STONE materials there is no vanilla block to source it from, so this
     // is craftable (chiseled_stone_bricks + vine) and used as the stonecutting ingredient.

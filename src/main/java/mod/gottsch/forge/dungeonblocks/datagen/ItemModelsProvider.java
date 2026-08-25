@@ -190,6 +190,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_RIGHT_LARGE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.COBBLESTONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_COBBLESTONE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.RUBBLE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_RUBBLE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.GRAVEL_BRICK));
 
 		basicItem(ModBlocks.MAP.get(ModBlocks.ROOTS), modLoc("block/roots_head"));
