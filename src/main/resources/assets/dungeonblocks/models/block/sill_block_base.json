@@ -1,6 +1,6 @@
 {
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
-	"parent": "block/block",
+	"parent": "dungeonblocks:block/block_no_ao",
     "__comment_ao": "AO off: the Ledge element is tilted -22.5 degrees and sits flush against the block above, and ambient occlusion shades an angled face like that almost black.",
     "ambientocclusion": false,
     "textures": {

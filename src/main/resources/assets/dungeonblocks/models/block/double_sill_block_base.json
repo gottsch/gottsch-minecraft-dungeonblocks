@@ -1,5 +1,5 @@
 {
-	"parent": "block/block",
+	"parent": "dungeonblocks:block/block_no_ao",
     "__comment_ao": "AO off: the Ledge elements are tilted +/-22.5 degrees and sit flush against the block above, and ambient occlusion shades an angled face like that almost black.",
     "ambientocclusion": false,
     "textures": {
