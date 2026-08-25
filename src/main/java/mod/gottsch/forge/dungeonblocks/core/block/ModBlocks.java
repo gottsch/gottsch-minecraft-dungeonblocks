@@ -177,6 +177,39 @@ public class ModBlocks {
     public static final RegistryObject<Block> MOSSY_SQUARE_STONE_BRICK = Registration.BLOCKS.register("mossy_square_stone_brick", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
+    // square_mud_brick is square_stone_brick's texture remapped onto the vanilla mud brick
+    // palette, so its properties come from MUD_BRICKS rather than STONE_BRICKS.
+    public static final RegistryObject<Block> SQUARE_MUD_BRICK = Registration.BLOCKS.register("square_mud_brick", () -> {
+        return new Block(Properties.copy(Blocks.MUD_BRICKS));
+    });
+
+    // ------------------------------------------------------------------
+    // square brick stairs / facades.
+    // Registered explicitly rather than as ModMaterials.STONE entries: a Material there produces
+    // all eleven stone block-types, and only stairs, facade and quarter facade are wanted here.
+    // The blockstate, item-model and block-tag generators all dispatch on the block id, so the
+    // two "<material>_facade_block" ids are picked up with no datagen change beyond registering
+    // the material's texture in DataGenMaps.
+    // ------------------------------------------------------------------
+    public static final RegistryObject<StairBlock> SQUARE_STONE_BRICK_STAIRS = Registration.BLOCKS.register("square_stone_brick_stairs", () -> {
+        return new StairBlock(SQUARE_STONE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.STONE_BRICK_STAIRS));
+    });
+    public static final RegistryObject<StairBlock> SQUARE_MUD_BRICK_STAIRS = Registration.BLOCKS.register("square_mud_brick_stairs", () -> {
+        return new StairBlock(SQUARE_MUD_BRICK.get().defaultBlockState(), Properties.copy(Blocks.MUD_BRICK_STAIRS));
+    });
+
+    public static final RegistryObject<Block> SQUARE_STONE_BRICK_FACADE_BLOCK = Registration.BLOCKS.register("square_stone_brick_facade_block", () -> {
+        return new FacadeBlock(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> SQUARE_MUD_BRICK_FACADE_BLOCK = Registration.BLOCKS.register("square_mud_brick_facade_block", () -> {
+        return new FacadeBlock(Properties.copy(Blocks.MUD_BRICKS));
+    });
+    public static final RegistryObject<Block> SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK = Registration.BLOCKS.register("square_stone_brick_quarter_facade_block", () -> {
+        return new QuarterFacadeBlock(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK = Registration.BLOCKS.register("square_mud_brick_quarter_facade_block", () -> {
+        return new QuarterFacadeBlock(Properties.copy(Blocks.MUD_BRICKS));
+    });
     public static final RegistryObject<Block> LEFT_LARGE_STONE_BRICK = Registration.BLOCKS.register("left_large_stone_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
     });

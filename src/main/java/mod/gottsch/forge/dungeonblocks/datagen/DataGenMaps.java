@@ -180,6 +180,13 @@ public class DataGenMaps {
             t2.put(material.name(), material.texture());
             m2.put(material.name(), material.base());
         });
+
+        // The square brick family is not in ModMaterials.STONE - an entry there would produce
+        // all eleven stone block-types, and only stairs/facade/quarter facade exist for these.
+        // Their textures are mod-owned, so they are declared here for the facade generators,
+        // which look the material up by the block id's prefix.
+        t2.put("square_stone_brick", modLoc("block/square_stone_brick"));
+        t2.put("square_mud_brick", modLoc("block/square_mud_brick"));
     }
 
     public ResourceLocation modLoc(String name) {

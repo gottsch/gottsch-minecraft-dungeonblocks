@@ -172,6 +172,10 @@ public class ItemModelsProvider extends ItemModelProvider {
 
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_MUD_BRICK));
+		// the facade / quarter facade item models are covered by the MAP sweep above
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK_STAIRS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_MUD_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.LEFT_LARGE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LEFT_LARGE_STONE_BRICK));
