@@ -180,6 +180,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LEFT_LARGE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_RIGHT_LARGE_STONE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.LEFT_LARGE_MUD_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_MUD_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.LARGE_BRICKS));

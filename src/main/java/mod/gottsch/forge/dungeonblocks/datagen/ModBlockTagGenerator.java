@@ -120,6 +120,13 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // No tier tag: vanilla bone block is mineable with any pickaxe.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.SKELETON.get());
 
+        // Angle cobwebs are decorative webbing, so a sword should cut them the way it cuts a vanilla
+        // cobweb. Vanilla gets there by hardcoding Blocks.COBWEB in SwordItem, which a modded block
+        // cannot reach; SWORD_EFFICIENT is the tag equivalent and gives swords 1.5F. Combined with
+        // the 0.4 hardness set in ModBlocks that lands on 8 ticks, the same as vanilla cobweb.
+        // Note vanilla COBWEB itself is NOT in this tag - it does not need to be, given the hardcoding.
+        this.tag(BlockTags.SWORD_EFFICIENT).add(ModBlocks.ANGLE_COBWEB_1.get(), ModBlocks.ANGLE_COBWEB_2.get());
+
         // same reason as the skeleton above: "rubble" matches nothing in stone_blocks, so
         // the loop skips it, but it copies requiresCorrectToolForDrops from cobblestone.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.RUBBLE.get(), ModBlocks.MOSSY_RUBBLE.get());

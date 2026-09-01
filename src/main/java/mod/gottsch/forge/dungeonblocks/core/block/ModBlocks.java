@@ -22,6 +22,7 @@ package mod.gottsch.forge.dungeonblocks.core.block;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.google.common.collect.Maps;
 
@@ -72,10 +73,30 @@ public class ModBlocks {
                     }).sound(SoundType.WOOD)));
 
     // purely decorative corner webbing - no vanilla cobweb slowdown/break behavior, see AngleCobwebBlock
+    //
+    // Properties are spelled out rather than copied from Blocks.COBWEB, which carries
+    // requiresCorrectToolForDrops() and cannot have it unset - Properties has a setter for it but no
+    // clearer. Inheriting it made these unusable: nothing is ever the "correct" tool, because these
+    // blocks are in no mineable tag, and SwordItem.isCorrectToolForDrops hardcodes Blocks.COBWEB. So
+    // hasCorrectToolForDrops was always false, which both blocked the drop entirely and put the
+    // 4.0 hardness over the 100x no-correct-tool divisor: 1.0 / 4.0 / 100 = 20 seconds to break.
+    //
+    // Vanilla cobweb only feels quick because SwordItem.getDestroySpeed special-cases
+    // Blocks.COBWEB to 15.0F, giving 15.0 / 4.0 / 30 = 8 ticks. A modded web cannot reach that
+    // branch, so the same 8 ticks is reached from the block side instead: 0.4 hardness, no tool
+    // requirement, and SWORD_EFFICIENT (1.5F for swords) = 1.5 / 0.4 / 30. Anything else takes
+    // 12 ticks, which keeps a decorative block removable without a specific tool in hand.
+    private static final Supplier<Properties> ANGLE_COBWEB_PROPS = () -> Properties.of()
+            .mapColor(Blocks.COBWEB.defaultMapColor())
+            .sound(Blocks.COBWEB.defaultBlockState().getSoundType())
+            .noCollission()
+            .strength(0.4F)
+            .pushReaction(PushReaction.DESTROY);
+
     public static final RegistryObject<Block> ANGLE_COBWEB_1 = Registration.BLOCKS.register("angle_cobweb_1",
-            () -> new AngleCobwebBlock(Properties.copy(Blocks.COBWEB).noCollission()));
+            () -> new AngleCobwebBlock(ANGLE_COBWEB_PROPS.get()));
     public static final RegistryObject<Block> ANGLE_COBWEB_2 = Registration.BLOCKS.register("angle_cobweb_2",
-            () -> new AngleCobwebBlock(Properties.copy(Blocks.COBWEB).noCollission()));
+            () -> new AngleCobwebBlock(ANGLE_COBWEB_PROPS.get()));
 
     public static final RegistryObject<Block> CANDLE_SCONCE = Registration.BLOCKS.register("candle_sconce_block",
             () -> new SconceBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion().lightLevel(SconceBlock.LIGHT_EMISSION)));
@@ -221,6 +242,14 @@ public class ModBlocks {
     });
     public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_STONE_BRICK = Registration.BLOCKS.register("mossy_right_large_stone_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
+    });
+
+    // the two halves of one large brick spanning two blocks, in the mud brick palette
+    public static final RegistryObject<Block> LEFT_LARGE_MUD_BRICK = Registration.BLOCKS.register("left_large_mud_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.MUD_BRICKS));
+    });
+    public static final RegistryObject<Block> RIGHT_LARGE_MUD_BRICK = Registration.BLOCKS.register("right_large_mud_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.MUD_BRICKS));
     });
     public static final RegistryObject<Block> MOSSY_BRICKS = Registration.BLOCKS.register("mossy_bricks", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));

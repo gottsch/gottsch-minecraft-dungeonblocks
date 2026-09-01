@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A **Lantern**, **Soul Lantern**, or **Dungeon Lantern** can be attached to the bottom of a swinging chain by right-clicking it with one. The lantern swings with the chain and lights the area; right-clicking with an empty hand takes it back off. A Dungeon Lantern attached this way is lit and extinguished with a torch or flint and steel, exactly like a placed one.
 - **DungeonBlocks Entities** creative tab, holding the decorative entity props. They no longer appear in the main DungeonBlocks tab.
 - Tall (3-block and 4-block) variants of the Spruce, Crimson, Dark Oak, and Mangrove Dungeon Doors, backported from the NeoForge 1.21.1 version. Placed and broken as a single unit like a vanilla door, generalized to any number of segments; the interior of the door reuses a single middle model/texture regardless of height, so a 3-tall and a 4-tall door of the same wood add no extra assets between them.
+- **Square Mud Brick** — the Square Stone Brick pattern in vanilla mud brick colours. One brick filling one block, like its stone counterpart.
+- **Stairs, Facade and Quarter Facade** for both Square Stone Brick and Square Mud Brick.
+- **Left and Right Large Mud Brick** — the two halves of a single large brick spanning two blocks, in the same mud brick colours.
 - **The Brazier has an `embers` state**: glowing coals with no flame, emitting light level 3. Mobs need block light 0 to spawn and block light drops by 1 per block, so a brazier at the usual light 15 sterilises an entire small dungeon room. At light 3 the brazier still reads as hot while most of a room's floor stays spawnable. The coals are drawn full-bright so they are visible in an otherwise dark room. The full range is now `fire=none` (0), `fire=embers` (3), `fire=soul` (10) and `fire=lit` (15), and the default is `none`.
 
 ### ⚙️ Changed
@@ -36,14 +39,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Corner pieces inside a rotated structure keep their shape. A dungeon room placed at a 90 or 270 degree rotation used to come out with its corner pieces turned the wrong way.
 - Corner pieces are now handled correctly in mirrored structure placements, which previously left the piece untouched.
 - The collision box of a Crown Molding outer corner now matches its model; its lower moulding was two pixels shallower than it looked.
-- Fluted Block and Fluted Facade blocks (straight, inner corner, and outer corner, in every material) no longer render dark when placed against full blocks. The flutes reach the sides of their own block, so ambient occlusion treated the neighbouring full block as shadowing them and shaded their faces almost black — the same problem the Sill and Sconce blocks had.
-- Sill, Double Sill, Skeleton, Brazier (all three), Wall Sconce, and Candle Sconce (all variants) blocks no longer show an almost-black face where they sit against a neighbouring block. These models have steeply angled parts that reach the edge of their block, and shading them against the block next door darkened them far too much.
+- Facade, Quarter Facade, Fluted Facade, Sill and Double Sill blocks (straight, inner corner and outer corner, in every material) no longer render almost black when placed against full blocks. These models reach the edges of their own block, so ambient occlusion treated the neighbouring full block as shadowing them. The models had asked for ambient occlusion to be turned off for some time, but the request was being silently discarded: Minecraft reads that setting from the *root* of a model's parent chain, and these models inherited from a vanilla model that leaves it switched on. They now inherit from a model that turns it off.
+- Faces of Facade, Quarter Facade and Fluted Facade blocks that sit flush against a neighbouring full block are no longer drawn at all. Previously they were still rendered, taking their light level from inside the solid block next door and fighting with that block's own face for the same pixels, which showed as a black flickering seam.
 - The tops of the candles on a Candle Sconce are no longer black. Every sconce except a north-facing one had its candle tops mapped onto an empty region of the candle texture, so they drew as solid black. North-facing sconces were the only ones unaffected.
 - Two-candle and three-candle Candle Sconce models were also missing their transparency setting, so see-through parts of the candle texture were drawn as solid black. The one-candle model was already correct.
 - The top face of each candle on a Candle Sconce now shows the wax top of the candle rather than a slice of the candle's side.
 - The third arm of the Candle Sconce sat almost entirely outside its own block, roughly three pixels into the neighbouring block. It is now positioned as a true mirror of the first arm, so the three arms are evenly spaced.
 - 265 block models across 20 base models no longer render one or more faces as a magenta/black missing-texture checkerboard. Affected: every Crown Molding piece, Corbel, Barred Window Facade, Ledge inner corners, five Dungeon Door pieces, three Heavy Trapdoor pieces, two Sewer pieces, Wall Ring, Torch Sconce, and all three Braziers. The models referenced a texture variable nothing in their parent chain ever declared.
 - Pillar Base blocks now render facing the direction they were placed against (previously always rendered in the default orientation, though the collision box rotated correctly).
+- The side of a Sill block no longer shows a seam down its middle. The sill is built from two halves and both were drawing the same half of the texture, so the pattern restarted midway along the block. The underside had the same fault. Cornice, Facade and Quarter Facade inner corners were affected in the same way.
+- Angle Cobwebs break quickly again. A sword now cuts one in 8 ticks, the same as a vanilla cobweb, and anything else takes 12. They previously took a full 20 seconds to break with any tool and then dropped nothing at all: they took their hardness and their "requires the correct tool" flag from the vanilla cobweb, but nothing counts as the correct tool for them, because vanilla only grants a sword its speed and its harvesting ability on the vanilla cobweb block specifically.
+- A Crown Molding outer corner now blends with the straight pieces either side of it. Its top surface was taking its colours from the corner of the texture, where many materials keep a lighter edge, while its neighbours took theirs from the middle — so the corner read as a brighter patch rather than as a continuation of the run.
 
 ### Known limitations
 
@@ -52,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ceramic Pots drop nothing by default; the loot plumbing is in place but the shipped loot tables are intentionally empty.
 - Tall doors currently reuse each door's own bottom texture as a placeholder for the middle segment texture pending dedicated tiling art.
 - Tall doors have no crafting recipe yet (obtainable via creative/give only).
+- Square Stone Brick and Square Mud Brick stairs and facades have no crafting recipe yet (obtainable via creative/give only).
 
 ## [2.3.1] - 2026-07-12
 
