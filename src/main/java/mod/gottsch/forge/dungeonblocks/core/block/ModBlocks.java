@@ -251,6 +251,18 @@ public class ModBlocks {
     public static final RegistryObject<Block> RIGHT_LARGE_MUD_BRICK = Registration.BLOCKS.register("right_large_mud_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.MUD_BRICKS));
     });
+
+    // Mossy mud bricks take their properties from MUD_BRICKS - vanilla has no mossy mud brick to
+    // copy - and their moss is the mod's usual overlay, unchanged from the stone and clay variants.
+    public static final RegistryObject<Block> MOSSY_SQUARE_MUD_BRICK = Registration.BLOCKS.register("mossy_square_mud_brick", () -> {
+        return new Block(Properties.copy(Blocks.MUD_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_MUD_BRICK = Registration.BLOCKS.register("mossy_left_large_mud_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.MUD_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_MUD_BRICK = Registration.BLOCKS.register("mossy_right_large_mud_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.MUD_BRICKS));
+    });
     public static final RegistryObject<Block> MOSSY_BRICKS = Registration.BLOCKS.register("mossy_bricks", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });

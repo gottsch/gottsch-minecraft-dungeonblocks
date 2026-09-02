@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Square Mud Brick** — the Square Stone Brick pattern in vanilla mud brick colours. One brick filling one block, like its stone counterpart.
 - **Stairs, Facade and Quarter Facade** for both Square Stone Brick and Square Mud Brick.
 - **Left and Right Large Mud Brick** — the two halves of a single large brick spanning two blocks, in the same mud brick colours.
+- **Mossy Square Mud Brick** and **Mossy Left / Right Large Mud Brick** — mossy variants of all three, carrying the same moss the stone and clay bricks use.
 - **The Brazier has an `embers` state**: glowing coals with no flame, emitting light level 3. Mobs need block light 0 to spawn and block light drops by 1 per block, so a brazier at the usual light 15 sterilises an entire small dungeon room. At light 3 the brazier still reads as hot while most of a room's floor stays spawnable. The coals are drawn full-bright so they are visible in an otherwise dark room. The full range is now `fire=none` (0), `fire=embers` (3), `fire=soul` (10) and `fire=lit` (15), and the default is `none`.
 
 ### ⚙️ Changed
