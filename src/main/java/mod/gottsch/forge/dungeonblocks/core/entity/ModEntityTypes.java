@@ -136,6 +136,50 @@ public class ModEntityTypes {
 					.updateInterval(1)
 					.build("red_flask"));
 
+	// colour is purely cosmetic (the liquid tint) — every colour shares PotMaterial.GLASS, since a
+	// shattered potion of any colour throws the same glass shards.
+	public static final RegistryObject<EntityType<PotEntity>> BIG_YELLOW_POTION = Registration.ENTITY_TYPES.register("big_yellow_potion",
+			() -> EntityType.Builder.of(potionOf(PotMaterial.GLASS), MobCategory.MISC)
+					.sized(0.25F, 0.3125F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("big_yellow_potion"));
+
+	public static final RegistryObject<EntityType<PotEntity>> YELLOW_FLASK = Registration.ENTITY_TYPES.register("yellow_flask",
+			() -> EntityType.Builder.of(potionOf(PotMaterial.GLASS), MobCategory.MISC)
+					.sized(0.21875F, 0.28125F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("yellow_flask"));
+
+	public static final RegistryObject<EntityType<PotEntity>> BIG_BLUE_POTION = Registration.ENTITY_TYPES.register("big_blue_potion",
+			() -> EntityType.Builder.of(potionOf(PotMaterial.GLASS), MobCategory.MISC)
+					.sized(0.25F, 0.3125F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("big_blue_potion"));
+
+	public static final RegistryObject<EntityType<PotEntity>> BLUE_FLASK = Registration.ENTITY_TYPES.register("blue_flask",
+			() -> EntityType.Builder.of(potionOf(PotMaterial.GLASS), MobCategory.MISC)
+					.sized(0.21875F, 0.28125F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("blue_flask"));
+
+	public static final RegistryObject<EntityType<PotEntity>> BIG_GREEN_POTION = Registration.ENTITY_TYPES.register("big_green_potion",
+			() -> EntityType.Builder.of(potionOf(PotMaterial.GLASS), MobCategory.MISC)
+					.sized(0.25F, 0.3125F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("big_green_potion"));
+
+	public static final RegistryObject<EntityType<PotEntity>> GREEN_FLASK = Registration.ENTITY_TYPES.register("green_flask",
+			() -> EntityType.Builder.of(potionOf(PotMaterial.GLASS), MobCategory.MISC)
+					.sized(0.21875F, 0.28125F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("green_flask"));
+
 	/**
 	 * Factory that stamps a material onto every pot of a type. Going through the {@code EntityType}
 	 * factory rather than a lookup table means a pot is built with its material however it comes into

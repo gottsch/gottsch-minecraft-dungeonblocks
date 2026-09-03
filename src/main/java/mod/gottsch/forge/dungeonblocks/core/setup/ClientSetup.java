@@ -68,7 +68,20 @@ public class ClientSetup {
             new PotVariant(ModEntityTypes.BIG_RED_POTION, BigRedPotionModel.LAYER_LOCATION, BigRedPotionModel::new,
                     PotVariant.entityTexture("big_red_potion"), 0.875F, 0.5F, 0.5F),
             new PotVariant(ModEntityTypes.RED_FLASK, RedFlaskModel.LAYER_LOCATION, RedFlaskModel::new,
-                    PotVariant.entityTexture("red_flask"), 0.8125F, 0.4375F, 0.5F));
+                    PotVariant.entityTexture("red_flask"), 0.8125F, 0.4375F, 0.5F),
+            // same geometry as the red potion set, reskinned - see ModEntityTypes for the colour list
+            new PotVariant(ModEntityTypes.BIG_YELLOW_POTION, BigRedPotionModel.LAYER_LOCATION, BigRedPotionModel::new,
+                    PotVariant.entityTexture("big_yellow_potion"), 0.875F, 0.5F, 0.5F),
+            new PotVariant(ModEntityTypes.YELLOW_FLASK, RedFlaskModel.LAYER_LOCATION, RedFlaskModel::new,
+                    PotVariant.entityTexture("yellow_flask"), 0.8125F, 0.4375F, 0.5F),
+            new PotVariant(ModEntityTypes.BIG_BLUE_POTION, BigRedPotionModel.LAYER_LOCATION, BigRedPotionModel::new,
+                    PotVariant.entityTexture("big_blue_potion"), 0.875F, 0.5F, 0.5F),
+            new PotVariant(ModEntityTypes.BLUE_FLASK, RedFlaskModel.LAYER_LOCATION, RedFlaskModel::new,
+                    PotVariant.entityTexture("blue_flask"), 0.8125F, 0.4375F, 0.5F),
+            new PotVariant(ModEntityTypes.BIG_GREEN_POTION, BigRedPotionModel.LAYER_LOCATION, BigRedPotionModel::new,
+                    PotVariant.entityTexture("big_green_potion"), 0.875F, 0.5F, 0.5F),
+            new PotVariant(ModEntityTypes.GREEN_FLASK, RedFlaskModel.LAYER_LOCATION, RedFlaskModel::new,
+                    PotVariant.entityTexture("green_flask"), 0.8125F, 0.4375F, 0.5F));
 
     /**
      * Register the {@link IBlockColor} handlers.

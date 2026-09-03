@@ -94,6 +94,18 @@ public class ModItems {
 			() -> new PotItem(() -> ModEntityTypes.BIG_RED_POTION.get(), new Item.Properties()));
 	public static final RegistryObject<Item> RED_FLASK = Registration.ITEMS.register("red_flask",
 			() -> new PotItem(() -> ModEntityTypes.RED_FLASK.get(), new Item.Properties()));
+	public static final RegistryObject<Item> BIG_YELLOW_POTION = Registration.ITEMS.register("big_yellow_potion",
+			() -> new PotItem(() -> ModEntityTypes.BIG_YELLOW_POTION.get(), new Item.Properties()));
+	public static final RegistryObject<Item> YELLOW_FLASK = Registration.ITEMS.register("yellow_flask",
+			() -> new PotItem(() -> ModEntityTypes.YELLOW_FLASK.get(), new Item.Properties()));
+	public static final RegistryObject<Item> BIG_BLUE_POTION = Registration.ITEMS.register("big_blue_potion",
+			() -> new PotItem(() -> ModEntityTypes.BIG_BLUE_POTION.get(), new Item.Properties()));
+	public static final RegistryObject<Item> BLUE_FLASK = Registration.ITEMS.register("blue_flask",
+			() -> new PotItem(() -> ModEntityTypes.BLUE_FLASK.get(), new Item.Properties()));
+	public static final RegistryObject<Item> BIG_GREEN_POTION = Registration.ITEMS.register("big_green_potion",
+			() -> new PotItem(() -> ModEntityTypes.BIG_GREEN_POTION.get(), new Item.Properties()));
+	public static final RegistryObject<Item> GREEN_FLASK = Registration.ITEMS.register("green_flask",
+			() -> new PotItem(() -> ModEntityTypes.GREEN_FLASK.get(), new Item.Properties()));
 
 	/**
 	 * Items belonging to the decorative-entity subsystem. These are pulled out of the main
@@ -105,7 +117,10 @@ public class ModItems {
 			STONE_POT, SQUAT_STONE_POT, THIN_STONE_POT,
 			RED_POT, SQUAT_RED_POT, THIN_RED_POT,
 			BLUE_POT, SQUAT_BLUE_POT, THIN_BLUE_POT,
-			BIG_RED_POTION, RED_FLASK);
+			BIG_RED_POTION, RED_FLASK,
+			BIG_YELLOW_POTION, YELLOW_FLASK,
+			BIG_BLUE_POTION, BLUE_FLASK,
+			BIG_GREEN_POTION, GREEN_FLASK);
 
 	/**
 	 * 
