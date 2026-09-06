@@ -260,6 +260,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.MOSSY_SQUARE_MUD_BRICK.get());
         rectangleLeftHorizontalBlock(ModBlocks.MOSSY_LEFT_LARGE_MUD_BRICK, ModBlocks.MOSSY_RIGHT_LARGE_MUD_BRICK);
         rectangleRightHorizontalBlock(ModBlocks.MOSSY_RIGHT_LARGE_MUD_BRICK, ModBlocks.MOSSY_LEFT_LARGE_MUD_BRICK);
+        simpleBlock(ModBlocks.POLISHED_ANDESITE_BRICKS.get());
+        stairsBlock(ModBlocks.POLISHED_ANDESITE_BRICK_STAIRS.get(), modLoc("block/polished_andesite_bricks"));
 
         simpleBlock(ModBlocks.MOSSY_BRICKS.get());
         stairsBlock(ModBlocks.MOSSY_BRICK_STAIRS.get(), modLoc("block/mossy_bricks"));

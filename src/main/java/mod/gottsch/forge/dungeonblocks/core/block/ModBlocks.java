@@ -263,6 +263,17 @@ public class ModBlocks {
     public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_MUD_BRICK = Registration.BLOCKS.register("mossy_right_large_mud_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.MUD_BRICKS));
     });
+
+    // Polished Andesite Bricks: the vanilla stone brick pattern re-toned onto polished andesite's
+    // own palette, the way vanilla derives deepslate_bricks from polished_deepslate. Plural, because
+    // the texture shows several bricks - unlike square/large bricks, which are one brick per block.
+    // Not a ModMaterials.STONE entry: that would produce all eleven stone block-types at once.
+    public static final RegistryObject<Block> POLISHED_ANDESITE_BRICKS = Registration.BLOCKS.register("polished_andesite_bricks", () -> {
+        return new Block(Properties.copy(Blocks.POLISHED_ANDESITE));
+    });
+    public static final RegistryObject<StairBlock> POLISHED_ANDESITE_BRICK_STAIRS = Registration.BLOCKS.register("polished_andesite_brick_stairs", () -> {
+        return new StairBlock(POLISHED_ANDESITE_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.POLISHED_ANDESITE_STAIRS));
+    });
     public static final RegistryObject<Block> MOSSY_BRICKS = Registration.BLOCKS.register("mossy_bricks", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
