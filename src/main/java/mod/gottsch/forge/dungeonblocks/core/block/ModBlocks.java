@@ -218,6 +218,14 @@ public class ModBlocks {
     public static final RegistryObject<StairBlock> SQUARE_MUD_BRICK_STAIRS = Registration.BLOCKS.register("square_mud_brick_stairs", () -> {
         return new StairBlock(SQUARE_MUD_BRICK.get().defaultBlockState(), Properties.copy(Blocks.MUD_BRICK_STAIRS));
     });
+    // The mossy counterpart of SQUARE_STONE_BRICK_STAIRS, added 2026-09-07 for Dungeons2's boss-room
+    // weathering: it ages square stone brick stairs into their mossy form, and until now the mossy
+    // SQUARE STONE BRICK existed while its stairs did not, so the rule named a block that resolved
+    // to air. Follows MOSSY_LARGE_BRICK_STAIRS -- mossy stone brick stairs' properties over the
+    // mossy full block's state, and the texture the mossy full block already ships.
+    public static final RegistryObject<StairBlock> MOSSY_SQUARE_STONE_BRICK_STAIRS = Registration.BLOCKS.register("mossy_square_stone_brick_stairs", () -> {
+        return new StairBlock(MOSSY_SQUARE_STONE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
+    });
 
     public static final RegistryObject<Block> SQUARE_STONE_BRICK_FACADE_BLOCK = Registration.BLOCKS.register("square_stone_brick_facade_block", () -> {
         return new FacadeBlock(Properties.copy(Blocks.STONE_BRICKS));
@@ -273,6 +281,14 @@ public class ModBlocks {
     });
     public static final RegistryObject<StairBlock> POLISHED_ANDESITE_BRICK_STAIRS = Registration.BLOCKS.register("polished_andesite_brick_stairs", () -> {
         return new StairBlock(POLISHED_ANDESITE_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.POLISHED_ANDESITE_STAIRS));
+    });
+    // Vanilla has no mossy polished andesite to copy properties from, so - as with mossy_bricks/
+    // mossy_large_bricks above - these take their properties from MOSSY_STONE_BRICKS instead.
+    public static final RegistryObject<Block> MOSSY_POLISHED_ANDESITE_BRICKS = Registration.BLOCKS.register("mossy_polished_andesite_bricks", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_POLISHED_ANDESITE_BRICK_STAIRS = Registration.BLOCKS.register("mossy_polished_andesite_brick_stairs", () -> {
+        return new StairBlock(MOSSY_POLISHED_ANDESITE_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
     });
     public static final RegistryObject<Block> MOSSY_BRICKS = Registration.BLOCKS.register("mossy_bricks", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));

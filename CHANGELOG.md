@@ -31,6 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Stairs, Facade and Quarter Facade** for both Square Stone Brick and Square Mud Brick.
 - **Left and Right Large Mud Brick** — the two halves of a single large brick spanning two blocks, in the same mud brick colours.
 - **Mossy Square Mud Brick** and **Mossy Left / Right Large Mud Brick** — mossy variants of all three, carrying the same moss the stone and clay bricks use.
+- **Polished Andesite Bricks** and **Polished Andesite Brick Stairs** — a brick pattern in vanilla polished andesite's grey, at polished andesite's own properties. Andesite is the mod's usual trim stone, and until now there was no bricked form of it to run a course or a step in.
+- **Mossy Polished Andesite Bricks** and **Mossy Polished Andesite Brick Stairs** — mossy variants of both. Vanilla has no mossy polished andesite to copy properties from, so like Mossy Bricks and Mossy Large Bricks they take theirs from Mossy Stone Bricks.
+- **Mossy Square Stone Brick Stairs** — completes the Square Stone Brick family. The mossy full block and the plain stairs both already existed; the mossy stairs did not, so a run of square stone brick steps had no aged form to weather into.
 - **The Brazier has an `embers` state**: glowing coals with no flame, emitting light level 3. Mobs need block light 0 to spawn and block light drops by 1 per block, so a brazier at the usual light 15 sterilises an entire small dungeon room. At light 3 the brazier still reads as hot while most of a room's floor stays spawnable. The coals are drawn full-bright so they are visible in an otherwise dark room. The full range is now `fire=none` (0), `fire=embers` (3), `fire=soul` (10) and `fire=lit` (15), and the default is `none`.
 
 ### ⚙️ Changed
@@ -63,6 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tall doors currently reuse each door's own bottom texture as a placeholder for the middle segment texture pending dedicated tiling art.
 - Tall doors have no crafting recipe yet (obtainable via creative/give only).
 - Square Stone Brick and Square Mud Brick stairs and facades have no crafting recipe yet (obtainable via creative/give only).
+- Polished Andesite Brick blocks and stairs, in both plain and mossy, have no crafting recipe yet (obtainable via creative/give only), and neither do Mossy Square Stone Brick Stairs.
 
 ## [2.3.1] - 2026-07-12
 
