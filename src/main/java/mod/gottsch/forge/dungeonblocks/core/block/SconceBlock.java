@@ -85,7 +85,8 @@ public class SconceBlock extends AbstractSconceBlock {
 	public SconceBlock(Properties properties) {
 
 		super(properties);
-		this.registerDefaultState(this.stateDefinition.any()
+		// defaultBlockState(), not stateDefinition.any() -- see AbstractSconceBlock
+		this.registerDefaultState(this.defaultBlockState()
 						.setValue(LIT, Boolean.valueOf(false))
 				.setValue(CANDLES, Integer.valueOf(0)));
 

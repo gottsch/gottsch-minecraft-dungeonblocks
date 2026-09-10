@@ -57,13 +57,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The side of a Sill block no longer shows a seam down its middle. The sill is built from two halves and both were drawing the same half of the texture, so the pattern restarted midway along the block. The underside had the same fault. Cornice, Facade and Quarter Facade inner corners were affected in the same way.
 - Angle Cobwebs break quickly again. A sword now cuts one in 8 ticks, the same as a vanilla cobweb, and anything else takes 12. They previously took a full 20 seconds to break with any tool and then dropped nothing at all: they took their hardness and their "requires the correct tool" flag from the vanilla cobweb, but nothing counts as the correct tool for them, because vanilla only grants a sword its speed and its harvesting ability on the vanilla cobweb block specifically.
 - A Crown Molding outer corner now blends with the straight pieces either side of it. Its top surface was taking its colours from the corner of the texture, where many materials keep a lighter edge, while its neighbours took theirs from the middle — so the corner read as a brighter patch rather than as a continuation of the run.
+- Dungeon Lanterns and Sconces placed by a structure, a datapack or a command are no longer waterlogged. Their default state had every on/off property switched on, so anything that started from the default and did not explicitly say otherwise got a lantern that was hanging and full of water, and the water poured out across the floor around it. Lanterns and sconces placed by hand were never affected.
 
 ### Known limitations
 
 - Manacles as a chain fixture are planned but not yet implemented.
 - Swinging chains must hang from a ceiling or from another chain, and cannot be placed in mid-air.
 - Ceramic Pots drop nothing by default; the loot plumbing is in place but the shipped loot tables are intentionally empty.
-- Tall doors currently reuse each door's own bottom texture as a placeholder for the middle segment texture pending dedicated tiling art.
 - Tall doors have no crafting recipe yet (obtainable via creative/give only).
 - Square Stone Brick and Square Mud Brick stairs and facades have no crafting recipe yet (obtainable via creative/give only).
 - Polished Andesite Brick blocks and stairs, in both plain and mossy, have no crafting recipe yet (obtainable via creative/give only), and neither do Mossy Square Stone Brick Stairs.
