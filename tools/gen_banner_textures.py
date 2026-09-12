@@ -121,6 +121,58 @@ BASES = {
         blood=(170, 40, 32, 255),
         blood_dark=(112, 24, 20, 255),
     ),
+    # A fallen deep-delving hold. This is the first saturated cool field in the set - the others
+    # sit at hue 0, 47 and a near-neutral grey - and brass is a third crest MATERIAL rather than a
+    # third shape in bone or ink. Brass on indigo is also the widest luma gap available here (~89),
+    # which is why the hammer reads more cleanly than any other crest.
+    "dwarven": dict(
+        field=(52, 68, 118, 255),
+        edge=(30, 40, 72, 255),
+        shade=(42, 55, 96, 255),
+        crest=(198, 156, 62, 255),
+        crest_dark=(146, 112, 42, 255),
+        grime_tint=(46, 44, 40, 255),
+        rod=(56, 58, 66, 255),
+        rod_lit=(84, 86, 96, 255),
+        symbol="dwarven",
+    ),
+    # Deliberately NOT another eye - that mark belongs to the orcs now. A diamond-within-a-diamond
+    # is all straight steps, which is what survives at this size, and sickly green is a fourth
+    # crest material.
+    "cult": dict(
+        field=(78, 44, 112, 255),
+        edge=(48, 26, 70, 255),
+        shade=(62, 35, 90, 255),
+        crest=(150, 196, 120, 255),
+        crest_dark=(104, 140, 84, 255),
+        grime_tint=(44, 38, 44, 255),
+        rod=(60, 52, 62, 255),
+        rod_lit=(88, 78, 92, 255),
+        # Darker than the field rather than brighter: a mid-violet sits close to ordinary blood in
+        # luma, so the stain has to go the other way to register. Soaked in, not spattered on.
+        blood=(72, 14, 14, 255),
+        blood_dark=(48, 10, 10, 255),
+        symbol="cult",
+    ),
+    # The one bright banner. Everything else in the set is a dark shape on a dark wall; at luma 162
+    # this one carries across a room. It also INVERTS the crest relationship - the mark is the dark
+    # element and the field is the light one, which is why "crest" here is a charcoal.
+    "plague": dict(
+        field=(168, 170, 108, 255),
+        edge=(112, 114, 66, 255),
+        shade=(140, 142, 88, 255),
+        crest=(52, 48, 38, 255),
+        crest_dark=(32, 29, 23, 255),
+        # Glass, not sockets. Every other faction's "socket" is darker than its crest because the
+        # crest is pale and a hole in it reads as shadow. Here the crest is the dark element, so a
+        # darker socket vanishes into it - the first pass made the mask one featureless blob. The
+        # lenses have to be the LIGHT element for the mask to have any internal structure at all.
+        socket=(206, 206, 186, 255),
+        grime_tint=(72, 66, 44, 255),
+        rod=(96, 88, 60, 255),
+        rod_lit=(128, 118, 82, 255),
+        symbol="plague",
+    ),
 }
 
 # Default blood: dried and dark, which is what suits a mid-tone field like the orc sackcloth.
@@ -141,6 +193,18 @@ VARIANTS = [
     ("undead_banner", "undead", dict(grime=0.25)),
     ("tattered_undead_banner", "undead", dict(grime=0.45, tatter=0.70)),
     ("bloodstained_undead_banner", "undead", dict(grime=0.35, tatter=0.50, blood=0.50)),
+    ("dwarven_banner", "dwarven", dict(grime=0.20)),
+    ("tattered_dwarven_banner", "dwarven", dict(grime=0.45, tatter=0.70)),
+    ("bloodstained_dwarven_banner", "dwarven", dict(grime=0.30, tatter=0.45, blood=0.50)),
+    ("cult_banner", "cult", dict(grime=0.25)),
+    ("tattered_cult_banner", "cult", dict(grime=0.50, tatter=0.70)),
+    ("bloodstained_cult_banner", "cult", dict(grime=0.30, tatter=0.45, blood=0.55)),
+    # Grime reads hard on a field this pale - harder than anywhere else in the set, because there
+    # is somewhere for it to show. Held back all the same: much past this and the one bright banner
+    # turns olive-brown and stops being the thing that made the faction worth adding.
+    ("plague_banner", "plague", dict(grime=0.30)),
+    ("tattered_plague_banner", "plague", dict(grime=0.50, tatter=0.75)),
+    ("bloodstained_plague_banner", "plague", dict(grime=0.30, tatter=0.50, blood=0.50)),
 ]
 
 
@@ -199,12 +263,8 @@ def layer_edging(px, base, rnd):
 
 
 def layer_crest(px, base, rnd):
-    if base["symbol"] == "cross":
-        _crest_cross(px, base, rnd)
-    elif base["symbol"] == "undead":
-        _crest_undead(px, base, rnd)
-    else:
-        _crest_orc(px, base, rnd)
+    """Dispatched by table, so adding a faction touches its own crest function and this map only."""
+    SYMBOLS[base["symbol"]](px, base, rnd)
 
 
 def _bone_patch(px, base, cells, rnd):
@@ -280,7 +340,7 @@ def _crest_undead(px, base, rnd):
     cells = _cells(skull, 1, 3)
     _bone_patch(px, base, cells, rnd)
     for x, y in sorted(_cells(skull, 1, 3, "o")):
-        _set(px, x, y, mul(base["socket"], 1.0 + rnd.uniform(-0.08, 0.08)))
+        _set(px, x, y, mul(base.get("socket", base["crest_dark"]), 1.0 + rnd.uniform(-0.08, 0.08)))
 
     spine = {(x, y) for x in (4, 5) for y in range(13, 23)}
     ribs = {(x, y) for y in (14, 16, 18, 20) for x in (2, 7)}
@@ -338,6 +398,99 @@ def _crest_orc(px, base, rnd):
                 c = mul(c, 0.7)
             px[y][x] = lerp(c, px[y][x], fade * 0.65)
 
+
+def _crest_dwarven(px, base, rnd):
+    """
+    A mountain over three strata bands: the hold, and the delvings under it.
+
+    This is a GLYPH, not a depicted object, and that was the whole lesson of getting here. A hammer
+    was tried three ways and every one failed at this size: a symmetric head on a central haft is
+    read as a letter T, moving the haft under one end of the head turns it into a 7, and a peak
+    with cross-bars under it becomes a cross. An object needs enough silhouette to be recognised
+    as that object and nothing else, and eight pixels does not supply it. A bold triangle plus
+    three bars has no competing reading - it is obviously heraldry, and it is legible instantly.
+
+    The bands also give the lower cloth something to carry, which the skull's spine does for the
+    undead banner.
+    """
+    peak = (
+        "...##...",
+        "..####..",
+        ".######.",
+        "########",
+        "########",
+    )
+    _bone_patch(px, base, _cells(peak, 1, 3), rnd)
+
+    bands = {(x, y) for x in range(2, 8) for y in (11, 15, 19)}
+    _bone_patch(px, base, bands, rnd)
+    for x, y in sorted(bands):
+        if px[y][x] is not None:
+            px[y][x] = mul(px[y][x], 0.85)  # the mountain stays the thing you look at
+
+
+def _crest_cult(px, base, rnd):
+    """
+    A diamond within a diamond, with three marks tallied beneath it.
+
+    Concentric straight-stepped rings, because a circle at eight pixels is a lumpy octagon and a
+    curve is the one thing this scale cannot draw. The inner diamond is what stops it reading as a
+    plain rhombus.
+    """
+    sigil = (
+        "...##...",
+        ".##..##.",
+        "#..##..#",
+        "#.####.#",
+        "#.####.#",
+        "#..##..#",
+        ".##..##.",
+        "...##...",
+    )
+    _bone_patch(px, base, _cells(sigil, 1, 3), rnd)
+
+    tally = {(x, y) for y0 in (14, 18, 22) for y in (y0, y0 + 1) for x in (4, 5)}
+    _bone_patch(px, base, tally, rnd)
+    for x, y in sorted(tally):
+        if px[y][x] is not None:
+            px[y][x] = mul(px[y][x], 0.85)  # the sigil stays the thing you look at
+
+
+def _crest_plague(px, base, rnd):
+    """
+    A beaked plague mask: domed hood, round lenses, and a beak projecting well below it.
+
+    The beak is doing real work. A dome with two sockets in it is a skull, and the undead banner
+    already owns that shape - it is the length of the beak below the jawline that separates the
+    two at a glance.
+
+    Note the crest is DARK here against a light field, the reverse of every other faction.
+    _bone_patch does not care: it reads "crest" as the lit ply and "crest_dark" as the shadowed
+    one, whichever way round they happen to be.
+    """
+    mask = (
+        ".######.",
+        "########",
+        "#oo##oo#",
+        "#oo##oo#",
+        ".######.",
+        "..####..",
+    )
+    cells = _cells(mask, 1, 3)
+    cells |= {(x, y) for x in (4, 5) for y in range(9, 13)}  # beak
+    _bone_patch(px, base, cells, rnd)
+    for x, y in sorted(_cells(mask, 1, 3, "o")):
+        _set(px, x, y, mul(base.get("socket", base["crest_dark"]), 1.0 + rnd.uniform(-0.08, 0.08)))
+
+
+SYMBOLS = {
+    "cross": _crest_cross,
+    "orc": _crest_orc,
+    "undead": _crest_undead,
+    "dwarven": _crest_dwarven,
+    "cult": _crest_cult,
+    "plague": _crest_plague,
+}
 
 def layer_grime(px, base, amount, rnd):
     """

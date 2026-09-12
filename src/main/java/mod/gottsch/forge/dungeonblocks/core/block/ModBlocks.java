@@ -435,6 +435,21 @@ public class ModBlocks {
             banner("tattered_undead_banner", MapColor.COLOR_BLACK);
     public static final RegistryObject<Block> BLOODSTAINED_UNDEAD_BANNER =
             banner("bloodstained_undead_banner", MapColor.COLOR_BLACK);
+    public static final RegistryObject<Block> DWARVEN_BANNER = banner("dwarven_banner", MapColor.COLOR_BLUE);
+    public static final RegistryObject<Block> TATTERED_DWARVEN_BANNER =
+            banner("tattered_dwarven_banner", MapColor.COLOR_BLUE);
+    public static final RegistryObject<Block> BLOODSTAINED_DWARVEN_BANNER =
+            banner("bloodstained_dwarven_banner", MapColor.COLOR_BLUE);
+    public static final RegistryObject<Block> CULT_BANNER = banner("cult_banner", MapColor.COLOR_PURPLE);
+    public static final RegistryObject<Block> TATTERED_CULT_BANNER =
+            banner("tattered_cult_banner", MapColor.COLOR_PURPLE);
+    public static final RegistryObject<Block> BLOODSTAINED_CULT_BANNER =
+            banner("bloodstained_cult_banner", MapColor.COLOR_PURPLE);
+    public static final RegistryObject<Block> PLAGUE_BANNER = banner("plague_banner", MapColor.TERRACOTTA_YELLOW);
+    public static final RegistryObject<Block> TATTERED_PLAGUE_BANNER =
+            banner("tattered_plague_banner", MapColor.TERRACOTTA_YELLOW);
+    public static final RegistryObject<Block> BLOODSTAINED_PLAGUE_BANNER =
+            banner("bloodstained_plague_banner", MapColor.TERRACOTTA_YELLOW);
 
     // plate bracket
     public static final RegistryObject<Block> IRON_PLATE_BRACKET = Registration.BLOCKS.register("iron_plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
