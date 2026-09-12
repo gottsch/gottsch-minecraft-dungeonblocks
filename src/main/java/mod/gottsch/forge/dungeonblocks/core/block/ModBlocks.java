@@ -433,6 +433,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> UNDEAD_BANNER = banner("undead_banner", MapColor.COLOR_BLACK);
     public static final RegistryObject<Block> TATTERED_UNDEAD_BANNER =
             banner("tattered_undead_banner", MapColor.COLOR_BLACK);
+    public static final RegistryObject<Block> BLOODSTAINED_UNDEAD_BANNER =
+            banner("bloodstained_undead_banner", MapColor.COLOR_BLACK);
 
     // plate bracket
     public static final RegistryObject<Block> IRON_PLATE_BRACKET = Registration.BLOCKS.register("iron_plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));

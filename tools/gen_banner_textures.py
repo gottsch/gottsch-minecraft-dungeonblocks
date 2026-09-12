@@ -114,9 +114,17 @@ BASES = {
         rod=(50, 46, 46, 255),
         rod_lit=(76, 72, 72, 255),
         symbol="undead",
+        # Brighter and fresher than the default dried blood, and NOT a stylistic choice: the
+        # default sits 9 luma from this field and simply disappears on it, where it reads fine on
+        # the orc sackcloth 65 luma away. Contrast is a property of the pair, not of the colour -
+        # so the stain is defined per base, next to the field it has to be seen against.
+        blood=(170, 40, 32, 255),
+        blood_dark=(112, 24, 20, 255),
     ),
 }
 
+# Default blood: dried and dark, which is what suits a mid-tone field like the orc sackcloth.
+# A base can override it, and the undead one has to - see its "blood" entry.
 BLOOD = (92, 18, 16, 255)
 BLOOD_DARK = (58, 12, 12, 255)
 
@@ -132,6 +140,7 @@ VARIANTS = [
     # dark and this grey it does nothing you can see. Tatter and blood both read well on it.
     ("undead_banner", "undead", dict(grime=0.25)),
     ("tattered_undead_banner", "undead", dict(grime=0.45, tatter=0.70)),
+    ("bloodstained_undead_banner", "undead", dict(grime=0.35, tatter=0.50, blood=0.50)),
 ]
 
 
@@ -289,7 +298,7 @@ def _crest_orc(px, base, rnd):
     The eye is built pale-inside-dark rather than as one dark blob: at this size a solid shape has
     no internal structure to read as an eye, so it needs the light lens to sit against the ink rim.
     """
-    ink, pale, rust = base["crest"], base["crest_dark"], BLOOD
+    ink, pale, rust = base["crest"], base["crest_dark"], base.get("blood", BLOOD)
 
     # An almond over five rows, with the ink outline DERIVED from it (any neighbour outside the
     # lens) rather than hand-placed bars above and below - those bars are what turned the first
@@ -363,8 +372,10 @@ def layer_grime(px, base, amount, rnd):
                     px[y][x] = lerp(px[y][x], tint, amount * 0.7 * (1.0 - d / r))
 
 
-def layer_blood(px, amount, rnd):
-    """Spatter, and runs dragged down from some of it. Kept dark and desaturated - dried, not wet."""
+def layer_blood(px, base, amount, rnd):
+    """Spatter, and runs dragged down from some of it. Whether it reads as dried or fresh is the
+    base's call, because that depends entirely on the field underneath it."""
+    blood, blood_dark = base.get("blood", BLOOD), base.get("blood_dark", BLOOD_DARK)
     for _ in range(int(5 * amount) + 1):
         cx, cy = rnd.randrange(CLOTH_W), rnd.randrange(2, CLOTH_H - 6)
         r = rnd.uniform(1.2, 2.6)
@@ -374,18 +385,18 @@ def layer_blood(px, amount, rnd):
                     continue
                 d = ((x - cx) ** 2 + ((y - cy) * 0.8) ** 2) ** 0.5
                 if d < r:
-                    px[y][x] = lerp(px[y][x], BLOOD, min(0.9, amount * (1.0 - d / r) * 2.0))
+                    px[y][x] = lerp(px[y][x], blood, min(0.9, amount * (1.0 - d / r) * 2.0))
         # a run from the bottom of the spatter
         if rnd.random() < 0.7:
             for step in range(int(rnd.uniform(2, 8) * amount) + 1):
                 y = int(cy + r) + step
                 if 0 <= y < CLOTH_H and px[y][cx] is not None:
-                    px[y][cx] = lerp(px[y][cx], BLOOD_DARK, amount * 0.9)
+                    px[y][cx] = lerp(px[y][cx], blood_dark, amount * 0.9)
 
     for _ in range(int(8 * amount)):  # fine spray
         x, y = rnd.randrange(CLOTH_W), rnd.randrange(CLOTH_H)
         if px[y][x] is not None:
-            px[y][x] = lerp(px[y][x], BLOOD_DARK, amount * 0.8)
+            px[y][x] = lerp(px[y][x], blood_dark, amount * 0.8)
 
 
 def layer_tatter(px, amount, rnd):
@@ -470,7 +481,7 @@ def build_face(base, treat, rnd):
     if treat.get("grime"):
         layer_grime(px, base, treat["grime"], rnd)
     if treat.get("blood"):
-        layer_blood(px, treat["blood"], rnd)
+        layer_blood(px, base, treat["blood"], rnd)
     if treat.get("tatter"):
         layer_tatter(px, treat["tatter"], rnd)
 
