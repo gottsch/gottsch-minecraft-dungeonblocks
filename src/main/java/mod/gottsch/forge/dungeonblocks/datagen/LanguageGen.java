@@ -22,7 +22,11 @@ import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.item.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.text.WordUtils;
+
+import java.util.Set;
 
 /**
  * 
@@ -35,6 +39,14 @@ public class LanguageGen extends LanguageProvider {
         super(output, DungeonBlocks.MOD_ID, locale);
     }
     
+    /** Blocks whose display name is set explicitly below, and so must not be auto-named. */
+    private static final Set<RegistryObject<Block>> NAMED_BY_HAND = Set.of(
+            ModBlocks.ROOTS,
+            ModBlocks.ROOTS_BODY,
+            ModBlocks.ORC_BANNER,
+            ModBlocks.TATTERED_ORC_BANNER,
+            ModBlocks.BLOODSTAINED_ORC_BANNER);
+
     @Override
     protected void addTranslations() {
     	// tabs
@@ -42,8 +54,10 @@ public class LanguageGen extends LanguageProvider {
         add("itemGroup." + DungeonBlocks.MOD_ID + ".entities", "DungeonBlocks Entities");
 
         ModBlocks.MAP.forEach((k, v) -> {
-            // these are given custom display names below
-            if (k == ModBlocks.ROOTS || k == ModBlocks.ROOTS_BODY) {
+            // these are given custom display names below. LanguageProvider.add() throws on a
+            // duplicate key rather than overwriting, so anything named by hand has to be skipped
+            // here or datagen dies outright.
+            if (NAMED_BY_HAND.contains(k)) {
                 return;
             }
             String s = k.getId().getPath().replace("_block", "").replace("_", " ").trim();
@@ -52,6 +66,12 @@ public class LanguageGen extends LanguageProvider {
         });
 
         // unmapped resources
+        // the orc banners' ids stay short (the naming scheme the rest of the mod uses), but
+        // "Orc War Banner" is what they actually are
+        add(ModBlocks.ORC_BANNER.get(), "Orc War Banner");
+        add(ModBlocks.TATTERED_ORC_BANNER.get(), "Tattered Orc War Banner");
+        add(ModBlocks.BLOODSTAINED_ORC_BANNER.get(), "Bloodstained Orc War Banner");
+
         add(ModBlocks.MOLD.get(), "Mold");
         add(ModBlocks.LICHEN.get(), "Lichen");
         add(ModItems.SKELETON.get(), "Skeleton");

@@ -3,6 +3,8 @@ package mod.gottsch.forge.dungeonblocks.core.setup;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.ModBlockEntityTypes;
+import mod.gottsch.forge.dungeonblocks.core.blockentity.client.DungeonBannerModel;
+import mod.gottsch.forge.dungeonblocks.core.blockentity.client.DungeonBannerRenderer;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.SwingingChainRenderer;
 import mod.gottsch.forge.dungeonblocks.core.entity.ModEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.BigRedPotionModel;
@@ -102,6 +104,7 @@ public class ClientSetup {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(DungeonBannerModel.LAYER_LOCATION, DungeonBannerModel::createBodyLayer);
         event.registerLayerDefinition(PotModel.LAYER_LOCATION, PotModel::createBodyLayer);
         event.registerLayerDefinition(SquatClayPotModel.LAYER_LOCATION, SquatClayPotModel::createBodyLayer);
         event.registerLayerDefinition(ThinClayPotModel.LAYER_LOCATION, ThinClayPotModel::createBodyLayer);
@@ -126,5 +129,6 @@ public class ClientSetup {
                                 variant.texture(), variant.tumblePivot(), variant.scale())));
         event.registerEntityRenderer(ModEntityTypes.POT_SHARD.get(), PotShardRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.SWINGING_CHAIN.get(), SwingingChainRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityTypes.DUNGEON_BANNER.get(), DungeonBannerRenderer::new);
     }
 }

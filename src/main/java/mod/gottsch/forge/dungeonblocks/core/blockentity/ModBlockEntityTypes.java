@@ -34,6 +34,20 @@ public class ModBlockEntityTypes {
 							.of(SwingingChainBlockEntity::new, ModBlocks.SWINGING_CHAIN.get())
 							.build(null));
 
+	/**
+	 * <b>One type for every banner variant.</b> The variants differ only by texture, and the
+	 * renderer derives that from the block's own id - so registering a type per variant would buy
+	 * nothing and would need a matching renderer registration each time. Valid blocks are read from
+	 * {@link ModBlocks#BANNERS} inside the supplier, which runs after the block registry is filled.
+	 */
+	public static final RegistryObject<BlockEntityType<DungeonBannerBlockEntity>> DUNGEON_BANNER =
+			Registration.BLOCK_ENTITY_TYPES.register("dungeon_banner",
+					() -> BlockEntityType.Builder
+							.of(DungeonBannerBlockEntity::new, ModBlocks.BANNERS.stream()
+									.map(RegistryObject::get)
+									.toArray(net.minecraft.world.level.block.Block[]::new))
+							.build(null));
+
 	public static void register(IEventBus bus) {
 		Registration.registerBlockEntityTypes(bus);
 	}

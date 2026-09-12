@@ -173,6 +173,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK_STAIRS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK_SLAB));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK_SLAB));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_MUD_BRICK));
 		// the facade / quarter facade item models are covered by the MAP sweep above
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK_STAIRS));
@@ -239,6 +241,11 @@ public class ItemModelsProvider extends ItemModelProvider {
 		// the chain block is drawn by a BlockEntityRenderer and has no baked model to inherit from,
 		// so its item uses vanilla's chain sprite
 		basicItem(ModBlocks.MAP.get(ModBlocks.SWINGING_CHAIN), mcLoc("item/chain"));
+
+		// same story for the banners: nothing baked to inherit, so each one's flat block sprite -
+		// which is also its break particle - is the icon
+		ModBlocks.BANNERS.forEach(banner ->
+				basicItem(ModBlocks.MAP.get(banner), modLoc("block/" + banner.getId().getPath())));
 
 		slabTableItem(ModBlocks.STONE_SLAB_TABLE);
 		slabTableItem(ModBlocks.STONE_BRICKS_SLAB_TABLE);

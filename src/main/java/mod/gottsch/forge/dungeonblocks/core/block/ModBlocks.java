@@ -19,6 +19,8 @@
  */
 package mod.gottsch.forge.dungeonblocks.core.block;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -44,6 +46,14 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModBlocks {
     // map from registry block to registry item
     public static final Map<RegistryObject<Block>, RegistryObject<Item>> MAP = Maps.newHashMap();
+
+    /**
+     * Every banner variant, in registration order. One BlockEntityType and one renderer cover the
+     * whole list (see ModBlockEntityTypes and DungeonBannerRenderer), and the datagen providers
+     * iterate it - so a new banner is one {@link #banner} call here plus its two PNGs, with nothing
+     * else to touch.
+     */
+    public static final List<RegistryObject<Block>> BANNERS = new ArrayList<>();
 
     // ------------------------------------------------------------------
     // Copper helpers. Weathering copper has 4 ages (unaffected -> exposed ->
@@ -227,6 +237,15 @@ public class ModBlocks {
         return new StairBlock(MOSSY_SQUARE_STONE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
     });
 
+    // Square stone brick slabs - the mod's first SlabBlock. A double slab drops two items, which
+    // the blanket dropSelf in ModBlockLootTables would not do; see the SlabBlock branch there.
+    public static final RegistryObject<SlabBlock> SQUARE_STONE_BRICK_SLAB = Registration.BLOCKS.register("square_stone_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.STONE_BRICK_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> MOSSY_SQUARE_STONE_BRICK_SLAB = Registration.BLOCKS.register("mossy_square_stone_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.MOSSY_STONE_BRICK_SLAB));
+    });
+
     public static final RegistryObject<Block> SQUARE_STONE_BRICK_FACADE_BLOCK = Registration.BLOCKS.register("square_stone_brick_facade_block", () -> {
         return new FacadeBlock(Properties.copy(Blocks.STONE_BRICKS));
     });
@@ -380,6 +399,40 @@ public class ModBlocks {
                     .noOcclusion()
                     .noCollission()
                     .lightLevel(SwingingChainBlock::lightEmission)));
+
+    // ------------------------------------------------------------------
+    // Wall banners. Every variant is the same block with a different texture - the design, the
+    // grime, the tears and the bloodstains all live in the PNG, so a variant costs no code.
+    //
+    // Cloth, so NO requiresCorrectToolForDrops and no mineable tag. None of these ids matches
+    // anything in DataGenMaps.stone_blocks or .names, which is what would otherwise sweep them
+    // into the stone family's model generation and into the pickaxe/stone-tool tags - and a block
+    // that requires the correct tool while belonging to no tool tag can never be mined for drops.
+    // ------------------------------------------------------------------
+
+    /** Registers a banner variant and records it in {@link #BANNERS}. */
+    private static RegistryObject<Block> banner(String id, MapColor mapColor) {
+        RegistryObject<Block> block = Registration.BLOCKS.register(id,
+                () -> new DungeonBannerBlock(Properties.of().mapColor(mapColor)
+                        .strength(1.0F)
+                        .sound(SoundType.WOOL)
+                        .noOcclusion()
+                        .noCollission()));
+        BANNERS.add(block);
+        return block;
+    }
+
+    public static final RegistryObject<Block> DUNGEON_BANNER = banner("dungeon_banner", MapColor.COLOR_RED);
+    public static final RegistryObject<Block> GRIMY_BANNER = banner("grimy_banner", MapColor.COLOR_RED);
+    public static final RegistryObject<Block> TATTERED_BANNER = banner("tattered_banner", MapColor.COLOR_RED);
+    public static final RegistryObject<Block> ORC_BANNER = banner("orc_banner", MapColor.TERRACOTTA_GREEN);
+    public static final RegistryObject<Block> TATTERED_ORC_BANNER =
+            banner("tattered_orc_banner", MapColor.TERRACOTTA_GREEN);
+    public static final RegistryObject<Block> BLOODSTAINED_ORC_BANNER =
+            banner("bloodstained_orc_banner", MapColor.TERRACOTTA_GREEN);
+    public static final RegistryObject<Block> UNDEAD_BANNER = banner("undead_banner", MapColor.COLOR_BLACK);
+    public static final RegistryObject<Block> TATTERED_UNDEAD_BANNER =
+            banner("tattered_undead_banner", MapColor.COLOR_BLACK);
 
     // plate bracket
     public static final RegistryObject<Block> IRON_PLATE_BRACKET = Registration.BLOCKS.register("iron_plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));

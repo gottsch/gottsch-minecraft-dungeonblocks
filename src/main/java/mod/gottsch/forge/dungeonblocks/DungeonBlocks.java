@@ -52,6 +52,7 @@ public class DungeonBlocks {
 	public DungeonBlocks() {
 		DungeonBlocks.instance = this;
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonBlocksConfig.COMMON_CONFIG);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, DungeonBlocksConfig.CLIENT_CONFIG);
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
