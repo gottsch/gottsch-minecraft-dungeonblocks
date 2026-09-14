@@ -82,29 +82,10 @@ import java.util.Map;
  *
  * @author Mark Gottschling on Sep 12, 2026
  */
-public class DungeonBannerBlock extends Block implements EntityBlock {
+public class DungeonBannerBlock extends AbstractBannerBlock {
 
-	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
-	/**
-	 * Whether this banner's cloth moves. Per-banner, toggled with an empty hand, and carried by both
-	 * halves so it reads the same whichever one you click. The client config can veto it globally but
-	 * cannot force a still banner to move - see {@code DungeonBannerRenderer}.
-	 */
-	public static final BooleanProperty ANIMATED = BooleanProperty.create("animated");
 
-	/**
-	 * A thin slab covering the cloth and rod, hugging the wall the banner hangs on. FACING is the
-	 * direction the banner looks, so the supporting wall is always at {@code FACING.getOpposite()},
-	 * and each shape sits against that side of the block. Both halves use the same box - the rod is
-	 * only marginally wider than the cloth, and a hitbox that changed between the halves would just
-	 * make the banner awkward to aim at.
-	 */
-	private static final Map<Direction, VoxelShape> SHAPES = Map.of(
-			Direction.NORTH, Block.box(2.0D, 0.0D, 12.0D, 14.0D, 16.0D, 16.0D),
-			Direction.SOUTH, Block.box(2.0D, 0.0D, 0.0D, 14.0D, 16.0D, 4.0D),
-			Direction.WEST, Block.box(12.0D, 0.0D, 2.0D, 16.0D, 16.0D, 14.0D),
-			Direction.EAST, Block.box(0.0D, 0.0D, 2.0D, 4.0D, 16.0D, 14.0D));
 
 	public DungeonBannerBlock(Properties properties) {
 		super(properties);
@@ -119,35 +100,10 @@ public class DungeonBannerBlock extends Block implements EntityBlock {
 		builder.add(FACING, HALF, ANIMATED);
 	}
 
-	/**
-	 * The cloth waves, so it cannot be baked into the chunk mesh - {@code DungeonBannerRenderer}
-	 * draws all of it. Same call the swinging chain makes, for the same reason.
-	 */
-	@Override
-	public RenderShape getRenderShape(BlockState state) {
-		return RenderShape.INVISIBLE;
-	}
 
-	@Override
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return SHAPES.get(state.getValue(FACING));
-	}
 
-	/** Cloth: you walk through it, exactly as you walk through a vanilla banner. */
-	@Override
-	public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return Shapes.empty();
-	}
 
-	@Override
-	public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
-		return true;
-	}
 
-	/** True when the block behind this position can be hung from. */
-	private static boolean hasWall(BlockState state, LevelReader level, BlockPos pos) {
-		return level.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).isSolid();
-	}
 
 	/**
 	 * The upper half hangs on a wall; the lower half hangs on the upper half. So a banner needs a
@@ -195,33 +151,15 @@ public class DungeonBannerBlock extends Block implements EntityBlock {
 		return null;
 	}
 
-	/**
-	 * Empty hand toggles this banner's motion. There is nothing else to do to a banner, so a plain
-	 * right-click is unambiguous, and holding anything passes so the click places the held block
-	 * instead of silently freezing the banner.
-	 */
-	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-			InteractionHand hand, BlockHitResult hit) {
-		if (!player.getItemInHand(hand).isEmpty()) {
-			return InteractionResult.PASS;
-		}
-		if (!level.isClientSide) {
-			boolean animated = !state.getValue(ANIMATED);
-			setAnimated(level, pos, state, animated);
-			level.playSound(null, pos, SoundEvents.WOOL_HIT, SoundSource.BLOCKS,
-					0.6F, animated ? 1.2F : 0.8F);
-		}
-		return InteractionResult.sidedSuccess(level.isClientSide);
-	}
 
 	/**
-	 * Sets the flag on both halves. Only the upper half's state is ever read for rendering, but
-	 * leaving the lower half stale would make the two disagree in F3 and in any structure or datapack
-	 * that reads them.
+	 * Carries the flag to the other half too. Only the upper half's state is ever read for
+	 * rendering, but leaving the lower half stale would make the two disagree in F3 and in any
+	 * structure or datapack that reads them.
 	 */
-	private void setAnimated(Level level, BlockPos pos, BlockState state, boolean animated) {
-		level.setBlock(pos, state.setValue(ANIMATED, animated), Block.UPDATE_ALL);
+	@Override
+	protected void setAnimated(Level level, BlockPos pos, BlockState state, boolean animated) {
+		super.setAnimated(level, pos, state, animated);
 		BlockPos otherPos = state.getValue(HALF) == DoubleBlockHalf.UPPER ? pos.below() : pos.above();
 		BlockState otherState = level.getBlockState(otherPos);
 		if (otherState.is(this) && otherState.getValue(HALF) != state.getValue(HALF)) {
@@ -283,15 +221,7 @@ public class DungeonBannerBlock extends Block implements EntityBlock {
 		super.playerWillDestroy(level, pos, state, player);
 	}
 
-	@Override
-	public BlockState rotate(BlockState state, Rotation rotation) {
-		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
-	}
 
-	@Override
-	public BlockState mirror(BlockState state, Mirror mirror) {
-		return state.rotate(mirror.getRotation(state.getValue(FACING)));
-	}
 
 	/**
 	 * Upper half only - it owns the rod and draws the entire banner, both halves' worth. The lower
@@ -300,8 +230,12 @@ public class DungeonBannerBlock extends Block implements EntityBlock {
 	@Override
 	@Nullable
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return state.getValue(HALF) == DoubleBlockHalf.UPPER
-				? new DungeonBannerBlockEntity(pos, state)
-				: null;
+		return state.getValue(HALF) == DoubleBlockHalf.UPPER ? newEntity(pos, state) : null;
+	}
+
+	/** The cloth hangs a full block below the half that owns the BlockEntity. */
+	@Override
+	public int blocksBelow() {
+		return 1;
 	}
 }

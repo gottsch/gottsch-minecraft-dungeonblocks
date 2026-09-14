@@ -104,7 +104,9 @@ public class ClientSetup {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(DungeonBannerModel.LAYER_LOCATION, DungeonBannerModel::createBodyLayer);
+        for (DungeonBannerModel.Shape shape : DungeonBannerModel.Shape.values()) {
+            event.registerLayerDefinition(shape.layer, () -> DungeonBannerModel.createBodyLayer(shape));
+        }
         event.registerLayerDefinition(PotModel.LAYER_LOCATION, PotModel::createBodyLayer);
         event.registerLayerDefinition(SquatClayPotModel.LAYER_LOCATION, SquatClayPotModel::createBodyLayer);
         event.registerLayerDefinition(ThinClayPotModel.LAYER_LOCATION, ThinClayPotModel::createBodyLayer);

@@ -33,13 +33,21 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                    "..", "src", "main", "resources", "assets", "dungeonblocks", "textures")
 
 # must match DungeonBannerModel
-CLOTH_W, CLOTH_H = 10, 30
+CLOTH_W = 10
 ROD_W, ROD_H, ROD_D = 12, 2, 2
 ROD_TEX = (0, 32)
 
 CLEAR = (0, 0, 0, 0)
-TAPER_FROM = 20  # rows above this are full width
-CREST_FLOOR = 11  # tatter holes stay below this, so crests survive - see layer_tatter
+
+# Cloth is the same width in both shapes - a pennant is the same bolt of cloth cut short, not a
+# different banner - so only the height, the taper and the slicing change. `slices` is here purely
+# so a mismatch with DungeonBannerModel is visible in one place; the generator does not use it.
+SHAPES = {
+    "tall":    dict(cloth_h=30, taper_from=20, taper_slope=0.45, crest_floor=11, slices=5),
+    # The taper keeps the same share of the drop (the bottom third), so it has to be twice as steep
+    # over half the rows to still reach a 2px point.
+    "pennant": dict(cloth_h=14, taper_from=9,  taper_slope=0.90, crest_floor=10, slices=7),
+}
 
 
 # ----------------------------------------------------------------------------------------------
@@ -180,31 +188,41 @@ BASES = {
 BLOOD = (92, 18, 16, 255)
 BLOOD_DARK = (58, 12, 12, 255)
 
-# id, base, treatments. Treatment strengths are 0..1.
+# id, base, shape, treatments. Treatment strengths are 0..1.
 VARIANTS = [
-    ("dungeon_banner", "dungeon", dict()),
-    ("grimy_banner", "dungeon", dict(grime=0.8)),
-    ("tattered_banner", "dungeon", dict(grime=0.5, tatter=0.65)),
-    ("orc_banner", "orc", dict(grime=0.30, tatter=0.25)),
-    ("tattered_orc_banner", "orc", dict(grime=0.60, tatter=0.85)),
-    ("bloodstained_orc_banner", "orc", dict(grime=0.40, tatter=0.55, blood=0.45)),
+    ("dungeon_banner", "dungeon", "tall", dict()),
+    ("grimy_banner", "dungeon", "tall", dict(grime=0.8)),
+    ("tattered_banner", "dungeon", "tall", dict(grime=0.5, tatter=0.65)),
+    ("orc_banner", "orc", "tall", dict(grime=0.30, tatter=0.25)),
+    ("tattered_orc_banner", "orc", "tall", dict(grime=0.60, tatter=0.85)),
+    ("bloodstained_orc_banner", "orc", "tall", dict(grime=0.40, tatter=0.55, blood=0.45)),
     # Note there is no grimy undead banner: grime darkens and desaturates, and on a field this
     # dark and this grey it does nothing you can see. Tatter and blood both read well on it.
-    ("undead_banner", "undead", dict(grime=0.25)),
-    ("tattered_undead_banner", "undead", dict(grime=0.45, tatter=0.70)),
-    ("bloodstained_undead_banner", "undead", dict(grime=0.35, tatter=0.50, blood=0.50)),
-    ("dwarven_banner", "dwarven", dict(grime=0.20)),
-    ("tattered_dwarven_banner", "dwarven", dict(grime=0.45, tatter=0.70)),
-    ("bloodstained_dwarven_banner", "dwarven", dict(grime=0.30, tatter=0.45, blood=0.50)),
-    ("cult_banner", "cult", dict(grime=0.25)),
-    ("tattered_cult_banner", "cult", dict(grime=0.50, tatter=0.70)),
-    ("bloodstained_cult_banner", "cult", dict(grime=0.30, tatter=0.45, blood=0.55)),
+    ("undead_banner", "undead", "tall", dict(grime=0.25)),
+    ("tattered_undead_banner", "undead", "tall", dict(grime=0.45, tatter=0.70)),
+    ("bloodstained_undead_banner", "undead", "tall", dict(grime=0.35, tatter=0.50, blood=0.50)),
+    ("dwarven_banner", "dwarven", "tall", dict(grime=0.20)),
+    ("tattered_dwarven_banner", "dwarven", "tall", dict(grime=0.45, tatter=0.70)),
+    ("bloodstained_dwarven_banner", "dwarven", "tall", dict(grime=0.30, tatter=0.45, blood=0.50)),
+    ("cult_banner", "cult", "tall", dict(grime=0.25)),
+    ("tattered_cult_banner", "cult", "tall", dict(grime=0.50, tatter=0.70)),
+    ("bloodstained_cult_banner", "cult", "tall", dict(grime=0.30, tatter=0.45, blood=0.55)),
     # Grime reads hard on a field this pale - harder than anywhere else in the set, because there
     # is somewhere for it to show. Held back all the same: much past this and the one bright banner
     # turns olive-brown and stops being the thing that made the faction worth adding.
-    ("plague_banner", "plague", dict(grime=0.30)),
-    ("tattered_plague_banner", "plague", dict(grime=0.50, tatter=0.75)),
-    ("bloodstained_plague_banner", "plague", dict(grime=0.30, tatter=0.50, blood=0.50)),
+    ("plague_banner", "plague", "tall", dict(grime=0.30)),
+    ("tattered_plague_banner", "plague", "tall", dict(grime=0.50, tatter=0.75)),
+    ("bloodstained_plague_banner", "plague", "tall", dict(grime=0.30, tatter=0.50, blood=0.50)),
+
+    # Pennants: the same six factions cut to one block, pristine only. Conditions can be added the
+    # same way the tall ones got theirs - one row each - but note that a pennant's crest_floor
+    # leaves almost no room for tatter holes, so tearing one would be mostly hem and side bites.
+    ("dungeon_pennant", "dungeon", "pennant", dict()),
+    ("orc_pennant", "orc", "pennant", dict()),
+    ("undead_pennant", "undead", "pennant", dict()),
+    ("dwarven_pennant", "dwarven", "pennant", dict()),
+    ("cult_pennant", "cult", "pennant", dict()),
+    ("plague_pennant", "plague", "pennant", dict()),
 ]
 
 
@@ -212,11 +230,11 @@ VARIANTS = [
 # silhouette
 # ----------------------------------------------------------------------------------------------
 
-def taper_inset(y):
+def taper_inset(y, shape):
     """Pixels cut from each side at row y - the painted point every banner shares."""
-    if y < TAPER_FROM:
+    if y < shape["taper_from"]:
         return 0
-    return min(CLOTH_W // 2 - 1, int((y - TAPER_FROM + 1) * 0.45))
+    return min(CLOTH_W // 2 - 1, int((y - shape["taper_from"] + 1) * shape["taper_slope"]))
 
 
 # ----------------------------------------------------------------------------------------------
@@ -231,7 +249,7 @@ def layer_weave(px, base, rnd):
     """
     slub_dark = {rnd.randrange(CLOTH_W) for _ in range(3)}
     slub_light = {rnd.randrange(CLOTH_W) for _ in range(2)}
-    for y in range(CLOTH_H):
+    for y in range(len(px)):
         for x in range(CLOTH_W):
             if px[y][x] is None:
                 continue
@@ -247,7 +265,7 @@ def layer_weave(px, base, rnd):
 
 def layer_edging(px, base, rnd):
     """A darker rim down both sides and along the top, where the cloth wraps the rod."""
-    for y in range(CLOTH_H):
+    for y in range(len(px)):
         row = [x for x in range(CLOTH_W) if px[y][x] is not None]
         if len(row) < 4:
             continue  # at the tip a rim on both sides would make the point solid dark
@@ -262,9 +280,17 @@ def layer_edging(px, base, rnd):
             px[1][x] = mul(px[1][x], 1.10)  # light catching just under the rod
 
 
-def layer_crest(px, base, rnd):
-    """Dispatched by table, so adding a faction touches its own crest function and this map only."""
-    SYMBOLS[base["symbol"]](px, base, rnd)
+def layer_crest(px, base, rnd, compact):
+    """
+    Dispatched by table, so adding a faction touches its own crest function and this map only.
+
+    `compact` is the pennant layout. A pennant has 14 rows of cloth against the tall banner's 30,
+    and the taper eats the bottom five of those, so there is room for the primary emblem and
+    nothing else: every faction's secondary motif (the undead spine, the dwarven strata, the orc
+    claw marks, the cult tally) is dropped rather than shrunk. Squeezing a second device into three
+    remaining rows is how you get the mush this scale punishes.
+    """
+    SYMBOLS[base["symbol"]](px, base, rnd, compact)
 
 
 def _bone_patch(px, base, cells, rnd):
@@ -298,7 +324,7 @@ def _bone_patch(px, base, cells, rnd):
             nx, ny = x + dx, y + dy
             if (nx, ny) in cells:
                 continue
-            if 0 <= nx < CLOTH_W and 0 <= ny < CLOTH_H and px[ny][nx] is not None:
+            if 0 <= nx < CLOTH_W and 0 <= ny < len(px) and px[ny][nx] is not None:
                 px[ny][nx] = mul(px[ny][nx], 0.82)
 
 
@@ -309,13 +335,17 @@ def _cells(art, x0, y0, mark="#"):
             for dx, ch in enumerate(row) if ch == mark}
 
 
-def _crest_cross(px, base, rnd):
-    cells = {(4, y) for y in range(3, 25)} | {(5, y) for y in range(3, 25)}
-    cells |= {(x, y) for x in range(2, 8) for y in range(7, 10)}
+def _crest_cross(px, base, rnd, compact=False):
+    if compact:
+        cells = {(x, y) for x in (4, 5) for y in range(2, 12)}
+        cells |= {(x, y) for x in range(2, 8) for y in range(4, 6)}
+    else:
+        cells = {(x, y) for x in (4, 5) for y in range(3, 25)}
+        cells |= {(x, y) for x in range(2, 8) for y in range(7, 10)}
     _bone_patch(px, base, cells, rnd)
 
 
-def _crest_undead(px, base, rnd):
+def _crest_undead(px, base, rnd, compact=False):
     """
     A bone skull over a spine, both drawn as stitched-on patches.
 
@@ -337,10 +367,12 @@ def _crest_undead(px, base, rnd):
         "..####..",
         "..#oo#..",
     )
-    cells = _cells(skull, 1, 3)
-    _bone_patch(px, base, cells, rnd)
-    for x, y in sorted(_cells(skull, 1, 3, "o")):
+    y0 = 2 if compact else 3
+    _bone_patch(px, base, _cells(skull, 1, y0), rnd)
+    for x, y in sorted(_cells(skull, 1, y0, "o")):
         _set(px, x, y, mul(base.get("socket", base["crest_dark"]), 1.0 + rnd.uniform(-0.08, 0.08)))
+    if compact:
+        return
 
     spine = {(x, y) for x in (4, 5) for y in range(13, 23)}
     ribs = {(x, y) for y in (14, 16, 18, 20) for x in (2, 7)}
@@ -350,7 +382,7 @@ def _crest_undead(px, base, rnd):
             px[y][x] = mul(px[y][x], 0.82)  # keep the skull the thing you look at
 
 
-def _crest_orc(px, base, rnd):
+def _crest_orc(px, base, rnd, compact=False):
     """
     A daubed eye with a slit pupil, and three claw slashes dragged under it. Crude and
     deliberately asymmetric - it should look smeared on by hand, not printed.
@@ -368,7 +400,10 @@ def _crest_orc(px, base, rnd):
     # leaves a single pale pixel either side on the narrow rows, and the eye stops reading as an eye
     # and starts reading as two white dots. It cannot sit on the true centre (4.5) either, so it
     # sits at 4 - which suits a mark daubed on by hand better than perfect symmetry would.
-    lens = {(x, 4) for x in range(4, 6)}         | {(x, 5) for x in range(3, 7)}         | {(x, 6) for x in range(2, 8)}         | {(x, 7) for x in range(3, 7)}         | {(x, 8) for x in range(4, 6)}
+    y0 = 3 if compact else 4
+    # dy, and the x range of the pale lens on that row
+    rows = ((0, 4, 6), (1, 3, 7), (2, 2, 8), (3, 3, 7), (4, 4, 6))
+    lens = {(x, y0 + dy) for dy, a, b in rows for x in range(a, b)}
     for x, y in sorted(lens):
         _set(px, x, y, mul(pale, 1.0 + rnd.uniform(-0.05, 0.05)))
     for x, y in sorted(lens):
@@ -376,9 +411,14 @@ def _crest_orc(px, base, rnd):
             if (x + dx, y + dy) not in lens:
                 _set(px, x + dx, y + dy, ink)
 
-    for y in range(5, 8):        # slit pupil, leaving the almond's tips pale
+    for y in range(y0 + 1, y0 + 4):   # slit pupil, leaving the almond's tips pale
         _set(px, 4, y, ink)
-    _set(px, 2, 6, rust)         # bloodshot inner corner, in the same daub as the claws
+    _set(px, 2, y0 + 2, rust)         # bloodshot inner corner, in the same daub as the claws
+
+    # A pennant carries the eye alone. The claws below would land in the taper, compressed to about
+    # three rows, and three converging marks in three rows is exactly the mush this scale punishes.
+    if compact:
+        return
 
     # Three claw slashes dragged down-right. Every one is a single pixel wide, spaced 3px apart on
     # a near-vertical drift: thickened strokes, or a steeper slope that lets them converge, merge
@@ -390,7 +430,7 @@ def _crest_orc(px, base, rnd):
     for x0, y0, length in ((2, 13, 8), (5, 12, 9), (7, 14, 7)):
         for step in range(length):
             x, y = x0 + step // 6, y0 + step
-            if not (0 <= x < CLOTH_W and 0 <= y < CLOTH_H) or px[y][x] is None:
+            if not (0 <= x < CLOTH_W and 0 <= y < len(px)) or px[y][x] is None:
                 continue
             fade = (step / max(1, length - 1)) ** 0.8
             c = mul(claw, 1.0 + rnd.uniform(-0.06, 0.06))
@@ -399,7 +439,7 @@ def _crest_orc(px, base, rnd):
             px[y][x] = lerp(c, px[y][x], fade * 0.65)
 
 
-def _crest_dwarven(px, base, rnd):
+def _crest_dwarven(px, base, rnd, compact=False):
     """
     A mountain over three strata bands: the hold, and the delvings under it.
 
@@ -420,6 +460,14 @@ def _crest_dwarven(px, base, rnd):
         "########",
         "########",
     )
+    if compact:
+        # The same five-row peak as the tall banner, just shifted up a row. A terraced seven-row
+        # version was tried, on the theory that five rows left the pennant looking sparse next to
+        # the other factions' eight - it did not, and the plain peak reads better. Crest area is
+        # not the thing to even up across factions; a mountain is a mountain at any size.
+        _bone_patch(px, base, _cells(peak, 1, 2), rnd)
+        return
+
     _bone_patch(px, base, _cells(peak, 1, 3), rnd)
 
     bands = {(x, y) for x in range(2, 8) for y in (11, 15, 19)}
@@ -429,7 +477,7 @@ def _crest_dwarven(px, base, rnd):
             px[y][x] = mul(px[y][x], 0.85)  # the mountain stays the thing you look at
 
 
-def _crest_cult(px, base, rnd):
+def _crest_cult(px, base, rnd, compact=False):
     """
     A diamond within a diamond, with three marks tallied beneath it.
 
@@ -447,7 +495,9 @@ def _crest_cult(px, base, rnd):
         ".##..##.",
         "...##...",
     )
-    _bone_patch(px, base, _cells(sigil, 1, 3), rnd)
+    _bone_patch(px, base, _cells(sigil, 1, 2 if compact else 3), rnd)
+    if compact:
+        return
 
     tally = {(x, y) for y0 in (14, 18, 22) for y in (y0, y0 + 1) for x in (4, 5)}
     _bone_patch(px, base, tally, rnd)
@@ -456,7 +506,7 @@ def _crest_cult(px, base, rnd):
             px[y][x] = mul(px[y][x], 0.85)  # the sigil stays the thing you look at
 
 
-def _crest_plague(px, base, rnd):
+def _crest_plague(px, base, rnd, compact=False):
     """
     A beaked plague mask: domed hood, round lenses, and a beak projecting well below it.
 
@@ -476,10 +526,14 @@ def _crest_plague(px, base, rnd):
         ".######.",
         "..####..",
     )
-    cells = _cells(mask, 1, 3)
-    cells |= {(x, y) for x in (4, 5) for y in range(9, 13)}  # beak
+    # The beak is the one secondary element that cannot simply be dropped - it is what separates
+    # this from the undead skull - so on a pennant it shortens from four rows to two instead.
+    y0 = 2 if compact else 3
+    beak_rows = range(y0 + 6, y0 + 8) if compact else range(y0 + 6, y0 + 10)
+    cells = _cells(mask, 1, y0)
+    cells |= {(x, y) for x in (4, 5) for y in beak_rows}
     _bone_patch(px, base, cells, rnd)
-    for x, y in sorted(_cells(mask, 1, 3, "o")):
+    for x, y in sorted(_cells(mask, 1, y0, "o")):
         _set(px, x, y, mul(base.get("socket", base["crest_dark"]), 1.0 + rnd.uniform(-0.08, 0.08)))
 
 
@@ -498,9 +552,9 @@ def layer_grime(px, base, amount, rnd):
     cloth touches everything) and soot at the top (where the torch smoke collects), plus blotches.
     """
     tint = base["grime_tint"]
-    for y in range(CLOTH_H):
-        up_from_hem = max(0.0, (y - CLOTH_H * 0.35) / (CLOTH_H * 0.65)) ** 1.6
-        down_from_rod = max(0.0, (CLOTH_H * 0.18 - y) / (CLOTH_H * 0.18)) ** 1.5
+    for y in range(len(px)):
+        up_from_hem = max(0.0, (y - len(px) * 0.35) / (len(px) * 0.65)) ** 1.6
+        down_from_rod = max(0.0, (len(px) * 0.18 - y) / (len(px) * 0.18)) ** 1.5
         base_t = amount * max(up_from_hem, down_from_rod * 0.7)
         for x in range(CLOTH_W):
             if px[y][x] is None:
@@ -514,9 +568,9 @@ def layer_grime(px, base, amount, rnd):
             px[y][x] = lerp(c, tint, t * 0.75)
 
     for _ in range(int(7 * amount) + 1):
-        cx, cy = rnd.randrange(CLOTH_W), rnd.randrange(4, CLOTH_H)
+        cx, cy = rnd.randrange(CLOTH_W), rnd.randrange(4, len(px))
         r = rnd.uniform(1.6, 3.4)
-        for y in range(CLOTH_H):
+        for y in range(len(px)):
             for x in range(CLOTH_W):
                 if px[y][x] is None:
                     continue
@@ -530,9 +584,9 @@ def layer_blood(px, base, amount, rnd):
     base's call, because that depends entirely on the field underneath it."""
     blood, blood_dark = base.get("blood", BLOOD), base.get("blood_dark", BLOOD_DARK)
     for _ in range(int(5 * amount) + 1):
-        cx, cy = rnd.randrange(CLOTH_W), rnd.randrange(2, CLOTH_H - 6)
+        cx, cy = rnd.randrange(CLOTH_W), rnd.randrange(2, len(px) - 6)
         r = rnd.uniform(1.2, 2.6)
-        for y in range(CLOTH_H):
+        for y in range(len(px)):
             for x in range(CLOTH_W):
                 if px[y][x] is None:
                     continue
@@ -543,16 +597,16 @@ def layer_blood(px, base, amount, rnd):
         if rnd.random() < 0.7:
             for step in range(int(rnd.uniform(2, 8) * amount) + 1):
                 y = int(cy + r) + step
-                if 0 <= y < CLOTH_H and px[y][cx] is not None:
+                if 0 <= y < len(px) and px[y][cx] is not None:
                     px[y][cx] = lerp(px[y][cx], blood_dark, amount * 0.9)
 
     for _ in range(int(8 * amount)):  # fine spray
-        x, y = rnd.randrange(CLOTH_W), rnd.randrange(CLOTH_H)
+        x, y = rnd.randrange(CLOTH_W), rnd.randrange(len(px))
         if px[y][x] is not None:
             px[y][x] = lerp(px[y][x], blood_dark, amount * 0.8)
 
 
-def layer_tatter(px, amount, rnd):
+def layer_tatter(px, amount, crest_floor, rnd):
     """
     Eats the silhouette: a ragged hem, bites out of the sides, and holes torn through. Runs LAST,
     so tears cut through the crest and the grime the way real damage does.
@@ -565,28 +619,28 @@ def layer_tatter(px, amount, rnd):
     max_depth = int(7 * amount)
     for x in range(CLOTH_W):
         depth = max(0, min(max_depth, depth + rnd.randint(-2, 2)))
-        for y in range(CLOTH_H - depth, CLOTH_H):
+        for y in range(len(px) - depth, len(px)):
             _clear(px, x, y)
 
     # bites out of the sides
     for _ in range(int(5 * amount)):
-        y0 = rnd.randrange(2, CLOTH_H - 2)
+        y0 = rnd.randrange(2, len(px) - 2)
         for dy in range(rnd.randint(1, 3)):
-            row = [x for x in range(CLOTH_W) if px[min(y0 + dy, CLOTH_H - 1)][x] is not None]
+            row = [x for x in range(CLOTH_W) if px[min(y0 + dy, len(px) - 1)][x] is not None]
             if not row:
                 continue
-            y = min(y0 + dy, CLOTH_H - 1)
+            y = min(y0 + dy, len(px) - 1)
             for k in range(rnd.randint(1, 2)):
                 _clear(px, row[0] + k if rnd.random() < 0.5 else row[-1] - k, y)
 
-    # Holes, kept to the lower cloth. Two reasons for the floor at CREST_FLOOR: the top rows are
+    # Holes, kept to the lower cloth. Two reasons for the floor at crest_floor: the top rows are
     # what the banner hangs off its rod by, and everything above it is crest - the orc eye and the
     # undead skull both live at rows 3-10, and a hole through the emblem costs the banner its
     # identity. Damage the cloth, not the mark.
     for _ in range(int(5 * amount)):
-        cx, cy = rnd.randrange(1, CLOTH_W - 1), rnd.randrange(CREST_FLOOR, CLOTH_H - 2)
+        cx, cy = rnd.randrange(1, CLOTH_W - 1), rnd.randrange(crest_floor, len(px) - 2)
         r = rnd.uniform(0.9, 1.0 + 1.4 * amount)
-        for y in range(CLOTH_H):
+        for y in range(len(px)):
             for x in range(CLOTH_W):
                 if ((x - cx) ** 2 + ((y - cy) * 0.9) ** 2) ** 0.5 < r:
                     _clear(px, x, y)
@@ -597,13 +651,13 @@ def layer_tatter(px, amount, rnd):
 def _fray(px, rnd):
     """Loose threads: pixels that gained a cleared neighbour get pulled light or dark."""
     frayed = []
-    for y in range(CLOTH_H):
+    for y in range(len(px)):
         for x in range(CLOTH_W):
             if px[y][x] is None:
                 continue
             for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
                 nx, ny = x + dx, y + dy
-                if not (0 <= nx < CLOTH_W and 0 <= ny < CLOTH_H) or px[ny][nx] is None:
+                if not (0 <= nx < CLOTH_W and 0 <= ny < len(px)) or px[ny][nx] is None:
                     frayed.append((x, y))
                     break
     for x, y in frayed:
@@ -611,12 +665,12 @@ def _fray(px, rnd):
 
 
 def _set(px, x, y, c):
-    if 0 <= x < CLOTH_W and 0 <= y < CLOTH_H and px[y][x] is not None:
+    if 0 <= x < CLOTH_W and 0 <= y < len(px) and px[y][x] is not None:
         px[y][x] = c
 
 
 def _clear(px, x, y):
-    if 0 <= x < CLOTH_W and 0 <= y < CLOTH_H:
+    if 0 <= x < CLOTH_W and 0 <= y < len(px):
         px[y][x] = None
 
 
@@ -624,23 +678,24 @@ def _clear(px, x, y):
 # assembly
 # ----------------------------------------------------------------------------------------------
 
-def build_face(base, treat, rnd):
+def build_face(base, shape, treat, rnd):
     """None means transparent, so the silhouette and the colour live in one grid."""
-    px = [[None if (x < taper_inset(y) or x >= CLOTH_W - taper_inset(y)) else base["field"]
-           for x in range(CLOTH_W)] for y in range(CLOTH_H)]
+    px = [[None if (x < taper_inset(y, shape) or x >= CLOTH_W - taper_inset(y, shape))
+           else base["field"]
+           for x in range(CLOTH_W)] for y in range(shape["cloth_h"])]
     layer_weave(px, base, rnd)
     layer_edging(px, base, rnd)
-    layer_crest(px, base, rnd)
+    layer_crest(px, base, rnd, shape["cloth_h"] < 20)
     if treat.get("grime"):
         layer_grime(px, base, treat["grime"], rnd)
     if treat.get("blood"):
         layer_blood(px, base, treat["blood"], rnd)
     if treat.get("tatter"):
-        layer_tatter(px, treat["tatter"], rnd)
+        layer_tatter(px, treat["tatter"], shape["crest_floor"], rnd)
 
-    img = Image.new("RGBA", (CLOTH_W, CLOTH_H), CLEAR)
+    img = Image.new("RGBA", (CLOTH_W, len(px)), CLEAR)
     out = img.load()
-    for y in range(CLOTH_H):
+    for y in range(len(px)):
         for x in range(CLOTH_W):
             out[x, y] = CLEAR if px[y][x] is None else px[y][x]
     return img
@@ -667,25 +722,32 @@ def entity_atlas(face, base, rnd):
 
 
 def block_sprite(face, base):
-    """16x16 icon. The banner is 2 blocks tall, so the cloth is squeezed to every other row."""
+    """
+    16x16 icon, also used as the break particle.
+
+    A tall banner is 30 rows of cloth and only 15 fit, so it is squeezed to every other row; a
+    pennant's 14 fit as they are. Deriving the step from the face is what stops a pennant sitting
+    in the top half of an otherwise empty square.
+    """
     img = Image.new("RGBA", (16, 16), CLEAR)
     px = img.load()
     x0 = (16 - ROD_W) // 2
     for x in range(x0, x0 + ROD_W):
         px[x, 0] = base["rod_lit"]
     fpx = face.load()
-    for row in range(15):
+    step = max(1, face.height // 15)
+    for row in range(min(15, face.height // step)):
         for x in range(CLOTH_W):
-            c = fpx[x, row * 2]
+            c = fpx[x, row * step]
             if c[3]:
                 px[(16 - CLOTH_W) // 2 + x, 1 + row] = c
     return img
 
 
-for banner_id, base_name, treatments in VARIANTS:
-    base = BASES[base_name]
+for banner_id, base_name, shape_name, treatments in VARIANTS:
+    base, shape = BASES[base_name], SHAPES[shape_name]
     rnd = Random(zlib.crc32(banner_id.encode()))
-    face = build_face(base, treatments, rnd)
+    face = build_face(base, shape, treatments, rnd)
     entity_atlas(face, base, rnd).save(os.path.join(OUT, "entity", banner_id + ".png"))
     block_sprite(face, base).save(os.path.join(OUT, "block", banner_id + ".png"))
-    print("%-26s base=%-8s %s" % (banner_id, base_name, treatments or "clean"))
+    print("%-27s %-8s %-8s %s" % (banner_id, base_name, shape_name, treatments or "clean"))

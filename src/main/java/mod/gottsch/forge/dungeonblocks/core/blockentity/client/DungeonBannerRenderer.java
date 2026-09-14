@@ -19,7 +19,7 @@ package mod.gottsch.forge.dungeonblocks.core.blockentity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import mod.gottsch.forge.dungeonblocks.core.block.DungeonBannerBlock;
+import mod.gottsch.forge.dungeonblocks.core.block.AbstractBannerBlock;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.DungeonBannerBlockEntity;
 import mod.gottsch.forge.dungeonblocks.core.config.DungeonBlocksConfig;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -36,6 +36,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +54,7 @@ import java.util.Map;
  * class comment.
  *
  * <p><b>Two switches, and they are not equals.</b> Each banner carries its own
- * {@link DungeonBannerBlock#ANIMATED} flag, and the client config's {@code animateBanners} is a veto
+ * {@link AbstractBannerBlock#ANIMATED} flag, and the client config's {@code animateBanners} is a veto
  * over all of them — so a player can still every banner in the world on their own client, but the
  * config can never animate one that its owner deliberately stilled. Both are read per frame rather
  * than cached, so either takes effect immediately with no chunk rebuild: the geometry never changes,
@@ -82,10 +83,18 @@ public class DungeonBannerRenderer implements BlockEntityRenderer<DungeonBannerB
 		});
 	}
 
-	private final DungeonBannerModel model;
+	/**
+	 * One baked model per shape. Both are built up front rather than looked up lazily: there are two
+	 * of them, they are cheap, and {@code bakeLayer} is not something to be calling from inside a
+	 * render loop.
+	 */
+	private final Map<DungeonBannerModel.Shape, DungeonBannerModel> models =
+			new EnumMap<>(DungeonBannerModel.Shape.class);
 
 	public DungeonBannerRenderer(BlockEntityRendererProvider.Context context) {
-		this.model = new DungeonBannerModel(context.bakeLayer(DungeonBannerModel.LAYER_LOCATION));
+		for (DungeonBannerModel.Shape shape : DungeonBannerModel.Shape.values()) {
+			this.models.put(shape, new DungeonBannerModel(context.bakeLayer(shape.layer), shape));
+		}
 	}
 
 	/**
@@ -101,20 +110,23 @@ public class DungeonBannerRenderer implements BlockEntityRenderer<DungeonBannerB
 			MultiBufferSource buffer, int packedLight, int packedOverlay) {
 		Level level = banner.getLevel();
 		BlockState state = banner.getBlockState();
-		if (level == null || !state.hasProperty(DungeonBannerBlock.FACING)
-				|| !state.hasProperty(DungeonBannerBlock.ANIMATED)) {
+		AbstractBannerBlock block = AbstractBannerBlock.of(state);
+		if (level == null || block == null) {
 			return;
 		}
-		Direction facing = state.getValue(DungeonBannerBlock.FACING);
+		Direction facing = state.getValue(AbstractBannerBlock.FACING);
+		DungeonBannerModel model = this.models.get(block.isPennant()
+				? DungeonBannerModel.Shape.PENNANT
+				: DungeonBannerModel.Shape.TALL);
 
 		// the blockstate decides, the config can only veto: a player who turns banners off gets still
 		// banners everywhere, but the config can never start a banner its owner deliberately stilled
-		boolean animate = state.getValue(DungeonBannerBlock.ANIMATED)
+		boolean animate = state.getValue(AbstractBannerBlock.ANIMATED)
 				&& DungeonBlocksConfig.VISUALS.animateBanners.get();
 		if (animate) {
-			this.model.wave((float) level.getGameTime() + partialTicks, phase(banner.getBlockPos()));
+			model.wave((float) level.getGameTime() + partialTicks, phase(banner.getBlockPos()));
 		} else {
-			this.model.still();
+			model.still();
 		}
 
 		poseStack.pushPose();
@@ -124,7 +136,7 @@ public class DungeonBannerRenderer implements BlockEntityRenderer<DungeonBannerB
 		// cutout because the cloth's taper is alpha in the texture rather than geometry. CULLING IS
 		// REQUIRED, not a choice: the slices are zero-thickness, so their front and back quads are
 		// coincident and z-fight without it. entityCutoutNoCull here is a visible bug.
-		this.model.render(poseStack, buffer.getBuffer(RenderType.entityCutout(textureFor(state.getBlock()))),
+		model.render(poseStack, buffer.getBuffer(RenderType.entityCutout(textureFor(state.getBlock()))),
 				packedLight, packedOverlay);
 		poseStack.popPose();
 	}

@@ -17,6 +17,7 @@
  */
 package mod.gottsch.forge.dungeonblocks.core.blockentity;
 
+import mod.gottsch.forge.dungeonblocks.core.block.AbstractBannerBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.DungeonBannerBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -44,13 +45,15 @@ public class DungeonBannerBlockEntity extends BlockEntity {
 	}
 
 	/**
-	 * Only the upper half has a BlockEntity, but the cloth it draws hangs a full block below it. The
-	 * default render box is this one block, so without widening it the entire banner - including the
-	 * part inside the lower block - is culled the moment the upper block leaves the frustum, and the
-	 * banner blinks out while you are still looking straight at its bottom half.
+	 * How far the cloth actually reaches. A tall banner's upper half draws a full block below itself,
+	 * so the default one-block render box would cull the whole banner the moment that block left the
+	 * frustum - it would blink out while you were still looking straight at its bottom half. A
+	 * pennant draws only inside its own block and gets the default.
 	 */
 	@Override
 	public AABB getRenderBoundingBox() {
-		return new AABB(this.worldPosition.below(), this.worldPosition.offset(1, 1, 1));
+		AbstractBannerBlock banner = AbstractBannerBlock.of(this.getBlockState());
+		int below = banner == null ? 1 : banner.blocksBelow();
+		return new AABB(this.worldPosition.below(below), this.worldPosition.offset(1, 1, 1));
 	}
 }

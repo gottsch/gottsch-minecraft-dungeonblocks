@@ -36,8 +36,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * The banner's geometry: a rod across the top with a cloth hanging beneath it.
  *
- * <p><b>The cloth is five flat, zero-thickness quads, and the taper is painted, not modelled.</b>
- * Both of those are deliberate, and between them they remove every problem the first version had:
+ * <p>Two heights, one model — see {@link Shape}. A pennant is the tall banner's cloth cut short,
+ * not a different thing: same width, same rod, same hang plane, same rules below.
+ *
+ * <p><b>The cloth is a stack of flat, zero-thickness quads, and the taper is painted, not
+ * modelled.</b> Both are deliberate, and between them they removed every problem the first version
+ * had:
  *
  * <ul>
  * <li><b>Zero thickness makes the seams exact.</b> Each slice hinges on its own top edge, and with
@@ -46,12 +50,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  *     its top edge half a pixel off the axis, which is enough to open a hairline; that is what the
  *     overlap fudge used to be papering over, and it is gone.</li>
  * <li><b>The taper is alpha in the texture.</b> Slices are all the same width, so the art is a plain
- *     {@value #CLOTH_WIDTH}x{@value #CLOTH_HEIGHT} rectangle laid out contiguously in the atlas
- *     rather than one column-inset strip per slice. The silhouette costs no geometry, is not
- *     quantised to the slice height, and can be reshaped — a swallowtail, a ragged hem — by editing
- *     the PNG alone.</li>
- * <li><b>Five slices is enough.</b> The wave is a few degrees; subdividing past this buys curve
- *     smoothness nobody can see, at a cube each.</li>
+ *     rectangle laid out contiguously in the atlas rather than one column-inset strip per slice. The
+ *     silhouette costs no geometry, is not quantised to the slice height, and can be reshaped — a
+ *     swallowtail, a ragged hem — by editing the PNG alone.</li>
+ * <li><b>A handful of slices is enough.</b> The wave is a few degrees; subdividing past this buys
+ *     curve smoothness nobody can see, at a quad each.</li>
  * </ul>
  *
  * <p><b>Zero thickness has exactly one requirement</b>, and the renderer has to honour it: the front
@@ -60,35 +63,74 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * of the two is ever rasterised at a given pixel and the surface is clean.
  *
  * <p><b>Coordinates.</b> {@code DungeonBannerRenderer} sets up the usual entity-model frame, so in
- * here <b>+y is down</b> and <b>+z is into the wall</b>, with the origin at the centre of the
- * <em>upper</em> block — the half that owns the BlockEntity. The wall plane is therefore z=8. y runs
- * from -8 (the top of the upper block) to +24 (the bottom of the lower one), and the geometry fills
- * exactly that: 2px of rod and 30px of cloth. Nothing is drawn outside the two blocks the banner
- * occupies.
+ * here <b>+y is down</b> and <b>+z is into the wall</b>, with the origin at the centre of the block
+ * that owns the BlockEntity — for a tall banner that is its upper half. The wall plane is z=8, y=-8
+ * is the top of that block, and the geometry is 2px of rod plus the shape's cloth: a pennant ends at
+ * y=+8, the bottom of its own block, and a tall banner at y=+24, the bottom of the one below.
+ * Neither draws outside the blocks it occupies.
  *
  * <p><b>Texture layout.</b> A zero-depth box unwraps to just two quads, the front at {@code (u, v)}
- * and the back at {@code (u + w, v)}. Stacking the slices at {@code texOffs(0, s * SLICE_HEIGHT)}
- * therefore makes the fronts one contiguous {@value #CLOTH_WIDTH}x{@value #CLOTH_HEIGHT} block at
- * the atlas origin, with the mirrored backs directly beside it.
+ * and the back at {@code (u + w, v)}. Stacking the slices at {@code texOffs(0, s * sliceHeight)}
+ * therefore makes the fronts one contiguous {@code CLOTH_WIDTH} × {@code clothHeight} block at the
+ * atlas origin, with the mirrored backs directly beside it.
  *
  * @author Mark Gottschling on Sep 12, 2026
  */
 @OnlyIn(Dist.CLIENT)
 public class DungeonBannerModel {
 
-	public static final ModelLayerLocation LAYER_LOCATION =
-			new ModelLayerLocation(new ResourceLocation(DungeonBlocks.MOD_ID, "dungeon_banner"), "main");
+	/**
+	 * Everything that differs between the two banner heights. The geometry, the texture layout and
+	 * the wave are otherwise identical, so a pennant is a second set of numbers rather than a second
+	 * model — the cloth width, the rod, the hang plane and the seam rule are shared.
+	 *
+	 * <p>The wave constants are not simply copied across. Both the amplitude and the lag are scaled
+	 * so the two shapes <em>look</em> alike: deflection accumulates per slice, so the same
+	 * per-slice angle on a pennant's seven short slices would bend it far harder than the tall
+	 * banner's five long ones, and the same lag would run more than a full wave down a shorter
+	 * cloth. What is held constant is the result — a hem excursion of about a tenth of the drop,
+	 * and a wave crest that travels a bit under half a cycle from rod to point.
+	 */
+	public enum Shape {
+		/** Two blocks: 30px of cloth in five 6px slices. */
+		TALL(30, 5, 0.012F, 0.09F, 0.025F, "main"),
+		/**
+		 * One block: 14px of cloth in seven 2px slices. Seven is more slices than the tall banner
+		 * despite being half the drop, because 14 does not divide by five — and the slices are quads,
+		 * so two extra costs nothing worth counting.
+		 */
+		PENNANT(14, 7, 0.0086F, 0.065F, 0.040F, "pennant");
+
+		public final int clothHeight;
+		public final int sliceCount;
+		public final int sliceHeight;
+		/** Per-slice billow, in radians, and the standing outward bow, which is equal to it. */
+		public final float amplitude;
+		/** Cycles of delay per slice down the cloth — this is what makes the wave travel. */
+		public final float sliceLag;
+		/** Whole-cloth roll. Bigger on a pennant: the same angle over half the drop barely shows. */
+		public final float leanAmplitude;
+		public final ModelLayerLocation layer;
+
+		Shape(int clothHeight, int sliceCount, float amplitude, float sliceLag, float leanAmplitude,
+				String layerName) {
+			this.clothHeight = clothHeight;
+			this.sliceCount = sliceCount;
+			this.sliceHeight = clothHeight / sliceCount;
+			this.amplitude = amplitude;
+			this.sliceLag = sliceLag;
+			this.leanAmplitude = leanAmplitude;
+			this.layer = new ModelLayerLocation(
+					new ResourceLocation(DungeonBlocks.MOD_ID, "dungeon_banner"), layerName);
+		}
+	}
 
 	/**
-	 * 10px wide against 30px of drop is roughly a 1:3 banner — narrower than vanilla's, which is the
-	 * proportion that suits a two-block hang. Where the cloth actually ends inside that rectangle is
-	 * up to the texture's alpha.
+	 * 10px wide, in both shapes — a pennant is the same bolt of cloth cut short, not a different
+	 * banner. Against 30px of drop that is roughly 1:3, narrower than vanilla's. Where the cloth
+	 * actually ends inside the rectangle is up to the texture's alpha.
 	 */
 	public static final int CLOTH_WIDTH = 10;
-	public static final int CLOTH_HEIGHT = 30;
-	/** Hinges, not detail: see the class comment on why five is enough. */
-	public static final int SLICE_COUNT = 5;
-	private static final int SLICE_HEIGHT = CLOTH_HEIGHT / SLICE_COUNT;
 
 	/** y of the cloth's top edge: just under the rod. */
 	private static final float CLOTH_TOP = -6.0F;
@@ -96,7 +138,7 @@ public class DungeonBannerModel {
 	private static final float CLOTH_Z = 4.5F;
 
 	private static final int ROD_WIDTH = 12;
-	/** The cloth's two unwraps occupy the top-left 20x30 of the atlas, so the rod goes below them. */
+	/** The cloth's two unwraps occupy the top-left of the atlas, so the rod goes below them. */
 	private static final int ROD_TEX_U = 0;
 	private static final int ROD_TEX_V = 32;
 
@@ -104,25 +146,19 @@ public class DungeonBannerModel {
 	private static final float TAU = (float) (Math.PI * 2.0D);
 
 	/**
-	 * Per-slice billow, in radians. Small because it accumulates: five slices of ~0.7 degrees is a
-	 * ~7 degree bend by the time it reaches the point, which moves the hem about 3px.
-	 */
-	private static final float AMPLITUDE = 0.012F;
-	/**
-	 * A standing outward bow, equal to the amplitude, so the billow swings between "flat" and "bowed
-	 * out" and <b>never crosses zero into the wall</b>. Without it the wave would drive the hem
-	 * several pixels backwards on every half-cycle, and the cloth hangs only 3px clear of the wall —
-	 * it would sink into the stone twice a cycle. Vanilla's banner biases its sway the same way and
-	 * for the same reason. It is also what keeps a motionless banner looking like cloth: see
+	 * A standing outward bow, equal to the shape's amplitude, so the billow swings between "flat"
+	 * and "bowed out" and <b>never crosses zero into the wall</b>. Without it the wave would drive
+	 * the hem backwards on every half-cycle, and the cloth hangs only 3px clear of the wall — it
+	 * would sink into the stone twice a cycle. Vanilla's banner biases its sway the same way and for
+	 * the same reason. It is also what keeps a motionless banner looking like cloth: see
 	 * {@link #still}.
 	 */
-	private static final float BILLOW_BIAS = AMPLITUDE;
+	private static float billowBias(Shape shape) {
+		return shape.amplitude;
+	}
+
 	/** Cycles per tick: a 5-second period, the same unhurried rate vanilla banners use. */
 	private static final float SPEED = 0.01F;
-	/** Cycles of delay per slice down the cloth — this is what makes the wave travel. */
-	private static final float SLICE_LAG = 0.09F;
-	/** ~1.4 degrees of whole-cloth roll, so the hem drifts under a pixel. See {@link #wave}. */
-	private static final float LEAN_AMPLITUDE = 0.025F;
 	/** Detuned against SPEED (~7s) so the lean drifts in and out of phase with the billow. */
 	private static final float LEAN_SPEED = 0.0071F;
 
@@ -130,11 +166,14 @@ public class DungeonBannerModel {
 	/** Index 0 is the slice at the rod; each is the previous one's child. */
 	private final ModelPart[] slices;
 
-	public DungeonBannerModel(ModelPart root) {
+	private final Shape shape;
+
+	public DungeonBannerModel(ModelPart root, Shape shape) {
 		this.root = root;
-		this.slices = new ModelPart[SLICE_COUNT];
+		this.shape = shape;
+		this.slices = new ModelPart[shape.sliceCount];
 		ModelPart parent = root;
-		for (int i = 0; i < SLICE_COUNT; i++) {
+		for (int i = 0; i < shape.sliceCount; i++) {
 			parent = parent.getChild(sliceName(i));
 			this.slices[i] = parent;
 		}
@@ -144,7 +183,7 @@ public class DungeonBannerModel {
 		return "slice" + index;
 	}
 
-	public static LayerDefinition createBodyLayer() {
+	public static LayerDefinition createBodyLayer(Shape shape) {
 		MeshDefinition mesh = new MeshDefinition();
 		PartDefinition parts = mesh.getRoot();
 
@@ -157,15 +196,15 @@ public class DungeonBannerModel {
 		// each slice hinges on its own top edge, so its pivot sits there and its quad hangs below it.
 		// depth is 0, which puts that whole edge on the rotation axis - the seams cannot open.
 		PartDefinition parent = parts;
-		for (int i = 0; i < SLICE_COUNT; i++) {
+		for (int i = 0; i < shape.sliceCount; i++) {
 			PartPose pose = i == 0
 					? PartPose.offset(0.0F, CLOTH_TOP, CLOTH_Z)
-					: PartPose.offset(0.0F, SLICE_HEIGHT, 0.0F);
+					: PartPose.offset(0.0F, shape.sliceHeight, 0.0F);
 			parent = parent.addOrReplaceChild(sliceName(i),
 					CubeListBuilder.create()
-							.texOffs(0, i * SLICE_HEIGHT)
+							.texOffs(0, i * shape.sliceHeight)
 							.addBox(-CLOTH_WIDTH / 2.0F, 0.0F, 0.0F,
-									CLOTH_WIDTH, SLICE_HEIGHT, 0.0F, CubeDeformation.NONE),
+									CLOTH_WIDTH, shape.sliceHeight, 0.0F, CubeDeformation.NONE),
 					pose);
 		}
 
@@ -195,10 +234,10 @@ public class DungeonBannerModel {
 	public void wave(float now, float phase) {
 		for (int i = 0; i < this.slices.length; i++) {
 			// negative is away from the wall, since +z points into it
-			this.slices[i].xRot =
-					-BILLOW_BIAS - AMPLITUDE * Mth.cos(TAU * (now * SPEED + phase + i * SLICE_LAG));
+			this.slices[i].xRot = -billowBias(this.shape)
+					- this.shape.amplitude * Mth.cos(TAU * (now * SPEED + phase + i * this.shape.sliceLag));
 		}
-		this.slices[0].zRot = LEAN_AMPLITUDE * Mth.cos(TAU * (now * LEAN_SPEED + phase));
+		this.slices[0].zRot = this.shape.leanAmplitude * Mth.cos(TAU * (now * LEAN_SPEED + phase));
 	}
 
 	/**
@@ -210,7 +249,7 @@ public class DungeonBannerModel {
 	 */
 	public void still() {
 		for (ModelPart slice : this.slices) {
-			slice.xRot = -BILLOW_BIAS;
+			slice.xRot = -billowBias(this.shape);
 			slice.zRot = 0.0F;
 		}
 	}

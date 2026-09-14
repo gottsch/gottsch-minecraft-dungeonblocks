@@ -410,14 +410,31 @@ public class ModBlocks {
     // that requires the correct tool while belonging to no tool tag can never be mined for drops.
     // ------------------------------------------------------------------
 
-    /** Registers a banner variant and records it in {@link #BANNERS}. */
+    private static Properties bannerProps(MapColor mapColor) {
+        return Properties.of().mapColor(mapColor)
+                .strength(1.0F)
+                .sound(SoundType.WOOL)
+                .noOcclusion()
+                .noCollission();
+    }
+
+    /** Registers a two-block banner variant and records it in {@link #BANNERS}. */
     private static RegistryObject<Block> banner(String id, MapColor mapColor) {
         RegistryObject<Block> block = Registration.BLOCKS.register(id,
-                () -> new DungeonBannerBlock(Properties.of().mapColor(mapColor)
-                        .strength(1.0F)
-                        .sound(SoundType.WOOL)
-                        .noOcclusion()
-                        .noCollission()));
+                () -> new DungeonBannerBlock(bannerProps(mapColor)));
+        BANNERS.add(block);
+        return block;
+    }
+
+    /**
+     * Registers a one-block pennant. Also goes in {@link #BANNERS} - the list drives the datagen
+     * loops and the shared BlockEntityType's valid-blocks, and both shapes want all of that. The
+     * loot generator tells them apart by class instead, since only the two-block banner needs the
+     * one-item-per-pair condition.
+     */
+    private static RegistryObject<Block> pennant(String id, MapColor mapColor) {
+        RegistryObject<Block> block = Registration.BLOCKS.register(id,
+                () -> new PennantBlock(bannerProps(mapColor)));
         BANNERS.add(block);
         return block;
     }
@@ -450,6 +467,15 @@ public class ModBlocks {
             banner("tattered_plague_banner", MapColor.TERRACOTTA_YELLOW);
     public static final RegistryObject<Block> BLOODSTAINED_PLAGUE_BANNER =
             banner("bloodstained_plague_banner", MapColor.TERRACOTTA_YELLOW);
+
+    // one-block pennants, pristine only for now
+    public static final RegistryObject<Block> DUNGEON_PENNANT = pennant("dungeon_pennant", MapColor.COLOR_RED);
+    public static final RegistryObject<Block> ORC_PENNANT = pennant("orc_pennant", MapColor.TERRACOTTA_GREEN);
+    public static final RegistryObject<Block> UNDEAD_PENNANT = pennant("undead_pennant", MapColor.COLOR_BLACK);
+    public static final RegistryObject<Block> DWARVEN_PENNANT = pennant("dwarven_pennant", MapColor.COLOR_BLUE);
+    public static final RegistryObject<Block> CULT_PENNANT = pennant("cult_pennant", MapColor.COLOR_PURPLE);
+    public static final RegistryObject<Block> PLAGUE_PENNANT =
+            pennant("plague_pennant", MapColor.TERRACOTTA_YELLOW);
 
     // plate bracket
     public static final RegistryObject<Block> IRON_PLATE_BRACKET = Registration.BLOCKS.register("iron_plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
