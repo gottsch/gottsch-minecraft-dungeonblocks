@@ -264,6 +264,19 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.MOSSY_SQUARE_MUD_BRICK.get());
         rectangleLeftHorizontalBlock(ModBlocks.MOSSY_LEFT_LARGE_MUD_BRICK, ModBlocks.MOSSY_RIGHT_LARGE_MUD_BRICK);
         rectangleRightHorizontalBlock(ModBlocks.MOSSY_RIGHT_LARGE_MUD_BRICK, ModBlocks.MOSSY_LEFT_LARGE_MUD_BRICK);
+
+        simpleBlock(ModBlocks.SQUARE_DEEPSLATE_BRICK.get());
+        simpleBlock(ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK.get());
+        stairsBlock(ModBlocks.SQUARE_DEEPSLATE_BRICK_STAIRS.get(), modLoc("block/square_deepslate_brick"));
+        stairsBlock(ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_STAIRS.get(), modLoc("block/mossy_square_deepslate_brick"));
+        slabBlock(ModBlocks.SQUARE_DEEPSLATE_BRICK_SLAB.get(), modLoc("block/square_deepslate_brick"), modLoc("block/square_deepslate_brick"));
+        slabBlock(ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_SLAB.get(), modLoc("block/mossy_square_deepslate_brick"), modLoc("block/mossy_square_deepslate_brick"));
+        rectangleLeftHorizontalBlock(ModBlocks.LEFT_LARGE_DEEPSLATE_BRICK, ModBlocks.RIGHT_LARGE_DEEPSLATE_BRICK);
+        rectangleRightHorizontalBlock(ModBlocks.RIGHT_LARGE_DEEPSLATE_BRICK, ModBlocks.LEFT_LARGE_DEEPSLATE_BRICK);
+        rectangleLeftHorizontalBlock(ModBlocks.MOSSY_LEFT_LARGE_DEEPSLATE_BRICK, ModBlocks.MOSSY_RIGHT_LARGE_DEEPSLATE_BRICK);
+        rectangleRightHorizontalBlock(ModBlocks.MOSSY_RIGHT_LARGE_DEEPSLATE_BRICK, ModBlocks.MOSSY_LEFT_LARGE_DEEPSLATE_BRICK);
+        simpleBlock(ModBlocks.CHISELED_DEEPSLATE_BRICKS.get());
+        simpleBlock(ModBlocks.MOSSY_CHISELED_DEEPSLATE_BRICKS.get());
         simpleBlock(ModBlocks.POLISHED_ANDESITE_BRICKS.get());
         stairsBlock(ModBlocks.POLISHED_ANDESITE_BRICK_STAIRS.get(), modLoc("block/polished_andesite_bricks"));
         simpleBlock(ModBlocks.MOSSY_POLISHED_ANDESITE_BRICKS.get());

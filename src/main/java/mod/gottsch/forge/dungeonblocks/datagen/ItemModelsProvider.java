@@ -188,6 +188,18 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_MUD_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LEFT_LARGE_MUD_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_RIGHT_LARGE_MUD_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_DEEPSLATE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_DEEPSLATE_BRICK_STAIRS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_STAIRS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_DEEPSLATE_BRICK_SLAB));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_SLAB));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.LEFT_LARGE_DEEPSLATE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_DEEPSLATE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LEFT_LARGE_DEEPSLATE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_RIGHT_LARGE_DEEPSLATE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.CHISELED_DEEPSLATE_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_CHISELED_DEEPSLATE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.POLISHED_ANDESITE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.POLISHED_ANDESITE_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_POLISHED_ANDESITE_BRICKS));

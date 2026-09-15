@@ -291,6 +291,70 @@ public class ModBlocks {
         return new FacingBlock(Properties.copy(Blocks.MUD_BRICKS));
     });
 
+    // The square / large brick set in the deepslate brick palette - the same textures as the stone
+    // set, per-shade remapped onto vanilla deepslate_bricks' seven shades (see
+    // tools/gen_deepslate_brick_textures.py).
+    public static final RegistryObject<Block> SQUARE_DEEPSLATE_BRICK = Registration.BLOCKS.register("square_deepslate_brick", () -> {
+        return new Block(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    });
+    // As with the mud bricks above, vanilla has no mossy deepslate brick to copy, so the mossy
+    // variants take their properties from the plain DEEPSLATE_BRICKS family.
+    public static final RegistryObject<Block> MOSSY_SQUARE_DEEPSLATE_BRICK = Registration.BLOCKS.register("mossy_square_deepslate_brick", () -> {
+        return new Block(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    });
+    public static final RegistryObject<StairBlock> SQUARE_DEEPSLATE_BRICK_STAIRS = Registration.BLOCKS.register("square_deepslate_brick_stairs", () -> {
+        return new StairBlock(SQUARE_DEEPSLATE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.DEEPSLATE_BRICK_STAIRS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_SQUARE_DEEPSLATE_BRICK_STAIRS = Registration.BLOCKS.register("mossy_square_deepslate_brick_stairs", () -> {
+        return new StairBlock(MOSSY_SQUARE_DEEPSLATE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.DEEPSLATE_BRICK_STAIRS));
+    });
+    public static final RegistryObject<SlabBlock> SQUARE_DEEPSLATE_BRICK_SLAB = Registration.BLOCKS.register("square_deepslate_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.DEEPSLATE_BRICK_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> MOSSY_SQUARE_DEEPSLATE_BRICK_SLAB = Registration.BLOCKS.register("mossy_square_deepslate_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.DEEPSLATE_BRICK_SLAB));
+    });
+    // Unlike the stone and mud square bricks, which have plain facades only, these come in mossy
+    // too - the mossy texture already exists for the full block, so the facade costs only the
+    // registration and the DataGenMaps texture entry the facade generators look the material up by.
+    public static final RegistryObject<Block> SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK = Registration.BLOCKS.register("square_deepslate_brick_facade_block", () -> {
+        return new FacadeBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK = Registration.BLOCKS.register("mossy_square_deepslate_brick_facade_block", () -> {
+        return new FacadeBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    });
+    public static final RegistryObject<Block> SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK = Registration.BLOCKS.register("square_deepslate_brick_quarter_facade_block", () -> {
+        return new QuarterFacadeBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK = Registration.BLOCKS.register("mossy_square_deepslate_brick_quarter_facade_block", () -> {
+        return new QuarterFacadeBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    });
+    public static final RegistryObject<Block> LEFT_LARGE_DEEPSLATE_BRICK = Registration.BLOCKS.register("left_large_deepslate_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    });
+    public static final RegistryObject<Block> RIGHT_LARGE_DEEPSLATE_BRICK = Registration.BLOCKS.register("right_large_deepslate_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_DEEPSLATE_BRICK = Registration.BLOCKS.register("mossy_left_large_deepslate_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_DEEPSLATE_BRICK = Registration.BLOCKS.register("mossy_right_large_deepslate_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    });
+
+    // Chiseled Deepslate Bricks: vanilla's chiseled STONE BRICK carving retoned onto the deepslate
+    // brick palette. Distinct from vanilla's own CHISELED_DEEPSLATE, which carries a different
+    // carving and is a darker stone - this one is a member of the deepslate BRICK family and sits at
+    // that family's brightness, so a course of it reads as part of a deepslate brick wall.
+    // Plural, like Polished Andesite Bricks and vanilla's Chiseled Stone Bricks: the face shows
+    // several bricks, unlike the square/large bricks which are one brick per block.
+    public static final RegistryObject<Block> CHISELED_DEEPSLATE_BRICKS = Registration.BLOCKS.register("chiseled_deepslate_bricks", () -> {
+        return new Block(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_CHISELED_DEEPSLATE_BRICKS = Registration.BLOCKS.register("mossy_chiseled_deepslate_bricks", () -> {
+        return new Block(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    });
+
     // Polished Andesite Bricks: the vanilla stone brick pattern re-toned onto polished andesite's
     // own palette, the way vanilla derives deepslate_bricks from polished_deepslate. Plural, because
     // the texture shows several bricks - unlike square/large bricks, which are one brick per block.

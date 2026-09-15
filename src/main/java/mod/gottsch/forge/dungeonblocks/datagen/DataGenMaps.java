@@ -187,6 +187,10 @@ public class DataGenMaps {
         // which look the material up by the block id's prefix.
         t2.put("square_stone_brick", modLoc("block/square_stone_brick"));
         t2.put("square_mud_brick", modLoc("block/square_mud_brick"));
+        t2.put("square_deepslate_brick", modLoc("block/square_deepslate_brick"));
+        // the deepslate square brick is the one of the three with a mossy facade, so its mossy
+        // texture has to be reachable by material lookup as well as by the full block's simpleBlock
+        t2.put("mossy_square_deepslate_brick", modLoc("block/mossy_square_deepslate_brick"));
     }
 
     public ResourceLocation modLoc(String name) {
