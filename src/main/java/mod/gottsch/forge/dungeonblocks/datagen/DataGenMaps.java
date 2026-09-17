@@ -20,6 +20,7 @@
 package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModMaterials;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -70,6 +71,11 @@ public class DataGenMaps {
 
     public List<String> stone_blocks = Arrays.asList(
             "barred_window",
+            // Without this, only the arrow slits whose MATERIAL name happens to contain another
+            // entry here ("brick", "square", ...) were tagged - 9 of 39. The other 30 copy
+            // requiresCorrectToolForDrops from their base stone but belonged to no tool tag, so
+            // they could never be mined for drops. Same failure mode as the 2.3.0 loot-table bug.
+            "arrow_slit",
             "ledge",
             "greek",
             "corbel",
@@ -187,6 +193,16 @@ public class DataGenMaps {
         // which look the material up by the block id's prefix.
         t2.put("square_stone_brick", modLoc("block/square_stone_brick"));
         t2.put("square_mud_brick", modLoc("block/square_mud_brick"));
+        // The three mossy deepslate materials carry vanilla's plain block as their Material.base,
+        // because that is where their PROPERTIES come from - but the block a player stonecuts them
+        // from is the mossy one. Only corbel and ledge currently generate stonecutting recipes and
+        // neither exists for these materials, so this changes no output today; it is here so that
+        // enabling the "do all the other types" branch in Recipes cannot silently produce mossy
+        // output from a plain deepslate ingredient.
+        m2.put("mossy_deepslate_bricks", ModBlocks.MOSSY_DEEPSLATE_BRICKS.get());
+        m2.put("mossy_deepslate_tiles", ModBlocks.MOSSY_DEEPSLATE_TILES.get());
+        m2.put("mossy_cobbled_deepslate", ModBlocks.MOSSY_COBBLED_DEEPSLATE.get());
+
         t2.put("square_deepslate_brick", modLoc("block/square_deepslate_brick"));
         // the deepslate square brick is the one of the three with a mossy facade, so its mossy
         // texture has to be reachable by material lookup as well as by the full block's simpleBlock

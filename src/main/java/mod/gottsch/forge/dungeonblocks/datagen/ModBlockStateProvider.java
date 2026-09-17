@@ -277,6 +277,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
         rectangleRightHorizontalBlock(ModBlocks.MOSSY_RIGHT_LARGE_DEEPSLATE_BRICK, ModBlocks.MOSSY_LEFT_LARGE_DEEPSLATE_BRICK);
         simpleBlock(ModBlocks.CHISELED_DEEPSLATE_BRICKS.get());
         simpleBlock(ModBlocks.MOSSY_CHISELED_DEEPSLATE_BRICKS.get());
+        // the eleven decorative types for these three come off the ModMaterials.STONE loop above;
+        // only the full block and the stairs are generated here
+        simpleBlock(ModBlocks.MOSSY_DEEPSLATE_BRICKS.get());
+        simpleBlock(ModBlocks.MOSSY_DEEPSLATE_TILES.get());
+        simpleBlock(ModBlocks.MOSSY_COBBLED_DEEPSLATE.get());
+        stairsBlock(ModBlocks.MOSSY_DEEPSLATE_BRICK_STAIRS.get(), modLoc("block/mossy_deepslate_bricks"));
         simpleBlock(ModBlocks.POLISHED_ANDESITE_BRICKS.get());
         stairsBlock(ModBlocks.POLISHED_ANDESITE_BRICK_STAIRS.get(), modLoc("block/polished_andesite_bricks"));
         simpleBlock(ModBlocks.MOSSY_POLISHED_ANDESITE_BRICKS.get());

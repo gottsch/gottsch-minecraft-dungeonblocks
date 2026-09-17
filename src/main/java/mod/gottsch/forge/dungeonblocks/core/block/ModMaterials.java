@@ -19,6 +19,7 @@
  */
 package mod.gottsch.forge.dungeonblocks.core.block;
 
+import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -58,6 +59,14 @@ public final class ModMaterials {
         public BlockBehaviour.Properties props() {
             return BlockBehaviour.Properties.copy(base);
         }
+    }
+
+    /**
+     * Texture owned by this mod rather than vanilla. Used by the materials that have no vanilla
+     * block behind them — the mossy deepslates, which vanilla does not ship in any form.
+     */
+    private static ResourceLocation modTexture(String name) {
+        return new ResourceLocation(DungeonBlocks.MOD_ID, "block/" + name);
     }
 
     /**
@@ -102,11 +111,17 @@ public final class ModMaterials {
 
             new Material("deepslate", Blocks.DEEPSLATE),
             new Material("deepslate_bricks", Blocks.DEEPSLATE_BRICKS),
+            // vanilla ships no mossy deepslate of any kind, so these three take their properties
+            // from the plain block they are moss over, and their textures from this mod
+            // (tools/gen_mossy_deepslate_textures.py)
+            new Material("mossy_deepslate_bricks", Blocks.DEEPSLATE_BRICKS, modTexture("mossy_deepslate_bricks")),
             new Material("cracked_deepslate_bricks", Blocks.CRACKED_DEEPSLATE_BRICKS),
             new Material("cobbled_deepslate", Blocks.COBBLED_DEEPSLATE),
+            new Material("mossy_cobbled_deepslate", Blocks.COBBLED_DEEPSLATE, modTexture("mossy_cobbled_deepslate")),
             new Material("polished_deepslate", Blocks.POLISHED_DEEPSLATE),
             new Material("chiseled_deepslate", Blocks.CHISELED_DEEPSLATE),
             new Material("deepslate_tiles", Blocks.DEEPSLATE_TILES),
+            new Material("mossy_deepslate_tiles", Blocks.DEEPSLATE_TILES, modTexture("mossy_deepslate_tiles")),
             new Material("cracked_deepslate_tiles", Blocks.CRACKED_DEEPSLATE_TILES),
 
             new Material("tuff", Blocks.TUFF)

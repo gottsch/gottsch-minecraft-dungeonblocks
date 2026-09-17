@@ -200,6 +200,10 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_RIGHT_LARGE_DEEPSLATE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.CHISELED_DEEPSLATE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_CHISELED_DEEPSLATE_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_DEEPSLATE_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_DEEPSLATE_TILES));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_COBBLED_DEEPSLATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_DEEPSLATE_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.POLISHED_ANDESITE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.POLISHED_ANDESITE_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_POLISHED_ANDESITE_BRICKS));

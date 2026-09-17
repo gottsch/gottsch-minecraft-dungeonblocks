@@ -355,6 +355,26 @@ public class ModBlocks {
         return new Block(Properties.copy(Blocks.DEEPSLATE_BRICKS));
     });
 
+    // Base blocks for the three mossy deepslate material families in ModMaterials.STONE. Vanilla
+    // has no mossy deepslate to source them from, so - like MOSSY_CHISELED_STONE_BRICKS - the full
+    // block is registered here by hand while the eleven decorative types come off the STONE loop.
+    // Properties come from the plain block the moss grows on; only the texture differs.
+    public static final RegistryObject<Block> MOSSY_DEEPSLATE_BRICKS = Registration.BLOCKS.register("mossy_deepslate_bricks", () -> {
+        return new Block(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_DEEPSLATE_TILES = Registration.BLOCKS.register("mossy_deepslate_tiles", () -> {
+        return new Block(Properties.copy(Blocks.DEEPSLATE_TILES));
+    });
+    public static final RegistryObject<Block> MOSSY_COBBLED_DEEPSLATE = Registration.BLOCKS.register("mossy_cobbled_deepslate", () -> {
+        return new Block(Properties.copy(Blocks.COBBLED_DEEPSLATE));
+    });
+    // Stairs are not one of the eleven STONE block-types, so this is registered explicitly the way
+    // MOSSY_POLISHED_ANDESITE_BRICK_STAIRS is - vanilla deepslate brick stairs' properties over the
+    // mossy full block's state.
+    public static final RegistryObject<StairBlock> MOSSY_DEEPSLATE_BRICK_STAIRS = Registration.BLOCKS.register("mossy_deepslate_brick_stairs", () -> {
+        return new StairBlock(MOSSY_DEEPSLATE_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.DEEPSLATE_BRICK_STAIRS));
+    });
+
     // Polished Andesite Bricks: the vanilla stone brick pattern re-toned onto polished andesite's
     // own palette, the way vanilla derives deepslate_bricks from polished_deepslate. Plural, because
     // the texture shows several bricks - unlike square/large bricks, which are one brick per block.

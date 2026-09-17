@@ -135,5 +135,14 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // the loop skips it, but it copies requiresCorrectToolForDrops from cobblestone.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.RUBBLE.get(), ModBlocks.MOSSY_RUBBLE.get());
         this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.RUBBLE.get(), ModBlocks.MOSSY_RUBBLE.get());
+
+        // Same reason again: of the three mossy deepslate full blocks, only "mossy_deepslate_bricks"
+        // matches stone_blocks (on "brick"). "tiles" and "cobbled" match nothing there, and both
+        // copy requiresCorrectToolForDrops from their base stone. Their eleven decorative types are
+        // fine - those match on "facade", "pillar", "sill" and so on.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .add(ModBlocks.MOSSY_DEEPSLATE_TILES.get(), ModBlocks.MOSSY_COBBLED_DEEPSLATE.get());
+        this.tag(BlockTags.NEEDS_STONE_TOOL)
+                .add(ModBlocks.MOSSY_DEEPSLATE_TILES.get(), ModBlocks.MOSSY_COBBLED_DEEPSLATE.get());
     }
 }
