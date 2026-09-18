@@ -136,6 +136,12 @@ public class ModBlocks {
 
     // grate
     public static final RegistryObject<Block> DARK_IRON_GRATE = Registration.BLOCKS.register("dark_iron_grate", () -> new HeavyGrateBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
+    // Rusted stages of the dark iron grate. Separate blocks, not a weathering chain: vanilla iron does
+    // not age, so a builder places whichever stage they want. Same properties as the plain grate -
+    // rust is only the texture (tools/gen_rusted_dark_iron_textures.py).
+    public static final RegistryObject<Block> TARNISHED_DARK_IRON_GRATE = Registration.BLOCKS.register("tarnished_dark_iron_grate", () -> new HeavyGrateBlock(Properties.copy(DARK_IRON_GRATE.get())));
+    public static final RegistryObject<Block> RUSTED_DARK_IRON_GRATE = Registration.BLOCKS.register("rusted_dark_iron_grate", () -> new HeavyGrateBlock(Properties.copy(DARK_IRON_GRATE.get())));
+    public static final RegistryObject<Block> CORRODED_DARK_IRON_GRATE = Registration.BLOCKS.register("corroded_dark_iron_grate", () -> new HeavyGrateBlock(Properties.copy(DARK_IRON_GRATE.get())));
 
     public static final RegistryObject<Block> COPPER_GRATE = Registration.BLOCKS.register("copper_grate", () -> {
         return new WeatheringCopperGrateBlock(WeatheringCopper.WeatherState.UNAFFECTED, Properties.of().strength(3.0F, 6.0F).sound(SoundType.COPPER).mapColor(MapColor.WARPED_STEM).noOcclusion().requiresCorrectToolForDrops().isValidSpawn((a, b, c, d) -> {
@@ -192,6 +198,10 @@ public class ModBlocks {
     public static final RegistryObject<Block> DARK_IRON_HEAVY_TRAPDOOR = Registration.BLOCKS.register("dark_iron_heavy_trapdoor", () -> {
         return new HeavyTrapDoorBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion());
     });
+    // rusted stages of the dark iron heavy trapdoor - see the rusted grates above
+    public static final RegistryObject<Block> TARNISHED_DARK_IRON_HEAVY_TRAPDOOR = Registration.BLOCKS.register("tarnished_dark_iron_heavy_trapdoor", () -> new HeavyTrapDoorBlock(Properties.copy(DARK_IRON_HEAVY_TRAPDOOR.get())));
+    public static final RegistryObject<Block> RUSTED_DARK_IRON_HEAVY_TRAPDOOR = Registration.BLOCKS.register("rusted_dark_iron_heavy_trapdoor", () -> new HeavyTrapDoorBlock(Properties.copy(DARK_IRON_HEAVY_TRAPDOOR.get())));
+    public static final RegistryObject<Block> CORRODED_DARK_IRON_HEAVY_TRAPDOOR = Registration.BLOCKS.register("corroded_dark_iron_heavy_trapdoor", () -> new HeavyTrapDoorBlock(Properties.copy(DARK_IRON_HEAVY_TRAPDOOR.get())));
 
     public static final RegistryObject<Block> COPPER_HEAVY_TRAPDOOR = weathering("copper_heavy_trapdoor", COPPER_TRAPDOOR, WeatherState.UNAFFECTED, WeatheringHeavyTrapDoorBlock::new);
     public static final RegistryObject<Block> EXPOSED_COPPER_HEAVY_TRAPDOOR = weathering("exposed_copper_heavy_trapdoor", EXPOSED_COPPER_TRAPDOOR, WeatherState.EXPOSED, WeatheringHeavyTrapDoorBlock::new);
@@ -607,6 +617,13 @@ public class ModBlocks {
     public static final RegistryObject<Block> STONE_GREEK_BLOCK = Registration.BLOCKS.register("stone_greek_block", () -> new FacingBlock(Properties.copy(Blocks.STONE)));
     public static final RegistryObject<Block> ANDESITE_GREEK_BLOCK = Registration.BLOCKS.register("andesite_greek_block", () -> new FacingBlock(Properties.copy(Blocks.ANDESITE)));
     public static final RegistryObject<Block> POLISHED_BASALT_GREEK_BLOCK = Registration.BLOCKS.register("polished_basalt_greek_block", () -> new FacingBlock(Properties.copy(Blocks.POLISHED_BASALT)));
+
+    // Mossy polished basalt. A rotated pillar like vanilla polished basalt, so it keeps the
+    // separate top and side textures rather than wrapping the side texture round every face
+    // (tools/gen_mossy_polished_basalt_textures.py).
+    public static final RegistryObject<Block> MOSSY_POLISHED_BASALT = Registration.BLOCKS.register("mossy_polished_basalt", () -> {
+        return new RotatedPillarBlock(Properties.copy(Blocks.POLISHED_BASALT));
+    });
 
     // doors
     public static final RegistryObject<Block> SPRUCE_DUNGEON_DOOR = Registration.BLOCKS.register("spruce_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.SPRUCE_DOOR), BlockSetType.SPRUCE));

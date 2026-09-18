@@ -70,6 +70,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.TORCH_SCONCE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_CHISELED_STONE_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_POLISHED_BASALT));
 		// flat vanilla cobweb icon, not the 3D block render blockItemParent would give - the thin
 		// cutout planes look wrong/invisible from the fixed GUI isometric angle
 		basicItem(ModBlocks.MAP.get(ModBlocks.ANGLE_COBWEB_1), mcLoc("block/cobweb"));
@@ -77,6 +78,9 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.CANDLE_SCONCE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.BRAZIER));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.TARNISHED_DARK_IRON_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.RUSTED_DARK_IRON_GRATE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.CORRODED_DARK_IRON_GRATE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.COPPER_GRATE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_GRATE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_GRATE));
@@ -112,6 +116,9 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_TRAPDOOR), modLoc("block/weathered_copper_heavy_trapdoor_bottom"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_TRAPDOOR), modLoc("block/oxidized_copper_heavy_trapdoor_bottom"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_HEAVY_TRAPDOOR), modLoc("block/dark_iron_heavy_trapdoor_bottom"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.TARNISHED_DARK_IRON_HEAVY_TRAPDOOR), modLoc("block/tarnished_dark_iron_heavy_trapdoor_bottom"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.RUSTED_DARK_IRON_HEAVY_TRAPDOOR), modLoc("block/rusted_dark_iron_heavy_trapdoor_bottom"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.CORRODED_DARK_IRON_HEAVY_TRAPDOOR), modLoc("block/corroded_dark_iron_heavy_trapdoor_bottom"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR), modLoc("block/weathered_copper_heavy_trapdoor_bottom"));
 
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.IRON_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.IRON_CORNER_PLATE_BRACKET.getId().getPath()));

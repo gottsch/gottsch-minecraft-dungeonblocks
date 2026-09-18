@@ -102,6 +102,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 });
 
         heavyTrapDoorBlock(ModBlocks.DARK_IRON_HEAVY_TRAPDOOR, modLoc("block/dark_iron"), true);
+        heavyTrapDoorBlock(ModBlocks.TARNISHED_DARK_IRON_HEAVY_TRAPDOOR, modLoc("block/tarnished_dark_iron"), true);
+        heavyTrapDoorBlock(ModBlocks.RUSTED_DARK_IRON_HEAVY_TRAPDOOR, modLoc("block/rusted_dark_iron"), true);
+        heavyTrapDoorBlock(ModBlocks.CORRODED_DARK_IRON_HEAVY_TRAPDOOR, modLoc("block/corroded_dark_iron"), true);
         heavyTrapDoorBlock(ModBlocks.COPPER_HEAVY_TRAPDOOR, mcLoc("block/copper_block"), true);
         heavyTrapDoorBlock(ModBlocks.EXPOSED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/exposed_copper"), true);
         heavyTrapDoorBlock(ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/weathered_copper"), true);
@@ -122,6 +125,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleSingleTexture(ModBlocks.WAXED_OXIDIZED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/oxidized_copper_grate"));
 
         heavyGrateBlock(ModBlocks.DARK_IRON_GRATE, modLoc("block/dark_iron"));
+        heavyGrateBlock(ModBlocks.TARNISHED_DARK_IRON_GRATE, modLoc("block/tarnished_dark_iron"));
+        heavyGrateBlock(ModBlocks.RUSTED_DARK_IRON_GRATE, modLoc("block/rusted_dark_iron"));
+        heavyGrateBlock(ModBlocks.CORRODED_DARK_IRON_GRATE, modLoc("block/corroded_dark_iron"));
         heavyGrateBlock(ModBlocks.COPPER_HEAVY_GRATE, mcLoc("block/copper_block"));
         heavyGrateBlock(ModBlocks.EXPOSED_COPPER_HEAVY_GRATE, mcLoc("block/exposed_copper"));
         heavyGrateBlock(ModBlocks.WEATHERED_COPPER_HEAVY_GRATE, mcLoc("block/weathered_copper"));
@@ -188,6 +194,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         greekBlock(ModBlocks.STONE_GREEK_BLOCK, modLoc("block/stone_greek_block"));
         greekBlock(ModBlocks.ANDESITE_GREEK_BLOCK, modLoc("block/andesite_greek_block"));
         greekBlock(ModBlocks.POLISHED_BASALT_GREEK_BLOCK, modLoc("block/polished_basalt_greek_block"));
+        axisBlock((RotatedPillarBlock) ModBlocks.MOSSY_POLISHED_BASALT.get(),
+                modLoc("block/mossy_polished_basalt_side"), modLoc("block/mossy_polished_basalt_top"));
 
         // roots (weeping-vines style hanging plants): cross model, cutout render
         simpleBlock(ModBlocks.ROOTS.get(), models().cross("roots_head", modLoc("block/roots_head")).renderType("minecraft:cutout"));

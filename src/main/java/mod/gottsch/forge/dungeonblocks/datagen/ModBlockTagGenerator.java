@@ -144,5 +144,35 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.MOSSY_DEEPSLATE_TILES.get(), ModBlocks.MOSSY_COBBLED_DEEPSLATE.get());
         this.tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(ModBlocks.MOSSY_DEEPSLATE_TILES.get(), ModBlocks.MOSSY_COBBLED_DEEPSLATE.get());
+
+        // Every copper block belonged to no tool tag. Most of them - grates, heavy grates, valve
+        // wheels, trapdoors, heavy trapdoors, plate brackets - copy requiresCorrectToolForDrops from
+        // COPPER_GRATE, so they could never be mined for a drop. Swept by id rather than listed, so a
+        // new copper block is covered automatically; the tier tag follows the block's own property
+        // rather than being assumed, so the doors and sewer block (which drop to anything) only
+        // gain pickaxe speed. Stone tier matches vanilla copper.
+        Registration.BLOCKS.getEntries().stream()
+                .filter(b -> b.getId().getPath().contains("copper"))
+                .forEach(b -> {
+                    this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get());
+                    if (b.get().defaultBlockState().requiresCorrectToolForDrops()) {
+                        this.tag(BlockTags.NEEDS_STONE_TOOL).add(b.get());
+                    }
+                });
+
+        // "basalt" matches nothing in stone_blocks, and the block copies requiresCorrectToolForDrops
+        // from vanilla polished basalt. Stone tier to match this mod's own polished_basalt_greek_block,
+        // which the sweep already puts there - note vanilla polished basalt itself drops to any pickaxe.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.MOSSY_POLISHED_BASALT.get());
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.MOSSY_POLISHED_BASALT.get());
+
+        // Dark iron grates and heavy trapdoors, plain and rusted, belonged to no tool tag, so a
+        // pickaxe mined them no faster than a bare hand. Pickaxe only, no tier tag: they do not
+        // require the correct tool for drops and never have, so they still drop to anything.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
+                ModBlocks.DARK_IRON_GRATE.get(), ModBlocks.TARNISHED_DARK_IRON_GRATE.get(),
+                ModBlocks.RUSTED_DARK_IRON_GRATE.get(), ModBlocks.CORRODED_DARK_IRON_GRATE.get(),
+                ModBlocks.DARK_IRON_HEAVY_TRAPDOOR.get(), ModBlocks.TARNISHED_DARK_IRON_HEAVY_TRAPDOOR.get(),
+                ModBlocks.RUSTED_DARK_IRON_HEAVY_TRAPDOOR.get(), ModBlocks.CORRODED_DARK_IRON_HEAVY_TRAPDOOR.get());
     }
 }
