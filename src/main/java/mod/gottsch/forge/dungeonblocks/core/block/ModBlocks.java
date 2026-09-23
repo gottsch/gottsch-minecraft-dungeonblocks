@@ -378,6 +378,11 @@ public class ModBlocks {
     public static final RegistryObject<Block> MOSSY_COBBLED_DEEPSLATE = Registration.BLOCKS.register("mossy_cobbled_deepslate", () -> {
         return new Block(Properties.copy(Blocks.COBBLED_DEEPSLATE));
     });
+    // Mossy tuff: a single full block only, not a ModMaterials.STONE family. Properties from plain
+    // tuff; texture from tools/gen_mossy_textures.py.
+    public static final RegistryObject<Block> MOSSY_TUFF = Registration.BLOCKS.register("mossy_tuff", () -> {
+        return new Block(Properties.copy(Blocks.TUFF));
+    });
     // Stairs are not one of the eleven STONE block-types, so this is registered explicitly the way
     // MOSSY_POLISHED_ANDESITE_BRICK_STAIRS is - vanilla deepslate brick stairs' properties over the
     // mossy full block's state.
@@ -620,7 +625,7 @@ public class ModBlocks {
 
     // Mossy polished basalt. A rotated pillar like vanilla polished basalt, so it keeps the
     // separate top and side textures rather than wrapping the side texture round every face
-    // (tools/gen_mossy_polished_basalt_textures.py).
+    // (tools/gen_mossy_textures.py).
     public static final RegistryObject<Block> MOSSY_POLISHED_BASALT = Registration.BLOCKS.register("mossy_polished_basalt", () -> {
         return new RotatedPillarBlock(Properties.copy(Blocks.POLISHED_BASALT));
     });

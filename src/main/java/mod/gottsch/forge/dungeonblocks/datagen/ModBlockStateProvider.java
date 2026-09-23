@@ -238,9 +238,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         tallDungeonDoorBlock((TallDoorBlock)ModBlocks.CRIMSON_DUNGEON_DOOR_4.get(),
                 mcLoc("block/crimson_door_bottom"), mcLoc("block/crimson_door_top"), mcLoc("block/crimson_door_top"));
         tallDungeonDoorBlock((TallDoorBlock)ModBlocks.DARK_OAK_DUNGEON_DOOR_3.get(),
-                mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_top"), mcLoc("block/dark_oak_door_top"));
+                modLoc("block/dungeon_dark_oak_door_bottom"), modLoc("block/dungeon_dark_oak_door_top"), modLoc("block/dungeon_dark_oak_door_top"));
         tallDungeonDoorBlock((TallDoorBlock)ModBlocks.DARK_OAK_DUNGEON_DOOR_4.get(),
-                mcLoc("block/dark_oak_door_bottom"), mcLoc("block/dark_oak_door_top"), mcLoc("block/dark_oak_door_top"));
+                modLoc("block/dungeon_dark_oak_door_top"), modLoc("block/dungeon_dark_oak_door_top"), modLoc("block/dungeon_dark_oak_door_top"));
         tallDungeonDoorBlock((TallDoorBlock)ModBlocks.MANGROVE_DUNGEON_DOOR_3.get(),
                 mcLoc("block/mangrove_door_bottom"), mcLoc("block/mangrove_door_top"), mcLoc("block/mangrove_door_top"));
         tallDungeonDoorBlock((TallDoorBlock)ModBlocks.MANGROVE_DUNGEON_DOOR_4.get(),
@@ -290,6 +290,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.MOSSY_DEEPSLATE_BRICKS.get());
         simpleBlock(ModBlocks.MOSSY_DEEPSLATE_TILES.get());
         simpleBlock(ModBlocks.MOSSY_COBBLED_DEEPSLATE.get());
+        simpleBlock(ModBlocks.MOSSY_TUFF.get());
         stairsBlock(ModBlocks.MOSSY_DEEPSLATE_BRICK_STAIRS.get(), modLoc("block/mossy_deepslate_bricks"));
         simpleBlock(ModBlocks.POLISHED_ANDESITE_BRICKS.get());
         stairsBlock(ModBlocks.POLISHED_ANDESITE_BRICK_STAIRS.get(), modLoc("block/polished_andesite_bricks"));

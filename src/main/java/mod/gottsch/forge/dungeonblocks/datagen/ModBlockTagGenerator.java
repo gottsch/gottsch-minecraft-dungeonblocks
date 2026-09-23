@@ -145,6 +145,12 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(ModBlocks.MOSSY_DEEPSLATE_TILES.get(), ModBlocks.MOSSY_COBBLED_DEEPSLATE.get());
 
+        // "mossy_tuff" matches nothing in stone_blocks either, and copies requiresCorrectToolForDrops
+        // from vanilla tuff. Stone tier to match this mod's tuff decorative blocks, which the sweep
+        // already puts there. It has no decorative types of its own to be caught by the sweep.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.MOSSY_TUFF.get());
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.MOSSY_TUFF.get());
+
         // Every copper block belonged to no tool tag. Most of them - grates, heavy grates, valve
         // wheels, trapdoors, heavy trapdoors, plate brackets - copy requiresCorrectToolForDrops from
         // COPPER_GRATE, so they could never be mined for a drop. Swept by id rather than listed, so a

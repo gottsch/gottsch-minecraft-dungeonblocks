@@ -113,7 +113,7 @@ public final class ModMaterials {
             new Material("deepslate_bricks", Blocks.DEEPSLATE_BRICKS),
             // vanilla ships no mossy deepslate of any kind, so these three take their properties
             // from the plain block they are moss over, and their textures from this mod
-            // (tools/gen_mossy_deepslate_textures.py)
+            // (tools/gen_mossy_textures.py)
             new Material("mossy_deepslate_bricks", Blocks.DEEPSLATE_BRICKS, modTexture("mossy_deepslate_bricks")),
             new Material("cracked_deepslate_bricks", Blocks.CRACKED_DEEPSLATE_BRICKS),
             new Material("cobbled_deepslate", Blocks.COBBLED_DEEPSLATE),
