@@ -172,6 +172,13 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.MOSSY_POLISHED_BASALT.get());
         this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.MOSSY_POLISHED_BASALT.get());
 
+        // The iron bars door matches nothing in stone_blocks ("barred_window" is not "bars") and
+        // copies requiresCorrectToolForDrops from the iron door. Pickaxe with no tier tag, exactly
+        // as vanilla tags the iron door. DOORS as vanilla does too - not WOODEN_DOORS, which is
+        // what villagers path through.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.IRON_BARS_DOOR.get());
+        this.tag(BlockTags.DOORS).add(ModBlocks.IRON_BARS_DOOR.get());
+
         // Dark iron grates and heavy trapdoors, plain and rusted, belonged to no tool tag, so a
         // pickaxe mined them no faster than a bare hand. Pickaxe only, no tier tag: they do not
         // require the correct tool for drops and never have, so they still drop to anything.

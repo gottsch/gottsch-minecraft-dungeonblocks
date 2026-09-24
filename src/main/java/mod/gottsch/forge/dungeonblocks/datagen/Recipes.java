@@ -111,6 +111,13 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.COPPER_INGOT))
 					.save(recipe);
 
+			// iron bars door
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, ModBlocks.IRON_BARS_DOOR.get())
+					.requires(Blocks.IRON_DOOR)
+					.requires(Blocks.IRON_BARS)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_BARS))
+					.save(recipe);
+
 			// grate trapdoors
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_HEAVY_TRAPDOOR.get())
 					.requires(Blocks.IRON_TRAPDOOR)

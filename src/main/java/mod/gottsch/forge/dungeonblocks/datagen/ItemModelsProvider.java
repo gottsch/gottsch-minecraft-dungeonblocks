@@ -246,6 +246,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		basicItem(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_DOOR), modLoc("item/exposed_copper_door"));
 		basicItem(ModBlocks.MAP.get(ModBlocks.WAX_WEATHERED_COPPER_DOOR), modLoc("item/weathered_copper_door"));
 		basicItem(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_DOOR), modLoc("item/oxidized_copper_door"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.IRON_BARS_DOOR), modLoc("item/iron_bars_door"));
 
 		// copper trapdoor items: parent to the generated bottom model
 		copperTrapdoorItem(ModBlocks.COPPER_TRAPDOOR);

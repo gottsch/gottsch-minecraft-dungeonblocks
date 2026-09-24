@@ -26,6 +26,7 @@ import mod.gottsch.forge.dungeonblocks.core.block.SlabTableBlock;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -55,6 +56,11 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 // lower half destroys the upper through updateShape, which drops - so either half
                 // yields exactly one banner, and neither yields two.
                 add(b, createSinglePropConditionTable(b, DungeonBannerBlock.HALF, DoubleBlockHalf.UPPER));
+            } else if (b instanceof DoorBlock) {
+                // vanilla door table: only the LOWER half drops. Breaking either half destroys the
+                // other through updateShape, which drops too - the same mechanism as the banner
+                // above - so the blanket dropSelf below gave two doors for every one broken.
+                add(b, createDoorTable(b));
             } else if (b instanceof SlabBlock) {
                 // vanilla slab table: one item, or two when broken as a double slab. The blanket
                 // dropSelf below would give one either way, losing an item on every double slab.

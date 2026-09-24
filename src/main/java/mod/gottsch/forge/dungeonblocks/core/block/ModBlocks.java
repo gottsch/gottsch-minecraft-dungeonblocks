@@ -670,6 +670,11 @@ public class ModBlocks {
     public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_DOOR = Registration.BLOCKS.register("waxed_oxidized_copper_door", () -> {
         return new WaxedCopperDoorBlock(Properties.copy((BlockBehaviour)OXIDIZED_COPPER_DOOR.get()), BlockSetType.IRON);
     });
+    // A cell door for a wall of vanilla iron bars. Vanilla iron door properties - pickaxe, 5.0
+    // strength, metal sound - but it opens by hand; see IronBarsDoorBlock for why it keeps the
+    // iron block set type anyway.
+    public static final RegistryObject<Block> IRON_BARS_DOOR = Registration.BLOCKS.register("iron_bars_door",
+            () -> new IronBarsDoorBlock(Properties.copy(Blocks.IRON_DOOR)));
 
     // bones & bodies
     // copy(STONE) alone left canOcclude=true, which is wrong for a 6px-tall sprawl: it culled the

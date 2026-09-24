@@ -210,6 +210,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         copperDoor(ModBlocks.WAXED_EXPOSED_COPPER_DOOR, "exposed_copper_door");
         copperDoor(ModBlocks.WAX_WEATHERED_COPPER_DOOR, "weathered_copper_door");
         copperDoor(ModBlocks.WAXED_OXIDIZED_COPPER_DOOR, "oxidized_copper_door");
+        edgedDoor(ModBlocks.IRON_BARS_DOOR, "iron_bars_door");
 
         // copper trapdoors (waxed variants reuse the un-waxed trapdoor textures)
         copperTrapDoor(ModBlocks.COPPER_TRAPDOOR, "copper_trapdoor");
@@ -412,6 +413,32 @@ public class ModBlockStateProvider extends BlockStateProvider {
         doorBlockWithRenderType((DoorBlock) block.get(),
                 modLoc("block/" + textureName + "_bottom"),
                 modLoc("block/" + textureName + "_top"), "minecraft:cutout");
+    }
+
+    /**
+     * A vanilla-shaped cutout door whose thin side edges and caps come from their own texture,
+     * {@code <textureName>_edge}, instead of being cut out of the face textures.
+     *
+     * <p>Vanilla's door models cut BOTH side edges from face columns 0-2 - the hinge side - and the
+     * caps from the end rows. On a solid door that is invisible; on a see-through one the edges show
+     * gaps between bars, and the handle edge shows hinges. The {@code template_edged_door_*} parents
+     * are vanilla's eight door models with those five faces pointed at {@code #edge}; the strip
+     * layout it expects is documented in tools/gen_iron_bars_door_textures.py.
+     */
+    public void edgedDoor(RegistryObject<Block> block, String textureName) {
+        String name = block.getId().getPath();
+        ResourceLocation bottom = modLoc("block/" + textureName + "_bottom");
+        ResourceLocation top = modLoc("block/" + textureName + "_top");
+        ResourceLocation edge = modLoc("block/" + textureName + "_edge");
+        ModelFile[] m = new ModelFile[8];
+        String[] parts = {"bottom_left", "bottom_left_open", "bottom_right", "bottom_right_open",
+                "top_left", "top_left_open", "top_right", "top_right_open"};
+        for (int i = 0; i < parts.length; i++) {
+            m[i] = models().withExistingParent(name + "_" + parts[i], modLoc("block/template_edged_door_" + parts[i]))
+                    .texture("bottom", bottom).texture("top", top).texture("edge", edge)
+                    .renderType("minecraft:cutout");
+        }
+        doorBlock((DoorBlock) block.get(), m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7]);
     }
 
     /** Generates the full vanilla-style (orientable) trapdoor blockstate + models (cutout) from the named texture. */

@@ -13,18 +13,18 @@
           "type": "minecraft:item",
           "conditions": [
             {
-              "block": "dungeonblocks:mangrove_dungeon_door",
+              "block": "dungeonblocks:iron_bars_door",
               "condition": "minecraft:block_state_property",
               "properties": {
                 "half": "lower"
               }
             }
           ],
-          "name": "dungeonblocks:mangrove_dungeon_door"
+          "name": "dungeonblocks:iron_bars_door"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "dungeonblocks:blocks/mangrove_dungeon_door"
+  "random_sequence": "dungeonblocks:blocks/iron_bars_door"
 }
