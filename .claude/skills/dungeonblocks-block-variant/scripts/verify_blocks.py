@@ -24,6 +24,9 @@ MODELS = "src/generated/resources/assets/dungeonblocks/models/**/*.json"
 TAGS = "src/generated/resources/data/minecraft/tags/blocks/"
 LOOT = "src/generated/resources/data/dungeonblocks/loot_tables/blocks/"
 BLOCKSTATES = "src/generated/resources/assets/dungeonblocks/blockstates/"
+# a few older blocks (the dungeon lantern, for one) predate datagen and keep a hand-written
+# blockstate here instead
+HAND_BLOCKSTATES = "src/main/resources/assets/dungeonblocks/blockstates/"
 
 TIER_TAGS = ["needs_stone_tool", "needs_iron_tool", "needs_diamond_tool"]
 
@@ -64,7 +67,9 @@ def check_block(block_id):
     ok = True
     print(f"\n{block_id}")
 
-    if not os.path.exists(f"{BLOCKSTATES}{block_id}.json"):
+    if os.path.exists(f"{HAND_BLOCKSTATES}{block_id}.json"):
+        print("  ok    blockstate is hand-written (src/main/resources), not generated")
+    elif not os.path.exists(f"{BLOCKSTATES}{block_id}.json"):
         fail("no blockstate generated -- is it registered, and did runData succeed?")
         ok = False
 

@@ -20,6 +20,7 @@
 package mod.gottsch.forge.dungeonblocks.core.block;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -617,7 +618,10 @@ public class ModBlocks {
 
     // hay patches
     public static final RegistryObject<Block> HAY_PATCH = Registration.BLOCKS.register("hay_patch_block", () -> new CarpetBlock(Properties.copy(Blocks.YELLOW_CARPET)));
-    public static final RegistryObject<Block> DIRTY_HAY_PATCH = Registration.BLOCKS.register("dirty_hay_patch_block", () -> new CarpetBlock(Properties.copy(Blocks.YELLOW_CARPET)));
+    // noOcclusion: the dirty hay texture has gaps the floor shows through. A carpet otherwise counts
+    // as covering the whole top face of the block under it, which stops drawing that face - and the
+    // gaps then look through a hole in the ground to the sky.
+    public static final RegistryObject<Block> DIRTY_HAY_PATCH = Registration.BLOCKS.register("dirty_hay_patch_block", () -> new CarpetBlock(Properties.copy(Blocks.YELLOW_CARPET).noOcclusion()));
 
     // greek blocks
     public static final RegistryObject<Block> STONE_GREEK_BLOCK = Registration.BLOCKS.register("stone_greek_block", () -> new FacingBlock(Properties.copy(Blocks.STONE)));
@@ -677,6 +681,19 @@ public class ModBlocks {
     public static final RegistryObject<Block> IRON_BARS_DOOR = Registration.BLOCKS.register("iron_bars_door",
             () -> new IronBarsDoorBlock(Properties.copy(Blocks.IRON_DOOR)));
 
+    // Dark iron bars, plain and lightly rusted, each with a matching cell door. Vanilla's own
+    // IronBarsBlock, so they connect to each other and to vanilla iron bars exactly as iron bars
+    // do. Textures: tools/gen_dark_iron_bars_textures.py. The tarnished pair is one light stage
+    // only - rust as staining - and creative-only, like the tarnished dark iron grate.
+    public static final RegistryObject<Block> DARK_IRON_BARS = Registration.BLOCKS.register("dark_iron_bars",
+            () -> new IronBarsBlock(Properties.copy(Blocks.IRON_BARS)));
+    public static final RegistryObject<Block> TARNISHED_DARK_IRON_BARS = Registration.BLOCKS.register("tarnished_dark_iron_bars",
+            () -> new IronBarsBlock(Properties.copy(Blocks.IRON_BARS)));
+    public static final RegistryObject<Block> DARK_IRON_BARS_DOOR = Registration.BLOCKS.register("dark_iron_bars_door",
+            () -> new IronBarsDoorBlock(Properties.copy(Blocks.IRON_DOOR)));
+    public static final RegistryObject<Block> TARNISHED_DARK_IRON_BARS_DOOR = Registration.BLOCKS.register("tarnished_dark_iron_bars_door",
+            () -> new IronBarsDoorBlock(Properties.copy(Blocks.IRON_DOOR)));
+
     // Sharpened logs: the point of a palisade stake, set on the end of a log, one per vanilla wood.
     // Named after the stripped block they are crafted from, in vanilla's own words for it (log,
     // stem, block), so a creative search for "oak log" finds them. Properties are spelled out rather than copied from a log: vanilla log properties carry a map
@@ -685,6 +702,9 @@ public class ModBlocks {
     // strength 2, its wood's sound, its planks' map colour, and lava-flammable except the nether
     // stems. Every sharpened log is listed in SHARPENED_LOGS, which the datagen providers iterate.
     public static final List<RegistryObject<Block>> SHARPENED_LOGS = new ArrayList<>();
+    // the other palisade pieces, one of each per wood, registered alongside its sharpened log
+    public static final List<RegistryObject<Block>> CHEVALS_DE_FRISE = new ArrayList<>();
+    public static final List<RegistryObject<Block>> WALKWAY_BRACKETS = new ArrayList<>();
     public static final RegistryObject<Block> SHARPENED_OAK_LOG = sharpened("oak_log", MapColor.WOOD, SoundType.WOOD, true);
     public static final RegistryObject<Block> SHARPENED_SPRUCE_LOG = sharpened("spruce_log", MapColor.PODZOL, SoundType.WOOD, true);
     public static final RegistryObject<Block> SHARPENED_BIRCH_LOG = sharpened("birch_log", MapColor.SAND, SoundType.WOOD, true);
@@ -697,15 +717,67 @@ public class ModBlocks {
     public static final RegistryObject<Block> SHARPENED_CRIMSON_STEM = sharpened("crimson_stem", MapColor.CRIMSON_STEM, SoundType.STEM, false);
     public static final RegistryObject<Block> SHARPENED_WARPED_STEM = sharpened("warped_stem", MapColor.WARPED_STEM, SoundType.STEM, false);
 
+    /**
+     * Registers a wood's palisade pieces - its sharpened log, cheval-de-frise and walkway bracket -
+     * so every wood always has all three. `log` is vanilla's word for the wood's log block
+     * (oak_log, crimson_stem, bamboo_block); the wood's own name is what precedes its last word.
+     */
     private static RegistryObject<Block> sharpened(String log, MapColor mapColor, SoundType sound, boolean burns) {
-        RegistryObject<Block> block = Registration.BLOCKS.register("sharpened_" + log, () -> {
+        Supplier<Properties> wood = () -> {
             Properties properties = Properties.of().mapColor(mapColor).instrument(NoteBlockInstrument.BASS)
                     .strength(2.0F).sound(sound);
-            return new SharpenedLogBlock(burns ? properties.ignitedByLava() : properties);
-        });
+            return burns ? properties.ignitedByLava() : properties;
+        };
+        RegistryObject<Block> block = Registration.BLOCKS.register("sharpened_" + log, () -> new PyramidBlock(wood.get()));
         SHARPENED_LOGS.add(block);
+        String name = log.substring(0, log.lastIndexOf('_'));
+        CHEVALS_DE_FRISE.add(Registration.BLOCKS.register(name + "_cheval_de_frise",
+                () -> new ChevalDeFriseBlock(wood.get().noOcclusion())));
+        WALKWAY_BRACKETS.add(Registration.BLOCKS.register(name + "_walkway_bracket",
+                () -> new WalkwayBracketBlock(wood.get())));
         return block;
     }
+
+
+    // Spikes: iron bars' strength and sound. Not Properties.copy(IRON_BARS): that carries
+    // noOcclusion, which would stop the plate's underside ever culling against the floor.
+    public static final RegistryObject<Block> IRON_SPIKES = Registration.BLOCKS.register("iron_spikes",
+            () -> new SpikesBlock(Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops()
+                    .strength(5.0F, 6.0F).sound(SoundType.METAL)));
+    public static final RegistryObject<Block> DARK_IRON_SPIKES = Registration.BLOCKS.register("dark_iron_spikes",
+            () -> new SpikesBlock(Properties.copy(IRON_SPIKES.get())));
+
+    // Portcullis: lattice cells that join into a gate, and the winch above that raises it. See
+    // PortcullisWinchBlock for how the two find each other. Iron bars' strength, and noOcclusion
+    // on the lattice because the gate is mostly holes.
+    public static final RegistryObject<Block> PORTCULLIS = Registration.BLOCKS.register("portcullis",
+            () -> new PortcullisBlock(Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops()
+                    .strength(5.0F, 6.0F).sound(SoundType.METAL).noOcclusion()));
+    public static final RegistryObject<Block> PORTCULLIS_WINCH = Registration.BLOCKS.register("portcullis_winch",
+            () -> new PortcullisWinchBlock(Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops()
+                    .strength(5.0F, 6.0F).sound(SoundType.METAL).noOcclusion()));
+
+    // Dungeon furniture: props with moving parts, modelled in Blockbench (blockbench/*.bbmodel,
+    // built into models by tools/bbmodel_to_block_models.py)
+    public static final RegistryObject<Block> STONE_SARCOPHAGUS = Registration.BLOCKS.register("stone_sarcophagus",
+            () -> new SarcophagusBlock(Properties.copy(Blocks.STONE_BRICKS)));
+    public static final RegistryObject<Block> DEEPSLATE_SARCOPHAGUS = Registration.BLOCKS.register("deepslate_sarcophagus",
+            () -> new SarcophagusBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS)));
+    public static final RegistryObject<Block> IRON_MAIDEN = Registration.BLOCKS.register("iron_maiden",
+            () -> new IronMaidenBlock(Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops()
+                    .strength(5.0F, 6.0F).sound(SoundType.METAL).noOcclusion()));
+    public static final RegistryObject<Block> GIBBET = Registration.BLOCKS.register("gibbet",
+            () -> new GibbetBlock(Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops()
+                    .strength(5.0F, 6.0F).sound(SoundType.METAL).noOcclusion()));
+    // Racks in the brazier's ironwork, with the brazier's leniency: no tool needed to take one
+    // down. The firewood rack is mostly logs to look at and to hit, so wood's strength and sound;
+    // the weapon rack is all iron, and holds its weapons in a block entity.
+    public static final RegistryObject<Block> FIREWOOD_RACK = Registration.BLOCKS.register("firewood_rack",
+            () -> new FirewoodRackBlock(Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS)
+                    .forceSolidOn().strength(2.0F).sound(SoundType.WOOD).noOcclusion()));
+    public static final RegistryObject<Block> WEAPON_RACK = Registration.BLOCKS.register("weapon_rack",
+            () -> new WeaponRackBlock(Properties.of().mapColor(MapColor.METAL)
+                    .forceSolidOn().strength(3.5F).sound(SoundType.METAL).noOcclusion()));
 
     // bones & bodies
     // copy(STONE) alone left canOcclude=true, which is wrong for a 6px-tall sprawl: it culled the
@@ -714,6 +786,48 @@ public class ModBlocks {
     public static final RegistryObject<Block> SKELETON = Registration.BLOCKS.register("skeleton",
             () -> new SkeletonBlock(Block.Properties.copy(Blocks.STONE).noOcclusion().sound(SoundType.BONE_BLOCK)));
     
+    // Capstones: the pyramid point in a stone, to cap a pillar, a tower or a gatepost. One for
+    // every overworld bricks block (chiseled ones excepted - their carving would be sliced
+    // diagonally across the facets - and the two-block large bricks), plus polished blackstone,
+    // polished andesite and the sandstones. Nether, end, prismarine and quartz bricks were
+    // deliberately left out. Declared last so every mod source block is registered before them. Each
+    // takes its source's properties, and datagen reads its texture off the source's id.
+    public static final Map<RegistryObject<Block>, Supplier<Block>> CAPSTONES = new LinkedHashMap<>();
+
+    static {
+        capstone("bricks", () -> Blocks.BRICKS);
+        capstone("stone_bricks", () -> Blocks.STONE_BRICKS);
+        capstone("mossy_stone_bricks", () -> Blocks.MOSSY_STONE_BRICKS);
+        capstone("cracked_stone_bricks", () -> Blocks.CRACKED_STONE_BRICKS);
+        capstone("deepslate_bricks", () -> Blocks.DEEPSLATE_BRICKS);
+        capstone("cracked_deepslate_bricks", () -> Blocks.CRACKED_DEEPSLATE_BRICKS);
+        capstone("polished_blackstone_bricks", () -> Blocks.POLISHED_BLACKSTONE_BRICKS);
+        capstone("cracked_polished_blackstone_bricks", () -> Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS);
+        capstone("mud_bricks", () -> Blocks.MUD_BRICKS);
+        capstone("polished_blackstone", () -> Blocks.POLISHED_BLACKSTONE);
+        capstone("polished_andesite", () -> Blocks.POLISHED_ANDESITE);
+        capstone("sandstone", () -> Blocks.SANDSTONE);
+        capstone("cut_sandstone", () -> Blocks.CUT_SANDSTONE);
+        capstone("smooth_sandstone", () -> Blocks.SMOOTH_SANDSTONE);
+        capstone("red_sandstone", () -> Blocks.RED_SANDSTONE);
+        capstone("cut_red_sandstone", () -> Blocks.CUT_RED_SANDSTONE);
+        capstone("smooth_red_sandstone", () -> Blocks.SMOOTH_RED_SANDSTONE);
+        for (RegistryObject<Block> source : List.of(SQUARE_STONE_BRICK, MOSSY_SQUARE_STONE_BRICK,
+                SQUARE_MUD_BRICK, MOSSY_SQUARE_MUD_BRICK, SQUARE_DEEPSLATE_BRICK, MOSSY_SQUARE_DEEPSLATE_BRICK,
+                MOSSY_DEEPSLATE_BRICKS, POLISHED_ANDESITE_BRICKS, MOSSY_POLISHED_ANDESITE_BRICKS, MOSSY_BRICKS,
+                LARGE_BRICKS, MOSSY_LARGE_BRICKS, SQUARE_BRICK, MOSSY_SQUARE_BRICK, COBBLESTONE_BRICK,
+                MOSSY_COBBLESTONE_BRICK, GRAVEL_BRICK)) {
+            capstone(source.getId().getPath(), source);
+        }
+    }
+
+    /** Registers "<source>_capstone", singular like vanilla's stairs: stone_bricks -> stone_brick_capstone. */
+    private static void capstone(String source, Supplier<Block> block) {
+        String name = source.endsWith("bricks") ? source.substring(0, source.length() - 1) : source;
+        CAPSTONES.put(Registration.BLOCKS.register(name + "_capstone",
+                () -> new PyramidBlock(Properties.copy(block.get()))), block);
+    }
+
     // ------------------------------------------------------------------
     // Stone block families (data-driven). See ModMaterials.STONE.
     // Add a material   -> one entry in ModMaterials.STONE.

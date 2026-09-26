@@ -13,6 +13,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Half;
@@ -23,6 +25,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -212,7 +215,48 @@ public class ModBlockStateProvider extends BlockStateProvider {
         copperDoor(ModBlocks.WAX_WEATHERED_COPPER_DOOR, "weathered_copper_door");
         copperDoor(ModBlocks.WAXED_OXIDIZED_COPPER_DOOR, "oxidized_copper_door");
         edgedDoor(ModBlocks.IRON_BARS_DOOR, "iron_bars_door");
+        edgedDoor(ModBlocks.DARK_IRON_BARS_DOOR, "dark_iron_bars_door");
+        edgedDoor(ModBlocks.TARNISHED_DARK_IRON_BARS_DOOR, "tarnished_dark_iron_bars_door");
+        ironBars(ModBlocks.DARK_IRON_BARS);
+        ironBars(ModBlocks.TARNISHED_DARK_IRON_BARS);
         ModBlocks.SHARPENED_LOGS.forEach(this::sharpenedLog);
+        ModBlocks.CAPSTONES.forEach((block, source) -> capstone(block, source.get()));
+        directionalBlock(ModBlocks.IRON_SPIKES.get(), objModel("iron_spikes", "spikes",
+                mcLoc("block/iron_block"), mcLoc("block/iron_block")));
+        directionalBlock(ModBlocks.DARK_IRON_SPIKES.get(), objModel("dark_iron_spikes", "spikes",
+                modLoc("block/dark_iron"), modLoc("block/dark_iron")));
+        // the cheval-de-frise OBJ's beam runs along x; axis z is the same model turned a quarter.
+        // Bark on the beam and stakes, the log's end grain on the beam's ends, stripped wood tips.
+        ModBlocks.CHEVALS_DE_FRISE.forEach(block -> {
+            String name = block.getId().getPath();
+            String log = DataGenMaps.logOf(DataGenMaps.woodOf(name, "cheval_de_frise"));
+            ModelFile cheval = objModel(name, "cheval_de_frise",
+                    mcLoc("block/" + log), mcLoc("block/" + log + "_top"), mcLoc("block/stripped_" + log));
+            getVariantBuilder(block.get()).forAllStates(state ->
+                    ConfiguredModel.builder().modelFile(cheval)
+                            .rotationY(state.getValue(ChevalDeFriseBlock.AXIS) == Direction.Axis.Z ? 90 : 0).build());
+        });
+        // portcullis: the lattice spans along x in the OBJ, so axis z is a quarter turn; the bottom
+        // row swaps in the model with spiked tips
+        ModelFile portcullis = objModel("portcullis", "portcullis", modLoc("block/dark_iron"));
+        ModelFile portcullisBottom = objModel("portcullis_bottom", "portcullis_bottom", modLoc("block/dark_iron"));
+        getVariantBuilder(ModBlocks.PORTCULLIS.get()).forAllStates(state ->
+                ConfiguredModel.builder()
+                        .modelFile(state.getValue(PortcullisBlock.BOTTOM) ? portcullisBottom : portcullis)
+                        .rotationY(state.getValue(PortcullisBlock.AXIS) == Direction.Axis.Z ? 90 : 0).build());
+        ModelFile winch = objModel("portcullis_winch", "portcullis_winch", modLoc("block/dark_iron"),
+                mcLoc("block/stripped_spruce_log"), mcLoc("block/stripped_spruce_log_top"), modLoc("block/dark_iron"));
+        getVariantBuilder(ModBlocks.PORTCULLIS_WINCH.get()).forAllStates(state ->
+                ConfiguredModel.builder().modelFile(winch)
+                        .rotationY(state.getValue(PortcullisWinchBlock.AXIS) == Direction.Axis.Z ? 90 : 0).build());
+        furniture();
+        // the bracket OBJ is authored facing north; horizontalBlock turns it like any facing block
+        ModBlocks.WALKWAY_BRACKETS.forEach(block -> {
+            String name = block.getId().getPath();
+            String log = DataGenMaps.logOf(DataGenMaps.woodOf(name, "walkway_bracket"));
+            horizontalBlock(block.get(), objModel(name, "walkway_bracket",
+                    mcLoc("block/stripped_" + log), mcLoc("block/stripped_" + log + "_top")));
+        });
 
         // copper trapdoors (waxed variants reuse the un-waxed trapdoor textures)
         copperTrapDoor(ModBlocks.COPPER_TRAPDOOR, "copper_trapdoor");
@@ -418,24 +462,173 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     /**
-     * A sharpened log over the shared pyramid OBJ: stripped-log facets, with the stripped log's end
-     * grain on the (normally hidden) base. Rooted at block_no_ao because the sloped facets are not
-     * axis-aligned, and a model's own ambientocclusion flag is ignored unless it is the root.
-     * The OBJ points up; directionalBlock turns it to each FACING the way vanilla turns an end rod.
+     * A block model over one of the OBJs from tools/gen_obj_models.py. Rooted at block_no_ao because
+     * those shapes are not axis-aligned, and a model's own ambientocclusion flag is ignored unless it
+     * is the root. `textures` pairs each of the OBJ's material slots with a texture, in order; the
+     * first also serves as the particle texture.
+     */
+    private BlockModelBuilder objModel(String name, String obj, ResourceLocation... textures) {
+        String[] slots = switch (obj) {
+            case "pyramid" -> new String[] {"facet", "base"};
+            case "spikes" -> new String[] {"plate", "spike"};
+            case "cheval_de_frise" -> new String[] {"bark", "end", "tip"};
+            case "walkway_bracket" -> new String[] {"wood", "end"};
+            case "portcullis", "portcullis_bottom" -> new String[] {"bar"};
+            case "portcullis_winch" -> new String[] {"iron", "drum", "drum_end", "chain_band"};
+            case "iron_maiden_spikes_lower_closed", "iron_maiden_spikes_lower_open",
+                 "iron_maiden_spikes_upper_closed", "iron_maiden_spikes_upper_open" -> new String[] {"spike"};
+            default -> throw new IllegalArgumentException("unknown OBJ model " + obj);
+        };
+        BlockModelBuilder model = models().withExistingParent(name, modLoc("block/block_no_ao"))
+                .customLoader(ObjModelBuilder::begin)
+                .modelLocation(modLoc("models/block/" + obj + ".obj"))
+                .flipV(true)
+                .end()
+                .texture("particle", textures[0]);
+        for (int i = 0; i < slots.length; i++) {
+            model.texture(slots[i], textures[i]);
+        }
+        return model;
+    }
+
+    /**
+     * The sarcophagi, iron maiden, gibbet and racks. Their models are built from blockbench/*.bbmodel
+     * by tools/bbmodel_to_block_models.py into src/main/resources, and only referenced here. All
+     * are authored facing north, so a FACING turns them by that facing's yaw + 180.
+     */
+    private void furniture() {
+        // sarcophagus: per-material children of the stone templates, one per part and lid frame
+        Map<RegistryObject<Block>, ResourceLocation[]> materials = Map.of(
+                ModBlocks.STONE_SARCOPHAGUS, new ResourceLocation[] {mcLoc("block/chiseled_stone_bricks"),
+                        mcLoc("block/smooth_stone"), mcLoc("block/polished_andesite")},
+                ModBlocks.DEEPSLATE_SARCOPHAGUS, new ResourceLocation[] {mcLoc("block/chiseled_deepslate"),
+                        mcLoc("block/polished_deepslate"), mcLoc("block/deepslate_tiles")});
+        materials.forEach((block, tex) -> {
+            String name = block.getId().getPath();
+            // The block shows only its body: SarcophagusRenderer always draws the lid, from the
+            // lid-only models (registered as additional models in ClientSetup). "closed", body and
+            // lid together, is for the item, which has no renderer to draw its lid.
+            for (String part : new String[] {"head", "foot"}) {
+                sarcophagusModel(name, part, "lid", tex);
+                sarcophagusModel(name, part, "closed", tex);
+            }
+            getVariantBuilder(block.get()).forAllStates(state -> {
+                String part = state.getValue(SarcophagusBlock.PART) == BedPart.HEAD ? "head" : "foot";
+                return ConfiguredModel.builder().modelFile(sarcophagusModel(name, part, "body", tex))
+                        .rotationY(yaw(state.getValue(SarcophagusBlock.FACING))).build();
+            });
+        });
+
+        // iron maiden: multipart, so each state layers the Blockbench body over the OBJ spikes
+        MultiPartBlockStateBuilder maiden = getMultipartBuilder(ModBlocks.IRON_MAIDEN.get());
+        for (Direction facing : Direction.Plane.HORIZONTAL) {
+            for (DoubleBlockHalf half : DoubleBlockHalf.values()) {
+                for (boolean open : new boolean[] {false, true}) {
+                    String suffix = (half == DoubleBlockHalf.LOWER ? "lower" : "upper") + "_" + (open ? "open" : "closed");
+                    ModelFile body = models().getExistingFile(modLoc("block/iron_maiden_" + suffix));
+                    ModelFile spikes = objModel("iron_maiden_spikes_" + suffix, "iron_maiden_spikes_" + suffix,
+                            modLoc("block/polished_dark_iron"));
+                    for (ModelFile model : new ModelFile[] {body, spikes}) {
+                        maiden.part().modelFile(model).rotationY(yaw(facing)).addModel()
+                                .condition(IronMaidenBlock.FACING, facing)
+                                .condition(IronMaidenBlock.HALF, half)
+                                .condition(IronMaidenBlock.OPEN, open).end();
+                    }
+                }
+            }
+        }
+
+        // gibbet: one model per part
+        getVariantBuilder(ModBlocks.GIBBET.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(models().getExistingFile(modLoc("block/gibbet_"
+                        + state.getValue(GibbetBlock.PART).getSerializedName())))
+                .rotationY(yaw(state.getValue(GibbetBlock.FACING))).build());
+
+        // racks: horizontalBlock's default turn is the same yaw + 180. The firewood rack has a model
+        // per fill stage. The weapon rack's model is its frame alone - WeaponRackRenderer draws
+        // whatever hangs in it.
+        horizontalBlock(ModBlocks.FIREWOOD_RACK.get(), state -> models().getExistingFile(
+                modLoc("block/firewood_rack_" + state.getValue(FirewoodRackBlock.FIREWOOD))));
+        horizontalBlock(ModBlocks.WEAPON_RACK.get(), models().getExistingFile(modLoc("block/weapon_rack")));
+    }
+
+    private ModelFile sarcophagusModel(String name, String part, String variant, ResourceLocation[] tex) {
+        return models().withExistingParent(name + "_" + part + "_" + variant,
+                        modLoc("block/template_sarcophagus_" + part + "_" + variant))
+                .texture("side", tex[0]).texture("lid", tex[1]).texture("effigy", tex[2])
+                .texture("particle", tex[1]);
+    }
+
+    /** The y rotation that turns a north-authored model to face `facing`. */
+    private static int yaw(Direction facing) {
+        return ((int) facing.toYRot() + 180) % 360;
+    }
+
+    /**
+     * A sharpened log: stripped-log facets over the pyramid, with the stripped log's end grain on
+     * the (normally hidden) base. The OBJ points up; directionalBlock turns it to each FACING the way
+     * vanilla turns an end rod.
      */
     public void sharpenedLog(RegistryObject<Block> block) {
         String name = block.getId().getPath();
         // ids follow vanilla's stripped block word for word: sharpened_oak_log <- stripped_oak_log
         String stripped = "stripped_" + name.substring("sharpened_".length());
-        BlockModelBuilder model = models().withExistingParent(name, modLoc("block/block_no_ao"))
-                .customLoader(ObjModelBuilder::begin)
-                .modelLocation(modLoc("models/block/sharpened_log.obj"))
-                .flipV(true)
-                .end()
-                .texture("facet", mcLoc("block/" + stripped))
-                .texture("base", mcLoc("block/" + stripped + "_top"))
-                .texture("particle", mcLoc("block/" + stripped));
-        directionalBlock(block.get(), model);
+        directionalBlock(block.get(), objModel(name, "pyramid",
+                mcLoc("block/" + stripped), mcLoc("block/" + stripped + "_top")));
+    }
+
+    /**
+     * A capstone: the pyramid in its source stone. The texture is the source block's own id, in its
+     * own namespace - true of every source - except the smooth sandstones, whose blocks have no
+     * texture of their own and use the sandstone top, as vanilla does.
+     */
+    public void capstone(RegistryObject<Block> block, Block source) {
+        ResourceLocation id = ForgeRegistries.BLOCKS.getKey(source);
+        String path = switch (id.getPath()) {
+            case "smooth_sandstone" -> "sandstone_top";
+            case "smooth_red_sandstone" -> "red_sandstone_top";
+            default -> id.getPath();
+        };
+        ResourceLocation texture = new ResourceLocation(id.getNamespace(), "block/" + path);
+        directionalBlock(block.get(), objModel(block.getId().getPath(), "pyramid", texture, texture));
+    }
+
+    /**
+     * Iron bars in another texture: children of vanilla's six iron bars models with the texture
+     * swapped, joined by the same multipart rules as vanilla's own iron_bars blockstate - a post
+     * always, a lone post when unconnected, a cap when connected one way only, a side per
+     * connection. The vanilla parents declare ambientocclusion false at their root, so it holds.
+     */
+    public void ironBars(RegistryObject<Block> block) {
+        String name = block.getId().getPath();
+        ResourceLocation texture = modLoc("block/" + name);
+        Map<String, ModelFile> parts = new java.util.HashMap<>();
+        for (String part : new String[] {"post_ends", "post", "cap", "cap_alt", "side", "side_alt"}) {
+            parts.put(part, models().withExistingParent(name + "_" + part, mcLoc("block/iron_bars_" + part))
+                    .texture("particle", texture).texture("bars", texture).texture("edge", texture)
+                    .renderType("minecraft:cutout_mipped"));
+        }
+        MultiPartBlockStateBuilder builder = getMultipartBuilder(block.get());
+        builder.part().modelFile(parts.get("post_ends")).addModel().end();
+        builder.part().modelFile(parts.get("post")).addModel()
+                .condition(IronBarsBlock.NORTH, false).condition(IronBarsBlock.EAST, false)
+                .condition(IronBarsBlock.SOUTH, false).condition(IronBarsBlock.WEST, false).end();
+        // [model, y rotation, the one connected side]
+        Object[][] caps = {{"cap", 0, IronBarsBlock.NORTH}, {"cap", 90, IronBarsBlock.EAST},
+                {"cap_alt", 0, IronBarsBlock.SOUTH}, {"cap_alt", 90, IronBarsBlock.WEST}};
+        for (Object[] cap : caps) {
+            MultiPartBlockStateBuilder.PartBuilder part = builder.part().modelFile(parts.get((String) cap[0]))
+                    .rotationY((Integer) cap[1]).addModel();
+            for (BooleanProperty side : new BooleanProperty[] {IronBarsBlock.NORTH, IronBarsBlock.EAST,
+                    IronBarsBlock.SOUTH, IronBarsBlock.WEST}) {
+                part.condition(side, side == cap[2]);
+            }
+            part.end();
+        }
+        builder.part().modelFile(parts.get("side")).addModel().condition(IronBarsBlock.NORTH, true).end();
+        builder.part().modelFile(parts.get("side")).rotationY(90).addModel().condition(IronBarsBlock.EAST, true).end();
+        builder.part().modelFile(parts.get("side_alt")).addModel().condition(IronBarsBlock.SOUTH, true).end();
+        builder.part().modelFile(parts.get("side_alt")).rotationY(90).addModel().condition(IronBarsBlock.WEST, true).end();
     }
 
     /**

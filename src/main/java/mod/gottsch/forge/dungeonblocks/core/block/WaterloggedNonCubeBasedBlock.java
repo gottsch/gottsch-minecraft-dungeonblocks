@@ -97,7 +97,7 @@ public class WaterloggedNonCubeBasedBlock extends BasedBlock implements SimpleWa
 		FluidState fluidState = context.getLevel().getFluidState(blockPos);
 
 		BlockState blockState = super.getStateForPlacement(context).setValue(BASE, context.getClickedFace());
-		blockState.setValue(WATERLOGGED,  fluidState.is(Fluids.WATER));
+		blockState = blockState.setValue(WATERLOGGED,  fluidState.is(Fluids.WATER));
 
 		return blockState;
 	}

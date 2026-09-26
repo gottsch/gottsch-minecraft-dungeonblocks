@@ -1,5 +1,7 @@
 {
   "values": [
-    "dungeonblocks:iron_bars_door"
+    "dungeonblocks:iron_bars_door",
+    "dungeonblocks:dark_iron_bars_door",
+    "dungeonblocks:tarnished_dark_iron_bars_door"
   ]
 }

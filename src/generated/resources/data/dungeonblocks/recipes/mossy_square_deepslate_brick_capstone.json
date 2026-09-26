@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "dungeonblocks:mossy_square_deepslate_brick"
+  },
+  "result": "dungeonblocks:mossy_square_deepslate_brick_capstone"
+}

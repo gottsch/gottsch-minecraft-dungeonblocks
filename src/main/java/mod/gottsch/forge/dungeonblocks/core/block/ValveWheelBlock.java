@@ -55,7 +55,7 @@ public class ValveWheelBlock extends WaterloggedNonCubeFacingBlock {
 
       BlockState blockState = this.defaultBlockState().setValue(FACING,
               context.getNearestLookingDirection().getOpposite());
-      blockState.setValue(WATERLOGGED, Boolean.valueOf(fluidState.getType() == Fluids.WATER));
+      blockState = blockState.setValue(WATERLOGGED, Boolean.valueOf(fluidState.getType() == Fluids.WATER));
 
       return blockState;
    }

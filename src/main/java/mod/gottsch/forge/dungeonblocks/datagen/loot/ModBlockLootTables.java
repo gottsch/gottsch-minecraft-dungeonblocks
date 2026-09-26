@@ -20,6 +20,8 @@
 package mod.gottsch.forge.dungeonblocks.datagen.loot;
 
 import mod.gottsch.forge.dungeonblocks.core.block.DungeonBannerBlock;
+import mod.gottsch.forge.dungeonblocks.core.block.GibbetBlock;
+import mod.gottsch.forge.dungeonblocks.core.block.IronMaidenBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.SkeletonBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.SlabTableBlock;
@@ -56,6 +58,13 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 // lower half destroys the upper through updateShape, which drops - so either half
                 // yields exactly one banner, and neither yields two.
                 add(b, createSinglePropConditionTable(b, DungeonBannerBlock.HALF, DoubleBlockHalf.UPPER));
+            } else if (b instanceof IronMaidenBlock) {
+                // two halves, one item, the same shape as a door: the lower half carries the drop
+                add(b, createSinglePropConditionTable(b, IronMaidenBlock.HALF, DoubleBlockHalf.LOWER));
+            } else if (b instanceof GibbetBlock) {
+                // three parts, one item: the bottom part carries the drop, and breaking any part
+                // destroys the rest, so a gibbet yields exactly one whichever part is broken
+                add(b, createSinglePropConditionTable(b, GibbetBlock.PART, GibbetBlock.Part.BOTTOM));
             } else if (b instanceof DoorBlock) {
                 // vanilla door table: only the LOWER half drops. Breaking either half destroys the
                 // other through updateShape, which drops too - the same mechanism as the banner

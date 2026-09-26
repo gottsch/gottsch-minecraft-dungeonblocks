@@ -1,6 +1,0 @@
-# The two texture slots the sharpened log model fills in per wood.
-newmtl facet
-map_Kd #facet
-
-newmtl base
-map_Kd #base

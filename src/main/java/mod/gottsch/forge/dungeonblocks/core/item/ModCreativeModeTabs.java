@@ -18,13 +18,13 @@
 package mod.gottsch.forge.dungeonblocks.core.item;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
@@ -44,7 +44,9 @@ public class ModCreativeModeTabs {
 	public static final RegistryObject<CreativeModeTab> MOD_TAB = TABS.register("treasure_tab",
 			() -> CreativeModeTab.builder()
 					.title(Component.translatable("itemGroup.dungeonblocks"))
-					.icon(() -> new ItemStack(Blocks.MOSSY_STONE_BRICKS))
+					// a flat sprite keeps its contrast at 16px, where a 3D block item shrinks to a
+					// smudge: the skull on black cloth reads as "dungeon" at a glance
+					.icon(() -> new ItemStack(ModBlocks.UNDEAD_PENNANT.get()))
 					.displayItems((displayParams, output) -> {
 						// add all items except the logo and the decorative-entity props,
 						// which live in ENTITIES_TAB

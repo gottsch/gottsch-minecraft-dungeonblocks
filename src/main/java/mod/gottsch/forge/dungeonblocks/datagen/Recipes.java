@@ -25,11 +25,14 @@ import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.data.recipes.*;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
@@ -118,6 +121,21 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_BARS))
 					.save(recipe);
 
+			// dark iron bars: eight iron bars around a coal, blackened; the door as the iron one is
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_BARS.get(), 8)
+					.pattern("bbb")
+					.pattern("bcb")
+					.pattern("bbb")
+					.define('b', Blocks.IRON_BARS)
+					.define('c', Items.COAL)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_BARS))
+					.save(recipe);
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, ModBlocks.DARK_IRON_BARS_DOOR.get())
+					.requires(Blocks.IRON_DOOR)
+					.requires(ModBlocks.DARK_IRON_BARS.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.DARK_IRON_BARS.get()))
+					.save(recipe);
+
 			// sharpened logs: a stripped log sharpened with flint
 			sharpened(recipe, ModBlocks.SHARPENED_OAK_LOG, Blocks.STRIPPED_OAK_LOG);
 			sharpened(recipe, ModBlocks.SHARPENED_SPRUCE_LOG, Blocks.STRIPPED_SPRUCE_LOG);
@@ -130,6 +148,109 @@ public class Recipes extends RecipeProvider {
 			sharpened(recipe, ModBlocks.SHARPENED_BAMBOO_BLOCK, Blocks.STRIPPED_BAMBOO_BLOCK);
 			sharpened(recipe, ModBlocks.SHARPENED_CRIMSON_STEM, Blocks.STRIPPED_CRIMSON_STEM);
 			sharpened(recipe, ModBlocks.SHARPENED_WARPED_STEM, Blocks.STRIPPED_WARPED_STEM);
+
+			// capstones: stonecut from their source, one for one
+			ModBlocks.CAPSTONES.forEach((capstone, source) ->
+					SingleItemRecipeBuilder.stonecutting(Ingredient.of(source.get()), RecipeCategory.BUILDING_BLOCKS, capstone.get())
+							.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(source.get()))
+							.save(recipe));
+
+			// spikes: a row of nuggets for points over a row of ingots for the plate
+			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.IRON_SPIKES.get(), 2)
+					.pattern("nnn")
+					.pattern("iii")
+					.define('n', Items.IRON_NUGGET)
+					.define('i', Items.IRON_INGOT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+					.save(recipe);
+			// dark iron spikes: iron spikes blackened with coal
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.DARK_IRON_SPIKES.get())
+					.requires(ModBlocks.IRON_SPIKES.get())
+					.requires(Items.COAL)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.IRON_SPIKES.get()))
+					.save(recipe);
+
+			// cheval-de-frise: a log with a sharpened log either side of it
+			ModBlocks.CHEVALS_DE_FRISE.forEach(cheval -> {
+				String log = DataGenMaps.logOf(DataGenMaps.woodOf(cheval.getId().getPath(), "cheval_de_frise"));
+				Block sharpened = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(DungeonBlocks.MOD_ID, "sharpened_" + log));
+				ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, cheval.get())
+						.pattern("sls")
+						.define('s', sharpened)
+						.define('l', ForgeRegistries.BLOCKS.getValue(new ResourceLocation(log)))
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(sharpened))
+						.save(recipe);
+			});
+
+			// walkway bracket: stripped logs laid out as the knee brace itself
+			ModBlocks.WALKWAY_BRACKETS.forEach(bracket -> {
+				String log = DataGenMaps.logOf(DataGenMaps.woodOf(bracket.getId().getPath(), "walkway_bracket"));
+				Block stripped = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("stripped_" + log));
+				ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, bracket.get(), 4)
+						.pattern("ss")
+						.pattern("s ")
+						.define('s', stripped)
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(stripped))
+						.save(recipe);
+			});
+
+			// portcullis: iron bars braced with ingots; the winch is a drum, a chain and iron
+			ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ModBlocks.PORTCULLIS.get(), 4)
+					.pattern("bib")
+					.pattern("bib")
+					.define('b', Blocks.IRON_BARS)
+					.define('i', Items.IRON_INGOT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_BARS))
+					.save(recipe);
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, ModBlocks.PORTCULLIS_WINCH.get())
+					.requires(Blocks.STRIPPED_SPRUCE_LOG)
+					.requires(Blocks.CHAIN)
+					.requires(Items.IRON_INGOT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.PORTCULLIS.get()))
+					.save(recipe);
+
+			// sarcophagi: a lid of slabs over a chest of the carved block
+			sarcophagus(recipe, ModBlocks.STONE_SARCOPHAGUS, Blocks.SMOOTH_STONE_SLAB, Blocks.CHISELED_STONE_BRICKS);
+			sarcophagus(recipe, ModBlocks.DEEPSLATE_SARCOPHAGUS, Blocks.POLISHED_DEEPSLATE_SLAB, Blocks.CHISELED_DEEPSLATE);
+
+			// iron maiden: an iron case around iron bars
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.IRON_MAIDEN.get())
+					.pattern("iii")
+					.pattern("ibi")
+					.pattern("iii")
+					.define('i', Items.IRON_INGOT)
+					.define('b', Blocks.IRON_BARS)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+					.save(recipe);
+
+			// gibbet: a cage of iron bars around a bone block
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.GIBBET.get())
+					.pattern("bbb")
+					.pattern("bxb")
+					.pattern("bbb")
+					.define('b', Blocks.IRON_BARS)
+					.define('x', Blocks.BONE_BLOCK)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.IRON_BARS))
+					.save(recipe);
+
+			// firewood rack: logs between two hoops of iron bars - any log a campfire would burn
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.FIREWOOD_RACK.get())
+					.pattern("b b")
+					.pattern("lll")
+					.pattern("b b")
+					.define('b', Blocks.IRON_BARS)
+					.define('l', ItemTags.LOGS_THAT_BURN)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.IRON_BARS))
+					.save(recipe);
+
+			// weapon rack: a rail of iron bars on two iron legs
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.WEAPON_RACK.get())
+					.pattern("bbb")
+					.pattern("i i")
+					.define('b', Blocks.IRON_BARS)
+					.define('i', Items.IRON_INGOT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+					.save(recipe);
 
 			// grate trapdoors
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_HEAVY_TRAPDOOR.get())
@@ -196,7 +317,9 @@ public class Recipes extends RecipeProvider {
 					.pattern("xxx")
 					.define('x', Ingredient.of(ModBlocks.HAY_PATCH.get(), ModBlocks.DIRTY_HAY_PATCH.get()))
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.HAY_PATCH.get()))
-					.save(recipe);
+					// its own id: saved under the result's default id it was minecraft:hay_block,
+					// which REPLACED vanilla's nine-wheat hay bale recipe
+					.save(recipe, new ResourceLocation(DungeonBlocks.MOD_ID, "hay_block_from_hay_patches"));
 
 			// barred windows
 			ingredientMap.clear();
@@ -372,6 +495,16 @@ public class Recipes extends RecipeProvider {
 		 * Shapeless: the stripped block plus flint to sharpen it. The flint is what keeps this clear
 		 * of vanilla's one-log-to-planks recipe, which a lone stripped log would collide with.
 		 */
+		private static void sarcophagus(Consumer<FinishedRecipe> recipe, RegistryObject<Block> sarcophagus, Block slab, Block carved) {
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, sarcophagus.get())
+					.pattern("sss")
+					.pattern("ccc")
+					.define('s', slab)
+					.define('c', carved)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(carved))
+					.save(recipe);
+		}
+
 		private static void sharpened(Consumer<FinishedRecipe> recipe, RegistryObject<Block> sharpened, Block stripped) {
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, sharpened.get())
 					.requires(stripped)

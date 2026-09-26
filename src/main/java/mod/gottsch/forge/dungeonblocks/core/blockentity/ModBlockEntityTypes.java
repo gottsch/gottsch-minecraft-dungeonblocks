@@ -48,6 +48,20 @@ public class ModBlockEntityTypes {
 									.toArray(net.minecraft.world.level.block.Block[]::new))
 							.build(null));
 
+	/** Both sarcophagi, both halves: the type only carries the lid renderer. */
+	public static final RegistryObject<BlockEntityType<SarcophagusBlockEntity>> SARCOPHAGUS =
+			Registration.BLOCK_ENTITY_TYPES.register("sarcophagus",
+					() -> BlockEntityType.Builder
+							.of(SarcophagusBlockEntity::new, ModBlocks.STONE_SARCOPHAGUS.get(), ModBlocks.DEEPSLATE_SARCOPHAGUS.get())
+							.build(null));
+
+	/** The weapons on a weapon rack, for WeaponRackRenderer to draw. */
+	public static final RegistryObject<BlockEntityType<WeaponRackBlockEntity>> WEAPON_RACK =
+			Registration.BLOCK_ENTITY_TYPES.register("weapon_rack",
+					() -> BlockEntityType.Builder
+							.of(WeaponRackBlockEntity::new, ModBlocks.WEAPON_RACK.get())
+							.build(null));
+
 	public static void register(IEventBus bus) {
 		Registration.registerBlockEntityTypes(bus);
 	}

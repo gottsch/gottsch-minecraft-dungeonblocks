@@ -69,6 +69,23 @@ public class DataGenMaps {
             "wall_ring"
     );
 
+    /**
+     * Vanilla's word for a wood's log block, from the wood's name: the nether woods grow stems and
+     * bamboo a block. The palisade pieces are named by wood, their textures by log.
+     */
+    public static String logOf(String wood) {
+        return switch (wood) {
+            case "crimson", "warped" -> wood + "_stem";
+            case "bamboo" -> "bamboo_block";
+            default -> wood + "_log";
+        };
+    }
+
+    /** The wood a palisade piece is made of: its id, less the piece's own name. */
+    public static String woodOf(String id, String piece) {
+        return id.substring(0, id.length() - piece.length() - 1);
+    }
+
     public List<String> stone_blocks = Arrays.asList(
             "barred_window",
             // Without this, only the arrow slits whose MATERIAL name happens to contain another

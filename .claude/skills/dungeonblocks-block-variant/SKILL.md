@@ -1,6 +1,6 @@
 ---
 name: dungeonblocks-block-variant
-description: How to add a block or block variant to the DungeonBlocks Forge mod — mossy overlays, rust/weathering stages, palette retones, and the registration, datagen, tag and verification steps they all share. Use this whenever the user asks for a mossy, rusted, weathered, cracked, chiseled, polished or otherwise retextured version of a block, a new stone material or block family, or any new block in this repo at all — the block-tag trap in step 3 silently breaks drops on new blocks and applies even when no new texture is involved.
+description: How to add a block or block variant to the DungeonBlocks Forge mod — mossy overlays, rust/weathering stages, palette retones, non-cube shapes (points, slopes, angled timbers via OBJ), see-through doors, multi-block props with moving parts and their Blockbench models, and the registration, datagen, tag and verification steps they all share. Use this whenever the user asks for a mossy, rusted, weathered, cracked, chiseled, polished or otherwise retextured version of a block, a new stone material or block family, a new shape, door, prop or piece of furniture, or any new block in this repo at all — the block-tag trap in step 3 silently breaks drops on new blocks and applies even when no new texture is involved.
 ---
 
 # Adding a block variant to DungeonBlocks
@@ -18,7 +18,13 @@ pillar, arrow slit). That is the right call when the stone should behave like a 
 material. A single block is right when the stone is a pillar with a distinct top, or when nothing
 else in the mod has that stone's decorative pieces. **Ask the user which they want if the request
 is ambiguous** — the difference is 1 block versus 37, and it is not recoverable cheaply once
-players have placed them.
+players have placed them. One standing answer: "make a mossy version of X" means **the full block
+only** — the user said so (Mossy Tuff); offer the family, stairs or slab in one line instead.
+
+**Is it a new shape, a door, or a multi-block prop?** Those have their own sections in step 2:
+[shapes JSON cannot make](#shapes-json-cannot-make-points-slopes-angled-timbers),
+[see-through doors](#see-through-doors) and
+[multi-block props, moving parts and Blockbench models](#multi-block-props-moving-parts-and-blockbench-models).
 
 **Does the texture already exist?** If so, skip to step 2.
 
@@ -35,7 +41,10 @@ method.
 | One stone's pattern in another stone's colours | `tools/gen_deepslate_brick_textures.py` | a pair to `PAIRS` |
 
 Generated PNGs are overwritten on the next run, so never hand-edit them — fix the table instead.
-(`tools/gen_banner_textures.py` is the same deal for the 36 banner textures.)
+(`tools/gen_banner_textures.py` is the same deal for the 36 banner textures.) One-off generators
+exist too, each with its method in its docstring: `gen_iron_bars_door_textures.py` (its door FACES
+were hand-touched by the user, so a plain run writes only the edge texture; `--faces` discards
+their edits), `gen_polished_dark_iron_texture.py`, `gen_dirty_hay_texture.py`.
 
 ### Moss
 
@@ -86,8 +95,12 @@ luminance formula used for the pot textures is only needed for continuous-tone s
 
 **A flat 16×16 preview is not enough.** A texture sampled as thin strips — grates, bars, pillars,
 trapdoors — reads completely differently in place. Render the actual model and look at it before
-showing the user. `C:\Development\claude\minecraft\forge\dungeonblocks\3.0.0\rusted-grate\preview.py`
-composites a model's faces over a floor/wall and is worth copying for this.
+showing the user. `scripts/preview.py` (in this skill) renders block model JSONs, OBJ models and
+plain cubes with their real textures, from any angle - its docstring has a worked example. It is
+not the game's lighting: trust it for shape, UV mapping and texture choice, not brightness.
+
+Whenever you tell the user a preview exists, **actually send it** (SendUserFile) and check the
+send succeeded. A preview that silently fails to send reads to them as no preview at all.
 
 Then show the user the image and **wait**. Brightness and moss-placement calls have been wrong
 before and were only caught by eye. Do not wire 37 blocks around an unapproved texture.
@@ -135,6 +148,87 @@ The blockstate, item-model and recipe providers dispatch on **block-id substring
 `quarter_facade` before `facade`). Name a block conventionally and it is picked up for free. That
 same substring dispatch is what causes the trap below.
 
+### Shapes JSON cannot make (points, slopes, angled timbers)
+
+JSON block models are axis-aligned boxes, rotatable only 22.5/45 degrees on one axis. Anything
+sloped or pointed - the sharpened logs, capstones, spikes, cheval-de-frise, walkway bracket,
+portcullis - is an **OBJ model through Forge's OBJ loader**, not a block entity renderer: it bakes
+into the chunk mesh once and costs nothing per frame.
+
+- **Add the shape to `tools/gen_obj_models.py`** (boxes and pyramids in pixel units, `grain` for
+  wood direction, `rotate` for angles) and run it. Never hand-write an OBJ. The script asserts face
+  winding (a backwards face is invisible) and that every UV lies on its sprite - an off-sprite UV
+  silently samples the next texture in the atlas, which is how the iron maiden's spikes first came
+  out gold.
+- **Datagen:** `ModBlockStateProvider.objModel(name, obj, textures...)`; add the OBJ's material
+  slots to its switch. Models root at `block_no_ao` (a child's own ambientocclusion flag is ignored).
+- **One OBJ per shape, textures per block**, via the .mtl's `#slot` references - 11 woods or 34
+  stones share one file.
+- A block whose flat base must hide against what it sits on needs a real **occlusion shape** on
+  that side only (see `PyramidBlock.slabs`) - not `noOcclusion`, and not a full cube, which would
+  cull its neighbours' faces and leave holes.
+- **Porting:** NeoForge 21.1 registers the loader as `neoforge:obj`, not `forge:obj`. Datagen writes
+  the id, so a ported datagen emits the right one; the .obj/.mtl files carry over unchanged.
+
+### See-through doors
+
+Vanilla door models cut BOTH thin side edges from the hinge side's texture columns 0-2, and the caps
+from the end rows. On a see-through door that shows gaps and hinges on the handle edge. Use
+`ModBlockStateProvider.edgedDoor(block, textureName)`, whose `template_edged_door_*` parents read
+the edges from a dedicated `<name>_edge.png` (strip layout in `gen_iron_bars_door_textures.py`).
+A door that opens by hand but must keep villagers out and survive zombies keeps `BlockSetType.IRON`
+and overrides `use()` (see `IronBarsDoorBlock`) - a hand-openable set type makes it a wooden door
+to the AI. `ModBlockLootTables` has a `DoorBlock` branch so only the lower half drops.
+
+### Multi-block props, moving parts and Blockbench models
+
+The sarcophagus, iron maiden and gibbet are the worked examples.
+
+- **Blockbench is the source.** One `blockbench/<name>_<part>.bbmodel` per block of the prop (the
+  java_block format only allows -16..32). `tools/bbmodel_to_block_models.py` builds the game models:
+  its JOBS table turns element GROUPS on or off per output (`doors_closed`/`doors_open`), splits a
+  moving part out on its own, adds cullface to flush faces and converts per-texture UV sizes. A
+  texture's NAME in Blockbench is the model's texture key. Never hand-edit the output.
+- **Parts:** two horizontal - extend `SlabTableBlock` (FOOT where clicked, HEAD ahead); two tall -
+  copy `IronMaidenBlock`; three tall - copy `GibbetBlock`'s enum PART. Each: placement returns null
+  unless every part's space is free, `updateShape` destroys the rest when a part goes,
+  `playerWillDestroy` clears the dropping part with flag 35 in creative, and ONE part carries the
+  drop in `ModBlockLootTables` (enum property - the helper rejects an IntegerProperty).
+- **Layering models:** a MULTIPART blockstate draws every entry whose `when` matches, so a
+  Blockbench body and OBJ spikes can share one state (the iron maiden).
+- **A moving part is drawn like a chest lid: always by a renderer, never baked.** The sarcophagus
+  tried stepped baked frames (choppy) and then baking at rest with a renderer only while moving,
+  which **flickered at both hand-offs** - the renderer switches on the frame the state changes, the
+  chunk re-mesh lands a frame or more later. Never split one visible part between the baked mesh
+  and a renderer over time. No ticking is needed: keep client-only animation fields on the block
+  entity and start a slide when the state differs from what is shown (`SarcophagusRenderer`).
+  Keep a baked "closed" model for the item, which has no renderer. Register the part-only models in
+  `ClientSetup` (`ModelEvent.RegisterAdditional`), and apply the per-face shade yourself
+  (`getShade`, turned by the facing): `ModelBlockRenderer.renderModel` skips it and the part comes
+  out too light.
+- **A prop that holds items** (the weapon rack): keep the items in a block entity (a `NonNullList`,
+  synced with `getUpdatePacket`/`getUpdateTag`, cleared before `loadAllItems`), make it
+  `Clearable` so a structure can replace it without spilling, and drop the contents in `onRemove`.
+  Draw them with `ItemRenderer.renderStatic(..., ItemDisplayContext.FIXED, ...)` in a renderer, so
+  glint and modded models come free. The transform math is in memory `item-sprite-upright-in-ber`.
+  An item has no renderer, so give the item model a static stand-in for what the renderer draws:
+  `weapon_rack_item` uses item sprites on planes, which works because `textures/item/` is on the
+  block atlas.
+- **Mob textures in block models** need the texture added to the block atlas:
+  `assets/minecraft/atlases/blocks.json` (the gibbet's skeleton). See-through textures need
+  `render_type: cutout`, or the gaps draw black.
+
+### Properties traps
+
+- **Never `Properties.copy` a vanilla log** onto a block without an `AXIS` property: its map-colour
+  function reads AXIS and crashes on first lookup. Spell the properties out (see the palisade
+  helper in `ModBlocks`).
+- **`stateDefinition.any()` gives every unset boolean `true`.** A subclass that adds boolean
+  properties to an inherited default must set them in `registerDefaultState`, or it places in the
+  wrong state - every sarcophagus came out open and stuck.
+- A carpet-like block with a see-through texture needs `noOcclusion()`, or it culls the top face of
+  the block beneath and its gaps look through a hole in the ground.
+
 ## Step 3: The tag trap — check this every single time
 
 `ModBlockTagGenerator` tags by substring match against `DataGenMaps.stone_blocks`. **A block whose
@@ -155,6 +249,12 @@ mossy-deepslate-tiles comments) over adding a new substring to `stone_blocks` �
 also pulls blocks into model and recipe generation. Adding a substring is right only when a whole
 *category* is missing, as with `arrow_slit`. Match the tier the mod already uses for that family
 rather than inventing one, and say so if that differs from vanilla.
+
+**The same kind of silent trap in recipes:** a recipe whose RESULT is a vanilla item is saved by
+default under that item's id - in the `minecraft` namespace - and **replaces vanilla's recipe**. The
+hay-patch recipe did exactly this and removed wheat-to-hay-bale for as long as the mod was
+installed. Give such a recipe its own id: `.save(recipe, new ResourceLocation(MOD_ID, "..."))`.
+`src/generated/resources/data/minecraft/recipes/` should not exist.
 
 ## Step 4: Verify
 

@@ -5,7 +5,9 @@ import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.ModBlockEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.DungeonBannerModel;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.DungeonBannerRenderer;
+import mod.gottsch.forge.dungeonblocks.core.blockentity.client.SarcophagusRenderer;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.SwingingChainRenderer;
+import mod.gottsch.forge.dungeonblocks.core.blockentity.client.WeaponRackRenderer;
 import mod.gottsch.forge.dungeonblocks.core.entity.ModEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.BigRedPotionModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.PotItemRenderer;
@@ -20,10 +22,14 @@ import mod.gottsch.forge.dungeonblocks.core.entity.client.ThinClayPotModel;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 
@@ -132,5 +138,21 @@ public class ClientSetup {
         event.registerEntityRenderer(ModEntityTypes.POT_SHARD.get(), PotShardRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.SWINGING_CHAIN.get(), SwingingChainRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.DUNGEON_BANNER.get(), DungeonBannerRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityTypes.SARCOPHAGUS.get(), SarcophagusRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityTypes.WEAPON_RACK.get(), WeaponRackRenderer::new);
+    }
+
+    /**
+     * The sarcophagus lid-only models. No blockstate references them - they exist only for
+     * SarcophagusRenderer to draw the sliding lid - so they have to be registered to be baked.
+     */
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
+        for (RegistryObject<Block> block : List.of(ModBlocks.STONE_SARCOPHAGUS, ModBlocks.DEEPSLATE_SARCOPHAGUS)) {
+            for (BedPart part : BedPart.values()) {
+                event.register(SarcophagusRenderer.lidModel(block.getId(), part));
+            }
+        }
     }
 }

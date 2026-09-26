@@ -57,7 +57,7 @@ public class LanguageGen extends LanguageProvider {
             // these are given custom display names below. LanguageProvider.add() throws on a
             // duplicate key rather than overwriting, so anything named by hand has to be skipped
             // here or datagen dies outright.
-            if (NAMED_BY_HAND.contains(k)) {
+            if (NAMED_BY_HAND.contains(k) || ModBlocks.CHEVALS_DE_FRISE.contains(k)) {
                 return;
             }
             String s = k.getId().getPath().replace("_block", "").replace("_", " ").trim();
@@ -71,6 +71,14 @@ public class LanguageGen extends LanguageProvider {
         add(ModBlocks.ORC_BANNER.get(), "Orc War Banner");
         add(ModBlocks.TATTERED_ORC_BANNER.get(), "Tattered Orc War Banner");
         add(ModBlocks.BLOODSTAINED_ORC_BANNER.get(), "Bloodstained Orc War Banner");
+
+        // the auto-name would be "Oak Cheval De Frise"; the word is hyphenated
+        ModBlocks.CHEVALS_DE_FRISE.forEach(b -> add(b.get(), WordUtils.capitalizeFully(
+                DataGenMaps.woodOf(b.getId().getPath(), "cheval_de_frise").replace("_", " ")) + " Cheval-de-Frise"));
+
+        // death messages for the spikes damage type (data/dungeonblocks/damage_type/spikes.json)
+        add("death.attack." + DungeonBlocks.MOD_ID + ".spikes", "%1$s was impaled on spikes");
+        add("death.attack." + DungeonBlocks.MOD_ID + ".spikes.player", "%1$s was impaled on spikes whilst fighting %2$s");
 
         add(ModBlocks.MOLD.get(), "Mold");
         add(ModBlocks.LICHEN.get(), "Lichen");

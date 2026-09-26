@@ -143,7 +143,7 @@ public class SlabTableBlock extends HorizontalDirectionalBlock {
     }
 
     /** Direction from this half toward its partner. */
-    private static Direction towardOtherHalf(BlockState state) {
+    protected static Direction towardOtherHalf(BlockState state) {
         Direction facing = state.getValue(FACING);
         return state.getValue(PART) == BedPart.FOOT ? facing : facing.getOpposite();
     }

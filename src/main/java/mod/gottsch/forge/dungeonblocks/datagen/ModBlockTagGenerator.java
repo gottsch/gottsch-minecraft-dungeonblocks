@@ -178,10 +178,54 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // what villagers path through.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.IRON_BARS_DOOR.get());
         this.tag(BlockTags.DOORS).add(ModBlocks.IRON_BARS_DOOR.get());
+        // the dark iron bars and their doors: the same, and pickaxe-only like vanilla iron bars
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.DARK_IRON_BARS.get(), ModBlocks.TARNISHED_DARK_IRON_BARS.get(),
+                ModBlocks.DARK_IRON_BARS_DOOR.get(), ModBlocks.TARNISHED_DARK_IRON_BARS_DOOR.get());
+        this.tag(BlockTags.DOORS).add(ModBlocks.DARK_IRON_BARS_DOOR.get(), ModBlocks.TARNISHED_DARK_IRON_BARS_DOOR.get());
 
         // Sharpened logs are wood: axe, no tier, like vanilla logs. Their ids match nothing in
         // stone_blocks, and must stay out of that sweep, which would tag them for a pickaxe.
         ModBlocks.SHARPENED_LOGS.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
+        ModBlocks.CHEVALS_DE_FRISE.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
+        ModBlocks.WALKWAY_BRACKETS.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
+
+        // Capstones copy their source stone, requiresCorrectToolForDrops included. The brick ones
+        // match "brick"/"square"/"large" and the stone_blocks sweep above already tags them; the
+        // sandstones, polished blackstone and polished andesite match nothing there. Those are
+        // tagged here, at the stone tier the sweep gives the rest of the mod's stone.
+        ModBlocks.CAPSTONES.keySet().stream()
+                .filter(b -> maps.stone_blocks.stream().noneMatch(n -> b.getId().getPath().contains(n)))
+                .forEach(b -> {
+                    this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get());
+                    this.tag(BlockTags.NEEDS_STONE_TOOL).add(b.get());
+                });
+
+        // Spikes require the correct tool (as iron bars do) and match nothing in stone_blocks.
+        // Pickaxe, no tier, like vanilla iron bars.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.IRON_SPIKES.get(), ModBlocks.DARK_IRON_SPIKES.get());
+        // Dungeon furniture matches nothing in stone_blocks either. The sarcophagi copy stone bricks
+        // (stone tier, like the mod's other stone); the iron pieces are pickaxe-only like iron bars.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.STONE_SARCOPHAGUS.get(), ModBlocks.DEEPSLATE_SARCOPHAGUS.get(),
+                ModBlocks.IRON_MAIDEN.get(), ModBlocks.GIBBET.get());
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.STONE_SARCOPHAGUS.get(), ModBlocks.DEEPSLATE_SARCOPHAGUS.get());
+
+        // Same for the portcullis and its winch
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.PORTCULLIS.get(), ModBlocks.PORTCULLIS_WINCH.get());
+
+        // The racks match nothing in stone_blocks either. Neither requires a tool to drop; these
+        // only make the right one faster - an axe for the firewood, a pickaxe for the iron rack.
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.FIREWOOD_RACK.get());
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.WEAPON_RACK.get());
+
+        // "brazier" and "lantern" match nothing in stone_blocks, so neither block was ever tagged.
+        // The brazier drops to anything, but a pickaxe mined it no faster than a bare hand. The
+        // dungeon lantern copies vanilla lantern's requiresCorrectToolForDrops, so with no tool tag
+        // it could never be mined for a drop at all. Pickaxe, no tier: vanilla's lantern exactly.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.BRAZIER.get(), ModBlocks.DUNGEON_LANTERN.get());
+        // The sconces and the wall ring had the brazier's gap: in no tool tag, so no faster to mine
+        // with a pickaxe than by hand. None requires a tool to drop, so no tier.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.CANDLE_SCONCE.get(), ModBlocks.TORCH_SCONCE.get(),
+                ModBlocks.WALL_RING.get());
 
         // Dark iron grates and heavy trapdoors, plain and rusted, belonged to no tool tag, so a
         // pickaxe mined them no faster than a bare hand. Pickaxe only, no tier tag: they do not

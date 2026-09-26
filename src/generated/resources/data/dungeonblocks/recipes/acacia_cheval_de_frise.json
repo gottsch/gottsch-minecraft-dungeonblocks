@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "l": {
+      "item": "minecraft:acacia_log"
+    },
+    "s": {
+      "item": "dungeonblocks:sharpened_acacia_log"
+    }
+  },
+  "pattern": [
+    "sls"
+  ],
+  "result": {
+    "item": "dungeonblocks:acacia_cheval_de_frise"
+  },
+  "show_notification": true
+}

@@ -2,7 +2,7 @@
   "parent": "dungeonblocks:block/block_no_ao",
   "flip_v": true,
   "loader": "forge:obj",
-  "model": "dungeonblocks:models/block/sharpened_log.obj",
+  "model": "dungeonblocks:models/block/pyramid.obj",
   "textures": {
     "base": "minecraft:block/stripped_cherry_log_top",
     "facet": "minecraft:block/stripped_cherry_log",

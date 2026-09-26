@@ -247,7 +247,31 @@ public class ItemModelsProvider extends ItemModelProvider {
 		basicItem(ModBlocks.MAP.get(ModBlocks.WAX_WEATHERED_COPPER_DOOR), modLoc("item/weathered_copper_door"));
 		basicItem(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_DOOR), modLoc("item/oxidized_copper_door"));
 		basicItem(ModBlocks.MAP.get(ModBlocks.IRON_BARS_DOOR), modLoc("item/iron_bars_door"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.DARK_IRON_BARS_DOOR), modLoc("item/dark_iron_bars_door"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.TARNISHED_DARK_IRON_BARS_DOOR), modLoc("item/tarnished_dark_iron_bars_door"));
+		// bars show their flat texture in the inventory, as vanilla iron bars do
+		basicItem(ModBlocks.MAP.get(ModBlocks.DARK_IRON_BARS), modLoc("block/dark_iron_bars"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.TARNISHED_DARK_IRON_BARS), modLoc("block/tarnished_dark_iron_bars"));
 		ModBlocks.SHARPENED_LOGS.forEach(b -> blockItemParent(ModBlocks.MAP.get(b)));
+		ModBlocks.CAPSTONES.keySet().forEach(b -> blockItemParent(ModBlocks.MAP.get(b)));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.IRON_SPIKES));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_SPIKES));
+		ModBlocks.CHEVALS_DE_FRISE.forEach(b -> blockItemParent(ModBlocks.MAP.get(b)));
+		ModBlocks.WALKWAY_BRACKETS.forEach(b -> blockItemParent(ModBlocks.MAP.get(b)));
+		// the portcullis item shows a bottom cell, tips and all - the piece that says "portcullis"
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.PORTCULLIS), modLoc("block/portcullis_bottom"));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.PORTCULLIS_WINCH));
+		// multi-block props show the part that says what they are: the effigy's head end, the
+		// iron maiden's hooded head, the gibbet's caged skull
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.STONE_SARCOPHAGUS), modLoc("block/stone_sarcophagus_head_closed"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_SARCOPHAGUS), modLoc("block/deepslate_sarcophagus_head_closed"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.IRON_MAIDEN), modLoc("block/iron_maiden_upper_closed"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.GIBBET), modLoc("block/gibbet_top"));
+		// the item shows a full rack, though a placed one starts empty
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.FIREWOOD_RACK), modLoc("block/firewood_rack_4"));
+		// an empty rack reads as a bare frame at icon size, and an item has no renderer to hang
+		// weapons in it, so the item's model has a sword and an axe racked
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEAPON_RACK), modLoc("block/weapon_rack_item"));
 
 		// copper trapdoor items: parent to the generated bottom model
 		copperTrapdoorItem(ModBlocks.COPPER_TRAPDOOR);

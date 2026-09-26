@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "dungeonblocks:mossy_large_bricks"
+  },
+  "result": "dungeonblocks:mossy_large_brick_capstone"
+}

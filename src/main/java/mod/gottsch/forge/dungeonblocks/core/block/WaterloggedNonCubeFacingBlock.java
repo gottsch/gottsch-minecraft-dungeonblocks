@@ -73,7 +73,7 @@ public class WaterloggedNonCubeFacingBlock extends FacingBlock implements Simple
 
 		BlockState blockState = this.defaultBlockState().setValue(FACING,
 				context.getHorizontalDirection().getOpposite());
-		blockState.setValue(WATERLOGGED, Boolean.valueOf(fluidState.getType() == Fluids.WATER));
+		blockState = blockState.setValue(WATERLOGGED, Boolean.valueOf(fluidState.getType() == Fluids.WATER));
 
 		return blockState;
 	}
