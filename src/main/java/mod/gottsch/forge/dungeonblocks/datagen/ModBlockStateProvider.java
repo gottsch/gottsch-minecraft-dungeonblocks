@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.client.model.generators.*;
+import net.minecraftforge.client.model.generators.loaders.ObjModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -211,6 +212,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         copperDoor(ModBlocks.WAX_WEATHERED_COPPER_DOOR, "weathered_copper_door");
         copperDoor(ModBlocks.WAXED_OXIDIZED_COPPER_DOOR, "oxidized_copper_door");
         edgedDoor(ModBlocks.IRON_BARS_DOOR, "iron_bars_door");
+        ModBlocks.SHARPENED_LOGS.forEach(this::sharpenedLog);
 
         // copper trapdoors (waxed variants reuse the un-waxed trapdoor textures)
         copperTrapDoor(ModBlocks.COPPER_TRAPDOOR, "copper_trapdoor");
@@ -413,6 +415,27 @@ public class ModBlockStateProvider extends BlockStateProvider {
         doorBlockWithRenderType((DoorBlock) block.get(),
                 modLoc("block/" + textureName + "_bottom"),
                 modLoc("block/" + textureName + "_top"), "minecraft:cutout");
+    }
+
+    /**
+     * A sharpened log over the shared pyramid OBJ: stripped-log facets, with the stripped log's end
+     * grain on the (normally hidden) base. Rooted at block_no_ao because the sloped facets are not
+     * axis-aligned, and a model's own ambientocclusion flag is ignored unless it is the root.
+     * The OBJ points up; directionalBlock turns it to each FACING the way vanilla turns an end rod.
+     */
+    public void sharpenedLog(RegistryObject<Block> block) {
+        String name = block.getId().getPath();
+        // ids follow vanilla's stripped block word for word: sharpened_oak_log <- stripped_oak_log
+        String stripped = "stripped_" + name.substring("sharpened_".length());
+        BlockModelBuilder model = models().withExistingParent(name, modLoc("block/block_no_ao"))
+                .customLoader(ObjModelBuilder::begin)
+                .modelLocation(modLoc("models/block/sharpened_log.obj"))
+                .flipV(true)
+                .end()
+                .texture("facet", mcLoc("block/" + stripped))
+                .texture("base", mcLoc("block/" + stripped + "_top"))
+                .texture("particle", mcLoc("block/" + stripped));
+        directionalBlock(block.get(), model);
     }
 
     /**

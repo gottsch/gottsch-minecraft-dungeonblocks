@@ -118,6 +118,19 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_BARS))
 					.save(recipe);
 
+			// sharpened logs: a stripped log sharpened with flint
+			sharpened(recipe, ModBlocks.SHARPENED_OAK_LOG, Blocks.STRIPPED_OAK_LOG);
+			sharpened(recipe, ModBlocks.SHARPENED_SPRUCE_LOG, Blocks.STRIPPED_SPRUCE_LOG);
+			sharpened(recipe, ModBlocks.SHARPENED_BIRCH_LOG, Blocks.STRIPPED_BIRCH_LOG);
+			sharpened(recipe, ModBlocks.SHARPENED_JUNGLE_LOG, Blocks.STRIPPED_JUNGLE_LOG);
+			sharpened(recipe, ModBlocks.SHARPENED_ACACIA_LOG, Blocks.STRIPPED_ACACIA_LOG);
+			sharpened(recipe, ModBlocks.SHARPENED_DARK_OAK_LOG, Blocks.STRIPPED_DARK_OAK_LOG);
+			sharpened(recipe, ModBlocks.SHARPENED_MANGROVE_LOG, Blocks.STRIPPED_MANGROVE_LOG);
+			sharpened(recipe, ModBlocks.SHARPENED_CHERRY_LOG, Blocks.STRIPPED_CHERRY_LOG);
+			sharpened(recipe, ModBlocks.SHARPENED_BAMBOO_BLOCK, Blocks.STRIPPED_BAMBOO_BLOCK);
+			sharpened(recipe, ModBlocks.SHARPENED_CRIMSON_STEM, Blocks.STRIPPED_CRIMSON_STEM);
+			sharpened(recipe, ModBlocks.SHARPENED_WARPED_STEM, Blocks.STRIPPED_WARPED_STEM);
+
 			// grate trapdoors
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_HEAVY_TRAPDOOR.get())
 					.requires(Blocks.IRON_TRAPDOOR)
@@ -352,6 +365,18 @@ public class Recipes extends RecipeProvider {
 					.define('x', slab)
 					.define('y', base)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(base))
+					.save(recipe);
+		}
+
+		/**
+		 * Shapeless: the stripped block plus flint to sharpen it. The flint is what keeps this clear
+		 * of vanilla's one-log-to-planks recipe, which a lone stripped log would collide with.
+		 */
+		private static void sharpened(Consumer<FinishedRecipe> recipe, RegistryObject<Block> sharpened, Block stripped) {
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, sharpened.get())
+					.requires(stripped)
+					.requires(Items.FLINT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(stripped))
 					.save(recipe);
 		}
 }

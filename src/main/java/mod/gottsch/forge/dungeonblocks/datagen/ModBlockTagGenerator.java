@@ -179,6 +179,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.IRON_BARS_DOOR.get());
         this.tag(BlockTags.DOORS).add(ModBlocks.IRON_BARS_DOOR.get());
 
+        // Sharpened logs are wood: axe, no tier, like vanilla logs. Their ids match nothing in
+        // stone_blocks, and must stay out of that sweep, which would tag them for a pickaxe.
+        ModBlocks.SHARPENED_LOGS.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
+
         // Dark iron grates and heavy trapdoors, plain and rusted, belonged to no tool tag, so a
         // pickaxe mined them no faster than a bare hand. Pickaxe only, no tier tag: they do not
         // require the correct tool for drops and never have, so they still drop to anything.

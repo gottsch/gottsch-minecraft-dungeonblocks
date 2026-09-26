@@ -1,0 +1,11 @@
+{
+  "parent": "dungeonblocks:block/block_no_ao",
+  "flip_v": true,
+  "loader": "forge:obj",
+  "model": "dungeonblocks:models/block/sharpened_log.obj",
+  "textures": {
+    "base": "minecraft:block/stripped_oak_log_top",
+    "facet": "minecraft:block/stripped_oak_log",
+    "particle": "minecraft:block/stripped_oak_log"
+  }
+}

@@ -1,0 +1,29 @@
+# Sharpened log: a square pyramid over a full block, apex 1 block up.
+# Units are blocks: Forge's OBJ loader uses positions as-is. Facets are CCW from
+# outside with outward normals; the base faces down and auto-culls against the log.
+mtllib sharpened_log.mtl
+o sharpened_log
+v 0 0 0
+v 1 0 0
+v 1 0 1
+v 0 0 1
+v 0.5 1.0 0.5
+vt 0 0
+vt 1 0
+vt 0.5 1
+vt 0 0
+vt 1 0
+vt 1 1
+vt 0 1
+vn 0.0 0.447214 -0.894427
+vn -0.894427 0.447214 0.0
+vn -0.0 0.447214 0.894427
+vn 0.894427 0.447214 0.0
+vn 0 -1 0
+usemtl facet
+f 2/1/1 1/2/1 5/3/1
+f 1/1/2 4/2/2 5/3/2
+f 4/1/3 3/2/3 5/3/3
+f 3/1/4 2/2/4 5/3/4
+usemtl base
+f 1/4/5 2/5/5 3/6/5 4/7/5

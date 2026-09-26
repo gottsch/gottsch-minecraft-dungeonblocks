@@ -36,6 +36,7 @@ import net.minecraft.world.level.block.WeatheringCopper.WeatherState;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.RegistryObject;
@@ -675,6 +676,36 @@ public class ModBlocks {
     // iron block set type anyway.
     public static final RegistryObject<Block> IRON_BARS_DOOR = Registration.BLOCKS.register("iron_bars_door",
             () -> new IronBarsDoorBlock(Properties.copy(Blocks.IRON_DOOR)));
+
+    // Sharpened logs: the point of a palisade stake, set on the end of a log, one per vanilla wood.
+    // Named after the stripped block they are crafted from, in vanilla's own words for it (log,
+    // stem, block), so a creative search for "oak log" finds them. Properties are spelled out rather than copied from a log: vanilla log properties carry a map
+    // colour function that reads the AXIS property, which this block does not have, so copying them
+    // would crash the first time anything asked for its map colour. Values match the vanilla log -
+    // strength 2, its wood's sound, its planks' map colour, and lava-flammable except the nether
+    // stems. Every sharpened log is listed in SHARPENED_LOGS, which the datagen providers iterate.
+    public static final List<RegistryObject<Block>> SHARPENED_LOGS = new ArrayList<>();
+    public static final RegistryObject<Block> SHARPENED_OAK_LOG = sharpened("oak_log", MapColor.WOOD, SoundType.WOOD, true);
+    public static final RegistryObject<Block> SHARPENED_SPRUCE_LOG = sharpened("spruce_log", MapColor.PODZOL, SoundType.WOOD, true);
+    public static final RegistryObject<Block> SHARPENED_BIRCH_LOG = sharpened("birch_log", MapColor.SAND, SoundType.WOOD, true);
+    public static final RegistryObject<Block> SHARPENED_JUNGLE_LOG = sharpened("jungle_log", MapColor.DIRT, SoundType.WOOD, true);
+    public static final RegistryObject<Block> SHARPENED_ACACIA_LOG = sharpened("acacia_log", MapColor.COLOR_ORANGE, SoundType.WOOD, true);
+    public static final RegistryObject<Block> SHARPENED_DARK_OAK_LOG = sharpened("dark_oak_log", MapColor.COLOR_BROWN, SoundType.WOOD, true);
+    public static final RegistryObject<Block> SHARPENED_MANGROVE_LOG = sharpened("mangrove_log", MapColor.COLOR_RED, SoundType.WOOD, true);
+    public static final RegistryObject<Block> SHARPENED_CHERRY_LOG = sharpened("cherry_log", MapColor.TERRACOTTA_WHITE, SoundType.CHERRY_WOOD, true);
+    public static final RegistryObject<Block> SHARPENED_BAMBOO_BLOCK = sharpened("bamboo_block", MapColor.COLOR_YELLOW, SoundType.BAMBOO_WOOD, true);
+    public static final RegistryObject<Block> SHARPENED_CRIMSON_STEM = sharpened("crimson_stem", MapColor.CRIMSON_STEM, SoundType.STEM, false);
+    public static final RegistryObject<Block> SHARPENED_WARPED_STEM = sharpened("warped_stem", MapColor.WARPED_STEM, SoundType.STEM, false);
+
+    private static RegistryObject<Block> sharpened(String log, MapColor mapColor, SoundType sound, boolean burns) {
+        RegistryObject<Block> block = Registration.BLOCKS.register("sharpened_" + log, () -> {
+            Properties properties = Properties.of().mapColor(mapColor).instrument(NoteBlockInstrument.BASS)
+                    .strength(2.0F).sound(sound);
+            return new SharpenedLogBlock(burns ? properties.ignitedByLava() : properties);
+        });
+        SHARPENED_LOGS.add(block);
+        return block;
+    }
 
     // bones & bodies
     // copy(STONE) alone left canOcclude=true, which is wrong for a 6px-tall sprawl: it culled the
