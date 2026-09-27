@@ -368,8 +368,8 @@ public class ModBlocks {
     });
 
     // Base blocks for the three mossy deepslate material families in ModMaterials.STONE. Vanilla
-    // has no mossy deepslate to source them from, so - like MOSSY_CHISELED_STONE_BRICKS - the full
-    // block is registered here by hand while the eleven decorative types come off the STONE loop.
+    // has no mossy deepslate to source them from, so the full block is registered here by hand
+    // while the eleven decorative types come off the STONE loop.
     // Properties come from the plain block the moss grows on; only the texture differs.
     public static final RegistryObject<Block> MOSSY_DEEPSLATE_BRICKS = Registration.BLOCKS.register("mossy_deepslate_bricks", () -> {
         return new Block(Properties.copy(Blocks.DEEPSLATE_BRICKS));
@@ -460,9 +460,9 @@ public class ModBlocks {
     public static final RegistryObject<Block> MOSSY_RUBBLE = Registration.BLOCKS.register("mossy_rubble", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_COBBLESTONE));
     });
-    // base block for the mossy_chiseled_stone_bricks material family (ModMaterials.STONE) -
-    // unlike the other STONE materials there is no vanilla block to source it from, so this
-    // is craftable (chiseled_stone_bricks + vine) and used as the stonecutting ingredient.
+    // a full block only - it has no material family in ModMaterials.STONE, so no decorative
+    // pieces and no stonecutting recipes. Vanilla has no mossy chiseled stone bricks, so it is
+    // crafted (chiseled_stone_bricks + vine; a hand-written recipe in src/main/resources).
     public static final RegistryObject<Block> MOSSY_CHISELED_STONE_BRICKS = Registration.BLOCKS.register("mossy_chiseled_stone_bricks", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
