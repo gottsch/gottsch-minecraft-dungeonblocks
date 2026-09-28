@@ -12,8 +12,11 @@ import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTagGenerator extends BlockTagsProvider {
@@ -216,6 +219,51 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // only make the right one faster - an axe for the firewood, a pickaxe for the iron rack.
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.FIREWOOD_RACK.get());
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.WEAPON_RACK.get());
+
+        // Coffins and the skull pike are wood: axe, no tier, and neither needs a tool to drop.
+        ModBlocks.COFFINS.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.SKULL_PIKE.get(), ModBlocks.ZOMBIE_HEAD_PIKE.get(),
+                ModBlocks.BLOODY_STEVE_HEAD_PIKE.get());
+        // Catacomb niches copy their stone, requiresCorrectToolForDrops included. The brick ones
+        // match "brick" and the stone_blocks sweep above already tags them; the tuff and sandstone
+        // ones match nothing there, and are tagged here at the stone tier the sweep gives the rest.
+        ModBlocks.CATACOMB_NICHES.keySet().stream()
+                .filter(b -> maps.stone_blocks.stream().noneMatch(n -> b.getId().getPath().contains(n)))
+                .forEach(b -> {
+                    this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get());
+                    this.tag(BlockTags.NEEDS_STONE_TOOL).add(b.get());
+                });
+        // The gargoyles copy stone, requiresCorrectToolForDrops included, and match nothing in
+        // stone_blocks: pickaxe, at the stone tier the mod's other stone has.
+        for (RegistryObject<Block> b : List.of(ModBlocks.PERCHED_GARGOYLE, ModBlocks.GARGOYLE_BUST, ModBlocks.GARGOYLE_STATUE)) {
+            this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get());
+            this.tag(BlockTags.NEEDS_STONE_TOOL).add(b.get());
+        }
+        // The lever sconce is the torch sconce's twin: pickaxe, no tier. The hidden doors are doors
+        // (DOORS, as vanilla tags the iron door); their ids all name a brick, so the stone_blocks
+        // sweep has already made them pickaxe at the stone tier. The pedestal copies polished
+        // andesite, requiresCorrectToolForDrops included, and matches nothing in the sweep.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.LEVER_SCONCE.get(), ModBlocks.PEDESTAL.get());
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.PEDESTAL.get());
+        ModBlocks.HIDDEN_DOORS.keySet().forEach(b -> this.tag(BlockTags.DOORS).add(b.get()));
+        // Crumbling floors copy their stone, requiresCorrectToolForDrops included. The brick ones match
+        // "brick" in the sweep above; cobblestone, polished andesite and the deepslate tiles match
+        // nothing there, and are tagged here at the stone tier the sweep gives the rest.
+        ModBlocks.CRUMBLING_FLOORS.keySet().stream()
+                .filter(b -> maps.stone_blocks.stream().noneMatch(n -> b.getId().getPath().contains(n)))
+                .forEach(b -> {
+                    this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get());
+                    this.tag(BlockTags.NEEDS_STONE_TOOL).add(b.get());
+                });
+        // Tapestries are cloth, and drop to anything: an axe only takes them down faster, as vanilla's
+        // banners are tagged.
+        ModBlocks.TAPESTRIES.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
+        // The rubble scatter is loose stone: pickaxe, no tier, and it drops to anything.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.RUBBLE_SCATTER.get());
+        // The bone pile, the chandelier and the chain fixtures drop to anything; a pickaxe only
+        // takes them down faster.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.BONE_PILE.get(), ModBlocks.CHANDELIER.get(),
+                ModBlocks.MANACLES.get(), ModBlocks.MEAT_HOOK.get(), ModBlocks.CENSER.get());
 
         // "brazier" and "lantern" match nothing in stone_blocks, so neither block was ever tagged.
         // The brazier drops to anything, but a pickaxe mined it no faster than a bare hand. The

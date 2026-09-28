@@ -21,6 +21,7 @@ import mod.gottsch.forge.dungeonblocks.core.blockentity.SwingingChainBlockEntity
 import mod.gottsch.forge.dungeonblocks.core.state.properties.ChainFixture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.sounds.SoundEvents;
@@ -48,11 +49,13 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 /**
  * A decorative chain segment that sways — gently on its own, and properly when something walks
@@ -308,6 +311,15 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 		if (stack.is(ModBlocks.DUNGEON_LANTERN.get().asItem())) {
 			return ChainFixture.DUNGEON_LANTERN;
 		}
+		if (stack.is(ModBlocks.MANACLES.get().asItem())) {
+			return ChainFixture.MANACLES;
+		}
+		if (stack.is(ModBlocks.MEAT_HOOK.get().asItem())) {
+			return ChainFixture.MEAT_HOOK;
+		}
+		if (stack.is(ModBlocks.CENSER.get().asItem())) {
+			return ChainFixture.CENSER;
+		}
 		return ChainFixture.NONE;
 	}
 
@@ -316,6 +328,9 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 			case LANTERN -> new ItemStack(Items.LANTERN);
 			case SOUL_LANTERN -> new ItemStack(Items.SOUL_LANTERN);
 			case DUNGEON_LANTERN -> new ItemStack(ModBlocks.DUNGEON_LANTERN.get());
+			case MANACLES -> new ItemStack(ModBlocks.MANACLES.get());
+			case MEAT_HOOK -> new ItemStack(ModBlocks.MEAT_HOOK.get());
+			case CENSER -> new ItemStack(ModBlocks.CENSER.get());
 			case NONE -> ItemStack.EMPTY;
 		};
 	}
@@ -341,6 +356,28 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 			popResource(level, pos, dropFor(state.getValue(FIXTURE)));
 		}
 		super.onRemove(state, level, pos, newState, isMoving);
+	}
+
+	/**
+	 * A lit censer smokes. The smoke rises from where the censer is drawn - swung aside, the smoke
+	 * goes with it - which {@link SwingingChainBlockEntity#bottomPoint} works out from the same swing
+	 * the renderer draws.
+	 */
+	@Override
+	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+		if (state.getValue(FIXTURE) != ChainFixture.CENSER || !state.getValue(LIT)) {
+			return;
+		}
+		if (!(level.getBlockEntity(findTop(level, pos)) instanceof SwingingChainBlockEntity chain)) {
+			return;
+		}
+		// out of the gap under the censer's lid, a little to one side or the other
+		Vec3 at = chain.bottomPoint(level.getGameTime(), new Vector3f(
+				0.5F + (random.nextFloat() - 0.5F) * 0.3F, CenserBlock.SMOKE_Y, 0.5F + (random.nextFloat() - 0.5F) * 0.3F));
+		level.addParticle(ParticleTypes.SMOKE, at.x, at.y, at.z, 0.0D, 0.015D, 0.0D);
+		if (random.nextInt(4) == 0) {
+			level.addParticle(ParticleTypes.SMOKE, at.x, at.y + 0.1D, at.z, 0.0D, 0.02D, 0.0D);
+		}
 	}
 
 	/** The bottom segment of the chain owned by {@code topPos} — the one that can carry a fixture. */

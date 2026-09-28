@@ -5,6 +5,7 @@ import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.ModBlockEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.DungeonBannerModel;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.DungeonBannerRenderer;
+import mod.gottsch.forge.dungeonblocks.core.blockentity.client.PedestalRenderer;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.SarcophagusRenderer;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.SwingingChainRenderer;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.WeaponRackRenderer;
@@ -19,7 +20,9 @@ import mod.gottsch.forge.dungeonblocks.core.entity.client.PotVariant;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.RedFlaskModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.SquatClayPotModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.ThinClayPotModel;
+import mod.gottsch.forge.dungeonblocks.core.state.properties.ChainFixture;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.world.level.block.Block;
@@ -31,6 +34,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = DungeonBlocks.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -140,18 +144,32 @@ public class ClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntityTypes.DUNGEON_BANNER.get(), DungeonBannerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.SARCOPHAGUS.get(), SarcophagusRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.WEAPON_RACK.get(), WeaponRackRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityTypes.PEDESTAL.get(), PedestalRenderer::new);
     }
 
     /**
-     * The sarcophagus lid-only models. No blockstate references them - they exist only for
-     * SarcophagusRenderer to draw the sliding lid - so they have to be registered to be baked.
+     * Models the renderers look up by their own location, which have to be registered to be baked
+     * under it: the sarcophagus and coffin lid-only models, which no blockstate references and
+     * SarcophagusRenderer always draws, and the chain fixtures' models, which SwingingChainRenderer
+     * draws in a chain's bottom link. The fixture blocks' blockstates use those models too, but a
+     * blockstate bakes its models under the block's own locations, not these.
      */
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
-        for (RegistryObject<Block> block : List.of(ModBlocks.STONE_SARCOPHAGUS, ModBlocks.DEEPSLATE_SARCOPHAGUS)) {
+        List<RegistryObject<Block>> tombs = new ArrayList<>(List.of(ModBlocks.STONE_SARCOPHAGUS, ModBlocks.DEEPSLATE_SARCOPHAGUS));
+        tombs.addAll(ModBlocks.COFFINS);
+        for (RegistryObject<Block> block : tombs) {
             for (BedPart part : BedPart.values()) {
                 event.register(SarcophagusRenderer.lidModel(block.getId(), part));
+            }
+        }
+        for (ChainFixture fixture : ChainFixture.values()) {
+            for (boolean lit : new boolean[] {false, true}) {
+                String model = fixture.model(lit);
+                if (model != null) {
+                    event.register(new ResourceLocation(DungeonBlocks.MOD_ID, "block/" + model));
+                }
             }
         }
     }

@@ -3,6 +3,10 @@
     {
       "type": "single",
       "resource": "minecraft:entity/skeleton/skeleton"
+    },
+    {
+      "type": "single",
+      "resource": "minecraft:entity/zombie/zombie"
     }
   ]
 }

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "minecraft:bone"
+    },
+    "p": {
+      "item": "minecraft:spruce_planks"
+    },
+    "s": {
+      "item": "minecraft:spruce_slab"
+    }
+  },
+  "pattern": [
+    "sss",
+    "pbp"
+  ],
+  "result": {
+    "item": "dungeonblocks:spruce_coffin"
+  },
+  "show_notification": true
+}

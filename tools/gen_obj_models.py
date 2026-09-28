@@ -292,7 +292,325 @@ def _maiden(half, state):
     return faces
 
 
+# ---------------------------------------------------------------------------------------------
+# polygons: the coffin's tapered outline
+# ---------------------------------------------------------------------------------------------
+
+def _oriented(face):
+    """Wind a face to match its intended normal, reversing its corners (and their uvs) if not."""
+    a, b, c = face.verts[0], face.verts[1], face.verts[2]
+    wn = cross(tuple(b[i] - a[i] for i in range(3)), tuple(c[i] - a[i] for i in range(3)))
+    if sum(wn[i] * face.normal[i] for i in range(3)) < 0:
+        face.verts.reverse()
+        face.uvs.reverse()
+    return face
+
+
+def _outward_normals(poly):
+    """Each edge's outward unit normal, in the x-z plane, for a convex polygon of (x, z) points."""
+    area = sum(x0 * z1 - x1 * z0 for (x0, z0), (x1, z1) in zip(poly, poly[1:] + poly[:1]))
+    out = []
+    for (x0, z0), (x1, z1) in zip(poly, poly[1:] + poly[:1]):
+        dx, dz = x1 - x0, z1 - z0
+        ln = math.hypot(dx, dz)
+        out.append((dz / ln, -dx / ln) if area > 0 else (-dz / ln, dx / ln))
+    return out
+
+
+def _offset(poly, d):
+    """The convex polygon grown by d px (shrunk if d is negative), corner for corner."""
+    normals = _outward_normals(poly)
+    k = len(poly)
+    lines = [((poly[i][0] + normals[i][0] * d, poly[i][1] + normals[i][1] * d),
+              (poly[(i + 1) % k][0] - poly[i][0], poly[(i + 1) % k][1] - poly[i][1])) for i in range(k)]
+    out = []
+    for i in range(k):
+        (px, pz), (dx, dz) = lines[i - 1]
+        (qx, qz), (ex, ez) = lines[i]
+        det = ex * dz - dx * ez
+        t = (ex * (qz - pz) - ez * (qx - px)) / det
+        out.append((px + t * dx, pz + t * dz))
+    return out
+
+
+def _clip(poly, lo, hi):
+    """A convex polygon of (x, z) points clipped to lo <= z <= hi (Sutherland-Hodgman)."""
+    for bound, keep in ((lo, lambda z: z >= lo - 1e-9), (hi, lambda z: z <= hi + 1e-9)):
+        out = []
+        for i in range(len(poly)):
+            cur, nxt = poly[i], poly[(i + 1) % len(poly)]
+            if keep(cur[1]):
+                out.append(cur)
+            if keep(cur[1]) != keep(nxt[1]):
+                t = (bound - cur[1]) / (nxt[1] - cur[1])
+                out.append((cur[0] + t * (nxt[0] - cur[0]), bound))
+        poly = out
+    return poly
+
+
+def _flat(material, poly, y, up, uv, dz=0):
+    """A horizontal convex polygon at height y facing up or down, as quads fanned from its first
+    corner (a leftover triangle is fine: Forge pads it). `dz` shifts z from object to block space,
+    and `uv(x, z)` maps a corner's block-space x and z to texture pixels."""
+    pts = [(x, y, z - dz) for x, z in poly]
+    faces = []
+    i = 1
+    while i + 1 < len(pts):
+        corners = [pts[0]] + pts[i:i + 3]
+        faces.append(_oriented(Face(material, corners, [uv(p[0], p[2]) for p in corners],
+                                    (0, 1 if up else -1, 0))))
+        i += 2
+    return faces
+
+
+def _wall(material, p, q, y0, y1, normal, dz=0):
+    """A vertical quad over the x-z segment p-q, from y0 to y1, facing `normal` (x, z). The
+    texture runs along the segment, centred on the sprite; v is height, as on a JSON side face."""
+    ln = math.hypot(q[0] - p[0], q[1] - p[1])
+    u0 = 8 - ln / 2
+    corners = [(p[0], y1, p[1] - dz), (p[0], y0, p[1] - dz), (q[0], y0, q[1] - dz), (q[0], y1, q[1] - dz)]
+    uvs = [(u0, 16 - y1), (u0, 16 - y0), (u0 + ln, 16 - y0), (u0 + ln, 16 - y1)]
+    return _oriented(Face(material, corners, uvs, (normal[0], 0, normal[1])))
+
+
+def _segment(p, q, lo, hi):
+    """The part of the x-z segment p-q with lo <= z <= hi, or None if there is none."""
+    dz = q[1] - p[1]
+    if abs(dz) < 1e-12:
+        return (p, q) if lo - 1e-9 <= p[1] <= hi + 1e-9 else None
+    t0, t1 = 0.0, 1.0
+    for bound, lower in ((lo, True), (hi, False)):
+        t = (bound - p[1]) / dz
+        if (dz > 0) == lower:
+            t0 = max(t0, t)     # the segment enters the range here
+        else:
+            t1 = min(t1, t)     # and leaves it here
+    if t1 - t0 < 1e-9:
+        return None
+    at = lambda t: (p[0] + t * (q[0] - p[0]), p[1] + t * dz)
+    return at(t0), at(t1)
+
+
+# The coffin: the hexagonal "toe-pincher", two blocks long. In object pixels, seen from above: x
+# across, z along it - the head end at z=1, the shoulders at z=8, the foot end at z=31. The head
+# block holds z 0-16, the foot block 16-32. Authored facing north: the head end is north.
+COFFIN_OUTLINE = [(4.5, 1), (11.5, 1), (14.5, 8), (11, 31), (5, 31), (1.5, 8)]
+COFFIN_WALL = 1          # wall and floor thickness
+COFFIN_HEIGHT = 8        # the rim, where the lid rests
+COFFIN_LID = 1.5         # lid thickness
+COFFIN_OVERHANG = 0.5    # how far the lid's edge stands out past the walls
+
+
+def coffin_hinge():
+    """The line the lid hinges on, as two (x, y, z) points in object pixels: the lid's long east
+    edge, shoulder to foot, along its underside. SarcophagusRenderer holds the same numbers
+    (HINGE_FROM/HINGE_TO) - change them together. Hinged straight along z instead, at the
+    shoulders, the lid's narrow ends swung clear of the body and it looked detached."""
+    lid = _offset(COFFIN_OUTLINE, COFFIN_OVERHANG)
+    return (lid[2][0], COFFIN_HEIGHT, lid[2][1]), (lid[3][0], COFFIN_HEIGHT, lid[3][1])
+
+
+def _coffin(part, piece):
+    """One block's share of the coffin - its "body" or its "lid" - in that block's own pixels.
+    Faces on the seam between the two blocks are left out: the other half always covers them."""
+    lo, hi = (0, 16) if part == "head" else (16, 32)
+    dz = lo
+    outer = COFFIN_OUTLINE
+    faces = []
+    # uv from a corner's block-space x and z. The lid's boards run along the coffin: `along` turns
+    # the planks texture so its boards follow z.
+    along = lambda x, z: (z, x)
+    flat = lambda x, z: (x, z)
+    under = lambda x, z: (x, 16 - z)
+    if piece == "body":
+        inner = _offset(outer, -COFFIN_WALL)
+        top = COFFIN_HEIGHT
+        normals = _outward_normals(outer)
+        k = len(outer)
+        for i in range(k):
+            n = normals[i]
+            seg = _segment(outer[i], outer[(i + 1) % k], lo, hi)
+            if seg:
+                faces.append(_wall("wood", *seg, 0, top, n, dz))
+            seg = _segment(inner[i], inner[(i + 1) % k], lo, hi)
+            if seg:
+                faces.append(_wall("lining", *seg, COFFIN_WALL, top, (-n[0], -n[1]), dz))
+            # the rim between them
+            rim = _clip([outer[i], outer[(i + 1) % k], inner[(i + 1) % k], inner[i]], lo, hi)
+            if len(rim) >= 3:
+                faces += _flat("wood", rim, top, True, along, dz)
+        faces += _flat("wood", _clip(outer, lo, hi), 0, False, under, dz)
+        faces += _flat("lining", _clip(inner, lo, hi), COFFIN_WALL, True, flat, dz)
+    else:
+        lid = _offset(outer, COFFIN_OVERHANG)
+        y0, y1 = COFFIN_HEIGHT, COFFIN_HEIGHT + COFFIN_LID
+        normals = _outward_normals(lid)
+        for i in range(len(lid)):
+            seg = _segment(lid[i], lid[(i + 1) % len(lid)], lo, hi)
+            if seg:
+                faces.append(_wall("wood", *seg, y0, y1, normals[i], dz))
+        faces += _flat("wood", _clip(lid, lo, hi), y1, True, along, dz)
+        faces += _flat("lining", _clip(lid, lo, hi), y0, False, under, dz)
+        if part == "head":
+            # an iron cross on the lid, its arms toward the head: stem and crossbar as three
+            # boxes that only meet, so no two top faces overlap and flicker
+            y2 = y1 + 1
+            faces += box((7.25, y1, 3), (8.75, y2, 5.5), "trim", skip=("down", "south"))
+            faces += box((5, y1, 5.5), (11, y2, 7), "trim", skip=("down",))
+            faces += box((7.25, y1, 7), (8.75, y2, 13), "trim", skip=("down", "north"))
+    return faces
+
+
+def model_coffin_item():
+    """The whole coffin, closed, at half size so it fits one block: the item's model."""
+    faces = []
+    for part, shift in (("head", 0), ("foot", 16)):
+        for piece in ("body", "lid"):
+            for f in _coffin(part, piece):
+                f.verts = [(8 + (x - 8) * 0.5, y * 0.5 + 2, 8 + (z + shift - 16) * 0.5) for x, y, z in f.verts]
+                faces.append(f)
+    return faces
+
+
+COFFIN_MATERIALS = ["wood", "lining", "trim"]
+
+
+# ---------------------------------------------------------------------------------------------
+# statues: a mob's own model, baked in a pose (tools/entity_model.py), cut in stone
+# ---------------------------------------------------------------------------------------------
+
+def _mob(entity, tex_w, tex_h, **bake_args):
+    """A mob's model as upright faces in its own pixels, facing north: entity models are upside
+    down, and LivingEntityRenderer's scale(-1, -1, 1) - a half turn about z - stands them up, with
+    the face still toward -z."""
+    import entity_model
+    with open(f"tools/entity_models/{entity}.java", encoding="utf-8") as fh:
+        parts = entity_model.parse_layer(fh.read())
+    return [([(-x, -y, z) for x, y, z in pts], uvs)
+            for pts, uvs in entity_model.bake(parts, tex_w, tex_h, **bake_args)]
+
+
+def _placed(mob, material, scale, base, centre=(8, 8), lift=0.0):
+    """Faces for a baked mob, scaled about its footprint's centre, its lowest point at y=base."""
+    xs = [p[0] for pts, _ in mob for p in pts]
+    ys = [p[1] for pts, _ in mob for p in pts]
+    zs = [p[2] for pts, _ in mob for p in pts]
+    cx, cz, y0 = (min(xs) + max(xs)) / 2, (min(zs) + max(zs)) / 2, min(ys)
+    faces = []
+    for pts, uvs in mob:
+        verts = [((x - cx) * scale + centre[0], (y - y0) * scale + base + lift, (z - cz) * scale + centre[1])
+                 for x, y, z in pts]
+        a, b, c = verts[0], verts[1], verts[2]
+        n = cross(tuple(b[i] - a[i] for i in range(3)), tuple(c[i] - a[i] for i in range(3)))
+        if all(abs(x) < 1e-12 for x in n):
+            a, b, c = verts[0], verts[2], verts[3]
+            n = cross(tuple(b[i] - a[i] for i in range(3)), tuple(c[i] - a[i] for i in range(3)))
+        # the winding is vanilla's own - counter-clockwise from outside - so it IS the normal
+        faces.append(Face(material, verts, list(uvs), n))
+    return faces
+
+
+def _clip_y(faces, lo, hi):
+    """Faces cut to lo <= y <= hi and moved down by lo, uvs interpolated along the cut: one block's
+    share of a figure taller than a block."""
+    out = []
+    for f in faces:
+        poly = list(zip(f.verts, f.uvs))
+        for bound, keep in ((lo, lambda y: y >= lo - 1e-9), (hi, lambda y: y <= hi + 1e-9)):
+            cut = []
+            for i in range(len(poly)):
+                (p, t), (q, s) = poly[i], poly[(i + 1) % len(poly)]
+                if keep(p[1]):
+                    cut.append((p, t))
+                if keep(p[1]) != keep(q[1]):
+                    k = (bound - p[1]) / (q[1] - p[1])
+                    cut.append((tuple(p[j] + k * (q[j] - p[j]) for j in range(3)),
+                                tuple(t[j] + k * (s[j] - t[j]) for j in range(2))))
+            poly = cut
+            if len(poly) < 3:
+                break
+        if len(poly) < 3:
+            continue
+        # fan the (convex) remainder into quads, a triangle left over if need be
+        for i in range(1, len(poly) - 1, 2):
+            piece = [poly[0]] + poly[i:i + 3]
+            verts = [(p[0], p[1] - lo, p[2]) for p, _ in piece]
+            face = Face(f.material, verts, [t for _, t in piece], f.normal)
+            out.append(face)
+    return out
+
+
+GARGOYLE_TEXTURE = (128, 128)
+# The perched gargoyle's wings: half raised behind its shoulders, their tip panels folded in, so it
+# stays close to its block. Folded flat down its back, they sank into its hunch. The statue keeps
+# the mob's own spread wings.
+GARGOYLE_WINGS_BACK = {"rightWing": (0.04, 0.9, 0.35), "leftWing": (0.04, -0.9, -0.35),
+                       "rightWingMedius": (0, -1.2, 0), "leftWingMedius": (0, 1.2, 0)}
+# the head, jaw, horns, ears and teeth: the parts a bust keeps, with the chest for its shoulders
+GARGOYLE_HEAD = {"head", "jaw", "rightHorn", "leftHorn", "rightEar_r1", "leftEar_r1", "topTeeth1_r1",
+                 "topTeeth2_r1", "smallTeeth1_r1", "rightCanine_r1", "leftCanine_r1"}
+
+
+def model_gargoyle_perched():
+    """A gargoyle crouched on the block below, wings raised behind it: the mob's own model at half
+    its size, so it fits one block - to sit on a wall's top, a pillar or a roof's edge."""
+    mob = _mob("gargoyle", *GARGOYLE_TEXTURE, pose=GARGOYLE_WINGS_BACK)
+    return _placed(mob, "stone", 0.5, 0)
+
+
+def _gargoyle_statue():
+    """The gargoyle as the mob stands, wings spread, on a 3px plinth: two blocks tall. The mob's
+    wingtips reach higher than that, so it is scaled to fit - nine tenths of its size - rather
+    than cut off at the top. The spread wings overhang a block's width either side."""
+    mob = _mob("gargoyle", *GARGOYLE_TEXTURE)
+    ys = [p[1] for pts, _ in mob for p in pts]
+    scale = min(1.0, (32 - 3 - 0.25) / (max(ys) - min(ys)))
+    return _placed(mob, "stone", scale, 3) + box((1, 0, 1), (15, 3, 15), "plinth")
+
+
+def model_gargoyle_statue_lower():
+    return _clip_y(_gargoyle_statue(), 0, 16)
+
+
+def model_gargoyle_statue_upper():
+    return _clip_y(_gargoyle_statue(), 16, 32)
+
+
+def model_gargoyle_statue_item():
+    """The whole statue shrunk to fit a block, plinth and all, for the item: its wings are the
+    widest thing about it."""
+    faces = _gargoyle_statue()
+    xs = [v[0] for f in faces for v in f.verts]
+    k = min(0.5, 16 / (max(xs) - min(xs)))
+    for f in faces:
+        f.verts = [(8 + (x - 8) * k, y * k, 8 + (z - 8) * k) for x, y, z in f.verts]
+    return faces
+
+
+def model_gargoyle_bust():
+    """The gargoyle's head and shoulders on a pedestal. Sat up straight, the head moved back over
+    the chest: in the mob's hunch it juts out in front of it, and on a pedestal it overhung the
+    front like a gargoyle falling off."""
+    upright = {"gargoyle": (0, 0, 0), "body": (0, 0, 0), "chest": (0, 0, 0), "head": (0, 0, 0)}
+    mob = _mob("gargoyle", *GARGOYLE_TEXTURE, pose=upright, offset={"head": (-1, -7, 2)},
+               only=GARGOYLE_HEAD | {"chest"})
+    return (_placed(mob, "stone", 0.75, 6) + box((4, 0, 4), (12, 1.5, 12), "plinth")
+            + box((5.5, 1.5, 5.5), (10.5, 6, 10.5), "plinth"))
+
+
+STATUE_MATERIALS = ["stone", "plinth"]
+
 MODELS = {
+    "coffin_head_body": (lambda: _coffin("head", "body"), COFFIN_MATERIALS),
+    "coffin_head_lid": (lambda: _coffin("head", "lid"), COFFIN_MATERIALS),
+    "coffin_foot_body": (lambda: _coffin("foot", "body"), COFFIN_MATERIALS),
+    "coffin_foot_lid": (lambda: _coffin("foot", "lid"), COFFIN_MATERIALS),
+    "coffin_item": (model_coffin_item, COFFIN_MATERIALS),
+    "gargoyle_perched": (model_gargoyle_perched, STATUE_MATERIALS),
+    "gargoyle_statue_lower": (model_gargoyle_statue_lower, STATUE_MATERIALS),
+    "gargoyle_statue_upper": (model_gargoyle_statue_upper, STATUE_MATERIALS),
+    "gargoyle_statue_item": (model_gargoyle_statue_item, STATUE_MATERIALS),
+    "gargoyle_bust": (model_gargoyle_bust, STATUE_MATERIALS),
     "iron_maiden_spikes_lower_closed": (lambda: _maiden("lower", "closed"), ["spike"]),
     "iron_maiden_spikes_lower_open": (lambda: _maiden("lower", "open"), ["spike"]),
     "iron_maiden_spikes_upper_closed": (lambda: _maiden("upper", "closed"), ["spike"]),

@@ -19,13 +19,18 @@ package mod.gottsch.forge.dungeonblocks.core.state.properties;
 
 import net.minecraft.util.StringRepresentable;
 
+import javax.annotation.Nullable;
+
 /**
  * What, if anything, hangs off the bottom of a swinging chain.
  *
- * <p>Every value here is rendered from an <em>existing</em> block model via
- * {@code BlockRenderDispatcher#renderSingleBlock}, so a fixture costs no new geometry and inherits
- * the player's resource pack. Adding one is an entry here plus a case in the renderer's state
- * mapping and in the block's item mapping — manacles will slot in that way once modelled.
+ * <p>The lanterns are rendered from their <em>existing</em> block models via
+ * {@code BlockRenderDispatcher#renderSingleBlock}, so they cost no new geometry and inherit the
+ * player's resource pack. The mod's own fixtures - manacles, a meat hook, a censer - are blocks
+ * too ({@code HangingFixtureBlock}, {@code CenserBlock}), which hang under a vanilla chain or a
+ * ceiling; on a swinging chain they are drawn from the same model ({@link #model}), built from
+ * blockbench/chain_fixture_*.bbmodel. Adding one is an entry here, its block, and a case in the
+ * chain's item mapping.
  *
  * @author Mark Gottschling on Jul 26, 2026
  */
@@ -34,7 +39,10 @@ public enum ChainFixture implements StringRepresentable {
 	NONE("none"),
 	LANTERN("lantern"),
 	SOUL_LANTERN("soul_lantern"),
-	DUNGEON_LANTERN("dungeon_lantern");
+	DUNGEON_LANTERN("dungeon_lantern"),
+	MANACLES("manacles"),
+	MEAT_HOOK("meat_hook"),
+	CENSER("censer");
 
 	private final String name;
 
@@ -57,7 +65,8 @@ public enum ChainFixture implements StringRepresentable {
 	 * and raises inertia relative to damping, so it keeps swinging noticeably longer.
 	 */
 	public boolean isWeighted() {
-		return this != NONE;
+		// a pair of cuffs is too light to change how the chain moves
+		return this != NONE && this != MANACLES;
 	}
 
 	/**
@@ -66,7 +75,7 @@ public enum ChainFixture implements StringRepresentable {
 	 * mirrors that rather than silently forcing it alight.
 	 */
 	public boolean isLightable() {
-		return this == DUNGEON_LANTERN;
+		return this == DUNGEON_LANTERN || this == CENSER;
 	}
 
 	/** Block light emitted while attached. Matches each source's own vanilla/mod value. */
@@ -75,7 +84,23 @@ public enum ChainFixture implements StringRepresentable {
 			case LANTERN -> 15;
 			case SOUL_LANTERN -> 10;
 			case DUNGEON_LANTERN -> lit ? 15 : 0;
-			case NONE -> 0;
+			// smouldering incense: a glow, not a lamp. CenserBlock gives the same.
+			case CENSER -> lit ? 7 : 0;
+			case NONE, MANACLES, MEAT_HOOK -> 0;
+		};
+	}
+
+	/**
+	 * The model a fixture of the mod's own is drawn from, as a path under models/block, or null for
+	 * the lanterns, which are drawn from their blocks. ClientSetup registers each of these.
+	 */
+	@Nullable
+	public String model(boolean lit) {
+		return switch (this) {
+			case MANACLES -> "chain_fixture_manacles";
+			case MEAT_HOOK -> "chain_fixture_meat_hook";
+			case CENSER -> lit ? "chain_fixture_censer_lit" : "chain_fixture_censer";
+			case NONE, LANTERN, SOUL_LANTERN, DUNGEON_LANTERN -> null;
 		};
 	}
 }

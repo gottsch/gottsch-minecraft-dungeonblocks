@@ -272,6 +272,39 @@ public class ItemModelsProvider extends ItemModelProvider {
 		// an empty rack reads as a bare frame at icon size, and an item has no renderer to hang
 		// weapons in it, so the item's model has a sword and an axe racked
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEAPON_RACK), modLoc("block/weapon_rack_item"));
+		// the whole coffin, closed, at half size: half a coffin does not say "coffin"
+		ModBlocks.COFFINS.forEach(b -> withExistingParent(ModBlocks.MAP.get(b), modLoc("block/" + b.getId().getPath() + "_item")));
+		// a niche shows the skull and bones every niche had before there was a choice of remains
+		ModBlocks.CATACOMB_NICHES.keySet().forEach(b ->
+				withExistingParent(ModBlocks.MAP.get(b), modLoc("block/" + b.getId().getPath() + "_skull_and_bones")));
+		// the pike's top half, the skull on its pole, is the part that says what it is
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.SKULL_PIKE), modLoc("block/skull_pike_upper"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.ZOMBIE_HEAD_PIKE), modLoc("block/zombie_head_pike_upper"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.BLOODY_STEVE_HEAD_PIKE), modLoc("block/bloody_steve_head_pike_upper"));
+		// a full heap, though a placed pile starts small
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.BONE_PILE), modLoc("block/bone_pile_4"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.CHANDELIER), modLoc("block/chandelier"));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.PERCHED_GARGOYLE));
+		// the lever sconce shows as the torch sconce it pretends to be
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.LEVER_SCONCE), modLoc("block/torch_sconce_block"));
+		// a hidden door shows a flat door icon in its wall's stone, as vanilla's doors show theirs
+		// (tools/gen_prop_item_icons.py): its lower half drawn as a block read as a slab of wall
+		ModBlocks.HIDDEN_DOORS.keySet().forEach(b ->
+				basicItem(ModBlocks.MAP.get(b), modLoc("item/" + b.getId().getPath())));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.PEDESTAL));
+		// a tapestry shows its whole scene, shrunk flat (tools/gen_tapestry_textures.py)
+		ModBlocks.TAPESTRIES.forEach(b -> basicItem(ModBlocks.MAP.get(b), modLoc("item/" + b.getId().getPath())));
+		ModBlocks.CRUMBLING_FLOORS.keySet().forEach(b -> blockItemParent(ModBlocks.MAP.get(b)));
+		// the full scatter, though a placed one starts at a few chips
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.RUBBLE_SCATTER), modLoc("block/rubble_scatter_4"));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.GARGOYLE_BUST));
+		// the whole statue, shrunk to fit: its top half alone is a pair of wings
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.GARGOYLE_STATUE), modLoc("block/gargoyle_statue_item"));
+		// the chain fixtures show the model they hang as - bar the meat hook, a thin line of iron
+		// at icon size, which has a flat icon (tools/gen_prop_item_icons.py) as vanilla's chain does
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.MANACLES), modLoc("block/chain_fixture_manacles"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.MEAT_HOOK), modLoc("item/meat_hook"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.CENSER), modLoc("block/chain_fixture_censer"));
 
 		// copper trapdoor items: parent to the generated bottom model
 		copperTrapdoorItem(ModBlocks.COPPER_TRAPDOOR);

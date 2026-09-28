@@ -41,23 +41,35 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 /**
- * Draws every sarcophagus lid, always - the way a chest's lid is drawn - so the lid is never handed
- * between this renderer and the block's baked model, which is what made it flicker. The block's
- * own model is the body alone.
+ * Draws every sarcophagus and coffin lid, always - the way a chest's lid is drawn - so the lid is
+ * never handed between this renderer and the block's baked model, which is what made it flicker.
+ * The block's own model is the body alone.
  *
  * <p>The animation needs no ticking. Each frame the block's OPEN is compared with the OPEN the lid
- * was last heading for; when they differ, a slide starts from wherever the lid is drawn now, so
- * reversing it mid-slide is smooth. Position is eased over {@link SarcophagusBlock#MOVE_TICKS}.
+ * was last heading for; when they differ, a move starts from wherever the lid is drawn now, so
+ * reversing it mid-move is smooth. Position is eased over {@link SarcophagusBlock#MOVE_TICKS}.
  *
- * <p>The lid is the Blockbench-built lid-only model ({@code <id>_<part>_lid}, registered as an
- * additional model in ClientSetup), turned to the block's facing and slid along the model's x
- * axis, eased in and out.
+ * <p>The lid is the lid-only model ({@code <id>_<part>_lid}, registered as an additional model in
+ * ClientSetup), turned to the block's facing, then moved as the block's
+ * {@link SarcophagusBlock.LidMotion} says: a sarcophagus lid slides along the model's x axis, a
+ * coffin lid swings up on its hinge.
  */
 public class SarcophagusRenderer implements BlockEntityRenderer<SarcophagusBlockEntity> {
-    /** How far the lid slides aside when open, in blocks. */
+    /** How far a sliding lid moves aside when open, in blocks. */
     private static final float OPEN_SLIDE = 10F / 16F;
+    /**
+     * A coffin lid's hinge: its long east edge, shoulder to foot, along its underside, in the head
+     * block's model space (the foot block's is one block further along z). The same line as
+     * coffin_hinge() in tools/gen_obj_models.py - change them together.
+     */
+    private static final Vector3f HINGE_FROM = new Vector3f(15.01577F, 8F, 7.93417F).div(16F);
+    private static final Vector3f HINGE_AXIS = new Vector3f(11.42967F - 15.01577F, 0F, 31.5F - 7.93417F).normalize();
+    /** How far a hinged lid swings open: a little past upright, so it stands. */
+    private static final float OPEN_ANGLE = 100F;
 
     public SarcophagusRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -90,7 +102,6 @@ public class SarcophagusRenderer implements BlockEntityRenderer<SarcophagusBlock
         float t = Mth.clamp((float) ((now - be.moveStart) / SarcophagusBlock.MOVE_TICKS), 0F, 1F);
         float eased = t * t * (3F - 2F * t);
         be.slide = Mth.lerp(eased, be.slideFrom, open ? 1F : 0F);
-        float slide = OPEN_SLIDE * be.slide;
 
         ResourceLocation id = ForgeRegistries.BLOCKS.getKey(state.getBlock());
         BakedModel lid = Minecraft.getInstance().getModelManager().getModel(lidModel(id, state.getValue(SarcophagusBlock.PART)));
@@ -102,9 +113,26 @@ public class SarcophagusRenderer implements BlockEntityRenderer<SarcophagusBlock
         pose.translate(0.5, 0, 0.5);
         pose.mulPose(Axis.YP.rotationDegrees(-((facing.toYRot() + 180F) % 360F)));
         pose.translate(-0.5, 0, -0.5);
-        pose.translate(slide, 0, 0);
+        if (((SarcophagusBlock) state.getBlock()).lidMotion() == SarcophagusBlock.LidMotion.HINGE) {
+            hinge(pose, state.getValue(SarcophagusBlock.PART), be.slide);
+        } else {
+            pose.translate(OPEN_SLIDE * be.slide, 0, 0);
+        }
         drawShaded(be, state, lid, turn(facing), pose, buffers.getBuffer(RenderType.solid()), light, overlay);
         pose.popPose();
+    }
+
+    /**
+     * Swings a coffin lid `open` (0 shut, 1 fully open) about its hinge, in model space. The two
+     * halves turn about the same line - the foot's model sits a block further along z - so they
+     * move as one lid.
+     */
+    private static void hinge(PoseStack pose, BedPart part, float open) {
+        float z = HINGE_FROM.z - (part == BedPart.FOOT ? 1F : 0F);
+        pose.translate(HINGE_FROM.x, HINGE_FROM.y, z);
+        // negative: the free edge, on the hinge's west side, lifts
+        pose.mulPose(new Quaternionf().rotationAxis(-OPEN_ANGLE * open * Mth.DEG_TO_RAD, HINGE_AXIS));
+        pose.translate(-HINGE_FROM.x, -HINGE_FROM.y, -z);
     }
 
     /**

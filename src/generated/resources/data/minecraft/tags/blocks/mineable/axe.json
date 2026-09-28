@@ -33,6 +33,21 @@
     "dungeonblocks:bamboo_walkway_bracket",
     "dungeonblocks:crimson_walkway_bracket",
     "dungeonblocks:warped_walkway_bracket",
-    "dungeonblocks:firewood_rack"
+    "dungeonblocks:firewood_rack",
+    "dungeonblocks:spruce_coffin",
+    "dungeonblocks:dark_oak_coffin",
+    "dungeonblocks:crimson_coffin",
+    "dungeonblocks:mangrove_coffin",
+    "dungeonblocks:skull_pike",
+    "dungeonblocks:zombie_head_pike",
+    "dungeonblocks:bloody_steve_head_pike",
+    "dungeonblocks:dragon_tapestry",
+    "dungeonblocks:worn_dragon_tapestry",
+    "dungeonblocks:hunt_tapestry",
+    "dungeonblocks:worn_hunt_tapestry",
+    "dungeonblocks:necromancer_tapestry",
+    "dungeonblocks:worn_necromancer_tapestry",
+    "dungeonblocks:summoning_tapestry",
+    "dungeonblocks:worn_summoning_tapestry"
   ]
 }

@@ -39,6 +39,11 @@ method.
 | Moss on a stone | `tools/gen_mossy_textures.py` | a `Job` to `JOBS` |
 | Rust / age stages | `tools/gen_rusted_dark_iron_textures.py` | a stage to `STAGES` |
 | One stone's pattern in another stone's colours | `tools/gen_deepslate_brick_textures.py` | a pair to `PAIRS` |
+| A mob's texture turned to stone, for its statue | `tools/gen_statue_textures.py` | a row to `JOBS` |
+| A flat inventory icon for a prop whose model reads badly in a slot | `tools/gen_prop_item_icons.py` | a row to `HIDDEN_DOORS`, or a pixel mask |
+| A tapestry scene (pristine + worn, icons) | `tools/gen_tapestry_textures.py` | a draw function in `SCENES`, then two `ModBlocks.tapestry(...)` lines and a `Recipes.tapestry(...)` |
+| A crumbling floor in a new stone | `tools/gen_crumbling_floor_textures.py` | a stone to `STONES`, then a `crumblingFloor(...)` line in `ModBlocks` |
+| A mob's head changed for a prop (blood on it) | `tools/gen_pike_head_textures.py` | a function, called from `main` |
 
 Generated PNGs are overwritten on the next run, so never hand-edit them — fix the table instead.
 (`tools/gen_banner_textures.py` is the same deal for the 36 banner textures.) One-off generators
@@ -99,7 +104,9 @@ showing the user. `scripts/preview.py` (in this skill) renders block model JSONs
 plain cubes with their real textures, from any angle - its docstring has a worked example. It is
 not the game's lighting: trust it for shape, UV mapping and texture choice, not brightness.
 
-Whenever you tell the user a preview exists, **actually send it** (SendUserFile) and check the
+**But only when the user asks for one** - they have said rendered previews cost too many tokens
+(memory `feedback-no-previews-unless-asked`); by default describe the result and let them judge it
+in game. Whenever you tell the user a preview exists, **actually send it** (SendUserFile) and check the
 send succeeded. A preview that silently fails to send reads to them as no preview at all.
 
 Then show the user the image and **wait**. Brightness and moss-placement calls have been wrong
@@ -189,8 +196,23 @@ The sarcophagus, iron maiden and gibbet are the worked examples.
   its JOBS table turns element GROUPS on or off per output (`doors_closed`/`doors_open`), splits a
   moving part out on its own, adds cullface to flush faces and converts per-texture UV sizes. A
   texture's NAME in Blockbench is the model's texture key. Never hand-edit the output.
+- **A new prop's project is scaffolded, then belongs to Blockbench.** Describe it as boxes in
+  `tools/gen_bbmodels.py` (its `bone`/`skull`/`head`/`candle`/`chain`/`iron_ring` helpers, groups for
+  the converter to switch) and run it: it writes only the projects that do not exist yet, and never
+  overwrites one without `--force <name>`, which discards the user's Blockbench edits. Then add its
+  outputs to the converter's JOBS. Keep to whole pixels and 22.5-degree turns - the user wants the
+  props "minecrafty" (memory `feedback-keep-props-minecrafty`). A part that rises above or sinks
+  below the block (the pike's point) needs explicit UVs: vanilla's default mapping runs off the
+  sprite there and samples its atlas neighbour, and the converter now stops on any UV off 0-16.
+- **A statue of a mob** is its own model baked, not re-modelled: copy the mob model's
+  `createBodyLayer()` into `tools/entity_models/`, pose it and bake it with `tools/entity_model.py`
+  through `gen_obj_models.py` (the gargoyles), stone texture from `tools/gen_statue_textures.py`. A
+  mob's flat planes are painted one side only - the baker handles it (memory `entity-model-baking`).
 - **Parts:** two horizontal - extend `SlabTableBlock` (FOOT where clicked, HEAD ahead); two tall -
-  copy `IronMaidenBlock`; three tall - copy `GibbetBlock`'s enum PART. Each: placement returns null
+  a still prop is a `TallPropBlock` (the skull pike, the gargoyle statue: pass its two shapes), one
+  with moving parts copies `IronMaidenBlock`; three tall - copy `GibbetBlock`'s enum PART. A tall
+  prop that can hang (the gibbet) reads the clicked face: DOWN places its TOP part where clicked
+  and grows down, anything else its BOTTOM part, growing up. Each: placement returns null
   unless every part's space is free, `updateShape` destroys the rest when a part goes,
   `playerWillDestroy` clears the dropping part with flag 35 in creative, and ONE part carries the
   drop in `ModBlockLootTables` (enum property - the helper rejects an IntegerProperty).
@@ -203,9 +225,14 @@ The sarcophagus, iron maiden and gibbet are the worked examples.
   and a renderer over time. No ticking is needed: keep client-only animation fields on the block
   entity and start a slide when the state differs from what is shown (`SarcophagusRenderer`).
   Keep a baked "closed" model for the item, which has no renderer. Register the part-only models in
-  `ClientSetup` (`ModelEvent.RegisterAdditional`), and apply the per-face shade yourself
-  (`getShade`, turned by the facing): `ModelBlockRenderer.renderModel` skips it and the part comes
-  out too light.
+  `ClientSetup` (`ModelEvent.RegisterAdditional`).
+- **A baked model drawn by a renderer gets no directional light in a chunk render type.**
+  `ModelBlockRenderer.renderModel` into `RenderType.cutout()`/`solid()` from a block entity renderer
+  draws every face at full brightness, and dark iron comes out visibly lighter (the chain fixtures
+  did). Two fixes: draw into `Sheets.cutoutBlockSheet()`, the entity sheet `renderSingleBlock` uses,
+  lit by normal - match this when the part sits beside vanilla blocks a renderer draws (the chain's
+  links); or apply `getShade` per face yourself, turned by the facing, to match the chunk exactly -
+  when the part must match its own baked body (the sarcophagus lid).
 - **A prop that holds items** (the weapon rack): keep the items in a block entity (a `NonNullList`,
   synced with `getUpdatePacket`/`getUpdateTag`, cleared before `loadAllItems`), make it
   `Clearable` so a structure can replace it without spilling, and drop the contents in `onRemove`.
@@ -217,6 +244,30 @@ The sarcophagus, iron maiden and gibbet are the worked examples.
 - **Mob textures in block models** need the texture added to the block atlas:
   `assets/minecraft/atlases/blocks.json` (the gibbet's skeleton). See-through textures need
   `render_type: cutout`, or the gaps draw black.
+  A mob's HEAD on a prop takes its texture's head-box corner as it is: the `head` helper maps an
+  8px cube from vanilla's skin layout, so a whole 64x64 mob texture (the zombie head pike, via the
+  atlas) and a 32x16 head cut from one (the bloody Steve head) take the same UVs.
+- **Hanging, as a lantern hangs** (the chandelier, the manacles, meat hook and censer):
+  `Block.canSupportCenter(level, pos.above(), Direction.DOWN)` in `canSurvive`, and pop in
+  `updateShape` when the block above changes. That accepts a sturdy ceiling and a vanilla chain
+  (its 3px core covers the centre) and refuses a swinging chain, which has no collision shape.
+- **Variety without a player choosing:** a state picked from `Mth.getSeed(pos)` on placement
+  (the niche's REMAINS) varies a row of them with no effort, and client and server agree on it
+  without a roll. A state the player builds up instead: stages added by using more of the same
+  item on it, as pink petals do (the rubble scatter's CHIPS: `canBeReplaced` +
+  `getStateForPlacement`), with a loot table that gives one back per stage. Either way the DEFAULT
+  state is what a structure gets when it names none - keep it the look the block had before.
+- **Wall hangings** (banners, pennants, tapestries): the ROD sits flush on the wall, the cloth
+  hangs about 1px out from it - the user rejected both a floating rod and a cloth pressed flat.
+  `TapestryBlock` is a 4x3 grid of parts placed as one (COLUMN/ROW ints, loot on (0,0) via a
+  StatePropertiesPredicate); its part models are built in datagen as UV windows of one sprite, so
+  a texture may be any whole multiple of 64x48 (the necromancer is 128x96 for detail).
+- **Scene art:** cartoon shorthand - a round moon, V bats, stick limbs, a triangle body - reads as a
+  child's drawing (the necromancer took three tries). Use silhouette, folds, rim light, dithered
+  shading and atmosphere, and more resolution when a figure needs a face.
+- **Flat item icons** (`tools/gen_prop_item_icons.py`): a door's lower half, or a 1px hook, turns
+  into a slab or a hairline as a 3D item. Draw a sprite instead, as vanilla does for its doors,
+  chain and lanterns, and give the item `basicItem(..., modLoc("item/<name>"))`.
 
 ### Properties traps
 

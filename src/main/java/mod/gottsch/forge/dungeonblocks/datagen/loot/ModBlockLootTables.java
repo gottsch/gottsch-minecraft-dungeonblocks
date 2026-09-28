@@ -19,12 +19,17 @@
  */
 package mod.gottsch.forge.dungeonblocks.datagen.loot;
 
+import mod.gottsch.forge.dungeonblocks.core.block.TallPropBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.DungeonBannerBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.GibbetBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.IronMaidenBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.RubbleScatterBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.SkeletonBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.SlabTableBlock;
+import mod.gottsch.forge.dungeonblocks.core.block.TapestryBlock;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
@@ -32,6 +37,13 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Set;
@@ -61,6 +73,9 @@ public class ModBlockLootTables extends BlockLootSubProvider {
             } else if (b instanceof IronMaidenBlock) {
                 // two halves, one item, the same shape as a door: the lower half carries the drop
                 add(b, createSinglePropConditionTable(b, IronMaidenBlock.HALF, DoubleBlockHalf.LOWER));
+            } else if (b instanceof TallPropBlock) {
+                // two halves, one item, as the iron maiden: the lower half carries the drop
+                add(b, createSinglePropConditionTable(b, TallPropBlock.HALF, DoubleBlockHalf.LOWER));
             } else if (b instanceof GibbetBlock) {
                 // three parts, one item: the bottom part carries the drop, and breaking any part
                 // destroys the rest, so a gibbet yields exactly one whichever part is broken
@@ -70,6 +85,17 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 // other through updateShape, which drops too - the same mechanism as the banner
                 // above - so the blanket dropSelf below gave two doors for every one broken.
                 add(b, createDoorTable(b));
+            } else if (b instanceof TapestryBlock) {
+                // twelve parts, one item: the bottom-left part carries the drop, and losing any part
+                // takes down the rest, so a tapestry yields exactly one whichever part is broken
+                add(b, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(b).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(b)
+                                .setProperties(StatePropertiesPredicate.Builder.properties()
+                                        .hasProperty(TapestryBlock.COLUMN, 0).hasProperty(TapestryBlock.ROW, 0))))
+                        .when(ExplosionCondition.survivesExplosion())));
+            } else if (b instanceof RubbleScatterBlock) {
+                // one for each stage laid, as vanilla's pink petals give back one per petal
+                add(b, createStagedDrops(b, RubbleScatterBlock.CHIPS));
             } else if (b instanceof SlabBlock) {
                 // vanilla slab table: one item, or two when broken as a double slab. The blanket
                 // dropSelf below would give one either way, losing an item on every double slab.
@@ -85,6 +111,18 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         Block skeleton = ModBlocks.SKELETON.get();
         add(skeleton, createSinglePropConditionTable(skeleton, SkeletonBlock.PART,
                 SkeletonBlock.EnumPartType.BOTTOM));
+    }
+
+    /**
+     * The block itself, as many as the stage `stages` names - vanilla's createPetalsDrops, which is
+     * written against pink petals' own property, for any stage property counted from one.
+     */
+    private LootTable.Builder createStagedDrops(Block block, IntegerProperty stages) {
+        return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                .add(applyExplosionDecay(block, LootItem.lootTableItem(block).apply(stages.getPossibleValues(),
+                        n -> SetItemCountFunction.setCount(ConstantValue.exactly(n))
+                                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(stages, n)))))));
     }
 
 //    protected LootTable.Builder createCopperLikeOreDrops(Block pBlock, Item item) {

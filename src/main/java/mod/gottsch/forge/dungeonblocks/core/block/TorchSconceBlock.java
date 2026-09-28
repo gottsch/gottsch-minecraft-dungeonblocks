@@ -84,8 +84,8 @@ public class TorchSconceBlock extends NonCubeFacingBlock {
 		double d0 = (double) pos.getX() + 0.5D;
 		double d1 = (double) pos.getY() + 0.5D;
 		double d2 = (double) pos.getZ() + 0.5D;
-		double d3 = 0.40D; // y offset
-		double d4 = 0.05D; // horizontal offset middle
+		double d3 = flameHeight(state); // y offset
+		double d4 = flameInset(state); // horizontal offset middle
 
 		if (direction.getAxis().isHorizontal()) {
 			Direction directionFacing = direction.getOpposite();
@@ -100,6 +100,16 @@ public class TorchSconceBlock extends NonCubeFacingBlock {
 					0.0D);
 
 		}
+	}
+
+	/** How far above the block's centre the torch's flame burns. */
+	protected double flameHeight(BlockState state) {
+		return 0.40D;
+	}
+
+	/** How far from the block's centre toward the wall the torch's flame burns. */
+	protected double flameInset(BlockState state) {
+		return 0.05D;
 	}
 
 	/**

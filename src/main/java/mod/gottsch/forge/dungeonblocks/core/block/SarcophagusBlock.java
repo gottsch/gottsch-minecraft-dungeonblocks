@@ -92,8 +92,16 @@ import java.util.Optional;
  */
 public class SarcophagusBlock extends SlabTableBlock implements EntityBlock {
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
-    /** How long the lid takes to slide, in ticks. */
+    /** How long the lid takes to open or close, in ticks. */
     public static final int MOVE_TICKS = 12;
+
+    /** How the lid moves when the tomb opens; the renderer reads it. */
+    public enum LidMotion {
+        /** Grinds aside along the model's x, as a stone slab would. */
+        SLIDE,
+        /** Swings up on a hinge along one side, as a coffin lid does. */
+        HINGE
+    }
 
     private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 14, 16);
     /** The top of the sarcophagus, where the lid sits and a guardian stands. */
@@ -118,6 +126,19 @@ public class SarcophagusBlock extends SlabTableBlock implements EntityBlock {
         return SHAPE;
     }
 
+    public LidMotion lidMotion() {
+        return LidMotion.SLIDE;
+    }
+
+    /** The top of the closed tomb, in blocks: where the lid rests and a guardian stands. */
+    protected double lidTop() {
+        return TOP;
+    }
+
+    protected void playLidSound(Level level, BlockPos pos, boolean open) {
+        level.playSound(null, pos, SoundEvents.GRINDSTONE_USE, SoundSource.BLOCKS, 0.8F, 0.5F);
+    }
+
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new SarcophagusBlockEntity(pos, state);
@@ -133,7 +154,7 @@ public class SarcophagusBlock extends SlabTableBlock implements EntityBlock {
             if (other.is(this)) {
                 level.setBlock(otherPos, other.setValue(OPEN, open), 2);
             }
-            level.playSound(null, pos, SoundEvents.GRINDSTONE_USE, SoundSource.BLOCKS, 0.8F, 0.5F);
+            playLidSound(level, pos, open);
             if (open && level instanceof ServerLevel serverLevel) {
                 disturb(serverLevel, pos, state, player);
             }
@@ -146,7 +167,7 @@ public class SarcophagusBlock extends SlabTableBlock implements EntityBlock {
      * then it is empty for good. Either half may hold the contents - a structure could put them on
      * either - but a tomb is one roll, so the head's win and both halves are emptied.
      */
-    private static void disturb(ServerLevel level, BlockPos pos, BlockState state, Player player) {
+    private void disturb(ServerLevel level, BlockPos pos, BlockState state, Player player) {
         BlockPos otherPos = pos.relative(towardOtherHalf(state));
         boolean clickedHead = state.getValue(PART) == BedPart.HEAD;
         BlockPos headPos = clickedHead ? pos : otherPos;
@@ -159,7 +180,7 @@ public class SarcophagusBlock extends SlabTableBlock implements EntityBlock {
             return;
         }
         // the middle of the lid, over the seam between the halves
-        Vec3 top = new Vec3((headPos.getX() + footPos.getX()) / 2.0 + 0.5, pos.getY() + TOP,
+        Vec3 top = new Vec3((headPos.getX() + footPos.getX()) / 2.0 + 0.5, pos.getY() + lidTop(),
                 (headPos.getZ() + footPos.getZ()) / 2.0 + 0.5);
         switch (tomb.rollOutcome(level.random)) {
             case LOOT -> spillLoot(level, tomb, top, player);

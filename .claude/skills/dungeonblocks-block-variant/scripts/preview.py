@@ -147,7 +147,11 @@ def load_json(name, offset=(0, 0, 0), yrot=0, textures=None):
                 continue
             fd = e["faces"][n]
             u0, v0, u1, v1 = fd["uv"]
-            f.uvs = [(u0, v0), (u0, v1), (u1, v1), (u1, v0)]
+            # a face "rotation" turns the texture clockwise: corner i takes the uv of corner
+            # i + rotation/90, as vanilla's BlockFaceUV does
+            corners = [(u0, v0), (u0, v1), (u1, v1), (u1, v0)]
+            turn = fd.get("rotation", 0) // 90
+            f.uvs = [corners[(i + turn) % 4] for i in range(4)]
             f.material = fd["texture"].lstrip("#")
             keep.append(f)
         if "rotation" in e:

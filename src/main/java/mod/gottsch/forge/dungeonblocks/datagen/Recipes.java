@@ -28,6 +28,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
@@ -250,6 +251,150 @@ public class Recipes extends RecipeProvider {
 					.define('b', Blocks.IRON_BARS)
 					.define('i', Items.IRON_INGOT)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+					.save(recipe);
+
+			// coffins: a lid of the wood's slabs over its planks, with a bone laid in
+			coffin(recipe, ModBlocks.SPRUCE_COFFIN, Blocks.SPRUCE_SLAB, Blocks.SPRUCE_PLANKS);
+			coffin(recipe, ModBlocks.DARK_OAK_COFFIN, Blocks.DARK_OAK_SLAB, Blocks.DARK_OAK_PLANKS);
+			coffin(recipe, ModBlocks.CRIMSON_COFFIN, Blocks.CRIMSON_SLAB, Blocks.CRIMSON_PLANKS);
+			coffin(recipe, ModBlocks.MANGROVE_COFFIN, Blocks.MANGROVE_SLAB, Blocks.MANGROVE_PLANKS);
+
+			// catacomb niches: the stone with a bone in it
+			ModBlocks.CATACOMB_NICHES.forEach((niche, source) ->
+					ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, niche.get())
+							.requires(source.get())
+							.requires(Items.BONE)
+							.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(source.get()))
+							.save(recipe));
+
+			// skull pike: a bone block on two sticks
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.SKULL_PIKE.get())
+					.pattern("b")
+					.pattern("s")
+					.pattern("s")
+					.define('b', Blocks.BONE_BLOCK)
+					.define('s', Items.STICK)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.BONE_BLOCK))
+					.save(recipe);
+			// a zombie's head: rotten flesh on the pike; Steve's: leather for his skin, and red dye
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.ZOMBIE_HEAD_PIKE.get())
+					.pattern("f")
+					.pattern("s")
+					.pattern("s")
+					.define('f', Items.ROTTEN_FLESH)
+					.define('s', Items.STICK)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.ROTTEN_FLESH))
+					.save(recipe);
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.BLOODY_STEVE_HEAD_PIKE.get())
+					.pattern("lr")
+					.pattern("s ")
+					.pattern("s ")
+					.define('l', Items.LEATHER)
+					.define('r', Items.RED_DYE)
+					.define('s', Items.STICK)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER))
+					.save(recipe);
+
+			// bone pile: four bones
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.BONE_PILE.get())
+					.requires(Items.BONE, 4)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.BONE))
+					.save(recipe);
+
+			// chandelier: a row of candles on a row of iron, hung from a chain
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.CHANDELIER.get())
+					.pattern(" c ")
+					.pattern("kkk")
+					.pattern("iii")
+					.define('c', Blocks.CHAIN)
+					.define('k', ItemTags.CANDLES)
+					.define('i', Items.IRON_INGOT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CHAIN))
+					.save(recipe);
+
+			// gargoyles: the perched one and the bust are carved in a stonecutter; the statue stands
+			// on a smooth stone plinth, a block of chiseled stone bricks for its body
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.STONE), RecipeCategory.DECORATIONS, ModBlocks.PERCHED_GARGOYLE.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.STONE))
+					.save(recipe);
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.STONE), RecipeCategory.DECORATIONS, ModBlocks.GARGOYLE_BUST.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.STONE))
+					.save(recipe);
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.GARGOYLE_STATUE.get())
+					.pattern("c")
+					.pattern("c")
+					.pattern("s")
+					.define('c', Blocks.CHISELED_STONE_BRICKS)
+					.define('s', Blocks.SMOOTH_STONE)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CHISELED_STONE_BRICKS))
+					.save(recipe);
+
+			// the secret passage: a torch sconce with a lever in it; a door of the wall's own stone,
+			// its redstone set in; a pedestal of polished andesite
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, ModBlocks.LEVER_SCONCE.get())
+					.requires(ModBlocks.TORCH_SCONCE.get())
+					.requires(Blocks.LEVER)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.TORCH_SCONCE.get()))
+					.save(recipe);
+			ModBlocks.HIDDEN_DOORS.forEach((door, source) ->
+					ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, door.get())
+							.pattern("ss")
+							.pattern("sr")
+							.pattern("ss")
+							.define('s', source.get())
+							.define('r', Items.REDSTONE)
+							.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(source.get()))
+							.save(recipe));
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.PEDESTAL.get())
+					.pattern("sss")
+					.pattern(" s ")
+					.pattern("sss")
+					.define('s', Blocks.POLISHED_ANDESITE)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.POLISHED_ANDESITE))
+					.save(recipe);
+
+			// tapestries: wool woven on a rod of sticks, a dye for the scene; a pristine one aged with
+			// coarse dirt
+			tapestry(recipe, ModBlocks.DRAGON_TAPESTRY, ModBlocks.WORN_DRAGON_TAPESTRY, Items.RED_DYE);
+			tapestry(recipe, ModBlocks.HUNT_TAPESTRY, ModBlocks.WORN_HUNT_TAPESTRY, Items.GREEN_DYE);
+			tapestry(recipe, ModBlocks.NECROMANCER_TAPESTRY, ModBlocks.WORN_NECROMANCER_TAPESTRY, Items.PURPLE_DYE);
+			tapestry(recipe, ModBlocks.SUMMONING_TAPESTRY, ModBlocks.WORN_SUMMONING_TAPESTRY, Items.BLACK_DYE);
+			// crumbling floors: the stone laid over gravel
+			ModBlocks.CRUMBLING_FLOORS.forEach((floor, source) ->
+					ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, floor.get())
+							.requires(source.get())
+							.requires(Blocks.GRAVEL)
+							.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(source.get()))
+							.save(recipe));
+			// the rubble scatter is a Rubble block broken up
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.RUBBLE_SCATTER.get(), 4)
+					.requires(ModBlocks.RUBBLE.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.RUBBLE.get()))
+					.save(recipe);
+
+			// chain fixtures. Manacles: two iron cuffs on a chain
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.MANACLES.get())
+					.pattern(" c ")
+					.pattern("i i")
+					.define('c', Blocks.CHAIN)
+					.define('i', Items.IRON_INGOT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CHAIN))
+					.save(recipe);
+			// meat hook: an ingot drawn out, and bent
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.MEAT_HOOK.get())
+					.requires(Items.IRON_INGOT)
+					.requires(Items.IRON_NUGGET, 2)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+					.save(recipe);
+			// censer: an iron bowl of coal on a chain
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.CENSER.get())
+					.pattern(" c ")
+					.pattern("iki")
+					.pattern(" i ")
+					.define('c', Blocks.CHAIN)
+					.define('i', Items.IRON_INGOT)
+					.define('k', ItemTags.COALS)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CHAIN))
 					.save(recipe);
 
 			// grate trapdoors
@@ -491,10 +636,7 @@ public class Recipes extends RecipeProvider {
 					.save(recipe);
 		}
 
-		/**
-		 * Shapeless: the stripped block plus flint to sharpen it. The flint is what keeps this clear
-		 * of vanilla's one-log-to-planks recipe, which a lone stripped log would collide with.
-		 */
+		/** A lid of slabs over a chest of the carved block. */
 		private static void sarcophagus(Consumer<FinishedRecipe> recipe, RegistryObject<Block> sarcophagus, Block slab, Block carved) {
 			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, sarcophagus.get())
 					.pattern("sss")
@@ -505,6 +647,41 @@ public class Recipes extends RecipeProvider {
 					.save(recipe);
 		}
 
+		/** Wool on a rod of sticks with the scene's dye; the worn one is the pristine one and coarse dirt. */
+		private static void tapestry(Consumer<FinishedRecipe> recipe, RegistryObject<Block> pristine,
+				RegistryObject<Block> worn, Item dye) {
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, pristine.get())
+					.pattern("sss")
+					.pattern("wdw")
+					.pattern("www")
+					.define('s', Items.STICK)
+					.define('w', ItemTags.WOOL)
+					.define('d', dye)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(dye))
+					.save(recipe);
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, worn.get())
+					.requires(pristine.get())
+					.requires(Blocks.COARSE_DIRT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(pristine.get()))
+					.save(recipe);
+		}
+
+		/** A lid of the wood's slabs over its planks, with a bone laid in. */
+		private static void coffin(Consumer<FinishedRecipe> recipe, RegistryObject<Block> coffin, Block slab, Block planks) {
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, coffin.get())
+					.pattern("sss")
+					.pattern("pbp")
+					.define('s', slab)
+					.define('p', planks)
+					.define('b', Items.BONE)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(planks))
+					.save(recipe);
+		}
+
+		/**
+		 * Shapeless: the stripped block plus flint to sharpen it. The flint is what keeps this clear
+		 * of vanilla's one-log-to-planks recipe, which a lone stripped log would collide with.
+		 */
 		private static void sharpened(Consumer<FinishedRecipe> recipe, RegistryObject<Block> sharpened, Block stripped) {
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, sharpened.get())
 					.requires(stripped)

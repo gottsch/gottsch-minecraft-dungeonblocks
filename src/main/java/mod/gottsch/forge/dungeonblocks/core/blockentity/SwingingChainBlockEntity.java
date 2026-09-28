@@ -32,6 +32,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 /**
  * Swing state for a {@link SwingingChainBlock}.
@@ -65,6 +67,20 @@ public class SwingingChainBlockEntity extends BlockEntity {
 	private static final int IMPULSE_COOLDOWN_TICKS = 10;
 	/** Extra swing per segment of depth: a hit near the free end has more leverage on the pivot. */
 	private static final float LEVERAGE_PER_SEGMENT = 0.09F;
+
+	/**
+	 * Degrees of ambient drift. Small on purpose: at 2 degrees the bottom of a 3-block chain travels
+	 * about 2 pixels, which reads as "hanging in still air" rather than "windy".
+	 */
+	private static final float IDLE_AMPLITUDE = 2.0F;
+	/** ~5.7s period. Much slower than this and the drift stops registering as movement at all. */
+	private static final float IDLE_SPEED = 0.055F;
+	/** Detuned against IDLE_SPEED (~7.7s) so the two axes drift in and out of phase. */
+	private static final float IDLE_SPEED_CROSS = 0.041F;
+	/** Ticks of delay per joint down the chain — the source of the trailing curve. */
+	private static final float JOINT_LAG_TICKS = 1.6F;
+	/** Each joint bends this fraction as much as the one above it. */
+	private static final float JOINT_TAPER = 0.62F;
 
 	/** Decay time constant, in ticks: the swing visibly settles over roughly 2 seconds. */
 	public static final float DECAY_TAU = 30.0F;
@@ -130,6 +146,86 @@ public class SwingingChainBlockEntity extends BlockEntity {
 
 	public static float decayTau(boolean weighted) {
 		return weighted ? DECAY_TAU * WEIGHTED_DECAY_FACTOR : DECAY_TAU;
+	}
+
+	/**
+	 * How each joint of the chain bends at {@code time}: for segment {@code i} down from the top,
+	 * {@code [i][0]} degrees about +Z and then {@code [i][1]} degrees about +X, the order
+	 * SwingingChainRenderer applies them in.
+	 *
+	 * <p>Two motions are summed: the idle sway, always running, phase-seeded from the block position
+	 * so neighbouring chains don't move in lockstep; and the damped pendulum of the last synced
+	 * impulse. Each joint takes a share of the deflection, tapering downward, at a progressively later
+	 * time - the whip that makes the chain trail and curve rather than swing like a stick. It is all a
+	 * function of the clock and the synced swing, so the renderer and anything else that needs to
+	 * know where the chain is - the censer's smoke - agree without keeping any state.
+	 */
+	public float[][] jointAngles(float time, int length, boolean weighted) {
+		float omega = angularFrequency(length, weighted);
+		float tau = decayTau(weighted);
+		float phase = idlePhase(this.worldPosition);
+		// normalise the per-joint shares so the whole chain's deflection adds up to the swing angle
+		// regardless of how long it is
+		float weightSum = 0.0F;
+		for (int i = 0; i < length; i++) {
+			weightSum += (float) Math.pow(JOINT_TAPER, i);
+		}
+		float yawRad = this.swingYaw * Mth.DEG_TO_RAD;
+		float[][] angles = new float[length][2];
+		for (int i = 0; i < length; i++) {
+			float weight = (float) Math.pow(JOINT_TAPER, i) / weightSum;
+			float t = time - i * JOINT_LAG_TICKS;
+			float swing = swingAngle(t, omega, tau);
+			float towardX = swing * Mth.cos(yawRad) + IDLE_AMPLITUDE * Mth.sin(t * IDLE_SPEED + phase);
+			float towardZ = swing * Mth.sin(yawRad) + IDLE_AMPLITUDE * Mth.sin(t * IDLE_SPEED_CROSS + phase * 1.7F);
+			// a downward-hanging chain tips toward +X when rotated about +Z, and toward -Z when
+			// rotated about +X -- hence the negation on the Z component.
+			angles[i][0] = towardX * weight;
+			angles[i][1] = -towardZ * weight;
+		}
+		return angles;
+	}
+
+	/** Damped pendulum from the synced impulse; zero once it has decayed or if never struck. */
+	private float swingAngle(float time, float omega, float tau) {
+		if (!this.swinging) {
+			return 0.0F;
+		}
+		float elapsed = time - this.swingStartTick;
+		if (elapsed < 0.0F) {
+			return 0.0F;
+		}
+		float envelope = (float) Math.exp(-elapsed / tau);
+		return this.swingAmplitude * envelope * Mth.cos(omega * elapsed);
+	}
+
+	/** Position-derived phase so adjacent chains idle out of step with each other. */
+	private static float idlePhase(BlockPos pos) {
+		int hash = pos.getX() * 31 + pos.getY() * 17 + pos.getZ() * 13;
+		return (float) ((hash & 0xFF) / 255.0F * Math.PI * 2.0D);
+	}
+
+	/**
+	 * Where a point on the chain's bottom segment is at {@code time}, in world coordinates, following
+	 * the swing exactly as it is drawn. {@code local} is in that segment's own block space (0-1), as
+	 * its fixture's model is authored.
+	 */
+	public Vec3 bottomPoint(float time, Vector3f local) {
+		int length = getChainLength();
+		float[][] angles = jointAngles(time, length, isWeighted());
+		// the chain hangs from the top centre of this block, and bends at every joint on the way down
+		Matrix4f pose = new Matrix4f().translation(this.worldPosition.getX() + 0.5F,
+				this.worldPosition.getY() + 1.0F, this.worldPosition.getZ() + 0.5F);
+		for (int i = 0; i < length; i++) {
+			pose.rotateZ(angles[i][0] * Mth.DEG_TO_RAD);
+			pose.rotateX(angles[i][1] * Mth.DEG_TO_RAD);
+			if (i < length - 1) {
+				pose.translate(0.0F, -1.0F, 0.0F);
+			}
+		}
+		// the segment's top joint is its model's (0.5, 1, 0.5)
+		Vector3f at = pose.transformPosition(new Vector3f(local.x - 0.5F, local.y - 1.0F, local.z - 0.5F));
+		return new Vec3(at.x, at.y, at.z);
 	}
 
 	/** True when a fixture hangs off the end of this chain — see {@link ChainFixture#isWeighted}. */

@@ -25,6 +25,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -477,6 +479,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
             case "portcullis_winch" -> new String[] {"iron", "drum", "drum_end", "chain_band"};
             case "iron_maiden_spikes_lower_closed", "iron_maiden_spikes_lower_open",
                  "iron_maiden_spikes_upper_closed", "iron_maiden_spikes_upper_open" -> new String[] {"spike"};
+            case "coffin_head_body", "coffin_head_lid", "coffin_foot_body", "coffin_foot_lid",
+                 "coffin_item" -> new String[] {"wood", "lining", "trim"};
+            case "gargoyle_perched", "gargoyle_statue_lower", "gargoyle_statue_upper", "gargoyle_statue_item",
+                 "gargoyle_bust" -> new String[] {"stone", "plinth"};
             default -> throw new IllegalArgumentException("unknown OBJ model " + obj);
         };
         BlockModelBuilder model = models().withExistingParent(name, modLoc("block/block_no_ao"))
@@ -492,9 +498,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     /**
-     * The sarcophagi, iron maiden, gibbet and racks. Their models are built from blockbench/*.bbmodel
-     * by tools/bbmodel_to_block_models.py into src/main/resources, and only referenced here. All
-     * are authored facing north, so a FACING turns them by that facing's yaw + 180.
+     * The sarcophagi, iron maiden, gibbet, racks, coffins, niches, skull pike, bone pile and
+     * chandelier. Their models are built from blockbench/*.bbmodel by
+     * tools/bbmodel_to_block_models.py into src/main/resources - the coffins' from
+     * tools/gen_obj_models.py - and only referenced here. All are authored facing north, so a
+     * FACING turns them by that facing's yaw + 180.
      */
     private void furniture() {
         // sarcophagus: per-material children of the stone templates, one per part and lid frame
@@ -550,6 +558,151 @@ public class ModBlockStateProvider extends BlockStateProvider {
         horizontalBlock(ModBlocks.FIREWOOD_RACK.get(), state -> models().getExistingFile(
                 modLoc("block/firewood_rack_" + state.getValue(FirewoodRackBlock.FIREWOOD))));
         horizontalBlock(ModBlocks.WEAPON_RACK.get(), models().getExistingFile(modLoc("block/weapon_rack")));
+
+        // coffins: OBJs from tools/gen_obj_models.py, filled per wood - planks outside, red wool
+        // lining, an iron cross. Like the sarcophagus the block shows only its body: the lid-only
+        // models are for SarcophagusRenderer, and the whole coffin at half size is the item's.
+        ModBlocks.COFFINS.forEach(block -> {
+            String name = block.getId().getPath();
+            String wood = name.substring(0, name.length() - "_coffin".length());
+            ResourceLocation[] tex = {mcLoc("block/" + wood + "_planks"), mcLoc("block/red_wool"), modLoc("block/dark_iron")};
+            Map<BedPart, ModelFile> bodies = Map.of(
+                    BedPart.HEAD, objModel(name + "_head_body", "coffin_head_body", tex),
+                    BedPart.FOOT, objModel(name + "_foot_body", "coffin_foot_body", tex));
+            objModel(name + "_head_lid", "coffin_head_lid", tex);
+            objModel(name + "_foot_lid", "coffin_foot_lid", tex);
+            objModel(name + "_item", "coffin_item", tex);
+            getVariantBuilder(block.get()).forAllStates(state -> ConfiguredModel.builder()
+                    .modelFile(bodies.get(state.getValue(CoffinBlock.PART)))
+                    .rotationY(yaw(state.getValue(CoffinBlock.FACING))).build());
+        });
+
+        // catacomb niches: a child of the Blockbench template for each REMAINS, the stone's texture
+        // read off the source block's id, as for the capstones
+        ModBlocks.CATACOMB_NICHES.forEach((block, source) -> {
+            ResourceLocation id = ForgeRegistries.BLOCKS.getKey(source.get());
+            ResourceLocation texture = new ResourceLocation(id.getNamespace(), "block/" + id.getPath());
+            Map<CatacombNicheBlock.Remains, ModelFile> niches = new EnumMap<>(CatacombNicheBlock.Remains.class);
+            for (CatacombNicheBlock.Remains remains : CatacombNicheBlock.Remains.values()) {
+                String suffix = "_" + remains.getSerializedName();
+                niches.put(remains, models().withExistingParent(block.getId().getPath() + suffix,
+                        modLoc("block/template_catacomb_niche" + suffix)).texture("stone", texture).texture("particle", texture));
+            }
+            horizontalBlock(block.get(), state -> niches.get(state.getValue(CatacombNicheBlock.REMAINS)));
+        });
+
+        // skull pike: one model per half
+        // tapestries: a model per part, each the cloth's 16x16 window of the one 64x48 texture, a
+        // plane hanging from the rod's centreline, 1px off the wall; the top row carries the rod, flush
+        // against the wall, which runs 1px past each end.
+        // Authored facing north, the wall to the south; column 0 is the east end, the viewer's left.
+        ModBlocks.TAPESTRIES.forEach(block -> {
+            String name = block.getId().getPath();
+            ModelFile[][] parts = new ModelFile[TapestryBlock.WIDTH][TapestryBlock.HEIGHT];
+            float rowV = 16F / TapestryBlock.HEIGHT;
+            float colU = 16F / TapestryBlock.WIDTH;
+            for (int c = 0; c < TapestryBlock.WIDTH; c++) {
+                for (int r = 0; r < TapestryBlock.HEIGHT; r++) {
+                    float v0 = (TapestryBlock.HEIGHT - 1 - r) * rowV;
+                    BlockModelBuilder model = models().withExistingParent(name + "_" + c + "_" + r, mcLoc("block/block"))
+                            .renderType("minecraft:cutout").ao(false)
+                            .texture("cloth", modLoc("block/" + name)).texture("rod", mcLoc("block/dark_oak_log"))
+                            .texture("particle", modLoc("block/" + name));
+                    model.element().from(0, 0, 15).to(16, 16, 15)
+                            .face(Direction.NORTH).uvs(c * colU, v0, (c + 1) * colU, v0 + rowV).texture("#cloth").end()
+                            .face(Direction.SOUTH).uvs((c + 1) * colU, v0, c * colU, v0 + rowV).texture("#cloth").end()
+                            .end();
+                    if (r == TapestryBlock.HEIGHT - 1) {
+                        float x0 = c == TapestryBlock.WIDTH - 1 ? -1 : 0;
+                        float x1 = c == 0 ? 17 : 16;
+                        model.element().from(x0, 14, 14).to(x1, 16, 16)
+                                .allFaces((dir, face) -> face.uvs(0, 0, dir.getAxis() == Direction.Axis.X ? 2 : 16, 2).texture("#rod"))
+                                .end();
+                    }
+                    parts[c][r] = model;
+                }
+            }
+            getVariantBuilder(block.get()).forAllStates(state -> ConfiguredModel.builder()
+                    .modelFile(parts[state.getValue(TapestryBlock.COLUMN)][state.getValue(TapestryBlock.ROW)])
+                    .rotationY(yaw(state.getValue(TapestryBlock.FACING))).build());
+        });
+
+        // crumbling floors: the stone with faint cracks, and the cracks opened while it shakes
+        ModBlocks.CRUMBLING_FLOORS.keySet().forEach(block -> {
+            String name = block.getId().getPath();
+            ModelFile still = models().cubeAll(name, modLoc("block/" + name));
+            ModelFile shaking = models().cubeAll(name + "_shaking", modLoc("block/" + name + "_shaking"));
+            getVariantBuilder(block.get()).forAllStates(state -> ConfiguredModel.builder()
+                    .modelFile(state.getValue(CrumblingFloorBlock.SHAKING) ? shaking : still).build());
+        });
+
+        // the other heads share the skull pike's bare lower half
+        for (RegistryObject<Block> pike : List.of(ModBlocks.ZOMBIE_HEAD_PIKE, ModBlocks.BLOODY_STEVE_HEAD_PIKE)) {
+            tallProp(pike, models().getExistingFile(modLoc("block/skull_pike_lower")),
+                    models().getExistingFile(modLoc("block/" + pike.getId().getPath() + "_upper")));
+        }
+        tallProp(ModBlocks.SKULL_PIKE, models().getExistingFile(modLoc("block/skull_pike_lower")),
+                models().getExistingFile(modLoc("block/skull_pike_upper")));
+
+        // the secret passage. The lever sconce is the torch sconce to the pixel until it is
+        // pulled; its pulled model (hand-authored) tips the same torch 22.5 degrees further out.
+        ModelFile sconce = models().getExistingFile(modLoc("block/torch_sconce_block"));
+        ModelFile pulled = models().getExistingFile(modLoc("block/lever_sconce_pulled"));
+        myHorizontalBlock(ModBlocks.LEVER_SCONCE.get(), state -> state.getValue(LeverSconceBlock.POWERED) ? pulled : sconce);
+        // hidden doors: vanilla's door models in the wall's own texture, top and bottom alike, so a
+        // shut one is two more blocks of wall
+        ModBlocks.HIDDEN_DOORS.forEach((block, source) -> {
+            ResourceLocation id = ForgeRegistries.BLOCKS.getKey(source.get());
+            ResourceLocation wall = new ResourceLocation(id.getNamespace(), "block/" + id.getPath());
+            doorBlock((DoorBlock) block.get(), wall, wall);
+        });
+        simpleBlock(ModBlocks.PEDESTAL.get(), models().getExistingFile(modLoc("block/pedestal")));
+
+        // chain fixtures hung as blocks: the same Blockbench models SwingingChainRenderer draws in a
+        // swinging chain's bottom link, which are symmetrical enough to need no facing
+        simpleBlock(ModBlocks.MANACLES.get(), models().getExistingFile(modLoc("block/chain_fixture_manacles")));
+        simpleBlock(ModBlocks.MEAT_HOOK.get(), models().getExistingFile(modLoc("block/chain_fixture_meat_hook")));
+        ModelFile censer = models().getExistingFile(modLoc("block/chain_fixture_censer"));
+        ModelFile censerLit = models().getExistingFile(modLoc("block/chain_fixture_censer_lit"));
+        getVariantBuilder(ModBlocks.CENSER.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(state.getValue(CenserBlock.LIT) ? censerLit : censer).build());
+
+        // rubble scatter: a model per stage, each given a random quarter turn per block, so a floor
+        // of it does not repeat
+        for (int chips = 1; chips <= RubbleScatterBlock.FULL; chips++) {
+            getVariantBuilder(ModBlocks.RUBBLE_SCATTER.get()).partialState().with(RubbleScatterBlock.CHIPS, chips)
+                    .setModels(ConfiguredModel.allYRotations(
+                            models().getExistingFile(modLoc("block/rubble_scatter_" + chips)), 0, false));
+        }
+
+        // gargoyles: the gargoyle mob's model baked in stone (tools/gen_obj_models.py), on smooth
+        // stone plinths. Cutout: the wings' membranes are ragged, with holes through them.
+        ResourceLocation gargoyle = modLoc("block/gargoyle_statue");
+        ResourceLocation plinth = mcLoc("block/smooth_stone");
+        horizontalBlock(ModBlocks.PERCHED_GARGOYLE.get(),
+                objModel("perched_gargoyle", "gargoyle_perched", gargoyle, plinth).renderType("minecraft:cutout"));
+        horizontalBlock(ModBlocks.GARGOYLE_BUST.get(),
+                objModel("gargoyle_bust", "gargoyle_bust", gargoyle, plinth).renderType("minecraft:cutout"));
+        tallProp(ModBlocks.GARGOYLE_STATUE,
+                objModel("gargoyle_statue_lower", "gargoyle_statue_lower", gargoyle, plinth).renderType("minecraft:cutout"),
+                objModel("gargoyle_statue_upper", "gargoyle_statue_upper", gargoyle, plinth).renderType("minecraft:cutout"));
+        objModel("gargoyle_statue_item", "gargoyle_statue_item", gargoyle, plinth).renderType("minecraft:cutout");
+
+        // bone pile: a model per stage
+        horizontalBlock(ModBlocks.BONE_PILE.get(), state -> models().getExistingFile(
+                modLoc("block/bone_pile_" + state.getValue(BonePileBlock.BONES))));
+
+        // chandelier: lit and unlit differ only in the candles' wicks
+        getVariantBuilder(ModBlocks.CHANDELIER.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(models().getExistingFile(modLoc(state.getValue(ChandelierBlock.LIT)
+                        ? "block/chandelier_lit" : "block/chandelier"))).build());
+    }
+
+    /** A TallPropBlock: a model per half, turned to its FACING. */
+    private void tallProp(RegistryObject<Block> block, ModelFile lower, ModelFile upper) {
+        getVariantBuilder(block.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(state.getValue(TallPropBlock.HALF) == DoubleBlockHalf.LOWER ? lower : upper)
+                .rotationY(yaw(state.getValue(TallPropBlock.FACING))).build());
     }
 
     private ModelFile sarcophagusModel(String name, String part, String variant, ResourceLocation[] tex) {

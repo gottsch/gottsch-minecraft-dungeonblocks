@@ -23,6 +23,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.stream.Stream;
+
 /**
  * @author Mark Gottschling on Jul 26, 2026
  */
@@ -48,11 +50,18 @@ public class ModBlockEntityTypes {
 									.toArray(net.minecraft.world.level.block.Block[]::new))
 							.build(null));
 
-	/** Both sarcophagi, both halves: the type only carries the lid renderer. */
+	/**
+	 * Both sarcophagi and every coffin, both halves: the lid's animation for the renderer, and the
+	 * tomb's sealed contents. A coffin is a sarcophagus in wood.
+	 */
 	public static final RegistryObject<BlockEntityType<SarcophagusBlockEntity>> SARCOPHAGUS =
 			Registration.BLOCK_ENTITY_TYPES.register("sarcophagus",
 					() -> BlockEntityType.Builder
-							.of(SarcophagusBlockEntity::new, ModBlocks.STONE_SARCOPHAGUS.get(), ModBlocks.DEEPSLATE_SARCOPHAGUS.get())
+							.of(SarcophagusBlockEntity::new, Stream.concat(
+									Stream.of(ModBlocks.STONE_SARCOPHAGUS, ModBlocks.DEEPSLATE_SARCOPHAGUS),
+									ModBlocks.COFFINS.stream())
+									.map(RegistryObject::get)
+									.toArray(net.minecraft.world.level.block.Block[]::new))
 							.build(null));
 
 	/** The weapons on a weapon rack, for WeaponRackRenderer to draw. */
@@ -60,6 +69,13 @@ public class ModBlockEntityTypes {
 			Registration.BLOCK_ENTITY_TYPES.register("weapon_rack",
 					() -> BlockEntityType.Builder
 							.of(WeaponRackBlockEntity::new, ModBlocks.WEAPON_RACK.get())
+							.build(null));
+
+	/** What stands on a pedestal, for PedestalRenderer to draw. */
+	public static final RegistryObject<BlockEntityType<PedestalBlockEntity>> PEDESTAL =
+			Registration.BLOCK_ENTITY_TYPES.register("pedestal",
+					() -> BlockEntityType.Builder
+							.of(PedestalBlockEntity::new, ModBlocks.PEDESTAL.get())
 							.build(null));
 
 	public static void register(IEventBus bus) {

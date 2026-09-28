@@ -19,41 +19,41 @@ package mod.gottsch.forge.dungeonblocks.core.blockentity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.DungeonLanternBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.SwingingChainBlock;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.SwingingChainBlockEntity;
 import mod.gottsch.forge.dungeonblocks.core.state.properties.ChainFixture;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Draws a swinging chain, one 1-block segment at a time.
  *
- * <p><b>No physics, no state.</b> Every angle here is a closed-form function of the current time, so
- * there is nothing to integrate, nothing to desync and nothing to persist. Two motions are summed:
- *
- * <ul>
- * <li><b>Idle sway</b> — always running, client-only, seeded from the block position so neighbouring
- *     chains don't move in lockstep. Two slightly detuned sines on the X and Z axes make the chain
- *     wander in a slow ellipse rather than swinging flatly back and forth. This is what banners do,
- *     and it matters: a chain that only reacts to hits reads as dead scenery.</li>
- * <li><b>Impulse swing</b> — a damped pendulum {@code A e^(-t/tau) cos(w t)} driven off the three
- *     numbers the BlockEntity synced. The bell does the same thing.</li>
- * </ul>
+ * <p><b>No physics, no state.</b> Every angle here is a closed-form function of the current time,
+ * computed by {@link SwingingChainBlockEntity#jointAngles}, so there is nothing to integrate,
+ * nothing to desync and nothing to persist. Two motions are summed there: an idle sway, always
+ * running, and a damped pendulum driven off the three numbers the BlockEntity synced - the bell
+ * does the same thing.
  *
  * <p><b>The whip.</b> Each joint gets a share of the total deflection, tapering downward, evaluated
  * at a progressively later lag. That's what makes the chain trail and curve instead of swinging like
@@ -77,21 +77,6 @@ public class SwingingChainRenderer implements BlockEntityRenderer<SwingingChainB
 	 */
 	private static final BlockState CHAIN_LINK = Blocks.CHAIN.defaultBlockState();
 
-	/**
-	 * Degrees of ambient drift. Small on purpose: at 2 degrees the bottom of a 3-block chain travels
-	 * about 2 pixels, which reads as "hanging in still air" rather than "windy".
-	 */
-	private static final float IDLE_AMPLITUDE = 2.0F;
-	/** ~5.7s period. Much slower than this and the drift stops registering as movement at all. */
-	private static final float IDLE_SPEED = 0.055F;
-	/** Detuned against IDLE_SPEED (~7.7s) so the two axes drift in and out of phase. */
-	private static final float IDLE_SPEED_CROSS = 0.041F;
-
-	/** Ticks of delay per joint down the chain — the source of the trailing curve. */
-	private static final float JOINT_LAG_TICKS = 1.6F;
-	/** Each joint bends this fraction as much as the one above it. */
-	private static final float JOINT_TAPER = 0.62F;
-
 	private final BlockRenderDispatcher blockRenderer;
 
 	public SwingingChainRenderer(BlockEntityRendererProvider.Context context) {
@@ -99,8 +84,9 @@ public class SwingingChainRenderer implements BlockEntityRenderer<SwingingChainB
 	}
 
 	/**
-	 * The block model each fixture is drawn from. Every one is an existing block, so fixtures need no
-	 * geometry of their own and follow the player's resource pack.
+	 * The block model a lantern fixture is drawn from - an existing block, so it needs no geometry
+	 * of its own and follows the player's resource pack. The mod's own fixtures have models instead
+	 * ({@link ChainFixture#model}).
 	 */
 	@Nullable
 	private static BlockState fixtureState(ChainFixture fixture, boolean lit) {
@@ -110,7 +96,7 @@ public class SwingingChainRenderer implements BlockEntityRenderer<SwingingChainB
 			case DUNGEON_LANTERN -> ModBlocks.DUNGEON_LANTERN.get().defaultBlockState()
 					.setValue(LanternBlock.HANGING, true)
 					.setValue(DungeonLanternBlock.LIT, lit);
-			case NONE -> null;
+			default -> null;
 		};
 	}
 
@@ -124,25 +110,16 @@ public class SwingingChainRenderer implements BlockEntityRenderer<SwingingChainB
 
 		int length = chain.getChainLength();
 		float now = (float) level.getGameTime() + partialTicks;
-		float phase = idlePhase(chain.getBlockPos());
 
 		// a fixture only ever sits on the bottom segment, and its weight changes how the chain moves
 		BlockState bottom = level.getBlockState(chain.getBlockPos().below(length - 1));
 		ChainFixture fixture = bottom.hasProperty(SwingingChainBlock.FIXTURE)
 				? bottom.getValue(SwingingChainBlock.FIXTURE)
 				: ChainFixture.NONE;
-		boolean weighted = fixture.isWeighted();
-		float omega = SwingingChainBlockEntity.angularFrequency(length, weighted);
-		float tau = SwingingChainBlockEntity.decayTau(weighted);
-		BlockState fixtureState = fixtureState(fixture,
-				bottom.hasProperty(SwingingChainBlock.LIT) && bottom.getValue(SwingingChainBlock.LIT));
-
-		// normalise the per-joint shares so the whole chain's deflection adds up to the swing angle
-		// regardless of how long it is
-		float weightSum = 0.0F;
-		for (int i = 0; i < length; i++) {
-			weightSum += (float) Math.pow(JOINT_TAPER, i);
-		}
+		boolean lit = bottom.hasProperty(SwingingChainBlock.LIT) && bottom.getValue(SwingingChainBlock.LIT);
+		BlockState fixtureState = fixtureState(fixture, lit);
+		String fixtureModel = fixture.model(lit);
+		float[][] angles = chain.jointAngles(now, length, fixture.isWeighted());
 
 		BlockPos pos = chain.getBlockPos();
 
@@ -151,21 +128,9 @@ public class SwingingChainRenderer implements BlockEntityRenderer<SwingingChainB
 		poseStack.translate(0.5D, 1.0D, 0.5D);
 
 		for (int i = 0; i < length; i++) {
-			float weight = (float) Math.pow(JOINT_TAPER, i) / weightSum;
-			float t = now - i * JOINT_LAG_TICKS;
+			poseStack.mulPose(Axis.ZP.rotationDegrees(angles[i][0]));
+			poseStack.mulPose(Axis.XP.rotationDegrees(angles[i][1]));
 
-			float swing = swingAngle(chain, t, omega, tau);
-			float yawRad = chain.getSwingYaw() * Mth.DEG_TO_RAD;
-			float towardX = swing * Mth.cos(yawRad) + IDLE_AMPLITUDE * Mth.sin(t * IDLE_SPEED + phase);
-			float towardZ = swing * Mth.sin(yawRad)
-					+ IDLE_AMPLITUDE * Mth.sin(t * IDLE_SPEED_CROSS + phase * 1.7F);
-
-			// a downward-hanging chain tips toward +X when rotated about +Z, and toward -Z when
-			// rotated about +X -- hence the negation on the Z component.
-			poseStack.mulPose(Axis.ZP.rotationDegrees(towardX * weight));
-			poseStack.mulPose(Axis.XP.rotationDegrees(-towardZ * weight));
-
-			// sample light per segment: the bottom of a long chain can hang into much darker air
 			// The fixture takes the place of the bottom segment's chain link rather than hanging in the
 			// air below it. That block is real, so the lantern you see is the block you can click —
 			// an air block has nothing to ray-trace against, and a VoxelShape spilling downward would
@@ -174,15 +139,31 @@ public class SwingingChainRenderer implements BlockEntityRenderer<SwingingChainB
 			//
 			// Net effect matches vanilla: N stacked blocks read as (N-1) links plus a lantern, the
 			// same as placing N-1 chains and a lantern.
-			BlockState toDraw = (fixtureState != null && i == length - 1) ? fixtureState : CHAIN_LINK;
+			boolean last = i == length - 1;
+			// sample light per segment: the bottom of a long chain can hang into much darker air
+			int light = LevelRenderer.getLightColor(level, pos.below(i));
 
 			poseStack.pushPose();
-			// the origin is this segment's top joint, while renderSingleBlock draws into the unit cube
-			// 0..1 upward — so drop a block to land it in this segment's own space. Vanilla's hanging
-			// lantern model reaches y=16, so a fixture's connector meets the link above with no gap.
+			// the origin is this segment's top joint, while models draw into the unit cube 0..1
+			// upward — so drop a block to land it in this segment's own space. Vanilla's hanging
+			// lantern model reaches y=16, and so do the mod's fixture models, so a fixture's
+			// connector meets the link above with no gap.
 			poseStack.translate(-0.5D, -1.0D, -0.5D);
-			this.blockRenderer.renderSingleBlock(toDraw, poseStack, buffer,
-					LevelRenderer.getLightColor(level, pos.below(i)), OverlayTexture.NO_OVERLAY);
+			if (last && fixtureModel != null) {
+				BakedModel model = Minecraft.getInstance().getModelManager().getModel(
+						new ResourceLocation(DungeonBlocks.MOD_ID, "block/" + fixtureModel));
+				// Drawn into the same buffer renderSingleBlock gives the links and lanterns: the
+				// entity cutout sheet, whose shader lights each face by its normal. The chunk cutout
+				// type this used before has no such lighting in a block entity's pass, so every face
+				// came out at full brightness and the dark iron read lighter than the chain above it
+				// or the same iron on a chandelier.
+				this.blockRenderer.getModelRenderer().renderModel(poseStack.last(),
+						buffer.getBuffer(Sheets.cutoutBlockSheet()), null, model, 1.0F, 1.0F, 1.0F, light,
+						OverlayTexture.NO_OVERLAY, ModelData.EMPTY, RenderType.cutout());
+			} else {
+				this.blockRenderer.renderSingleBlock(last && fixtureState != null ? fixtureState : CHAIN_LINK,
+						poseStack, buffer, light, OverlayTexture.NO_OVERLAY);
+			}
 			poseStack.popPose();
 
 			// step down to the next joint, in this segment's rotated frame so the bend accumulates
@@ -190,24 +171,5 @@ public class SwingingChainRenderer implements BlockEntityRenderer<SwingingChainB
 		}
 
 		poseStack.popPose();
-	}
-
-	/** Damped pendulum from the synced impulse; zero once it has decayed or if never struck. */
-	private static float swingAngle(SwingingChainBlockEntity chain, float time, float omega, float tau) {
-		if (!chain.isSwinging()) {
-			return 0.0F;
-		}
-		float elapsed = time - chain.getSwingStartTick();
-		if (elapsed < 0.0F) {
-			return 0.0F;
-		}
-		float envelope = (float) Math.exp(-elapsed / tau);
-		return chain.getSwingAmplitude() * envelope * Mth.cos(omega * elapsed);
-	}
-
-	/** Position-derived phase so adjacent chains idle out of step with each other. */
-	private static float idlePhase(BlockPos pos) {
-		int hash = pos.getX() * 31 + pos.getY() * 17 + pos.getZ() * 13;
-		return (float) ((hash & 0xFF) / 255.0F * Math.PI * 2.0D);
 	}
 }

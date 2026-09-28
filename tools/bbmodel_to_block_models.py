@@ -26,6 +26,9 @@ CONVERSION RULES
   without one renders black against a solid neighbour.
 - An element may rotate on ONE axis, by a multiple of 22.5 degrees up to 45: the JSON format's
   limit. The script stops with an error rather than export something the game will reject.
+- Every UV must lie on its sprite (0-16). One off it samples the next texture on the block
+  atlas; the script stops rather than export it. Parts above or below the block need explicit
+  UVs in the .bbmodel, since vanilla's default mapping runs off the sprite there.
 """
 import json
 import os
@@ -68,9 +71,54 @@ for n in range(5):
 JOBS.append(("weapon_rack", "weapon_rack", RACK, {"frame": (0, 0, 0)}))
 JOBS.append(("weapon_rack", "weapon_rack_item", RACK, {"frame": (0, 0, 0), "display": (0, 0, 0)}))
 
+# The projects below were scaffolded by tools/gen_bbmodels.py; the .bbmodel is the source all the same.
+# the bones are the lying Skeleton block's own warm bone textures
+BONES = {"skull": "dungeonblocks:block/skeleton_head", "bone": "dungeonblocks:block/skeleton_bottom"}
+# a template per thing that can lie in the niche (CatacombNicheBlock's REMAINS): the wall and that
+# group, the wall alone for `empty`. Datagen makes one child of each per stone, filling `stone`.
+for remains in ("empty", "skull", "bones", "skull_and_bones", "skulls"):
+    JOBS.append(("catacomb_niche", f"template_catacomb_niche_{remains}", {"stone": "minecraft:block/stone_bricks", **BONES},
+                 {"wall": (0, 0, 0), **({} if remains == "empty" else {f"remains_{remains}": (0, 0, 0)})}))
+# one model per fill stage: bone_pile_N is groups pile_1..pile_N
+for n in range(1, 5):
+    JOBS.append(("bone_pile", f"bone_pile_{n}", BONES, {f"pile_{i}": (0, 0, 0) for i in range(1, n + 1)}))
+# one model per stage (RubbleScatterBlock's CHIPS): rubble_scatter_N is groups chips_1..chips_N;
+# rubble_scatter_4, the full scatter, is also the item's model
+for n in range(1, 5):
+    JOBS.append(("rubble_scatter", f"rubble_scatter_{n}", {"rubble": "dungeonblocks:block/rubble"},
+                 {f"chips_{i}": (0, 0, 0) for i in range(1, n + 1)}))
+JOBS.append(("pedestal", "pedestal", {"stone": "minecraft:block/polished_andesite"}, {"pedestal": (0, 0, 0)}))
+PIKE = {"pole": "minecraft:block/spruce_log", "skull": "dungeonblocks:block/skeleton_head",
+        "tip": "dungeonblocks:block/dark_iron"}
+for half in ("lower", "upper"):
+    JOBS.append((f"skull_pike_{half}", f"skull_pike_{half}", PIKE, {"pike": (0, 0, 0)}))
+# other heads on the same pike: only the upper half differs, and datagen gives each the skull
+# pike's lower half. The zombie's is vanilla's own mob texture (on the block atlas, as the
+# gibbet's skeleton is); the Steve head's is tools/gen_pike_head_textures.py.
+for pike, head in (("zombie_head_pike", "minecraft:entity/zombie/zombie"),
+                   ("bloody_steve_head_pike", "dungeonblocks:block/bloody_steve_head")):
+    JOBS.append((f"{pike}_upper", f"{pike}_upper",
+                 {"pole": "minecraft:block/spruce_log", "head": head, "tip": "dungeonblocks:block/dark_iron"},
+                 {"pike": (0, 0, 0)}))
+# lit and unlit differ only in the candle texture: vanilla's lit candle has a glowing wick
+for lit, candle in (("", "candle"), ("_lit", "candle_lit")):
+    JOBS.append(("chandelier", f"chandelier{lit}",
+                 {"iron": "dungeonblocks:block/dark_iron", "candle": f"minecraft:block/{candle}", "chain": "minecraft:block/chain"},
+                 {"frame": (0, 0, 0), "candles": (0, 0, 0)}))
+# chain fixtures: the manacles, meat hook and censer blocks' models, which SwingingChainRenderer also
+# draws in a swinging chain's bottom link when one is hung there.
+IRON_CHAIN = {"iron": "dungeonblocks:block/dark_iron", "chain": "minecraft:block/chain"}
+JOBS.append(("chain_fixture_manacles", "chain_fixture_manacles", IRON_CHAIN, {"fixture": (0, 0, 0)}))
+JOBS.append(("chain_fixture_meat_hook", "chain_fixture_meat_hook", {"iron": "dungeonblocks:block/dark_iron"},
+             {"fixture": (0, 0, 0)}))
+for lit, ember in (("", "coal_block"), ("_lit", "magma")):
+    JOBS.append(("chain_fixture_censer", f"chain_fixture_censer{lit}",
+                 {"metal": "dungeonblocks:block/dark_iron", "chain": "minecraft:block/chain",
+                  "ember": f"minecraft:block/{ember}"}, {"fixture": (0, 0, 0)}))
+
 # models whose textures have see-through pixels: the skeleton's ribs, the chain's links. Without
 # cutout those pixels draw black.
-CUTOUT = ("gibbet_",)
+CUTOUT = ("gibbet_", "chandelier", "chain_fixture_")
 
 BOUNDARY = {"north": (2, 0, "from"), "south": (2, 16, "to"), "west": (0, 0, "from"),
             "east": (0, 16, "to"), "down": (1, 0, "from"), "up": (1, 16, "to")}
@@ -107,6 +155,10 @@ def convert(project, groups, textures):
                 u0, v0, u1, v1 = face["uv"]
                 f = {"uv": [round(u0 * su, 4), round(v0 * sv, 4), round(u1 * su, 4), round(v1 * sv, 4)],
                      "texture": "#" + t["name"]}
+                # a UV off the sprite samples its neighbour on the block atlas - a part rising above
+                # the block takes a negative v from vanilla's default mapping, and did on the pikes
+                if min(f["uv"]) < 0 or max(f["uv"]) > 16:
+                    raise SystemExit(f"{project['name']}/{e['name']} {name}: uv {f['uv']} is off the sprite")
                 if face.get("rotation"):
                     f["rotation"] = face["rotation"]
                 axis, plane, side = BOUNDARY[name]

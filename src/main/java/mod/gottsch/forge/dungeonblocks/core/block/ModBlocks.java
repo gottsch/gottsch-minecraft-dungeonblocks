@@ -40,6 +40,7 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
@@ -779,6 +780,105 @@ public class ModBlocks {
             () -> new WeaponRackBlock(Properties.of().mapColor(MapColor.METAL)
                     .forceSolidOn().strength(3.5F).sound(SoundType.METAL).noOcclusion()));
 
+    // Coffins: the sarcophagus in wood - the same block entity, sealing and guardian - with a
+    // hinged lid. One per dungeon-door wood. Planks' properties, which carry no AXIS to trip on.
+    public static final List<RegistryObject<Block>> COFFINS = new ArrayList<>();
+    public static final RegistryObject<Block> SPRUCE_COFFIN = coffin("spruce", Blocks.SPRUCE_PLANKS);
+    public static final RegistryObject<Block> DARK_OAK_COFFIN = coffin("dark_oak", Blocks.DARK_OAK_PLANKS);
+    public static final RegistryObject<Block> CRIMSON_COFFIN = coffin("crimson", Blocks.CRIMSON_PLANKS);
+    public static final RegistryObject<Block> MANGROVE_COFFIN = coffin("mangrove", Blocks.MANGROVE_PLANKS);
+
+    private static RegistryObject<Block> coffin(String wood, Block planks) {
+        RegistryObject<Block> block = Registration.BLOCKS.register(wood + "_coffin",
+                () -> new CoffinBlock(Properties.copy(planks)));
+        COFFINS.add(block);
+        return block;
+    }
+
+    // A skull on a pike, two blocks tall. Wood's strength and sound, spelled out: see the note on
+    // the sharpened logs about copying a log's properties.
+    public static final RegistryObject<Block> SKULL_PIKE = Registration.BLOCKS.register("skull_pike",
+            () -> new TallPropBlock(Properties.of().mapColor(MapColor.PODZOL).instrument(NoteBlockInstrument.BASS)
+                    .strength(2.0F).sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.DESTROY),
+                    TallPropBlock.PIKE_POLE, TallPropBlock.PIKE_SKULL));
+    // other heads on the same pike, the same size as the skull: a zombie's, and Steve's, fresh
+    public static final RegistryObject<Block> ZOMBIE_HEAD_PIKE = Registration.BLOCKS.register("zombie_head_pike",
+            () -> new TallPropBlock(Properties.copy(SKULL_PIKE.get()), TallPropBlock.PIKE_POLE, TallPropBlock.PIKE_SKULL));
+    public static final RegistryObject<Block> BLOODY_STEVE_HEAD_PIKE = Registration.BLOCKS.register("bloody_steve_head_pike",
+            () -> new TallPropBlock(Properties.copy(SKULL_PIKE.get()), TallPropBlock.PIKE_POLE, TallPropBlock.PIKE_SKULL));
+
+    // The secret passage: a torch sconce that is a lever, doors that are wall until redstone opens
+    // them, and a pedestal to put the prize on. The lever sconce copies the torch sconce's
+    // properties exactly, so nothing about it gives it away.
+    public static final RegistryObject<Block> LEVER_SCONCE = Registration.BLOCKS.register("lever_sconce",
+            () -> new LeverSconceBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)
+                    .noCollission().lightLevel(state -> 14).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> PEDESTAL = Registration.BLOCKS.register("pedestal",
+            () -> new PedestalBlock(Properties.copy(Blocks.POLISHED_ANDESITE).noOcclusion()));
+    // One hidden door per wall stone Dungeons2 builds in - its motifs' walls, and the cracked and
+    // mossy stone bricks its weathering turns them into - each copying its stone's properties.
+    public static final Map<RegistryObject<Block>, Supplier<Block>> HIDDEN_DOORS = new LinkedHashMap<>();
+
+    static {
+        hiddenDoor("stone_bricks", () -> Blocks.STONE_BRICKS);
+        hiddenDoor("mossy_stone_bricks", () -> Blocks.MOSSY_STONE_BRICKS);
+        hiddenDoor("cracked_stone_bricks", () -> Blocks.CRACKED_STONE_BRICKS);
+        hiddenDoor("bricks", () -> Blocks.BRICKS);
+        hiddenDoor("deepslate_bricks", () -> Blocks.DEEPSLATE_BRICKS);
+        hiddenDoor("mud_bricks", () -> Blocks.MUD_BRICKS);
+    }
+
+    /** Registers "<source>_hidden_door", singular like the capstones: stone_brick_hidden_door. */
+    private static void hiddenDoor(String source, Supplier<Block> block) {
+        String name = source.endsWith("bricks") ? source.substring(0, source.length() - 1) : source;
+        HIDDEN_DOORS.put(Registration.BLOCKS.register(name + "_hidden_door",
+                () -> new HiddenDoorBlock(Properties.copy(block.get()).noOcclusion().pushReaction(PushReaction.DESTROY))), block);
+    }
+
+    // Loose stone chips strewn on a floor, a carpet that thickens as more is laid on it: it needs
+    // something under it.
+    public static final RegistryObject<Block> RUBBLE_SCATTER = Registration.BLOCKS.register("rubble_scatter",
+            () -> new RubbleScatterBlock(Properties.of().mapColor(MapColor.STONE).strength(0.5F).sound(SoundType.STONE)
+                    .noOcclusion().pushReaction(PushReaction.DESTROY)));
+
+    // Gargoyles: the Monster Manual's gargoyle mob, its own model baked in stone
+    // (tools/entity_model.py). Stone's properties, the need for a pickaxe included.
+    public static final RegistryObject<Block> PERCHED_GARGOYLE = Registration.BLOCKS.register("perched_gargoyle",
+            () -> new StatueBlock(Properties.copy(Blocks.STONE).noOcclusion(), 2, 2, 14, 14, 15.5));
+    public static final RegistryObject<Block> GARGOYLE_BUST = Registration.BLOCKS.register("gargoyle_bust",
+            () -> new StatueBlock(Properties.copy(Blocks.STONE).noOcclusion(), 2, 4, 14, 12, 14.5));
+    public static final RegistryObject<Block> GARGOYLE_STATUE = Registration.BLOCKS.register("gargoyle_statue",
+            () -> new TallPropBlock(Properties.copy(Blocks.STONE).noOcclusion(),
+                    Shapes.or(Block.box(1, 0, 1, 15, 3, 15), Block.box(3, 3, 3, 13, 16, 13)),
+                    Block.box(2, 0, 2, 14, 15.75, 14)));
+    // A heap of loose bones, filled in stages. Breaks quickly by hand, like a pile of anything loose.
+    public static final RegistryObject<Block> BONE_PILE = Registration.BLOCKS.register("bone_pile",
+            () -> new BonePileBlock(Properties.of().mapColor(MapColor.SAND).strength(0.5F).sound(SoundType.BONE_BLOCK)
+                    .noOcclusion().pushReaction(PushReaction.DESTROY)));
+    // An iron wheel of candles hung from the ceiling. The dungeon lantern's strength and sound, but
+    // like the sconces it needs no tool to take down.
+    public static final RegistryObject<Block> CHANDELIER = Registration.BLOCKS.register("chandelier",
+            () -> new ChandelierBlock(Properties.of().mapColor(MapColor.METAL).strength(3.5F).sound(SoundType.LANTERN)
+                    .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
+    // Chain fixtures, hung as blocks under a vanilla chain or from a ceiling, as a lantern hangs. On
+    // a swinging chain they are its fixture instead (SwingingChainBlock#use), drawn from the same
+    // models. The chandelier's strength and leniency. Each shape is its model's: a thin chain or
+    // eye above, the fixture's bulk below.
+    public static final RegistryObject<Block> MANACLES = Registration.BLOCKS.register("manacles",
+            () -> new HangingFixtureBlock(fixtureProperties(SoundType.CHAIN),
+                    Shapes.or(Block.box(6, 7, 6, 10, 16, 10), Block.box(0, 0, 5.5, 14.5, 7.5, 10.5))));
+    public static final RegistryObject<Block> MEAT_HOOK = Registration.BLOCKS.register("meat_hook",
+            () -> new HangingFixtureBlock(fixtureProperties(SoundType.CHAIN),
+                    Shapes.or(Block.box(6.5, 7.5, 6.5, 9.5, 16, 9.5), Block.box(5.5, 2, 5.5, 10.5, 7.5, 10.5))));
+    public static final RegistryObject<Block> CENSER = Registration.BLOCKS.register("censer",
+            () -> new CenserBlock(fixtureProperties(SoundType.LANTERN).lightLevel(CenserBlock.LIGHT_EMISSION),
+                    Shapes.or(Block.box(7, 10, 7, 9, 16, 9), Block.box(5, 1.5, 5, 11, 10, 11))));
+
+    private static Properties fixtureProperties(SoundType sound) {
+        return Properties.of().mapColor(MapColor.METAL).strength(3.5F).sound(sound).noOcclusion()
+                .pushReaction(PushReaction.DESTROY);
+    }
+
     // bones & bodies
     // copy(STONE) alone left canOcclude=true, which is wrong for a 6px-tall sprawl: it culled the
     // neighbouring faces, shaded the bones as if they filled the cell, and hid the water of a
@@ -826,6 +926,73 @@ public class ModBlocks {
         String name = source.endsWith("bricks") ? source.substring(0, source.length() - 1) : source;
         CAPSTONES.put(Registration.BLOCKS.register(name + "_capstone",
                 () -> new PyramidBlock(Properties.copy(block.get()))), block);
+    }
+
+    // Tapestries: woven scenes hung on a rod, 4 wide and 3 tall, each pristine and worn (textures:
+    // tools/gen_tapestry_textures.py). Cloth: wool's strength and sound, no tool, it burns.
+    public static final List<RegistryObject<Block>> TAPESTRIES = new ArrayList<>();
+    public static final RegistryObject<Block> DRAGON_TAPESTRY = tapestry("dragon_tapestry");
+    public static final RegistryObject<Block> WORN_DRAGON_TAPESTRY = tapestry("worn_dragon_tapestry");
+    public static final RegistryObject<Block> HUNT_TAPESTRY = tapestry("hunt_tapestry");
+    public static final RegistryObject<Block> WORN_HUNT_TAPESTRY = tapestry("worn_hunt_tapestry");
+    public static final RegistryObject<Block> NECROMANCER_TAPESTRY = tapestry("necromancer_tapestry");
+    public static final RegistryObject<Block> WORN_NECROMANCER_TAPESTRY = tapestry("worn_necromancer_tapestry");
+    public static final RegistryObject<Block> SUMMONING_TAPESTRY = tapestry("summoning_tapestry");
+    public static final RegistryObject<Block> WORN_SUMMONING_TAPESTRY = tapestry("worn_summoning_tapestry");
+
+    private static RegistryObject<Block> tapestry(String name) {
+        RegistryObject<Block> block = Registration.BLOCKS.register(name,
+                () -> new TapestryBlock(Properties.of().mapColor(MapColor.COLOR_BLUE).strength(0.8F).sound(SoundType.WOOL)
+                        .noCollission().noOcclusion().ignitedByLava().pushReaction(PushReaction.DESTROY)));
+        TAPESTRIES.add(block);
+        return block;
+    }
+
+    // Crumbling floors: a stone with faint cracks that gives way when stepped on, spreading through
+    // every crumbling block touching it. The stones Dungeons2 floors with (textures:
+    // tools/gen_crumbling_floor_textures.py). Each copies its stone's properties; datagen reads the
+    // texture off the id. Adding one is a line here and a row in the generator.
+    public static final Map<RegistryObject<Block>, Supplier<Block>> CRUMBLING_FLOORS = new LinkedHashMap<>();
+
+    static {
+        crumblingFloor("stone_bricks", () -> Blocks.STONE_BRICKS);
+        crumblingFloor("mossy_stone_bricks", () -> Blocks.MOSSY_STONE_BRICKS);
+        crumblingFloor("cracked_stone_bricks", () -> Blocks.CRACKED_STONE_BRICKS);
+        crumblingFloor("cobblestone", () -> Blocks.COBBLESTONE);
+        crumblingFloor("mossy_cobblestone", () -> Blocks.MOSSY_COBBLESTONE);
+        crumblingFloor("polished_andesite", () -> Blocks.POLISHED_ANDESITE);
+        crumblingFloor("deepslate_bricks", () -> Blocks.DEEPSLATE_BRICKS);
+        crumblingFloor("deepslate_tiles", () -> Blocks.DEEPSLATE_TILES);
+        crumblingFloor("mud_bricks", () -> Blocks.MUD_BRICKS);
+    }
+
+    /** Registers "crumbling_<source>": crumbling_stone_bricks, as vanilla says cracked_stone_bricks. */
+    private static void crumblingFloor(String source, Supplier<Block> block) {
+        CRUMBLING_FLOORS.put(Registration.BLOCKS.register("crumbling_" + source,
+                () -> new CrumblingFloorBlock(Properties.copy(block.get()))), block);
+    }
+
+    // Catacomb niches: a burial recess in a wall, with a skull and bones in it. A curated handful of
+    // crypt stones rather than every material - tuff because the Roman catacombs are cut in it,
+    // sandstone for desert tombs. Adding one is a line here. Each copies its source's properties,
+    // and datagen reads the stone texture off the source's id, as for the capstones.
+    public static final Map<RegistryObject<Block>, Supplier<Block>> CATACOMB_NICHES = new LinkedHashMap<>();
+
+    static {
+        catacombNiche("stone_bricks", () -> Blocks.STONE_BRICKS);
+        catacombNiche("mossy_stone_bricks", () -> Blocks.MOSSY_STONE_BRICKS);
+        catacombNiche("cracked_stone_bricks", () -> Blocks.CRACKED_STONE_BRICKS);
+        catacombNiche("deepslate_bricks", () -> Blocks.DEEPSLATE_BRICKS);
+        catacombNiche("cracked_deepslate_bricks", () -> Blocks.CRACKED_DEEPSLATE_BRICKS);
+        catacombNiche("tuff", () -> Blocks.TUFF);
+        catacombNiche("sandstone", () -> Blocks.SANDSTONE);
+    }
+
+    /** Registers "<source>_catacomb_niche", singular like the capstones: stone_brick_catacomb_niche. */
+    private static void catacombNiche(String source, Supplier<Block> block) {
+        String name = source.endsWith("bricks") ? source.substring(0, source.length() - 1) : source;
+        CATACOMB_NICHES.put(Registration.BLOCKS.register(name + "_catacomb_niche",
+                () -> new CatacombNicheBlock(Properties.copy(block.get()))), block);
     }
 
     // ------------------------------------------------------------------

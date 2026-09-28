@@ -134,9 +134,16 @@ public class DungeonBannerModel {
 
 	/** y of the cloth's top edge: just under the rod. */
 	private static final float CLOTH_TOP = -6.0F;
-	/** The plane the cloth hangs in. 3px clear of the wall, and the billow only ever moves it away. */
-	private static final float CLOTH_Z = 4.5F;
+	/**
+	 * The plane the cloth hangs in: straight down from the rod's centreline, 1px off the wall. It is
+	 * the ROD that must sit on the wall (it once stood 1px clear and read as floating); the cloth
+	 * hangs a little out from it, and was never the problem. The billow only ever moves the cloth
+	 * away from the wall (see {@link #billowBias}), so it never sinks into it.
+	 */
+	private static final float CLOTH_Z = 7.0F;
 
+	/** The rod's back face lies on the wall plane, z=8: it rests against the wall. */
+	private static final float ROD_Z = 6.0F;
 	private static final int ROD_WIDTH = 12;
 	/** The cloth's two unwraps occupy the top-left of the atlas, so the rod goes below them. */
 	private static final int ROD_TEX_U = 0;
@@ -148,7 +155,7 @@ public class DungeonBannerModel {
 	/**
 	 * A standing outward bow, equal to the shape's amplitude, so the billow swings between "flat"
 	 * and "bowed out" and <b>never crosses zero into the wall</b>. Without it the wave would drive
-	 * the hem backwards on every half-cycle, and the cloth hangs only 3px clear of the wall — it
+	 * the hem backwards on every half-cycle, and the cloth hangs only 1px clear of the wall — it
 	 * would sink into the stone twice a cycle. Vanilla's banner biases its sway the same way and for
 	 * the same reason. It is also what keeps a motionless banner looking like cloth: see
 	 * {@link #still}.
@@ -190,7 +197,7 @@ public class DungeonBannerModel {
 		parts.addOrReplaceChild("rod",
 				CubeListBuilder.create()
 						.texOffs(ROD_TEX_U, ROD_TEX_V)
-						.addBox(-ROD_WIDTH / 2.0F, -8.0F, 5.0F, ROD_WIDTH, 2.0F, 2.0F, CubeDeformation.NONE),
+						.addBox(-ROD_WIDTH / 2.0F, -8.0F, ROD_Z, ROD_WIDTH, 2.0F, 2.0F, CubeDeformation.NONE),
 				PartPose.ZERO);
 
 		// each slice hinges on its own top edge, so its pivot sits there and its quad hangs below it.

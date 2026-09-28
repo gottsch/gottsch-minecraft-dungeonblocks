@@ -45,8 +45,11 @@ import java.util.Locale;
  * (blockbench/gibbet_*.bbmodel). Every block of it is a full 16x16 cage section, so the skeleton
  * has room for other poses later. A prop; FACING is the way the skeleton faces, toward the player.
  *
- * <p>PART is BOTTOM, MIDDLE or TOP. Placed from the bottom, it needs the two blocks
- * above free; losing any part destroys the rest; only the bottom part drops the item.
+ * <p>PART is BOTTOM, MIDDLE or TOP. Clicked onto the underside of a block - a ceiling, or a
+ * chain - it hangs: the top part goes where it was placed and the other two below it, so its
+ * chain meets whatever it hangs from. Clicked onto any other face it stands, the bottom part
+ * where it was placed and the other two above. Either way all three spaces must be free; losing
+ * any part destroys the rest; only the bottom part drops the item.
  */
 public class GibbetBlock extends HorizontalDirectionalBlock {
     public enum Part implements StringRepresentable {
@@ -83,19 +86,29 @@ public class GibbetBlock extends HorizontalDirectionalBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
+        // hung from the underside of whatever was clicked, it grows down; stood, it grows up
+        boolean hanging = context.getClickedFace() == Direction.DOWN;
+        Direction grows = hanging ? Direction.DOWN : Direction.UP;
         for (int i = 1; i <= 2; i++) {
-            BlockPos p = pos.above(i);
-            if (p.getY() >= level.getMaxBuildHeight() || !level.getBlockState(p).canBeReplaced(context)) {
+            BlockPos p = pos.relative(grows, i);
+            if (level.isOutsideBuildHeight(p) || !level.getBlockState(p).canBeReplaced(context)) {
                 return null;
             }
         }
-        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite())
+                .setValue(PART, hanging ? Part.TOP : Part.BOTTOM);
     }
 
+    /** Fills in the other two parts, below a hung gibbet's top or above a stood one's bottom. */
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        level.setBlock(pos.above(), state.setValue(PART, Part.MIDDLE), 3);
-        level.setBlock(pos.above(2), state.setValue(PART, Part.TOP), 3);
+        if (state.getValue(PART) == Part.TOP) {
+            level.setBlock(pos.below(), state.setValue(PART, Part.MIDDLE), 3);
+            level.setBlock(pos.below(2), state.setValue(PART, Part.BOTTOM), 3);
+        } else {
+            level.setBlock(pos.above(), state.setValue(PART, Part.MIDDLE), 3);
+            level.setBlock(pos.above(2), state.setValue(PART, Part.TOP), 3);
+        }
     }
 
     /** Each part needs its neighbours in the stack; losing one destroys the rest, as a unit. */
