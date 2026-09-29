@@ -55,7 +55,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 /**
  * A decorative chain segment that sways — gently on its own, and properly when something walks
@@ -371,9 +370,7 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 		if (!(level.getBlockEntity(findTop(level, pos)) instanceof SwingingChainBlockEntity chain)) {
 			return;
 		}
-		// out of the gap under the censer's lid, a little to one side or the other
-		Vec3 at = chain.bottomPoint(level.getGameTime(), new Vector3f(
-				0.5F + (random.nextFloat() - 0.5F) * 0.3F, CenserBlock.SMOKE_Y, 0.5F + (random.nextFloat() - 0.5F) * 0.3F));
+		Vec3 at = chain.bottomPoint(level.getGameTime(), CenserBlock.smokeOrigin(random));
 		level.addParticle(ParticleTypes.SMOKE, at.x, at.y, at.z, 0.0D, 0.015D, 0.0D);
 		if (random.nextInt(4) == 0) {
 			level.addParticle(ParticleTypes.SMOKE, at.x, at.y + 0.1D, at.z, 0.0D, 0.02D, 0.0D);

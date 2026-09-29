@@ -184,6 +184,9 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // the dark iron bars and their doors: the same, and pickaxe-only like vanilla iron bars
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.DARK_IRON_BARS.get(), ModBlocks.TARNISHED_DARK_IRON_BARS.get(),
                 ModBlocks.DARK_IRON_BARS_DOOR.get(), ModBlocks.TARNISHED_DARK_IRON_BARS_DOOR.get());
+        // a ladder climbs only by this tag, not by being a LadderBlock
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.DARK_IRON_LADDER.get());
+        this.tag(BlockTags.CLIMBABLE).add(ModBlocks.DARK_IRON_LADDER.get());
         this.tag(BlockTags.DOORS).add(ModBlocks.DARK_IRON_BARS_DOOR.get(), ModBlocks.TARNISHED_DARK_IRON_BARS_DOOR.get());
 
         // Sharpened logs are wood: axe, no tier, like vanilla logs. Their ids match nothing in
@@ -211,6 +214,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.STONE_SARCOPHAGUS.get(), ModBlocks.DEEPSLATE_SARCOPHAGUS.get(),
                 ModBlocks.IRON_MAIDEN.get(), ModBlocks.GIBBET.get());
         this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.STONE_SARCOPHAGUS.get(), ModBlocks.DEEPSLATE_SARCOPHAGUS.get());
+
+        // The pillory and the rack are dark oak, and match nothing in stone_blocks: an axe, no tier
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.PILLORY.get(), ModBlocks.OCCUPIED_PILLORY.get(),
+                ModBlocks.TORTURE_RACK.get(), ModBlocks.OCCUPIED_TORTURE_RACK.get());
 
         // Same for the portcullis and its winch
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.PORTCULLIS.get(), ModBlocks.PORTCULLIS_WINCH.get());

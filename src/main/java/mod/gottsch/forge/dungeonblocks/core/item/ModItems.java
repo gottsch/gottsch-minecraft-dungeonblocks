@@ -22,6 +22,7 @@ package mod.gottsch.forge.dungeonblocks.core.item;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.entity.ModEntityTypes;
+import mod.gottsch.forge.dungeonblocks.core.entity.TomeVariant;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -31,8 +32,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * @author Mark Gottschling on Jan 13, 2020
@@ -107,12 +111,24 @@ public class ModItems {
 	public static final RegistryObject<Item> GREEN_FLASK = Registration.ITEMS.register("green_flask",
 			() -> new PotItem(() -> ModEntityTypes.GREEN_FLASK.get(), new Item.Properties()));
 
+	/** A tome item per cover, each laying down a TomeEntity with that cover. */
+	public static final Map<TomeVariant, RegistryObject<Item>> TOMES = tomes();
+
+	private static Map<TomeVariant, RegistryObject<Item>> tomes() {
+		Map<TomeVariant, RegistryObject<Item>> tomes = new EnumMap<>(TomeVariant.class);
+		for (TomeVariant variant : TomeVariant.values()) {
+			tomes.put(variant, Registration.ITEMS.register(variant.id(),
+					() -> new TomeItem(variant, new Item.Properties().stacksTo(16))));
+		}
+		return tomes;
+	}
+
 	/**
 	 * Items belonging to the decorative-entity subsystem. These are pulled out of the main
 	 * DungeonBlocks tab (which otherwise sweeps up every registered item) and shown in the
 	 * DungeonBlocks Entities tab instead — see {@link ModCreativeModeTabs}.
 	 */
-	public static final List<RegistryObject<Item>> ENTITY_ITEMS = List.of(
+	public static final List<RegistryObject<Item>> ENTITY_ITEMS = Stream.concat(Stream.of(
 			POT, SQUAT_CLAY_POT, THIN_CLAY_POT,
 			STONE_POT, SQUAT_STONE_POT, THIN_STONE_POT,
 			RED_POT, SQUAT_RED_POT, THIN_RED_POT,
@@ -120,7 +136,7 @@ public class ModItems {
 			BIG_RED_POTION, RED_FLASK,
 			BIG_YELLOW_POTION, YELLOW_FLASK,
 			BIG_BLUE_POTION, BLUE_FLASK,
-			BIG_GREEN_POTION, GREEN_FLASK);
+			BIG_GREEN_POTION, GREEN_FLASK), TOMES.values().stream()).toList();
 
 	/**
 	 * 

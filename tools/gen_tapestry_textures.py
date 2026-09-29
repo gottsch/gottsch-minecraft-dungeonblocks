@@ -288,7 +288,8 @@ def necromancer_scene():
         px[x, y] = (rnd.choice((110, 130, 150)),) * 2 + (150,) + (255,)
 
     # --- the moon, cratered, and cloud laid across it in strata, lit along their upper edges
-    MOON_C, MOON_D = (220, 212, 186), (182, 172, 146)
+    # yellower than the bone, or moon, skulls and skeletons are all one pale shade
+    MOON_C, MOON_D = (234, 214, 142), (196, 172, 102)
     d.ellipse((14, 10, 33, 29), fill=MOON_C)
     for cx, cy, r in ((20, 16, 2), (27, 21, 3), (22, 24, 1), (29, 14, 1)):
         d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=MOON_D)
@@ -416,10 +417,13 @@ def necromancer_scene():
     for x, y in ((106, 74), (107, 72), (108, 71), (109, 72), (110, 71), (111, 73), (107, 75), (108, 76), (109, 76)):
         put(x, y, BONE_C if x < 109 else BONE_S)
 
-    # --- the necromancer: a tall flared robe, dithered from its lit edge to deep shadow
-    ROBE_T = [(20, 16, 26), (30, 22, 38), (42, 32, 52)]               # shadow, body, lit
-    RIM_ROBE, TRIM, TRIM_D = (70, 128, 70), (176, 160, 120), (120, 106, 78)
-    robe = [(34, 30), (44, 30), (54, 78), (24, 78)]
+    # --- the necromancer: a tall flared robe, dithered from its lit edge to deep shadow. Violet, and
+    # lighter than the sky: robed in the sky's own near-black it vanished, and the hood's skull over
+    # a pale trim line read as a second skull on a spike beside the staff.
+    ROBE_T = [(40, 26, 52), (64, 42, 80), (94, 66, 112)]              # shadow, body, lit
+    RIM_ROBE, TRIM = (70, 128, 70), (176, 160, 120)
+    MOONLIT = (112, 98, 124)                                            # the moon's side, to the west
+    robe = [(31, 31), (46, 31), (54, 78), (24, 78)]
     f.polygon(robe, fill=255)
     rmask = Image.new("L", (w, h), 0)
     ImageDraw.Draw(rmask).polygon(robe, fill=255)
@@ -435,17 +439,21 @@ def necromancer_scene():
         for x in range(24, 55):
             if rmask.getpixel((x, y)) and ((x * 7) % 5 == 0) and y > 75:
                 px[x, y] = SKY_STEPS[4] + (255,)
-    d.line((39, 32, 39, 77), fill=TRIM)                                 # the open front, trimmed
-    d.line((40, 32, 40, 77), fill=TRIM_D)
-    for y in range(30, 78):                                             # the spell's light on its edge
-        edge = max((x for x in range(24, 56) if rmask.getpixel((x, y))), default=None)
-        if edge:
-            put(edge, y, RIM_ROBE)
+    d.line((39, 32, 40, 77), fill=ROBE_T[0])                            # the open front, a dark fold
+    for y in range(30, 78):                                             # the spell's light on its edge,
+        row = [x for x in range(20, 58) if rmask.getpixel((x, y))]      # the moon's on the other
+        if row:
+            put(row[-1], y, RIM_ROBE)
+            put(row[0], y, MOONLIT)
     # the hood: a peak, its opening black, a skull's face in the shadow with burning eyes
-    hood = [(31, 30), (38, 12), (47, 30)]
-    poly(hood, ROBE_T[1])
-    d.line((38, 12, 47, 30), fill=RIM_ROBE)
-    poly([(34, 29), (38, 19), (44, 29)], (8, 5, 10))
+    # a rounded cowl, not a triangle: domed over the head, falling straight to the shoulders
+    # sized to the head it holds: a size up, it swallowed the figure
+    crown = [(39, 16), (42, 17), (44, 19), (45, 23), (46, 28), (47, 31)]           # peak to east shoulder
+    west = [(39, 16), (36, 17), (34, 19), (33, 23), (32, 28), (31, 31)]            # peak to west shoulder
+    poly(crown + west[::-1], ROBE_T[1])
+    d.line(crown, fill=RIM_ROBE)
+    d.line(west, fill=MOONLIT)
+    poly([(35, 30), (35, 23), (37, 20), (39, 19), (41, 20), (43, 23), (43, 30)], (8, 5, 10))
     skull(36, 21, lit=False)
     put(37, 23, GLOW_L)
     put(41, 23, GLOW_L)
@@ -468,22 +476,23 @@ def necromancer_scene():
         put(x, y, c)
     # the staff in its other hand: gnarled wood, a horned skull at its head, green flame about it
     WOOD_L, WOOD_D = (126, 92, 58), (70, 48, 30)
-    d.line((28, 26, 29, 80), fill=WOOD_D, width=2)
-    f.line((28, 26, 29, 80), fill=255, width=2)
-    d.line((28, 26, 28, 80), fill=WOOD_L)
+    d.line((28, 20, 29, 80), fill=WOOD_D, width=2)
+    f.line((28, 20, 29, 80), fill=255, width=2)
+    d.line((28, 20, 28, 80), fill=WOOD_L)
     for y in (40, 55, 68):                                              # knots
         put(27, y, WOOD_D)
         put(30, y + 1, WOOD_D)
     poly([(31, 36), (34, 34), (36, 38), (31, 40)], ROBE_T[1])           # the gripping hand, sleeved
     put(30, 37, HAND)
     put(30, 38, HAND)
-    skull(25, 19)
-    for hx, hy in ((24, 19), (23, 17), (23, 16), (32, 19), (33, 17), (33, 16)):   # curling horns
+    # its head held above the hood, not beside the face: level with it, the two skulls read as a pair
+    skull(25, 13)
+    for hx, hy in ((24, 13), (23, 11), (23, 10), (32, 13), (33, 11), (33, 10)):   # curling horns
         put(hx, hy, BONE_D)
     for k in range(18):                                                 # green flame licking up
         x = rnd.randint(24, 32)
-        y = rnd.randint(12, 20)
-        put(x, y, GLOW_L if y > 16 else GLOW)
+        y = rnd.randint(6, 14)
+        put(x, y, GLOW_L if y > 10 else GLOW)
 
     # --- the spell: tendrils curling from the hand to each of the dead, bright core, soft halo
     import math

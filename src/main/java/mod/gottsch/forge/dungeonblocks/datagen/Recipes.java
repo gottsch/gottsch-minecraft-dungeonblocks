@@ -37,6 +37,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -137,6 +138,16 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.DARK_IRON_BARS.get()))
 					.save(recipe);
 
+			// dark iron ladder: vanilla's ladder in iron ingots, blackened with a coal
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_LADDER.get(), 8)
+					.pattern("i i")
+					.pattern("ici")
+					.pattern("i i")
+					.define('i', Items.IRON_INGOT)
+					.define('c', Items.COAL)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+					.save(recipe);
+
 			// sharpened logs: a stripped log sharpened with flint
 			sharpened(recipe, ModBlocks.SHARPENED_OAK_LOG, Blocks.STRIPPED_OAK_LOG);
 			sharpened(recipe, ModBlocks.SHARPENED_SPRUCE_LOG, Blocks.STRIPPED_SPRUCE_LOG);
@@ -233,6 +244,36 @@ public class Recipes extends RecipeProvider {
 					.define('x', Blocks.BONE_BLOCK)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.IRON_BARS))
 					.save(recipe);
+
+			// pillory: a slab board between two log posts; the rack: a plank bed on fence legs with a
+			// log roller at each end, strung with string. Each takes a bone block to fill, as the
+			// gibbet does.
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.PILLORY.get())
+					.pattern("lsl")
+					.pattern("l l")
+					.pattern("l l")
+					.define('l', Blocks.DARK_OAK_LOG)
+					.define('s', Blocks.DARK_OAK_SLAB)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.DARK_OAK_LOG))
+					.save(recipe);
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.TORTURE_RACK.get())
+					.pattern("ltl")
+					.pattern("ppp")
+					.pattern("f f")
+					.define('l', Blocks.DARK_OAK_LOG)
+					.define('t', Items.STRING)
+					.define('p', Blocks.DARK_OAK_PLANKS)
+					.define('f', Blocks.DARK_OAK_FENCE)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.DARK_OAK_LOG))
+					.save(recipe);
+			for (List<RegistryObject<Block>> pair : List.of(List.of(ModBlocks.PILLORY, ModBlocks.OCCUPIED_PILLORY),
+					List.of(ModBlocks.TORTURE_RACK, ModBlocks.OCCUPIED_TORTURE_RACK))) {
+				ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, pair.get(1).get())
+						.requires(pair.get(0).get())
+						.requires(Blocks.BONE_BLOCK)
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(pair.get(0).get()))
+						.save(recipe);
+			}
 
 			// firewood rack: logs between two hoops of iron bars - any log a campfire would burn
 			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.FIREWOOD_RACK.get())

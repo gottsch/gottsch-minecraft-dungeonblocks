@@ -690,6 +690,11 @@ public class ModBlocks {
             () -> new IronBarsBlock(Properties.copy(Blocks.IRON_BARS)));
     public static final RegistryObject<Block> TARNISHED_DARK_IRON_BARS = Registration.BLOCKS.register("tarnished_dark_iron_bars",
             () -> new IronBarsBlock(Properties.copy(Blocks.IRON_BARS)));
+    // a vanilla ladder in every way but its look: a 3D model of dark iron rails and rungs, inside
+    // the ladder's own shape. Iron bars' toughness, and like them it wants a pickaxe.
+    public static final RegistryObject<Block> DARK_IRON_LADDER = Registration.BLOCKS.register("dark_iron_ladder",
+            () -> new LadderBlock(Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops()
+                    .strength(3.0F, 6.0F).sound(SoundType.METAL).noOcclusion()));
     public static final RegistryObject<Block> DARK_IRON_BARS_DOOR = Registration.BLOCKS.register("dark_iron_bars_door",
             () -> new IronBarsDoorBlock(Properties.copy(Blocks.IRON_DOOR)));
     public static final RegistryObject<Block> TARNISHED_DARK_IRON_BARS_DOOR = Registration.BLOCKS.register("tarnished_dark_iron_bars_door",
@@ -770,6 +775,16 @@ public class ModBlocks {
     public static final RegistryObject<Block> GIBBET = Registration.BLOCKS.register("gibbet",
             () -> new GibbetBlock(Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops()
                     .strength(5.0F, 6.0F).sound(SoundType.METAL).noOcclusion()));
+    // the pillory and the rack, dark oak, each empty and with a skeleton in it: the occupied one is
+    // the same block with other models. Wood's strength and sound, and no tool needed.
+    public static final RegistryObject<Block> PILLORY = Registration.BLOCKS.register("pillory",
+            () -> new PilloryBlock(tortureWood()));
+    public static final RegistryObject<Block> OCCUPIED_PILLORY = Registration.BLOCKS.register("occupied_pillory",
+            () -> new PilloryBlock(tortureWood()));
+    public static final RegistryObject<Block> TORTURE_RACK = Registration.BLOCKS.register("torture_rack",
+            () -> new TortureRackBlock(tortureWood()));
+    public static final RegistryObject<Block> OCCUPIED_TORTURE_RACK = Registration.BLOCKS.register("occupied_torture_rack",
+            () -> new TortureRackBlock(tortureWood()));
     // Racks in the brazier's ironwork, with the brazier's leniency: no tool needed to take one
     // down. The firewood rack is mostly logs to look at and to hit, so wood's strength and sound;
     // the weapon rack is all iron, and holds its weapons in a block entity.
@@ -1016,6 +1031,11 @@ public class ModBlocks {
             Registration.BLOCKS.register(id + "_pillar_block",         () -> new PillarBlock(m.props()));
             Registration.BLOCKS.register(id + "_arrow_slit_block",     () -> new FacingBlock(m.props()));
         }
+    }
+
+    private static Properties tortureWood() {
+        return Properties.of().mapColor(MapColor.COLOR_BROWN).strength(2.5F, 3.0F).sound(SoundType.WOOD)
+                .ignitedByLava().noOcclusion();
     }
 
     /**

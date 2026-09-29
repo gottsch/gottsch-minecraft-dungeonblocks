@@ -20,6 +20,9 @@ import mod.gottsch.forge.dungeonblocks.core.entity.client.PotVariant;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.RedFlaskModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.SquatClayPotModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.ThinClayPotModel;
+import mod.gottsch.forge.dungeonblocks.core.entity.TomeVariant;
+import mod.gottsch.forge.dungeonblocks.core.entity.client.TomeModel;
+import mod.gottsch.forge.dungeonblocks.core.entity.client.TomeRenderer;
 import mod.gottsch.forge.dungeonblocks.core.state.properties.ChainFixture;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.resources.ResourceLocation;
@@ -122,6 +125,9 @@ public class ClientSetup {
         event.registerLayerDefinition(ThinClayPotModel.LAYER_LOCATION, ThinClayPotModel::createBodyLayer);
         event.registerLayerDefinition(BigRedPotionModel.LAYER_LOCATION, BigRedPotionModel::createBodyLayer);
         event.registerLayerDefinition(RedFlaskModel.LAYER_LOCATION, RedFlaskModel::createBodyLayer);
+        for (TomeVariant.Shape shape : TomeVariant.Shape.values()) {
+            event.registerLayerDefinition(TomeModel.layer(shape), () -> TomeModel.createBodyLayer(shape));
+        }
         // hand the shape table to the inventory renderer now that the layers exist
         PotItemRenderer.setVariants(POT_VARIANTS);
         for (int i = 0; i < PotShardModel.LAYERS.length; i++) {
@@ -140,6 +146,7 @@ public class ClientSetup {
                                 variant.modelFactory().apply(context.bakeLayer(variant.layer())),
                                 variant.texture(), variant.tumblePivot(), variant.scale())));
         event.registerEntityRenderer(ModEntityTypes.POT_SHARD.get(), PotShardRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.TOME.get(), TomeRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.SWINGING_CHAIN.get(), SwingingChainRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.DUNGEON_BANNER.get(), DungeonBannerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.SARCOPHAGUS.get(), SarcophagusRenderer::new);

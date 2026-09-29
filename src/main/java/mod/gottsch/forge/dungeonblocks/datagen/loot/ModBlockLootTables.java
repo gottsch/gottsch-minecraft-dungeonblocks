@@ -22,6 +22,7 @@ package mod.gottsch.forge.dungeonblocks.datagen.loot;
 import mod.gottsch.forge.dungeonblocks.core.block.TallPropBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.DungeonBannerBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.GibbetBlock;
+import mod.gottsch.forge.dungeonblocks.core.block.TortureRackBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.IronMaidenBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.RubbleScatterBlock;
@@ -76,6 +77,9 @@ public class ModBlockLootTables extends BlockLootSubProvider {
             } else if (b instanceof TallPropBlock) {
                 // two halves, one item, as the iron maiden: the lower half carries the drop
                 add(b, createSinglePropConditionTable(b, TallPropBlock.HALF, DoubleBlockHalf.LOWER));
+            } else if (b instanceof TortureRackBlock) {
+                // three parts, one item, as the gibbet: the foot carries the drop
+                add(b, createSinglePropConditionTable(b, TortureRackBlock.PART, TortureRackBlock.Part.FOOT));
             } else if (b instanceof GibbetBlock) {
                 // three parts, one item: the bottom part carries the drop, and breaking any part
                 // destroys the rest, so a gibbet yields exactly one whichever part is broken

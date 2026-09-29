@@ -22,6 +22,7 @@ CONVERSION RULES
   gets is set in JOBS below - and per material in datagen, for the sarcophagus.
 - UVs are converted from each texture's own UV size to Minecraft's 0-16 space, so a non-16
   texture such as the 64x32 skeleton mob texture maps correctly.
+- An element textured only with `chain` gets "shade": false, as vanilla's chain model has.
 - Any unrotated face lying flush on a block boundary gets the matching cullface. A flush face
   without one renders black against a solid neighbour.
 - An element may rotate on ONE axis, by a multiple of 22.5 degrees up to 45: the JSON format's
@@ -60,6 +61,52 @@ for half in ("lower", "upper"):
 for part in ("bottom", "middle", "top"):
     JOBS.append((f"gibbet_{part}", f"gibbet_{part}", CAGE,
                  {"cage": (0, 0, 0), "skeleton": (0, 0, 0), "chain": (0, 0, 0)}))
+# the torture devices' textures: dark oak, and vanilla's skeleton for an occupant
+TORTURE = {"wood": "minecraft:block/dark_oak_planks", "log": "minecraft:block/dark_oak_log",
+           "skeleton": "minecraft:entity/skeleton/skeleton"}
+RACK_TEX = {**TORTURE, "iron": "dungeonblocks:block/dark_iron", "rope": "minecraft:block/hay_block_side"}
+
+# The item's model is the whole gibbet: one block of it alone does not read as a gibbet. The three
+# projects are stacked in one model, bottom at y -16 and top at +16 (the JSON format's -16..32 limit
+# fits exactly), and its display shrinks it to a third so the 3-tall cage fits the slot.
+STACKS = [("gibbet_item", CAGE, [(f"gibbet_{part}", {"cage": (0, dy, 0), "skeleton": (0, dy, 0), "chain": (0, dy, 0)})
+                                  for part, dy in (("bottom", -16), ("middle", 0), ("top", 16))],
+           {"gui": {"rotation": [30, 225, 0], "translation": [0, 0, 0], "scale": [0.28, 0.28, 0.28]},
+            "ground": {"rotation": [0, 0, 0], "translation": [0, 3, 0], "scale": [0.1, 0.1, 0.1]},
+            "fixed": {"rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [0.28, 0.28, 0.28]},
+            "thirdperson_righthand": {"rotation": [75, 45, 0], "translation": [0, 2.5, 0], "scale": [0.15, 0.15, 0.15]},
+            "firstperson_righthand": {"rotation": [0, 45, 0], "translation": [0, 0, 0], "scale": [0.16, 0.16, 0.16]},
+            "firstperson_lefthand": {"rotation": [0, 225, 0], "translation": [0, 0, 0], "scale": [0.16, 0.16, 0.16]}})]
+
+
+def two_block_display(gui):
+    """Display for a prop two or three blocks long or tall, stacked centred on the block: shrunk to fit."""
+    return {"gui": {"rotation": [30, 225, 0], "translation": [0, 0, 0], "scale": [gui, gui, gui]},
+            "ground": {"rotation": [0, 0, 0], "translation": [0, 3, 0], "scale": [0.15, 0.15, 0.15]},
+            "fixed": {"rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [gui, gui, gui]},
+            "thirdperson_righthand": {"rotation": [75, 45, 0], "translation": [0, 2.5, 0], "scale": [0.2, 0.2, 0.2]},
+            "firstperson_righthand": {"rotation": [0, 45, 0], "translation": [0, 0, 0], "scale": [0.22, 0.22, 0.22]},
+            "firstperson_lefthand": {"rotation": [0, 225, 0], "translation": [0, 0, 0], "scale": [0.22, 0.22, 0.22]}}
+
+
+# the pillory and the rack whole, the pillory's two blocks either side of the block's centre (y -8
+# and +8), the rack's three centred on it (z -16, 0, +16); the pillory shut and the rack slack
+for occupied in ("", "occupied_"):
+    body = {"skeleton": None} if occupied else {}
+
+    def shifted(groups, offset):
+        return {g: offset for g in groups}
+
+    STACKS.append((f"{occupied}pillory_item", TORTURE, [
+        ("pillory_lower", shifted(["frame", *body], (0, -8, 0))),
+        ("pillory_upper", shifted(["frame", "board_lower", "board_upper", *body], (0, 8, 0)))],
+        two_block_display(0.4)))
+    limbs = ["skeleton", "arms", "legs"] if occupied else []
+    STACKS.append((f"{occupied}torture_rack_item", RACK_TEX, [
+        ("torture_rack_head", shifted(["frame", "crank_0", "ropes_0", *limbs[:2]], (0, 0, -16))),
+        ("torture_rack_middle", shifted(["frame", *[g for g in limbs if g != "arms"]], (0, 0, 0))),
+        ("torture_rack_foot", shifted(["frame", "ropes_0", *[g for g in limbs if g != "arms"]], (0, 0, 16)))],
+        two_block_display(0.3)))
 # one model per fill stage: firewood_rack_N is the frame and log groups logs_1..logs_N, two logs
 # each; firewood_rack_4, the full rack, is also the item's model
 for n in range(5):
@@ -116,9 +163,30 @@ for lit, ember in (("", "coal_block"), ("_lit", "magma")):
                  {"metal": "dungeonblocks:block/dark_iron", "chain": "minecraft:block/chain",
                   "ember": f"minecraft:block/{ember}"}, {"fixture": (0, 0, 0)}))
 
+# torture devices, each empty and with a skeleton in it ("occupied_"). The pillory's top board
+# (board_upper) lifts 3px when open. The rack has three tension notches: crank_<n> and ropes_<n>
+# are drawn per notch, and an occupant's arms and legs are pulled 1px nearer the rollers each notch.
+for occupied in ("", "occupied_"):
+    body = {"skeleton": (0, 0, 0)} if occupied else {}
+    JOBS.append(("pillory_lower", f"{occupied}pillory_lower", TORTURE, {"frame": (0, 0, 0), **body}))
+    for state, lift in (("closed", 0), ("open", 3)):
+        JOBS.append(("pillory_upper", f"{occupied}pillory_upper_{state}", TORTURE,
+                     {"frame": (0, 0, 0), "board_lower": (0, 0, 0), "board_upper": (0, lift, 0), **body}))
+    for n in range(3):
+        limbs = {"skeleton": (0, 0, 0), "arms": (0, 0, -n)} if occupied else {}
+        JOBS.append(("torture_rack_head", f"{occupied}torture_rack_head_{n}", RACK_TEX,
+                     {"frame": (0, 0, 0), f"crank_{n}": (0, 0, 0), f"ropes_{n}": (0, 0, 0), **limbs}))
+        limbs = {"skeleton": (0, 0, 0), "legs": (0, 0, n)} if occupied else {}
+        JOBS.append(("torture_rack_middle", f"{occupied}torture_rack_middle_{n}", RACK_TEX,
+                     {"frame": (0, 0, 0), **limbs}))
+        JOBS.append(("torture_rack_foot", f"{occupied}torture_rack_foot_{n}", RACK_TEX,
+                     {"frame": (0, 0, 0), f"ropes_{n}": (0, 0, 0), **limbs}))
+
+JOBS.append(("dark_iron_ladder", "dark_iron_ladder", {"iron": "dungeonblocks:block/dark_iron"}, {"ladder": (0, 0, 0)}))
+
 # models whose textures have see-through pixels: the skeleton's ribs, the chain's links. Without
 # cutout those pixels draw black.
-CUTOUT = ("gibbet_", "chandelier", "chain_fixture_")
+CUTOUT = ("gibbet", "chandelier", "chain_fixture_", "occupied_")
 
 BOUNDARY = {"north": (2, 0, "from"), "south": (2, 16, "to"), "west": (0, 0, "from"),
             "east": (0, 16, "to"), "down": (1, 0, "from"), "up": (1, 16, "to")}
@@ -165,6 +233,10 @@ def convert(project, groups, textures):
                 if not turned and (frm if side == "from" else to)[axis] == plane:
                     f["cullface"] = name
                 out["faces"][name] = f
+            # vanilla's chain model draws its crossed planes unshaded; shaded, they come out grey
+            # instead of the chain's blue - the gibbet's chain beside a real one looked dark iron
+            if out["faces"] and all(f["texture"] == "#chain" for f in out["faces"].values()):
+                out["shade"] = False
             elements.append(out)
     keys = sorted({t["name"] for t in tex})
     model = {"parent": "block/block",
@@ -185,6 +257,13 @@ def main():
             model = {"parent": model["parent"], "render_type": render_type(name), **{k: v for k, v in model.items() if k != "parent"}}
         json.dump(model, open(OUT + name + ".json", "w", newline="\n"), indent=2)
         print(f"{source}.bbmodel -> {name}.json ({len(model['elements'])} elements)")
+    for name, textures, parts, display in STACKS:
+        models = [convert(json.load(open(SRC + source + ".bbmodel")), groups, textures) for source, groups in parts]
+        model = {**models[0], "elements": [e for m in models for e in m["elements"]], "display": display}
+        if render_type(name):
+            model = {"parent": model["parent"], "render_type": render_type(name), **{k: v for k, v in model.items() if k != "parent"}}
+        json.dump(model, open(OUT + name + ".json", "w", newline="\n"), indent=2)
+        print(f"{' + '.join(s for s, _ in parts)} -> {name}.json ({len(model['elements'])} elements)")
 
 
 if __name__ == "__main__":

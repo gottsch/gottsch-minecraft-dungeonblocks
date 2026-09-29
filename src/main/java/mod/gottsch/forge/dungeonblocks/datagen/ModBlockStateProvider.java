@@ -220,6 +220,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
         edgedDoor(ModBlocks.DARK_IRON_BARS_DOOR, "dark_iron_bars_door");
         edgedDoor(ModBlocks.TARNISHED_DARK_IRON_BARS_DOOR, "tarnished_dark_iron_bars_door");
         ironBars(ModBlocks.DARK_IRON_BARS);
+        // the Blockbench model faces north, against a south wall, as vanilla's ladder does
+        getVariantBuilder(ModBlocks.DARK_IRON_LADDER.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
+                .modelFile(models().getExistingFile(modLoc("block/dark_iron_ladder")))
+                .rotationY(yaw(state.getValue(LadderBlock.FACING))).build(), LadderBlock.WATERLOGGED);
         ironBars(ModBlocks.TARNISHED_DARK_IRON_BARS);
         ModBlocks.SHARPENED_LOGS.forEach(this::sharpenedLog);
         ModBlocks.CAPSTONES.forEach((block, source) -> capstone(block, source.get()));
@@ -551,6 +555,24 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .modelFile(models().getExistingFile(modLoc("block/gibbet_"
                         + state.getValue(GibbetBlock.PART).getSerializedName())))
                 .rotationY(yaw(state.getValue(GibbetBlock.FACING))).build());
+
+        // pillory and rack: one Blockbench model per part and state, the occupied ones their own
+        for (RegistryObject<Block> block : List.of(ModBlocks.PILLORY, ModBlocks.OCCUPIED_PILLORY)) {
+            String name = block.getId().getPath();
+            getVariantBuilder(block.get()).forAllStates(state -> ConfiguredModel.builder()
+                    .modelFile(models().getExistingFile(modLoc("block/" + name + "_"
+                            + (state.getValue(PilloryBlock.HALF) == DoubleBlockHalf.LOWER ? "lower"
+                            : "upper_" + (state.getValue(PilloryBlock.OPEN) ? "open" : "closed")))))
+                    .rotationY(yaw(state.getValue(PilloryBlock.FACING))).build());
+        }
+        for (RegistryObject<Block> block : List.of(ModBlocks.TORTURE_RACK, ModBlocks.OCCUPIED_TORTURE_RACK)) {
+            String name = block.getId().getPath();
+            getVariantBuilder(block.get()).forAllStates(state -> ConfiguredModel.builder()
+                    .modelFile(models().getExistingFile(modLoc("block/" + name + "_"
+                            + state.getValue(TortureRackBlock.PART).getSerializedName()
+                            + "_" + state.getValue(TortureRackBlock.TENSION))))
+                    .rotationY(yaw(state.getValue(TortureRackBlock.FACING))).build());
+        }
 
         // racks: horizontalBlock's default turn is the same yaw + 180. The firewood rack has a model
         // per fill stage. The weapon rack's model is its frame alone - WeaponRackRenderer draws

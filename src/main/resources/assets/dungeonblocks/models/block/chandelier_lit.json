@@ -909,7 +909,8 @@
           5,
           8
         ]
-      }
+      },
+      "shade": false
     },
     {
       "name": "chain_b",
@@ -951,7 +952,8 @@
           5,
           8
         ]
-      }
+      },
+      "shade": false
     },
     {
       "name": "strut_0",

@@ -4,6 +4,7 @@ Generates flat inventory icons for props whose block model reads badly as an ite
 
     item/<stone>_hidden_door    one per hidden door (HIDDEN_DOORS below)
     item/meat_hook
+    item/dark_iron_ladder
 
 Vanilla does the same for its doors, chain and lanterns: a flat sprite in the item's place,
 drawn rather than rendered. Generated PNGs are overwritten on every run, so fix this script
@@ -70,6 +71,26 @@ MEAT_HOOK = [
     ".........##.....",
     "................",
 ]
+# the dark iron ladder as vanilla draws its ladder's icon: two rails and four rungs, front on. The
+# block's 3D model, in a slot, is mostly its wall plates; this reads as a ladder.
+LADDER = [
+    "..##........##..",
+    "..##........##..",
+    "..############..",
+    "..##........##..",
+    "..##........##..",
+    "..##........##..",
+    "..############..",
+    "..##........##..",
+    "..##........##..",
+    "..##........##..",
+    "..############..",
+    "..##........##..",
+    "..##........##..",
+    "..##........##..",
+    "..############..",
+    "..##........##..",
+]
 # dark iron at icon contrast: shadow, body, light
 IRON_DARK, IRON_MID, IRON_LIGHT = (52, 52, 54, 255), (74, 74, 76, 255), (104, 104, 106, 255)
 
@@ -128,6 +149,8 @@ def main():
         print(f"wrote item/{name}.png")
     mask_icon(MEAT_HOOK, IRON_DARK, IRON_MID, IRON_LIGHT).save(ITEM + "meat_hook.png")
     print("wrote item/meat_hook.png")
+    mask_icon(LADDER, IRON_DARK, IRON_MID, IRON_LIGHT).save(ITEM + "dark_iron_ladder.png")
+    print("wrote item/dark_iron_ladder.png")
 
 
 if __name__ == "__main__":

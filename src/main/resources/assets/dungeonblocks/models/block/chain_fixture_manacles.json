@@ -47,7 +47,8 @@
           11,
           8
         ]
-      }
+      },
+      "shade": false
     },
     {
       "name": "chain_b",
@@ -89,7 +90,8 @@
           11,
           8
         ]
-      }
+      },
+      "shade": false
     },
     {
       "name": "ring_top",

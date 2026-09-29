@@ -26,7 +26,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.text.WordUtils;
 
+import java.util.Arrays;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -89,6 +91,11 @@ public class LanguageGen extends LanguageProvider {
 
         // every clay pot shape shares one display name - the shapes are a visual variation of the
         // same prop, not three things a player needs to tell apart by name.
+        ModItems.TOMES.forEach((variant, item) -> add(item.get(), Arrays.stream(variant.id().split("_"))
+                .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
+                .collect(Collectors.joining(" "))));
+        add("entity." + DungeonBlocks.MOD_ID + ".tome", "Tome");
+
         add(ModItems.POT.get(), "Terracotta Pot");
         add(ModItems.SQUAT_CLAY_POT.get(), "Terracotta Pot");
         add(ModItems.THIN_CLAY_POT.get(), "Terracotta Pot");

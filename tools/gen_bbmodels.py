@@ -525,6 +525,170 @@ def pedestal():
     return p
 
 
+# ---------------------------------------------------------------------------------------------
+# torture devices: the pillory and the rack, empty and with a skeleton in them
+# ---------------------------------------------------------------------------------------------
+
+# vanilla's skeleton mob texture (64x32, on the block atlas via atlases/blocks.json, as the gibbet
+# has it) and its boxes as (u, v, width, height, depth) in the mob's own layout
+SKELETON = "minecraft:entity/skeleton/skeleton"
+MOB_HEAD, MOB_BODY = (0, 0, 8, 8, 8), (16, 16, 8, 12, 4)
+MOB_ARM, MOB_LEG = (40, 16, 2, 12, 2), (0, 16, 2, 12, 2)
+DARK_OAK = {"wood": "minecraft:block/dark_oak_planks", "log": "minecraft:block/dark_oak_log"}
+
+
+def mob_part(p, group, name, frm, to, part, rows=None, lie=None, rot=None, origin=None, skip=()):
+    """A box skinned from one of a mob texture's boxes, as the mob model skins it - squashed to
+    whatever size the box is. `rows` (r0, r1) takes only those rows of its length, top down, for a
+    limb split between two blocks. Standing, its front is north. `lie`: lying face up, its top
+    toward "north" or "south" - the front on the up face, the back on the down, the top and bottom
+    at the ends."""
+    u, v, w, h, d = part
+    r0, r1 = rows or (0, h)
+    top, bottom = [u + d, v, u + d + w, v + d], [u + d + w, v, u + d + 2 * w, v + d]
+
+    def side(a, b):
+        return [a, v + d + r0, b, v + d + r1]
+
+    front, back = side(u + d, u + d + w), side(u + 2 * d + w, u + 2 * d + 2 * w)
+    right, left = side(u, u + d), side(u + d + w, u + 2 * d + w)
+    face_rot = None
+    if lie is None:
+        uv = {"north": front, "east": right, "south": back, "west": left, "up": top, "down": bottom}
+    elif lie == "north":
+        uv = {"up": front, "down": back, "north": top, "south": bottom, "east": right, "west": left}
+        face_rot = {"east": 90, "west": 270}
+    else:
+        def flip(r):
+            return [r[0], r[3], r[2], r[1]]
+        uv = {"up": flip(front), "down": flip(back), "south": top, "north": bottom, "east": right, "west": left}
+        face_rot = {"east": 270, "west": 90}
+    p.box(group, name, frm, to, "skeleton", uv=uv, rot=rot, origin=origin, skip=skip, face_rot=face_rot)
+
+
+def spine(p, group, frm, to):
+    """A solid length of spine for a skeleton's waist. The mob texture's waist (body rows 6-9) is
+    see-through front and sides, its spine drawn on the back face alone: the mob renderer draws
+    both sides of every face, so there the spine shows through, but a block model culls back faces
+    and the ribs float over the pelvis. Every face takes the back face's spine pixels."""
+    p.box(group, "spine", frm, to, "skeleton", uv={d: [35, 27, 37, 30] for d in DIRS})
+
+
+def pillory(half):
+    """A pillory, two blocks tall, authored facing north: a dark oak post each side, a crossbeam
+    on top and a board held between them, split along a neck hole and two wrist holes. The top
+    half of the board (group board_upper) is what opens - the converter lifts it 3px. Group
+    skeleton is a prisoner left in it: standing behind the board, arms out through the wrist holes
+    and the skull through the neck hole, hung forward over the board."""
+    p = Project(f"pillory_{half}", {**DARK_OAK, "skeleton": SKELETON})
+    if half == "lower":
+        for x in (0, 14):
+            p.box("frame", "post", (x, 0, 9), (x + 2, 16, 11), "log", skip=("up",))
+            # a foot either side of the post, which it stands in
+            p.box("frame", "foot", (max(0, x - 1), 0, 6), (min(16, x + 3), 2, 9), "log")
+            p.box("frame", "foot", (max(0, x - 1), 0, 11), (min(16, x + 3), 2, 14), "log")
+        for x in (5, 9):
+            mob_part(p, "skeleton", "leg", (x, 0, 12), (x + 2, 12, 14), MOB_LEG)
+        mob_part(p, "skeleton", "body", (4, 12, 11), (12, 16, 15), MOB_BODY, rows=(8, 12), skip=("up",))
+        # the waist's spine, clear of the body's back face so the two do not fight
+        spine(p, "skeleton", (7, 13, 12.5), (9, 16, 14.5))
+        return p
+    for x in (0, 14):
+        p.box("frame", "post", (x, 0, 9), (x + 2, 14, 11), "log", skip=("up", "down"))
+    p.box("frame", "crossbeam", (0, 14, 8), (16, 16, 12), "log")
+    # the board, 2px thick between the posts. Holes: the neck x 6-10, y 6-10; the wrists x 2-4 and
+    # 12-14, y 7-9 - each split along y 8, where the halves meet
+    for (x0, y0, x1, y1) in ((2, 5, 14, 6), (2, 6, 4, 7), (4, 6, 6, 8), (10, 6, 12, 8), (12, 6, 14, 7)):
+        p.box("board_lower", "board", (x0, y0, 9), (x1, y1, 11), "wood")
+    for (x0, y0, x1, y1) in ((2, 10, 14, 11), (2, 9, 4, 10), (4, 8, 6, 10), (10, 8, 12, 10), (12, 9, 14, 10)):
+        p.box("board_upper", "board", (x0, y0, 9), (x1, y1, 11), "wood")
+    mob_part(p, "skeleton", "body", (4, 0, 11), (12, 8, 15), MOB_BODY, rows=(0, 8), skip=("down",))
+    spine(p, "skeleton", (7, 0, 12.5), (9, 2, 14.5))
+    for x in (2, 12):
+        # held straight out through the wrist holes, the hands just clear of the board
+        mob_part(p, "skeleton", "arm", (x, 7, 7), (x + 2, 9, 15), MOB_ARM, lie="south")
+    # the skull on the far side of the board, 6px deep so that hung forward it stays in the block
+    mob_part(p, "skeleton", "head", (4, 8, 3), (12, 16, 9), MOB_HEAD, rot=("x", -22.5), origin=(8, 8, 9))
+    return p
+
+
+def torture_rack(part):
+    """A rack, three blocks long (head, middle, foot), authored with its head to the north: a dark
+    oak frame on four legs, a bed of planks, and a roller across each end on cheeks above the rails.
+    The head roller has the crank. Three blocks because the prisoner is a skeleton at the mob's own
+    size - an 8px skull, 12px ribs and 12px legs, its arms (10px) stretched over its head; in two
+    blocks it had to be squashed and read as nothing. It lies face up, its neck on the head/middle
+    join. Tension stages 0-2 are groups the converter switches: crank_<n> (turned 22.5 degrees a
+    notch) and ropes_<n> (ropes and iron cuffs, shorter each notch). Groups skeleton (skull and
+    ribs, which stay put) and arms / legs, which the converter pulls 1px toward the rollers each
+    notch - at full tension they come away from the shoulders and hips."""
+    p = Project(f"torture_rack_{part}", {**DARK_OAK, "iron": DARK_IRON, "rope": "minecraft:block/hay_block_side",
+                                         "skeleton": SKELETON})
+    head, foot = part == "head", part == "foot"
+    rails = (1, 16) if head else (0, 15) if foot else (0, 16)   # open at the joins
+    bed = (4, 16) if head else (0, 11) if foot else (0, 16)
+    for x in (1, 13):
+        p.box("frame", "rail", (x, 7, rails[0]), (x + 2, 10, rails[1]), "wood")
+    p.box("frame", "bed", (3, 9, bed[0]), (13, 10, bed[1]), "wood", skip=("down",))
+    if head or foot:
+        roller = (1, 4) if head else (11, 14)
+        leg = (2, 4) if head else (12, 14)
+        for x in (1, 13):
+            p.box("frame", "leg", (x, 0, leg[0]), (x + 2, 7, leg[1]), "wood")
+            p.box("frame", "cheek", (x, 10, roller[0]), (x + 2, 13, roller[1]), "wood")
+        p.box("frame", "roller", (3, 10, roller[0]), (13, 13, roller[1]), "log")
+    if head:
+        p.box("frame", "axle", (15, 11, 2), (16, 12, 3), "iron")
+        for n, angle in enumerate((None, 22.5, 45)):
+            turn = dict(rot=("x", angle), origin=(15.5, 11.5, 2.5)) if angle else {}
+            p.box(f"crank_{n}", "spoke", (15, 9, 2), (16, 14, 3), "iron", **turn)
+            p.box(f"crank_{n}", "spoke", (15, 11, 0), (16, 12, 5), "iron", **turn)
+    # ropes from the roller to a cuff at each wrist (head) or ankle (foot), one set per notch
+    if head or foot:
+        for n in range(3):
+            for x in ((2, 12) if head else (5, 9)):
+                if head:
+                    end = 6 - n                            # the wrist, drawn toward the roller
+                    rope, cuff = (4, end), (end, end + 1)
+                else:
+                    end = 8 + n                            # the ankle
+                    rope, cuff = (end, 11), (end - 1, end)
+                if rope[1] > rope[0]:
+                    p.box(f"ropes_{n}", "rope", (x + 0.5, 10.5, rope[0]), (x + 1.5, 11.5, rope[1]), "rope")
+                p.box(f"ropes_{n}", "cuff", (x - 0.25, 10, cuff[0]), (x + 2.25, 12.25, cuff[1]), "iron")
+    if head:
+        mob_part(p, "skeleton", "head", (4, 10, 8), (12, 18, 16), MOB_HEAD, lie="north")
+        for x in (2, 12):
+            mob_part(p, "arms", "arm", (x, 10, 6), (x + 2, 12, 16), MOB_ARM, lie="south")
+    elif foot:
+        for x in (5, 9):
+            mob_part(p, "legs", "leg", (x, 10, 0), (x + 2, 12, 8), MOB_LEG, rows=(4, 12), lie="north",
+                     skip=("north",))
+    else:
+        mob_part(p, "skeleton", "body", (4, 10, 0), (12, 14, 12), MOB_BODY, lie="north")
+        spine(p, "skeleton", (7, 10.5, 6), (9, 12.5, 10))
+        for x in (5, 9):
+            mob_part(p, "legs", "leg", (x, 10, 12), (x + 2, 12, 16), MOB_LEG, rows=(0, 4), lie="north",
+                     skip=("south",))
+    return p
+
+
+def dark_iron_ladder():
+    """A dark iron ladder, authored facing north as vanilla's ladder model is: its wall is the south
+    face, and everything lies in vanilla's ladder shape, z 13-16, so it climbs and sits exactly as
+    one. Two 1px rails stand 2px off the wall, each held to it at mid-height by a bracket on a
+    riveted plate; 1px rungs cross between them every 4px, on vanilla's rung spacing, so a stack
+    tiles from block to block."""
+    p = Project("dark_iron_ladder", {"iron": DARK_IRON})
+    for x in (2, 13):
+        p.box("ladder", "rail", (x, 0, 13), (x + 1, 16, 14), "iron")
+        p.box("ladder", "bracket", (x, 7, 14), (x + 1, 8, 15), "iron", skip=("north", "south"))
+        p.box("ladder", "plate", (x - 1, 6, 15), (x + 2, 9, 16), "iron")
+    for y in (2, 6, 10, 14):
+        p.box("ladder", "rung", (3, y, 13), (13, y + 1, 14), "iron", skip=("east", "west"))
+    return p
+
+
 PROJECTS = {
     "catacomb_niche": catacomb_niche,
     "pedestal": pedestal,
@@ -539,6 +703,12 @@ PROJECTS = {
     "chain_fixture_manacles": manacles,
     "chain_fixture_meat_hook": meat_hook,
     "chain_fixture_censer": censer,
+    "pillory_lower": lambda: pillory("lower"),
+    "pillory_upper": lambda: pillory("upper"),
+    "torture_rack_head": lambda: torture_rack("head"),
+    "torture_rack_middle": lambda: torture_rack("middle"),
+    "torture_rack_foot": lambda: torture_rack("foot"),
+    "dark_iron_ladder": dark_iron_ladder,
 }
 
 

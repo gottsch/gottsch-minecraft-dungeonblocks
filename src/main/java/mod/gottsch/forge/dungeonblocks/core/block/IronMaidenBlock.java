@@ -140,10 +140,15 @@ public class IronMaidenBlock extends HorizontalDirectionalBlock {
             if (otherState.is(this)) {
                 level.setBlock(other, otherState.setValue(OPEN, open), 10);
             }
-            level.playSound(null, pos, open ? SoundEvents.IRON_DOOR_OPEN : SoundEvents.IRON_DOOR_CLOSE,
-                    SoundSource.BLOCKS, 1.0F, 0.7F);
+            this.playToggleSound(level, pos, open);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    /** The doors swinging: heavy iron, pitched low. */
+    protected void playToggleSound(Level level, BlockPos pos, boolean open) {
+        level.playSound(null, pos, open ? SoundEvents.IRON_DOOR_OPEN : SoundEvents.IRON_DOOR_CLOSE,
+                SoundSource.BLOCKS, 1.0F, 0.7F);
     }
 
     @Override

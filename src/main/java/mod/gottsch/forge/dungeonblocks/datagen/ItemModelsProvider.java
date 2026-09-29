@@ -33,6 +33,8 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.List;
+
 /**
  * 
  * @author Mark Gottschling on Oct 26, 2023
@@ -251,6 +253,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		basicItem(ModBlocks.MAP.get(ModBlocks.TARNISHED_DARK_IRON_BARS_DOOR), modLoc("item/tarnished_dark_iron_bars_door"));
 		// bars show their flat texture in the inventory, as vanilla iron bars do
 		basicItem(ModBlocks.MAP.get(ModBlocks.DARK_IRON_BARS), modLoc("block/dark_iron_bars"));
+		// drawn flat, as vanilla's ladder is: see tools/gen_prop_item_icons.py
+		basicItem(ModBlocks.MAP.get(ModBlocks.DARK_IRON_LADDER), modLoc("item/dark_iron_ladder"));
 		basicItem(ModBlocks.MAP.get(ModBlocks.TARNISHED_DARK_IRON_BARS), modLoc("block/tarnished_dark_iron_bars"));
 		ModBlocks.SHARPENED_LOGS.forEach(b -> blockItemParent(ModBlocks.MAP.get(b)));
 		ModBlocks.CAPSTONES.keySet().forEach(b -> blockItemParent(ModBlocks.MAP.get(b)));
@@ -262,11 +266,17 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.PORTCULLIS), modLoc("block/portcullis_bottom"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.PORTCULLIS_WINCH));
 		// multi-block props show the part that says what they are: the effigy's head end, the
-		// iron maiden's hooded head, the gibbet's caged skull
+		// iron maiden's hooded head
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.STONE_SARCOPHAGUS), modLoc("block/stone_sarcophagus_head_closed"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_SARCOPHAGUS), modLoc("block/deepslate_sarcophagus_head_closed"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.IRON_MAIDEN), modLoc("block/iron_maiden_upper_closed"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.GIBBET), modLoc("block/gibbet_top"));
+		// no one block of the gibbet reads as a gibbet, so the item is the whole cage at a third size
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.GIBBET), modLoc("block/gibbet_item"));
+		// the pillory and the rack whole, as the gibbet: shut, and slack
+		for (RegistryObject<Block> block : List.of(ModBlocks.PILLORY, ModBlocks.OCCUPIED_PILLORY,
+				ModBlocks.TORTURE_RACK, ModBlocks.OCCUPIED_TORTURE_RACK)) {
+			withExistingParent(ModBlocks.MAP.get(block), modLoc("block/" + block.getId().getPath() + "_item"));
+		}
 		// the item shows a full rack, though a placed one starts empty
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.FIREWOOD_RACK), modLoc("block/firewood_rack_4"));
 		// an empty rack reads as a bare frame at icon size, and an item has no renderer to hang
@@ -357,6 +367,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		potItem(ModItems.BLUE_FLASK);
 		potItem(ModItems.BIG_GREEN_POTION);
 		potItem(ModItems.GREEN_FLASK);
+		// a tome's item is the icon its cover was taken from, as it is
+		ModItems.TOMES.values().forEach(tome -> basicItem(tome.get()));
 	}
 
 	public ItemModelBuilder basicItem(RegistryObject<Item> item, ResourceLocation texture) {

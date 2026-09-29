@@ -201,6 +201,15 @@ public class ModEntityTypes {
 					.updateInterval(1)
 					.build("pot_shard"));
 
+	// one type for every cover: the variant is synced data, and only the texture differs
+	public static final RegistryObject<EntityType<TomeEntity>> TOME = Registration.ENTITY_TYPES.register("tome",
+			() -> EntityType.Builder.<TomeEntity>of(TomeEntity::new, MobCategory.MISC)
+					// a standard tome lying closed; TomeEntity#getDimensions sizes each shape and stance
+					.sized(0.4F, 0.1875F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("tome"));
+
 	public static void register(IEventBus bus) {
 		Registration.registerEntityTypes(bus);
 	}

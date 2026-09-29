@@ -43,6 +43,8 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import org.joml.Vector3f;
+
 import java.util.function.ToIntFunction;
 
 /**
@@ -56,9 +58,13 @@ public class CenserBlock extends HangingFixtureBlock {
     public static final ToIntFunction<BlockState> LIGHT_EMISSION = state -> state.getValue(LIT) ? 7 : 0;
     /**
      * Height of the ember band under the lid (blockbench/chain_fixture_censer.bbmodel), 0-1: where
-     * the smoke comes out, here and on a swinging chain.
+     * the smoke comes out round the rim, here and on a swinging chain.
      */
     public static final float SMOKE_Y = 6.0F / 16.0F;
+    /** Just outside the lid's edge (5..11 px): smoke born any nearer the middle is inside the model. */
+    private static final float RIM = 3.25F / 16.0F;
+    /** Just above the knob, the censer's top (9..10 px). */
+    private static final float TOP_Y = 10.25F / 16.0F;
 
     public CenserBlock(Properties properties, VoxelShape shape) {
         super(properties, shape);
@@ -115,15 +121,31 @@ public class CenserBlock extends HangingFixtureBlock {
         return false;
     }
 
-    /** Smoke out of the gap under the lid, a little to one side or the other. */
+    /**
+     * Where a wisp of smoke starts, in the censer's own block space (0-1): mostly from under the
+     * lid's rim on one side or another, sometimes from the top by the knob. Here and on a swinging
+     * chain, which moves the point with the swing.
+     */
+    public static Vector3f smokeOrigin(RandomSource random) {
+        if (random.nextInt(3) == 0) {
+            return new Vector3f(0.5F + (random.nextFloat() - 0.5F) * 0.1F, TOP_Y, 0.5F + (random.nextFloat() - 0.5F) * 0.1F);
+        }
+        float along = (random.nextFloat() - 0.5F) * 0.3F;
+        float out = random.nextBoolean() ? RIM : -RIM;
+        return random.nextBoolean()
+                ? new Vector3f(0.5F + out, SMOKE_Y, 0.5F + along)
+                : new Vector3f(0.5F + along, SMOKE_Y, 0.5F + out);
+    }
+
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (!state.getValue(LIT)) {
             return;
         }
-        double x = pos.getX() + 0.5 + (random.nextFloat() - 0.5) * 0.3;
-        double y = pos.getY() + SMOKE_Y;
-        double z = pos.getZ() + 0.5 + (random.nextFloat() - 0.5) * 0.3;
+        Vector3f at = smokeOrigin(random);
+        double x = pos.getX() + at.x();
+        double y = pos.getY() + at.y();
+        double z = pos.getZ() + at.z();
         level.addParticle(ParticleTypes.SMOKE, x, y, z, 0.0, 0.015, 0.0);
         if (random.nextInt(4) == 0) {
             level.addParticle(ParticleTypes.SMOKE, x, y + 0.1, z, 0.0, 0.02, 0.0);
