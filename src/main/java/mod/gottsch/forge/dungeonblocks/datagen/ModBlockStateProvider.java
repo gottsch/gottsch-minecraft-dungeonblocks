@@ -689,6 +689,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(ModBlocks.CENSER.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(state.getValue(CenserBlock.LIT) ? censerLit : censer).build());
 
+        // bubbling cauldron: vanilla's full cauldron, its brew a greyscale boil tinted per colour
+        // (ClientSetup), so every colour is the one model
+        simpleBlock(ModBlocks.BUBBLING_CAULDRON.get(), models()
+                .withExistingParent("bubbling_cauldron", mcLoc("block/template_cauldron_full"))
+                .texture("content", modLoc("block/bubbling_brew"))
+                .texture("inside", mcLoc("block/cauldron_inner"))
+                .texture("particle", mcLoc("block/cauldron_side"))
+                .texture("top", mcLoc("block/cauldron_top"))
+                .texture("bottom", mcLoc("block/cauldron_bottom"))
+                .texture("side", mcLoc("block/cauldron_side")));
+
         // rubble scatter: a model per stage, each given a random quarter turn per block, so a floor
         // of it does not repeat
         for (int chips = 1; chips <= RubbleScatterBlock.FULL; chips++) {

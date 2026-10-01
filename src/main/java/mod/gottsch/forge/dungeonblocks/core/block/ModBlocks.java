@@ -889,6 +889,11 @@ public class ModBlocks {
             () -> new CenserBlock(fixtureProperties(SoundType.LANTERN).lightLevel(CenserBlock.LIGHT_EMISSION),
                     Shapes.or(Block.box(7, 10, 7, 9, 16, 9), Block.box(5, 1.5, 5, 11, 10, 11))));
 
+    // A cauldron of coloured brew at a boil. Vanilla cauldron's properties exactly, so it needs a
+    // pickaxe to drop, as a cauldron does (tagged by hand in ModBlockTagGenerator).
+    public static final RegistryObject<Block> BUBBLING_CAULDRON = Registration.BLOCKS.register("bubbling_cauldron",
+            () -> new BubblingCauldronBlock(Properties.copy(Blocks.CAULDRON)));
+
     private static Properties fixtureProperties(SoundType sound) {
         return Properties.of().mapColor(MapColor.METAL).strength(3.5F).sound(sound).noOcclusion()
                 .pushReaction(PushReaction.DESTROY);

@@ -271,6 +271,9 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // takes them down faster.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.BONE_PILE.get(), ModBlocks.CHANDELIER.get(),
                 ModBlocks.MANACLES.get(), ModBlocks.MEAT_HOOK.get(), ModBlocks.CENSER.get());
+        // "bubbling_cauldron" matches nothing in stone_blocks, and it copies vanilla cauldron's
+        // requiresCorrectToolForDrops: untagged it could never drop. Pickaxe, no tier, as vanilla's.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.BUBBLING_CAULDRON.get());
 
         // "brazier" and "lantern" match nothing in stone_blocks, so neither block was ever tagged.
         // The brazier drops to anything, but a pickaxe mined it no faster than a bare hand. The

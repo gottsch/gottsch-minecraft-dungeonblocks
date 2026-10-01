@@ -438,6 +438,14 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CHAIN))
 					.save(recipe);
 
+			// bubbling cauldron: a cauldron, water, and nether wart for the brew; it starts green
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.BUBBLING_CAULDRON.get())
+					.requires(Blocks.CAULDRON)
+					.requires(Items.WATER_BUCKET)
+					.requires(Items.NETHER_WART)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CAULDRON))
+					.save(recipe);
+
 			// grate trapdoors
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_HEAVY_TRAPDOOR.get())
 					.requires(Blocks.IRON_TRAPDOOR)
