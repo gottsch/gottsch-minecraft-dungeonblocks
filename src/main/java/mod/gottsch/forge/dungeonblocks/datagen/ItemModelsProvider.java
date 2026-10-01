@@ -315,6 +315,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.MANACLES), modLoc("block/chain_fixture_manacles"));
 		basicItem(ModBlocks.MAP.get(ModBlocks.MEAT_HOOK), modLoc("item/meat_hook"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.CENSER), modLoc("block/chain_fixture_censer"));
+		// tinted green in the hand (ClientSetup), the default brew
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.BUBBLING_CAULDRON));
 
 		// copper trapdoor items: parent to the generated bottom model
 		copperTrapdoorItem(ModBlocks.COPPER_TRAPDOOR);

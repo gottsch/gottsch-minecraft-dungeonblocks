@@ -1,6 +1,7 @@
 package mod.gottsch.forge.dungeonblocks.core.setup;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.BubblingCauldronBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.ModBlockEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.DungeonBannerModel;
@@ -112,6 +113,22 @@ public class ClientSetup {
                 },
                 ModBlocks.WEATHERED_COPPER_SEWER.get(),
                 ModBlocks.TERRACOTTA_SEWER.get());
+        // the bubbling cauldron's brew (tint 0) takes its colour from the blockstate
+        event.register(
+                (state, reader, pos, tint) -> tint == 0 ? state.getValue(BubblingCauldronBlock.COLOR).getColor() : -1,
+                ModBlocks.BUBBLING_CAULDRON.get());
+    }
+
+    /**
+     * Register the item colour handlers: a bubbling cauldron in the hand shows the default brew.
+     *
+     * @param event The event
+     */
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
+        event.register((stack, tint) -> tint == 0 ? BubblingCauldronBlock.BrewColor.GREEN.getColor() : -1,
+                ModBlocks.BUBBLING_CAULDRON.get());
     }
 
     @OnlyIn(Dist.CLIENT)
