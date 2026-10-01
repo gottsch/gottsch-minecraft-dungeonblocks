@@ -371,6 +371,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		potItem(ModItems.GREEN_FLASK);
 		// a tome's item is the icon its cover was taken from, as it is
 		ModItems.TOMES.values().forEach(tome -> basicItem(tome.get()));
+		// and a scroll's, likewise
+		ModItems.SCROLLS.values().forEach(scroll -> basicItem(scroll.get()));
 	}
 
 	public ItemModelBuilder basicItem(RegistryObject<Item> item, ResourceLocation texture) {

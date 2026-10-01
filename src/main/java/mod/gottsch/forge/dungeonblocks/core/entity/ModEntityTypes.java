@@ -210,6 +210,15 @@ public class ModEntityTypes {
 					.updateInterval(1)
 					.build("tome"));
 
+	// one type for every design, as the tome: the variant is synced data
+	public static final RegistryObject<EntityType<ScrollEntity>> SCROLL = Registration.ENTITY_TYPES.register("scroll",
+			() -> EntityType.Builder.<ScrollEntity>of(ScrollEntity::new, MobCategory.MISC)
+					// the rolled scroll: 7 px long, 1.5 px thick
+					.sized(0.45F, 0.1F)
+					.clientTrackingRange(10)
+					.updateInterval(1)
+					.build("scroll"));
+
 	public static void register(IEventBus bus) {
 		Registration.registerEntityTypes(bus);
 	}

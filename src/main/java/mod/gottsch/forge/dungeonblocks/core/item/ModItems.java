@@ -22,6 +22,7 @@ package mod.gottsch.forge.dungeonblocks.core.item;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.entity.ModEntityTypes;
+import mod.gottsch.forge.dungeonblocks.core.entity.ScrollVariant;
 import mod.gottsch.forge.dungeonblocks.core.entity.TomeVariant;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
 import net.minecraft.world.item.BlockItem;
@@ -123,6 +124,18 @@ public class ModItems {
 		return tomes;
 	}
 
+	/** A scroll item per design, each laying down a ScrollEntity with that design. */
+	public static final Map<ScrollVariant, RegistryObject<Item>> SCROLLS = scrolls();
+
+	private static Map<ScrollVariant, RegistryObject<Item>> scrolls() {
+		Map<ScrollVariant, RegistryObject<Item>> scrolls = new EnumMap<>(ScrollVariant.class);
+		for (ScrollVariant variant : ScrollVariant.values()) {
+			scrolls.put(variant, Registration.ITEMS.register(variant.id(),
+					() -> new ScrollItem(variant, new Item.Properties().stacksTo(16))));
+		}
+		return scrolls;
+	}
+
 	/**
 	 * Items belonging to the decorative-entity subsystem. These are pulled out of the main
 	 * DungeonBlocks tab (which otherwise sweeps up every registered item) and shown in the
@@ -136,7 +149,7 @@ public class ModItems {
 			BIG_RED_POTION, RED_FLASK,
 			BIG_YELLOW_POTION, YELLOW_FLASK,
 			BIG_BLUE_POTION, BLUE_FLASK,
-			BIG_GREEN_POTION, GREEN_FLASK), TOMES.values().stream()).toList();
+			BIG_GREEN_POTION, GREEN_FLASK), Stream.concat(TOMES.values().stream(), SCROLLS.values().stream())).toList();
 
 	/**
 	 * 

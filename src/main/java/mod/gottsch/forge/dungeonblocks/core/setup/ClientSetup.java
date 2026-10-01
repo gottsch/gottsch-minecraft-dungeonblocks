@@ -22,6 +22,8 @@ import mod.gottsch.forge.dungeonblocks.core.entity.client.RedFlaskModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.SquatClayPotModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.ThinClayPotModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.TomeVariant;
+import mod.gottsch.forge.dungeonblocks.core.entity.client.ScrollModel;
+import mod.gottsch.forge.dungeonblocks.core.entity.client.ScrollRenderer;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.TomeModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.TomeRenderer;
 import mod.gottsch.forge.dungeonblocks.core.state.properties.ChainFixture;
@@ -142,6 +144,7 @@ public class ClientSetup {
         event.registerLayerDefinition(ThinClayPotModel.LAYER_LOCATION, ThinClayPotModel::createBodyLayer);
         event.registerLayerDefinition(BigRedPotionModel.LAYER_LOCATION, BigRedPotionModel::createBodyLayer);
         event.registerLayerDefinition(RedFlaskModel.LAYER_LOCATION, RedFlaskModel::createBodyLayer);
+        event.registerLayerDefinition(ScrollModel.LAYER_LOCATION, ScrollModel::createBodyLayer);
         for (TomeVariant.Shape shape : TomeVariant.Shape.values()) {
             event.registerLayerDefinition(TomeModel.layer(shape), () -> TomeModel.createBodyLayer(shape));
         }
@@ -164,6 +167,7 @@ public class ClientSetup {
                                 variant.texture(), variant.tumblePivot(), variant.scale())));
         event.registerEntityRenderer(ModEntityTypes.POT_SHARD.get(), PotShardRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.TOME.get(), TomeRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.SCROLL.get(), ScrollRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.SWINGING_CHAIN.get(), SwingingChainRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.DUNGEON_BANNER.get(), DungeonBannerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.SARCOPHAGUS.get(), SarcophagusRenderer::new);

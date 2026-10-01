@@ -72,10 +72,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
                         horizontalSingleTexture(b, modLoc(ModelProvider.BLOCK_FOLDER + "/corbel_block"), maps.t2.get(material));
                     } else if (name.contains("double_sill")) {
                         material = b.getId().getPath().split("_double_sill_block")[0];
-                        horizontalSingleTexture(b, modLoc("block/double_sill_block_base"), (ResourceLocation)maps.t2.get(material));
+                        // sills are OBJs (tools/gen_obj_models.py): their slopes are true slopes
+                        myHorizontalBlock(b.get(), objModel(b.getId().getPath(), "double_sill", (ResourceLocation)maps.t2.get(material)));
                     } else if (name.contains("sill") && !name.contains("double")) {
                         material = b.getId().getPath().split("_sill_block")[0];
-                        horizontalSingleTexture(b, modLoc("block/sill_block_base"), (ResourceLocation)maps.t2.get(material));
+                        myHorizontalBlock(b.get(), objModel(b.getId().getPath(), "sill", (ResourceLocation)maps.t2.get(material)));
                     } else if (name.contains("fluted_facade")) {
                         material = b.getId().getPath().split("_fluted_facade_block")[0];
                         flutedFacadeBlock(b, (ResourceLocation)maps.t2.get(material));
@@ -476,6 +477,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     private BlockModelBuilder objModel(String name, String obj, ResourceLocation... textures) {
         String[] slots = switch (obj) {
             case "pyramid" -> new String[] {"facet", "base"};
+            case "sill", "double_sill" -> new String[] {"stone"};
             case "spikes" -> new String[] {"plate", "spike"};
             case "cheval_de_frise" -> new String[] {"bark", "end", "tip"};
             case "walkway_bracket" -> new String[] {"wood", "end"};

@@ -134,6 +134,58 @@ def pyramid(x0, z0, x1, z1, y0, height, facet, base=None, region=None, with_base
     return faces
 
 
+def prism(profile, x0, x1, material, caps=None):
+    """A profile in the z-y plane, given as convex pieces of 3 or 4 points, counter-clockwise in
+    (z, y), together tiling the whole profile - pushed along x from x0 to x1. Pieces must meet edge
+    to edge: an edge two pieces share, end for end, is inside and dropped; every other edge is the
+    outline and becomes a side face. Each piece is a cap at both ends, so a concave profile needs
+    no faces of more than 4 corners, which Forge's OBJ loader is not safe with.
+    UVs as vanilla maps a JSON box: the caps and any wall mostly facing north or south take the
+    texture as seen from that side, and any face mostly facing up or down - a slope included -
+    takes it as seen from above or below. So a slope carries on unbroken from the flat top beside
+    it, and brick courses keep level across the lot."""
+    faces = []
+    # the outline: every piece edge not shared, reversed, with another piece
+    edges = []
+    for piece in profile:
+        edges += [(piece[i], piece[(i + 1) % len(piece)]) for i in range(len(piece))]
+    outline = [(p, q) for p, q in edges if (q, p) not in edges]
+
+    def signed_area(piece):
+        return sum(p[0] * q[1] - q[0] * p[1] for p, q in zip(piece, piece[1:] + piece[:1])) / 2
+
+    orient = 1 if signed_area(profile[0]) > 0 else -1
+    for (pz, py), (qz, qy) in outline:
+        dz, dy = qz - pz, qy - py
+        # outward: the profile turning the other way from its interior
+        nz, ny = (dy, -dz) if orient > 0 else (-dy, dz)
+        length = math.hypot(nz, ny)
+        normal = (0, ny / length, nz / length)
+        corners = [(x0, py, pz), (x1, py, pz), (x1, qy, qz), (x0, qy, qz)]
+        if abs(ny) >= abs(nz):
+            uvs = [(x, z) if ny > 0 else (x, 16 - z) for x, y, z in corners]
+        else:
+            uvs = [(16 - x, 16 - y) if nz < 0 else (x, 16 - y) for x, y, z in corners]
+        # wind to the outward normal
+        wn = cross(tuple(corners[1][i] - corners[0][i] for i in range(3)),
+                   tuple(corners[2][i] - corners[0][i] for i in range(3)))
+        if sum(wn[i] * normal[i] for i in range(3)) < 0:
+            corners.reverse()
+            uvs.reverse()
+        faces.append(Face(material, corners, uvs, normal))
+    for piece in profile:
+        for x, normal in ((x0, (-1, 0, 0)), (x1, (1, 0, 0))):
+            corners = [(x, y, z) for z, y in piece]
+            uvs = [(z, 16 - y) if normal[0] < 0 else (16 - z, 16 - y) for x_, y, z in corners]
+            wn = cross(tuple(corners[1][i] - corners[0][i] for i in range(3)),
+                       tuple(corners[2][i] - corners[0][i] for i in range(3)))
+            if sum(wn[i] * normal[i] for i in range(3)) < 0:
+                corners.reverse()
+                uvs.reverse()
+            faces.append(Face(caps or material, corners, uvs, normal))
+    return faces
+
+
 def rotate(faces, axis, degrees, pivot):
     """Rotate faces about an axis through `pivot` (pixels). UVs are untouched, so a timber keeps
     its grain."""
@@ -158,6 +210,28 @@ def rotate(faces, axis, degrees, pivot):
 # ---------------------------------------------------------------------------------------------
 # models
 # ---------------------------------------------------------------------------------------------
+
+def model_sill():
+    """A window sill, authored facing north, on the whole 16x16 footprint: full height at the back
+    (z 8-16), and from there the top slopes gently down toward the front, 4px over 8 (about 27
+    degrees; 45 was tried and read too steep), to a 12px front wall. Replaces a JSON model whose
+    slope was an element turned 22.5 degrees: that stretched its texture and left a notch where it
+    met the flat top."""
+    return prism([
+        [(0, 0), (16, 0), (16, 12), (0, 12)],                 # the body
+        [(0, 12), (16, 12), (16, 16), (8, 16)],               # the top: sloping in front, flat behind
+    ], 0, 16, "stone")
+
+
+def model_double_sill():
+    """A sill free-standing between two rooms, authored facing north, on the whole 16x16
+    footprint: 12px walls, and a low gable rising from both, 4px over 8, to a ridge at the top
+    centre - the single sill's slope, both ways."""
+    return prism([
+        [(0, 0), (16, 0), (16, 12), (0, 12)],
+        [(0, 12), (16, 12), (8, 16)],                         # the gable
+    ], 0, 16, "stone")
+
 
 def model_pyramid():
     """Sharpened logs and capstones: a full-block square pyramid, apex 16px up."""
@@ -619,6 +693,8 @@ MODELS = {
     "portcullis_bottom": (model_portcullis_bottom, ["bar"]),
     "portcullis_winch": (model_portcullis_winch, ["iron", "drum", "drum_end", "chain_band"]),
     "pyramid": (model_pyramid, ["facet", "base"]),
+    "sill": (model_sill, ["stone"]),
+    "double_sill": (model_double_sill, ["stone"]),
     "spikes": (model_spikes, ["plate", "spike"]),
     "cheval_de_frise": (model_cheval_de_frise, ["bark", "end", "tip"]),
     "walkway_bracket": (model_walkway_bracket, ["wood", "end"]),

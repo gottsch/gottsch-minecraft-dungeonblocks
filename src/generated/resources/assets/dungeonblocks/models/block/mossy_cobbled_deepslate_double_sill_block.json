@@ -1,6 +1,10 @@
 {
-  "parent": "dungeonblocks:block/double_sill_block_base",
+  "parent": "dungeonblocks:block/block_no_ao",
+  "flip_v": true,
+  "loader": "forge:obj",
+  "model": "dungeonblocks:models/block/double_sill.obj",
   "textures": {
-    "0": "dungeonblocks:block/mossy_cobbled_deepslate"
+    "particle": "dungeonblocks:block/mossy_cobbled_deepslate",
+    "stone": "dungeonblocks:block/mossy_cobbled_deepslate"
   }
 }

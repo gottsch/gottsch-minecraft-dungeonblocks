@@ -95,6 +95,10 @@ public class LanguageGen extends LanguageProvider {
                 .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
                 .collect(Collectors.joining(" "))));
         add("entity." + DungeonBlocks.MOD_ID + ".tome", "Tome");
+        ModItems.SCROLLS.forEach((variant, item) -> add(item.get(), Arrays.stream(variant.id().split("_"))
+                .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
+                .collect(Collectors.joining(" "))));
+        add("entity." + DungeonBlocks.MOD_ID + ".scroll", "Scroll");
 
         add(ModItems.POT.get(), "Terracotta Pot");
         add(ModItems.SQUAT_CLAY_POT.get(), "Terracotta Pot");
