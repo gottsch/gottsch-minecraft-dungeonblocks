@@ -769,6 +769,9 @@
     "dungeonblocks:crumbling_cobblestone",
     "dungeonblocks:crumbling_mossy_cobblestone",
     "dungeonblocks:crumbling_polished_andesite",
-    "dungeonblocks:crumbling_deepslate_tiles"
+    "dungeonblocks:crumbling_deepslate_tiles",
+    "dungeonblocks:stone_slab_table",
+    "dungeonblocks:smooth_stone_slab_table",
+    "dungeonblocks:smooth_sandstone_slab_table"
   ]
 }

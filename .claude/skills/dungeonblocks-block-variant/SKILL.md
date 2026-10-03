@@ -295,6 +295,12 @@ The 11 decorative types are always safe — they match on "facade", "pillar", "s
 plain full block, and any one-off block, that gets missed.** Verify rather than assume; step 4's
 script checks this for you.
 
+**`runData` now enforces this.** The last thing `ModBlockTagGenerator.addTags` does is
+`checkCorrectToolBlocksAreMineable()`, which **fails datagen** and names every mod block that
+requires the correct tool but is in no `mineable/*` tag. If `runData` stops with "can never drop",
+that is this trap: tag the named blocks as below, never by weakening the check. It caught the
+stone, smooth stone and smooth sandstone slab tables on its first run. It does not check the tier.
+
 When a block is missed, prefer tagging it explicitly in `ModBlockTagGenerator` (see the Rubble and
 mossy-deepslate-tiles comments) over adding a new substring to `stone_blocks` — a new substring
 also pulls blocks into model and recipe generation. Adding a substring is right only when a whole

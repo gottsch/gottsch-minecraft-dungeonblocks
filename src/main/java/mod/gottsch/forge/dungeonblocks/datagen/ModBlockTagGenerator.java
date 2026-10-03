@@ -8,7 +8,10 @@ import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
 import mod.gottsch.forge.dungeonblocks.core.tag.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagEntry;
+import net.minecraft.tags.TagKey;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -16,7 +19,9 @@ import net.minecraftforge.registries.RegistryObject;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTagGenerator extends BlockTagsProvider {
@@ -293,5 +298,57 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.RUSTED_DARK_IRON_GRATE.get(), ModBlocks.CORRODED_DARK_IRON_GRATE.get(),
                 ModBlocks.DARK_IRON_HEAVY_TRAPDOOR.get(), ModBlocks.TARNISHED_DARK_IRON_HEAVY_TRAPDOOR.get(),
                 ModBlocks.RUSTED_DARK_IRON_HEAVY_TRAPDOOR.get(), ModBlocks.CORRODED_DARK_IRON_HEAVY_TRAPDOOR.get());
+
+        // Slab tables copy their stone, requiresCorrectToolForDrops included. The two brick ones match
+        // "brick" in the sweep above; stone, smooth stone and smooth sandstone match nothing there,
+        // and are tagged here at the stone tier the sweep gives the brick ones.
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.STONE_SLAB_TABLE.get(),
+                ModBlocks.SMOOTH_STONE_SLAB_TABLE.get(), ModBlocks.SMOOTH_SANDSTONE_SLAB_TABLE.get());
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.STONE_SLAB_TABLE.get(),
+                ModBlocks.SMOOTH_STONE_SLAB_TABLE.get(), ModBlocks.SMOOTH_SANDSTONE_SLAB_TABLE.get());
+
+        // must stay last: it checks the tags built above
+        checkCorrectToolBlocksAreMineable();
+    }
+
+    /**
+     * Fails datagen if any mod block requires the correct tool for drops but is in no mineable/* tag.
+     * Such a block can never be mined for a drop by anything, and the substring sweeps above have
+     * shipped that bug repeatedly (the skeleton, rubble, copper, the lantern...). Only tags built
+     * by this provider are seen, which covers everything: no mod block is put in a mineable tag
+     * anywhere else.
+     */
+    private void checkCorrectToolBlocksAreMineable() {
+        Set<ResourceLocation> mineable = new HashSet<>();
+        for (TagKey<Block> tag : List.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_AXE,
+                BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.MINEABLE_WITH_HOE)) {
+            collectElements(tag.location(), mineable, new HashSet<>());
+        }
+
+        List<String> untagged = Registration.BLOCKS.getEntries().stream()
+                .filter(b -> b.get().defaultBlockState().requiresCorrectToolForDrops())
+                .map(RegistryObject::getId)
+                .filter(id -> !mineable.contains(id))
+                .map(ResourceLocation::toString)
+                .sorted()
+                .toList();
+        if (!untagged.isEmpty()) {
+            throw new IllegalStateException(untagged.size() + " block(s) require the correct tool for drops"
+                    + " but are in no mineable/* tag, so they can never drop: " + String.join(", ", untagged));
+        }
+    }
+
+    /** Adds the element ids of a tag built here to {@code out}, following nested tag references. */
+    private void collectElements(ResourceLocation tagId, Set<ResourceLocation> out, Set<ResourceLocation> visited) {
+        if (!visited.add(tagId) || !builders.containsKey(tagId)) {
+            return;
+        }
+        for (TagEntry entry : builders.get(tagId).build()) {
+            if (entry.isTag()) {
+                collectElements(entry.getId(), out, visited);
+            } else {
+                out.add(entry.getId());
+            }
+        }
     }
 }

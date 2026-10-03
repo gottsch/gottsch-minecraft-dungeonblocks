@@ -826,6 +826,9 @@
     "dungeonblocks:dark_iron_heavy_trapdoor",
     "dungeonblocks:tarnished_dark_iron_heavy_trapdoor",
     "dungeonblocks:rusted_dark_iron_heavy_trapdoor",
-    "dungeonblocks:corroded_dark_iron_heavy_trapdoor"
+    "dungeonblocks:corroded_dark_iron_heavy_trapdoor",
+    "dungeonblocks:stone_slab_table",
+    "dungeonblocks:smooth_stone_slab_table",
+    "dungeonblocks:smooth_sandstone_slab_table"
   ]
 }
