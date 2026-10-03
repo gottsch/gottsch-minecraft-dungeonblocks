@@ -265,11 +265,11 @@ public class ItemModelsProvider extends ItemModelProvider {
 		// the portcullis item shows a bottom cell, tips and all - the piece that says "portcullis"
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.PORTCULLIS), modLoc("block/portcullis_bottom"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.PORTCULLIS_WINCH));
-		// multi-block props show the part that says what they are: the effigy's head end, the
-		// iron maiden's hooded head
+		// multi-block props show the part that says what they are: the effigy's head end
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.STONE_SARCOPHAGUS), modLoc("block/stone_sarcophagus_head_closed"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_SARCOPHAGUS), modLoc("block/deepslate_sarcophagus_head_closed"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.IRON_MAIDEN), modLoc("block/iron_maiden_upper_closed"));
+		// the iron maiden whole, shut, as the gibbet
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.IRON_MAIDEN), modLoc("block/iron_maiden_item"));
 		// no one block of the gibbet reads as a gibbet, so the item is the whole cage at a third size
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.GIBBET), modLoc("block/gibbet_item"));
 		// the pillory and the rack whole, as the gibbet: shut, and slack
