@@ -1,3 +1,6 @@
 {
-  "parent": "dungeonblocks:block/bubbling_cauldron"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dungeonblocks:item/bubbling_cauldron"
+  }
 }

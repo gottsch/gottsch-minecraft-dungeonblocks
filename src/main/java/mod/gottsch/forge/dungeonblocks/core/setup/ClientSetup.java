@@ -121,17 +121,8 @@ public class ClientSetup {
                 ModBlocks.BUBBLING_CAULDRON.get());
     }
 
-    /**
-     * Register the item colour handlers: a bubbling cauldron in the hand shows the default brew.
-     *
-     * @param event The event
-     */
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-        event.register((stack, tint) -> tint == 0 ? BubblingCauldronBlock.BrewColor.GREEN.getColor() : -1,
-                ModBlocks.BUBBLING_CAULDRON.get());
-    }
+    // No item colour handler for the bubbling cauldron: its item is a flat sprite with the green
+    // brew painted in (tools/gen_bubbling_cauldron_item.py), and a tint on layer0 would dye it all.
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
