@@ -27,7 +27,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -81,7 +80,7 @@ public class CornerPlateBracketBlock extends WaterloggedFacingHalfBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState state = super.getStateForPlacement(context);
         return state == null ? null : state.setValue(WATERLOGGED,
-                context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+                Waterlogging.placedInWater(context));
     }
 
     @Override

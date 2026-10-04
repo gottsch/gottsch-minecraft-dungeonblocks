@@ -293,6 +293,11 @@ The sarcophagus, iron maiden and gibbet are the worked examples.
   wrong state - every sarcophagus came out open and stuck.
 - A carpet-like block with a see-through texture needs `noOcclusion()`, or it culls the top face of
   the block beneath and its gaps look through a hole in the ground.
+- **Waterlogging:** a new `SimpleWaterloggedBlock` declares `WATERLOGGED`, adds it to its state
+  definition, sets it `false` in `registerDefaultState` (see above), and uses
+  `Waterlogging.placedInWater(context)`, `Waterlogging.tickWater(...)` in `updateShape` and
+  `Waterlogging.fluid(...)` in `getFluidState`. Most props extend `WaterloggedNonCubeFacingBlock`,
+  which already does all of it.
 
 ## Step 3: The tag trap — check this every single time
 

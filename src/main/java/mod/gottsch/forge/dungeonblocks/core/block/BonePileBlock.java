@@ -47,7 +47,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -127,7 +126,7 @@ public class BonePileBlock extends HorizontalDirectionalBlock implements SimpleW
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState state = defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite())
                 .setValue(BONES, 1)
-                .setValue(WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+                .setValue(WATERLOGGED, Waterlogging.placedInWater(context));
         return state.canSurvive(context.getLevel(), context.getClickedPos()) ? state : null;
     }
 
@@ -144,15 +143,13 @@ public class BonePileBlock extends HorizontalDirectionalBlock implements SimpleW
         if (direction == Direction.DOWN && !state.canSurvive(level, pos)) {
             return Blocks.AIR.defaultBlockState();
         }
-        if (state.getValue(WATERLOGGED)) {
-            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-        }
+        Waterlogging.tickWater(state, level, pos);
         return super.updateShape(state, direction, neighbour, level, pos, neighbourPos);
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+        return Waterlogging.fluid(state, super.getFluidState(state));
     }
 
     @Override

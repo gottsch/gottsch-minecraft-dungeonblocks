@@ -132,11 +132,7 @@ public class SconceBlock extends AbstractSconceBlock {
 
 	// THIS DOESN'T WORK
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-
-		BlockState blockstate = context.getLevel().getBlockState(context.getClickedPos());
-			FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
-			boolean flag = fluidstate.getType() == Fluids.WATER;
-			return super.getStateForPlacement(context).setValue(WATERLOGGED, Boolean.valueOf(flag));
+		return super.getStateForPlacement(context).setValue(WATERLOGGED, Waterlogging.placedInWater(context));
 	}
 
 	/**

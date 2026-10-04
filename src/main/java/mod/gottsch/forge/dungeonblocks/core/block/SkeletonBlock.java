@@ -108,22 +108,19 @@ public class SkeletonBlock extends FacingBlock implements SimpleWaterloggedBlock
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		BlockState blockState = this.defaultBlockState().setValue(FACING,
 				context.getHorizontalDirection().getOpposite());
-		FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
-		blockState = blockState.setValue(WATERLOGGED, Boolean.valueOf(fluidState.getType() == Fluids.WATER));
+		blockState = blockState.setValue(WATERLOGGED, Waterlogging.placedInWater(context));
 		return blockState;
 	}
 
 	@Override
 	public BlockState updateShape(BlockState state, Direction direction, BlockState newState, LevelAccessor levelAccessor, BlockPos pos, BlockPos p_56930_) {
-		if (state.getValue(WATERLOGGED)) {
-			levelAccessor.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
-		}
+		Waterlogging.tickWater(state, levelAccessor, pos);
 		return super.updateShape(state, direction, newState, levelAccessor, pos, p_56930_);
 	}
 
 	@Override
 	public FluidState getFluidState(BlockState blockState) {
-		return blockState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(blockState);
+		return Waterlogging.fluid(blockState, super.getFluidState(blockState));
 	}
 
 	@Override

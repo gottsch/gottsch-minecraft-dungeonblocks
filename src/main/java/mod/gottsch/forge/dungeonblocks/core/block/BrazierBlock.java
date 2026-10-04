@@ -67,12 +67,9 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockPos blockPos = context.getClickedPos();
-        FluidState fluidState = context.getLevel().getFluidState(blockPos);
-
         return this.defaultBlockState()
                 .setValue(FIRE, BrazierFire.NONE)
-                .setValue(WATERLOGGED, Boolean.valueOf(fluidState.getType() == Fluids.WATER));
+                .setValue(WATERLOGGED, Waterlogging.placedInWater(context));
     }
 
     @Override
@@ -157,15 +154,13 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-        if (state.getValue(WATERLOGGED)) {
-            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-        }
+        Waterlogging.tickWater(state, level, pos);
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     }
 
     @Override
     public FluidState getFluidState(BlockState blockState) {
-        return blockState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(blockState);
+        return Waterlogging.fluid(blockState, super.getFluidState(blockState));
     }
 
     /**
