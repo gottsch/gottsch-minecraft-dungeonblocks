@@ -16,7 +16,6 @@
 package mod.gottsch.forge.dungeonblocks.core.block;
 
 import mod.gottsch.forge.gottschcore.block.FacingBlock;
-import mod.gottsch.forge.gottschcore.world.WorldInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -140,7 +139,7 @@ public class SkeletonBlock extends FacingBlock implements SimpleWaterloggedBlock
 	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 		super.setPlacedBy(level, pos, state, placer, stack);
-		if (WorldInfo.isServerSide(level)) {
+		if (!level.isClientSide) {
 			BlockPos blockPos = pos.relative(state.getValue(FACING).getOpposite());
 
 			// Check for water at the second position

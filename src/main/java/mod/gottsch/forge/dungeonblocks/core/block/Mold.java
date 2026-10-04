@@ -22,7 +22,6 @@ package mod.gottsch.forge.dungeonblocks.core.block;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.item.ModItems;
 import mod.gottsch.forge.dungeonblocks.core.particle.ModParticles;
-import mod.gottsch.forge.gottschcore.random.RandomHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;

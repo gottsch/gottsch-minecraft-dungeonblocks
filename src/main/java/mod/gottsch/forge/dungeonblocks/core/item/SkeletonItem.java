@@ -1,7 +1,6 @@
 package mod.gottsch.forge.dungeonblocks.core.item;
 
 import mod.gottsch.forge.dungeonblocks.core.block.SkeletonBlock;
-import mod.gottsch.forge.gottschcore.block.BlockContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -26,8 +25,8 @@ public class SkeletonItem extends BlockItem {
 	@Override
 	protected boolean placeBlock(BlockPlaceContext context, BlockState state) {
 		BlockPos blockPos = context.getClickedPos().relative(state.getValue(SkeletonBlock.FACING).getOpposite());
-		BlockContext blockContext = new BlockContext(context.getLevel(), blockPos);
-		if (blockContext.isAir() || blockContext.isReplaceable()) {
+		BlockState target = context.getLevel().getBlockState(blockPos);
+		if (target.isAir() || target.canBeReplaced()) {
 			return context.getLevel().setBlock(context.getClickedPos(), state, 26);
 		}
 		return false;

@@ -20,7 +20,6 @@
 package mod.gottsch.forge.dungeonblocks.core.config;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
-import mod.gottsch.forge.gottschcore.config.AbstractConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
@@ -30,7 +29,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
  *
  */
 @EventBusSubscriber(modid = DungeonBlocks.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
-public class DungeonBlocksConfig extends AbstractConfig {
+public class DungeonBlocksConfig {
 	protected static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
 	protected static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 
