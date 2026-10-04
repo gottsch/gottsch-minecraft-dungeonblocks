@@ -590,21 +590,32 @@ public class ModBlocks {
         return new RotatedPillarBlock(Properties.copy(Blocks.POLISHED_BASALT));
     });
 
-    // doors
-    public static final RegistryObject<Block> SPRUCE_DUNGEON_DOOR = Registration.BLOCKS.register("spruce_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.SPRUCE_DOOR), BlockSetType.SPRUCE));
-    public static final RegistryObject<Block> CRIMSON_DUNGEON_DOOR = Registration.BLOCKS.register("crimson_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.CRIMSON_DOOR), BlockSetType.CRIMSON));
-    public static final RegistryObject<Block> DARK_OAK_DUNGEON_DOOR = Registration.BLOCKS.register("dark_oak_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK));
-    public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR = Registration.BLOCKS.register("mangrove_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE));
+    // Dungeon doors: a vanilla wood's door reinforced, 2 blocks high, plus 3- and 4-high versions.
+    // Ids: <wood>_dungeon_door, <wood>_dungeon_door_3, <wood>_dungeon_door_4. Registered in this
+    // order - every 2-high door, then each wood's tall pair - as they always have been.
+    public record DungeonDoor(String wood, Block vanillaDoor, int height, RegistryObject<Block> block) {
+    }
 
-    // tall (3/4-block) doors - placeholder middle textures, see handoff notes
-    public static final RegistryObject<Block> SPRUCE_DUNGEON_DOOR_3 = Registration.BLOCKS.register("spruce_dungeon_door_3", () -> new TallDoorBlock(Properties.copy(Blocks.SPRUCE_DOOR), BlockSetType.SPRUCE, 3));
-    public static final RegistryObject<Block> SPRUCE_DUNGEON_DOOR_4 = Registration.BLOCKS.register("spruce_dungeon_door_4", () -> new TallDoorBlock(Properties.copy(Blocks.SPRUCE_DOOR), BlockSetType.SPRUCE, 4));
-    public static final RegistryObject<Block> CRIMSON_DUNGEON_DOOR_3 = Registration.BLOCKS.register("crimson_dungeon_door_3", () -> new TallDoorBlock(Properties.copy(Blocks.CRIMSON_DOOR), BlockSetType.CRIMSON, 3));
-    public static final RegistryObject<Block> CRIMSON_DUNGEON_DOOR_4 = Registration.BLOCKS.register("crimson_dungeon_door_4", () -> new TallDoorBlock(Properties.copy(Blocks.CRIMSON_DOOR), BlockSetType.CRIMSON, 4));
-    public static final RegistryObject<Block> DARK_OAK_DUNGEON_DOOR_3 = Registration.BLOCKS.register("dark_oak_dungeon_door_3", () -> new TallDoorBlock(Properties.copy(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK, 3));
-    public static final RegistryObject<Block> DARK_OAK_DUNGEON_DOOR_4 = Registration.BLOCKS.register("dark_oak_dungeon_door_4", () -> new TallDoorBlock(Properties.copy(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK, 4));
-    public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR_3 = Registration.BLOCKS.register("mangrove_dungeon_door_3", () -> new TallDoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE, 3));
-    public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR_4 = Registration.BLOCKS.register("mangrove_dungeon_door_4", () -> new TallDoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE, 4));
+    public static final List<DungeonDoor> DUNGEON_DOORS = new ArrayList<>();
+
+    static {
+        record Wood(String name, Block door, BlockSetType setType) {
+        }
+        List<Wood> woods = List.of(new Wood("spruce", Blocks.SPRUCE_DOOR, BlockSetType.SPRUCE),
+                new Wood("crimson", Blocks.CRIMSON_DOOR, BlockSetType.CRIMSON),
+                new Wood("dark_oak", Blocks.DARK_OAK_DOOR, BlockSetType.DARK_OAK),
+                new Wood("mangrove", Blocks.MANGROVE_DOOR, BlockSetType.MANGROVE));
+        for (Wood w : woods) {
+            DUNGEON_DOORS.add(new DungeonDoor(w.name(), w.door(), 2, Registration.BLOCKS.register(w.name() + "_dungeon_door",
+                    () -> new DungeonDoorBlock(Properties.copy(w.door()), w.setType()))));
+        }
+        for (Wood w : woods) {
+            for (int height : new int[]{3, 4}) {
+                DUNGEON_DOORS.add(new DungeonDoor(w.name(), w.door(), height, Registration.BLOCKS.register(w.name() + "_dungeon_door_" + height,
+                        () -> new TallDoorBlock(Properties.copy(w.door()), w.setType(), height))));
+            }
+        }
+    }
 
     public static final CopperFamily COPPER_DOORS = CopperFamily.register("copper_door",
             age -> age == WeatherState.UNAFFECTED

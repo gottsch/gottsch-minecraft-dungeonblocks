@@ -25,15 +25,15 @@
       "y": 90
     },
     "facing=east,part=middle,tension=0": {
-      "model": "dungeonblocks:block/torture_rack_middle_0",
+      "model": "dungeonblocks:block/torture_rack_middle",
       "y": 90
     },
     "facing=east,part=middle,tension=1": {
-      "model": "dungeonblocks:block/torture_rack_middle_1",
+      "model": "dungeonblocks:block/torture_rack_middle",
       "y": 90
     },
     "facing=east,part=middle,tension=2": {
-      "model": "dungeonblocks:block/torture_rack_middle_2",
+      "model": "dungeonblocks:block/torture_rack_middle",
       "y": 90
     },
     "facing=north,part=foot,tension=0": {
@@ -55,13 +55,13 @@
       "model": "dungeonblocks:block/torture_rack_head_2"
     },
     "facing=north,part=middle,tension=0": {
-      "model": "dungeonblocks:block/torture_rack_middle_0"
+      "model": "dungeonblocks:block/torture_rack_middle"
     },
     "facing=north,part=middle,tension=1": {
-      "model": "dungeonblocks:block/torture_rack_middle_1"
+      "model": "dungeonblocks:block/torture_rack_middle"
     },
     "facing=north,part=middle,tension=2": {
-      "model": "dungeonblocks:block/torture_rack_middle_2"
+      "model": "dungeonblocks:block/torture_rack_middle"
     },
     "facing=south,part=foot,tension=0": {
       "model": "dungeonblocks:block/torture_rack_foot_0",
@@ -88,15 +88,15 @@
       "y": 180
     },
     "facing=south,part=middle,tension=0": {
-      "model": "dungeonblocks:block/torture_rack_middle_0",
+      "model": "dungeonblocks:block/torture_rack_middle",
       "y": 180
     },
     "facing=south,part=middle,tension=1": {
-      "model": "dungeonblocks:block/torture_rack_middle_1",
+      "model": "dungeonblocks:block/torture_rack_middle",
       "y": 180
     },
     "facing=south,part=middle,tension=2": {
-      "model": "dungeonblocks:block/torture_rack_middle_2",
+      "model": "dungeonblocks:block/torture_rack_middle",
       "y": 180
     },
     "facing=west,part=foot,tension=0": {
@@ -124,15 +124,15 @@
       "y": 270
     },
     "facing=west,part=middle,tension=0": {
-      "model": "dungeonblocks:block/torture_rack_middle_0",
+      "model": "dungeonblocks:block/torture_rack_middle",
       "y": 270
     },
     "facing=west,part=middle,tension=1": {
-      "model": "dungeonblocks:block/torture_rack_middle_1",
+      "model": "dungeonblocks:block/torture_rack_middle",
       "y": 270
     },
     "facing=west,part=middle,tension=2": {
-      "model": "dungeonblocks:block/torture_rack_middle_2",
+      "model": "dungeonblocks:block/torture_rack_middle",
       "y": 270
     }
   }

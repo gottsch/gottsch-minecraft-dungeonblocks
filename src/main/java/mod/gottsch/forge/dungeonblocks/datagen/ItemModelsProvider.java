@@ -101,18 +101,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.DIRTY_HAY_PATCH));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.DUNGEON_LANTERN));
 
-		basicItem(ModBlocks.MAP.get(ModBlocks.CRIMSON_DUNGEON_DOOR), mcLoc("item/crimson_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.DARK_OAK_DUNGEON_DOOR), mcLoc("item/dark_oak_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.MANGROVE_DUNGEON_DOOR), mcLoc("item/mangrove_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.SPRUCE_DUNGEON_DOOR), mcLoc("item/spruce_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.SPRUCE_DUNGEON_DOOR_3), mcLoc("item/spruce_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.SPRUCE_DUNGEON_DOOR_4), mcLoc("item/spruce_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.CRIMSON_DUNGEON_DOOR_3), mcLoc("item/crimson_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.CRIMSON_DUNGEON_DOOR_4), mcLoc("item/crimson_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.DARK_OAK_DUNGEON_DOOR_3), mcLoc("item/dark_oak_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.DARK_OAK_DUNGEON_DOOR_4), mcLoc("item/dark_oak_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.MANGROVE_DUNGEON_DOOR_3), mcLoc("item/mangrove_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.MANGROVE_DUNGEON_DOOR_4), mcLoc("item/mangrove_door"));
+		// dungeon doors show their vanilla wood's door icon
+		ModBlocks.DUNGEON_DOORS.forEach(door -> basicItem(ModBlocks.MAP.get(door.block()), mcLoc("item/" + door.wood() + "_door")));
 
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK));

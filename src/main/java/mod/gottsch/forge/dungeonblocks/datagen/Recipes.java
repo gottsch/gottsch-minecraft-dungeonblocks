@@ -481,27 +481,13 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
 					.save(recipe);
 
-			// dungeon doors
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.CRIMSON_DUNGEON_DOOR.get())
-					.requires(Blocks.CRIMSON_DOOR)
-					.requires(Items.IRON_INGOT)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
-					.save(recipe);
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.DARK_OAK_DUNGEON_DOOR.get())
-					.requires(Blocks.DARK_OAK_DOOR)
-					.requires(Items.IRON_INGOT)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
-					.save(recipe);
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.MANGROVE_DUNGEON_DOOR.get())
-					.requires(Blocks.MANGROVE_DOOR)
-					.requires(Items.IRON_INGOT)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
-					.save(recipe);
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.SPRUCE_DUNGEON_DOOR.get())
-					.requires(Blocks.SPRUCE_DOOR)
-					.requires(Items.IRON_INGOT)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
-					.save(recipe);
+			// dungeon doors: a vanilla door reinforced with iron
+			ModBlocks.DUNGEON_DOORS.stream().filter(door -> door.height() == 2).forEach(door ->
+					ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, door.block().get())
+							.requires(door.vanillaDoor())
+							.requires(Items.IRON_INGOT)
+							.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+							.save(recipe));
 
 			// hay patches
 			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Blocks.HAY_BLOCK)

@@ -177,8 +177,12 @@ for occupied in ("", "occupied_"):
         JOBS.append(("torture_rack_head", f"{occupied}torture_rack_head_{n}", RACK_TEX,
                      {"frame": (0, 0, 0), f"crank_{n}": (0, 0, 0), f"ropes_{n}": (0, 0, 0), **limbs}))
         limbs = {"skeleton": (0, 0, 0), "legs": (0, 0, n)} if occupied else {}
-        JOBS.append(("torture_rack_middle", f"{occupied}torture_rack_middle_{n}", RACK_TEX,
-                     {"frame": (0, 0, 0), **limbs}))
+        # the empty rack's middle is the bare frame at every notch: one model, written once,
+        # which the blockstate uses for all three tensions. The occupant's legs move per notch.
+        if occupied or n == 0:
+            JOBS.append(("torture_rack_middle",
+                         f"{occupied}torture_rack_middle_{n}" if occupied else "torture_rack_middle", RACK_TEX,
+                         {"frame": (0, 0, 0), **limbs}))
         JOBS.append(("torture_rack_foot", f"{occupied}torture_rack_foot_{n}", RACK_TEX,
                      {"frame": (0, 0, 0), f"ropes_{n}": (0, 0, 0), **limbs}))
 
