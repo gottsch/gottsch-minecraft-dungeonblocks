@@ -21,8 +21,10 @@ package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.BarredWindows;
+import mod.gottsch.forge.dungeonblocks.core.block.AgedIronFamily;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
+import net.minecraft.world.level.block.WeatheringCopper.WeatherState;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -99,7 +101,7 @@ public class Recipes extends RecipeProvider {
 					.save(recipe);
 
 			// iron grate
-			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.DARK_IRON_GRATE.get(), 2)
+			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.DARK_IRON_GRATES.get(AgedIronFamily.Age.PLAIN).get(), 2)
 					.pattern("x x")
 					.pattern(" x ")
 					.pattern("x x")
@@ -108,7 +110,7 @@ public class Recipes extends RecipeProvider {
 					.save(recipe);
 
 			// copper grate
-			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.WEATHERED_COPPER_GRATE.get(), 2)
+			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.COPPER_GRATES.get(WeatherState.WEATHERED).get(), 2)
 					.pattern("x x")
 					.pattern(" x ")
 					.pattern("x x")
@@ -124,7 +126,7 @@ public class Recipes extends RecipeProvider {
 					.save(recipe);
 
 			// dark iron bars: eight iron bars around a coal, blackened; the door as the iron one is
-			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_BARS.get(), 8)
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_BARS.get(AgedIronFamily.Age.PLAIN).get(), 8)
 					.pattern("bbb")
 					.pattern("bcb")
 					.pattern("bbb")
@@ -132,10 +134,10 @@ public class Recipes extends RecipeProvider {
 					.define('c', Items.COAL)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_BARS))
 					.save(recipe);
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, ModBlocks.DARK_IRON_BARS_DOOR.get())
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, ModBlocks.DARK_IRON_BARS_DOORS.get(AgedIronFamily.Age.PLAIN).get())
 					.requires(Blocks.IRON_DOOR)
-					.requires(ModBlocks.DARK_IRON_BARS.get())
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.DARK_IRON_BARS.get()))
+					.requires(ModBlocks.DARK_IRON_BARS.get(AgedIronFamily.Age.PLAIN).get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.DARK_IRON_BARS.get(AgedIronFamily.Age.PLAIN).get()))
 					.save(recipe);
 
 			// dark iron ladder: vanilla's ladder in iron ingots, blackened with a coal
@@ -447,13 +449,13 @@ public class Recipes extends RecipeProvider {
 					.save(recipe);
 
 			// grate trapdoors
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_HEAVY_TRAPDOOR.get())
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.DARK_IRON_HEAVY_TRAPDOORS.get(AgedIronFamily.Age.PLAIN).get())
 					.requires(Blocks.IRON_TRAPDOOR)
 					.requires(Items.IRON_INGOT)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
 					.save(recipe);
 
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR.get())
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.COPPER_HEAVY_TRAPDOORS.get(WeatherState.WEATHERED).get())
 					.requires(Blocks.IRON_TRAPDOOR)
 					.requires(Items.COPPER_INGOT)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
@@ -559,8 +561,8 @@ public class Recipes extends RecipeProvider {
 			ingredientMap.forEach((k,v) -> {
 				ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, v.get())
 						.requires(k)
-						.requires(Ingredient.of(ModBlocks.DARK_IRON_GRATE.get(), ModBlocks.DARK_IRON_HEAVY_TRAPDOOR.get()))
-						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.DARK_IRON_GRATE.get(), ModBlocks.DARK_IRON_HEAVY_TRAPDOOR.get()))
+						.requires(Ingredient.of(ModBlocks.DARK_IRON_GRATES.get(AgedIronFamily.Age.PLAIN).get(), ModBlocks.DARK_IRON_HEAVY_TRAPDOORS.get(AgedIronFamily.Age.PLAIN).get()))
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.DARK_IRON_GRATES.get(AgedIronFamily.Age.PLAIN).get(), ModBlocks.DARK_IRON_HEAVY_TRAPDOORS.get(AgedIronFamily.Age.PLAIN).get()))
 						.save(recipe);
 			});
 			ingredientMap.clear();

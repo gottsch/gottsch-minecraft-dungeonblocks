@@ -11,6 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.WeatheringCopper.WeatherState;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -108,86 +109,30 @@ public class ModBlockStateProvider extends BlockStateProvider {
                     }
                 });
 
-        heavyTrapDoorBlock(ModBlocks.DARK_IRON_HEAVY_TRAPDOOR, modLoc("block/dark_iron"), true);
-        heavyTrapDoorBlock(ModBlocks.TARNISHED_DARK_IRON_HEAVY_TRAPDOOR, modLoc("block/tarnished_dark_iron"), true);
-        heavyTrapDoorBlock(ModBlocks.RUSTED_DARK_IRON_HEAVY_TRAPDOOR, modLoc("block/rusted_dark_iron"), true);
-        heavyTrapDoorBlock(ModBlocks.CORRODED_DARK_IRON_HEAVY_TRAPDOOR, modLoc("block/corroded_dark_iron"), true);
-        heavyTrapDoorBlock(ModBlocks.COPPER_HEAVY_TRAPDOOR, mcLoc("block/copper_block"), true);
-        heavyTrapDoorBlock(ModBlocks.EXPOSED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/exposed_copper"), true);
-        heavyTrapDoorBlock(ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/weathered_copper"), true);
-        heavyTrapDoorBlock(ModBlocks.OXIDIZED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/oxidized_copper"), true);
-        
-        heavyTrapDoorBlock(ModBlocks.WAXED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/copper_block"), true);
-        heavyTrapDoorBlock(ModBlocks.WAXED_EXPOSED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/exposed_copper"), true);
-        heavyTrapDoorBlock(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/weathered_copper"), true);
-        heavyTrapDoorBlock(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_TRAPDOOR, mcLoc("block/oxidized_copper"), true);
+        // dark iron and copper families: every age (and waxed twin) of a shape is the same model,
+        // textured by its age
+        ModBlocks.DARK_IRON_HEAVY_TRAPDOORS.forEach((age, b) -> heavyTrapDoorBlock(b, darkIronTexture(age), true));
+        ModBlocks.COPPER_HEAVY_TRAPDOORS.forEach((age, b) -> heavyTrapDoorBlock(b, copperTexture(age), true));
 
-        simpleSingleTexture(ModBlocks.COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/copper_grate"));
-        simpleSingleTexture(ModBlocks.EXPOSED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/exposed_copper_grate"));
-        simpleSingleTexture(ModBlocks.WEATHERED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/weathered_copper_grate"));
-        simpleSingleTexture(ModBlocks.OXIDIZED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/oxidized_copper_grate"));
-        simpleSingleTexture(ModBlocks.WAXED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/copper_grate"));
-        simpleSingleTexture(ModBlocks.WAXED_EXPOSED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/exposed_copper_grate"));
-        simpleSingleTexture(ModBlocks.WAXED_WEATHERED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/weathered_copper_grate"));
-        simpleSingleTexture(ModBlocks.WAXED_OXIDIZED_COPPER_GRATE, modLoc("block/template_cube_cutout"), modLoc("block/oxidized_copper_grate"));
+        ModBlocks.COPPER_GRATES.forEach((age, b) -> simpleSingleTexture(b, modLoc("block/template_cube_cutout"),
+                modLoc("block/" + CopperFamily.id(age, "copper_grate"))));
 
-        heavyGrateBlock(ModBlocks.DARK_IRON_GRATE, modLoc("block/dark_iron"));
-        heavyGrateBlock(ModBlocks.TARNISHED_DARK_IRON_GRATE, modLoc("block/tarnished_dark_iron"));
-        heavyGrateBlock(ModBlocks.RUSTED_DARK_IRON_GRATE, modLoc("block/rusted_dark_iron"));
-        heavyGrateBlock(ModBlocks.CORRODED_DARK_IRON_GRATE, modLoc("block/corroded_dark_iron"));
-        heavyGrateBlock(ModBlocks.COPPER_HEAVY_GRATE, mcLoc("block/copper_block"));
-        heavyGrateBlock(ModBlocks.EXPOSED_COPPER_HEAVY_GRATE, mcLoc("block/exposed_copper"));
-        heavyGrateBlock(ModBlocks.WEATHERED_COPPER_HEAVY_GRATE, mcLoc("block/weathered_copper"));
-        heavyGrateBlock(ModBlocks.OXIDIZED_COPPER_HEAVY_GRATE, mcLoc("block/oxidized_copper"));
-        heavyGrateBlock(ModBlocks.WAXED_COPPER_HEAVY_GRATE, mcLoc("block/copper_block"));
-        heavyGrateBlock(ModBlocks.WAXED_EXPOSED_COPPER_HEAVY_GRATE, mcLoc("block/exposed_copper"));
-        heavyGrateBlock(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_GRATE, mcLoc("block/weathered_copper"));
-        heavyGrateBlock(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_GRATE, mcLoc("block/oxidized_copper"));
+        ModBlocks.DARK_IRON_GRATES.forEach((age, b) -> heavyGrateBlock(b, darkIronTexture(age)));
+        ModBlocks.COPPER_HEAVY_GRATES.forEach((age, b) -> heavyGrateBlock(b, copperTexture(age)));
 
-        valveWheelBlock(ModBlocks.COPPER_VALVE_WHEEL, mcLoc("block/copper_block"));
-        valveWheelBlock(ModBlocks.EXPOSED_COPPER_VALVE_WHEEL, mcLoc("block/exposed_copper"));
-        valveWheelBlock(ModBlocks.WEATHERED_COPPER_VALVE_WHEEL, mcLoc("block/weathered_copper"));
-        valveWheelBlock(ModBlocks.OXIDIZED_COPPER_VALVE_WHEEL, mcLoc("block/oxidized_copper"));
-        valveWheelBlock(ModBlocks.WAXED_COPPER_VALVE_WHEEL, mcLoc("block/copper_block"));
-        valveWheelBlock(ModBlocks.WAXED_EXPOSED_COPPER_VALVE_WHEEL, mcLoc("block/exposed_copper"));
-        valveWheelBlock(ModBlocks.WAXED_WEATHERED_COPPER_VALVE_WHEEL, mcLoc("block/weathered_copper"));
-        valveWheelBlock(ModBlocks.WAXED_OXIDIZED_COPPER_VALVE_WHEEL, mcLoc("block/oxidized_copper"));
-
+        ModBlocks.COPPER_VALVE_WHEELS.forEach((age, b) -> valveWheelBlock(b, copperTexture(age)));
 
         plateBracketBlock(ModBlocks.IRON_PLATE_BRACKET, modLoc("block/iron_plate"));
         plateBracketBlock(ModBlocks.DARK_IRON_PLATE_BRACKET, modLoc("block/dark_iron"));
-        plateBracketBlock(ModBlocks.COPPER_PLATE_BRACKET, mcLoc("block/copper_block"));
-        plateBracketBlock(ModBlocks.EXPOSED_COPPER_PLATE_BRACKET, mcLoc("block/exposed_copper"));
-        plateBracketBlock(ModBlocks.WEATHERED_COPPER_PLATE_BRACKET, mcLoc("block/weathered_copper"));
-        plateBracketBlock(ModBlocks.OXIDIZED_COPPER_PLATE_BRACKET, mcLoc("block/oxidized_copper"));
-        plateBracketBlock(ModBlocks.WAXED_COPPER_PLATE_BRACKET, mcLoc("block/copper_block"));
-        plateBracketBlock(ModBlocks.WAXED_EXPOSED_COPPER_PLATE_BRACKET, mcLoc("block/exposed_copper"));
-        plateBracketBlock(ModBlocks.WAXED_WEATHERED_COPPER_PLATE_BRACKET, mcLoc("block/weathered_copper"));
-        plateBracketBlock(ModBlocks.WAXED_OXIDIZED_COPPER_PLATE_BRACKET, mcLoc("block/oxidized_copper"));
+        ModBlocks.COPPER_PLATE_BRACKETS.forEach((age, b) -> plateBracketBlock(b, copperTexture(age)));
 
         anglePlateBracketBlock(ModBlocks.IRON_ANGLE_PLATE_BRACKET, modLoc("block/iron_plate"));
         anglePlateBracketBlock(ModBlocks.DARK_IRON_ANGLE_PLATE_BRACKET, modLoc("block/dark_iron"));
-        anglePlateBracketBlock(ModBlocks.COPPER_ANGLE_PLATE_BRACKET, mcLoc("block/copper_block"));
-        anglePlateBracketBlock(ModBlocks.EXPOSED_COPPER_ANGLE_PLATE_BRACKET, mcLoc("block/exposed_copper"));
-        anglePlateBracketBlock(ModBlocks.WEATHERED_COPPER_ANGLE_PLATE_BRACKET, mcLoc("block/weathered_copper"));
-        anglePlateBracketBlock(ModBlocks.OXIDIZED_COPPER_ANGLE_PLATE_BRACKET, mcLoc("block/oxidized_copper"));
-
-        anglePlateBracketBlock(ModBlocks.WAXED_COPPER_ANGLE_PLATE_BRACKET, mcLoc("block/copper_block"));
-        anglePlateBracketBlock(ModBlocks.WAXED_EXPOSED_COPPER_ANGLE_PLATE_BRACKET, mcLoc("block/exposed_copper"));
-        anglePlateBracketBlock(ModBlocks.WAXED_WEATHERED_COPPER_ANGLE_PLATE_BRACKET, mcLoc("block/weathered_copper"));
-        anglePlateBracketBlock(ModBlocks.WAXED_OXIDIZED_COPPER_ANGLE_PLATE_BRACKET, mcLoc("block/oxidized_copper"));
+        ModBlocks.COPPER_ANGLE_PLATE_BRACKETS.forEach((age, b) -> anglePlateBracketBlock(b, copperTexture(age)));
 
         cornerPlateBracketBlock(ModBlocks.IRON_CORNER_PLATE_BRACKET, modLoc("block/iron_plate"));
         cornerPlateBracketBlock(ModBlocks.DARK_IRON_CORNER_PLATE_BRACKET, modLoc("block/dark_iron"));
-        cornerPlateBracketBlock(ModBlocks.COPPER_CORNER_PLATE_BRACKET, mcLoc("block/copper_block"));
-        cornerPlateBracketBlock(ModBlocks.EXPOSED_COPPER_CORNER_PLATE_BRACKET, mcLoc("block/exposed_copper"));
-        cornerPlateBracketBlock(ModBlocks.WEATHERED_COPPER_CORNER_PLATE_BRACKET, mcLoc("block/weathered_copper"));
-        cornerPlateBracketBlock(ModBlocks.OXIDIZED_COPPER_CORNER_PLATE_BRACKET, mcLoc("block/oxidized_copper"));
-
-        cornerPlateBracketBlock(ModBlocks.WAXED_COPPER_CORNER_PLATE_BRACKET, mcLoc("block/copper_block"));
-        cornerPlateBracketBlock(ModBlocks.WAXED_EXPOSED_COPPER_CORNER_PLATE_BRACKET, mcLoc("block/exposed_copper"));
-        cornerPlateBracketBlock(ModBlocks.WAXED_WEATHERED_COPPER_CORNER_PLATE_BRACKET, mcLoc("block/weathered_copper"));
-        cornerPlateBracketBlock(ModBlocks.WAXED_OXIDIZED_COPPER_CORNER_PLATE_BRACKET, mcLoc("block/oxidized_copper"));
+        ModBlocks.COPPER_CORNER_PLATE_BRACKETS.forEach((age, b) -> cornerPlateBracketBlock(b, copperTexture(age)));
 
         wallRingBlock(ModBlocks.WALL_RING);
         hayPatchBlock(ModBlocks.HAY_PATCH);
@@ -209,23 +154,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.ROOTS_BODY.get(), models().cross("roots_body", modLoc("block/roots_body")).renderType("minecraft:cutout"));
 
         // copper doors (waxed variants reuse the un-waxed door textures)
-        copperDoor(ModBlocks.COPPER_DOOR, "copper_door");
-        copperDoor(ModBlocks.EXPOSED_COPPER_DOOR, "exposed_copper_door");
-        copperDoor(ModBlocks.WEATHERED_COPPER_DOOR, "weathered_copper_door");
-        copperDoor(ModBlocks.OXIDIZED_COPPER_DOOR, "oxidized_copper_door");
-        copperDoor(ModBlocks.WAXED_COPPER_DOOR, "copper_door");
-        copperDoor(ModBlocks.WAXED_EXPOSED_COPPER_DOOR, "exposed_copper_door");
-        copperDoor(ModBlocks.WAX_WEATHERED_COPPER_DOOR, "weathered_copper_door");
-        copperDoor(ModBlocks.WAXED_OXIDIZED_COPPER_DOOR, "oxidized_copper_door");
+        ModBlocks.COPPER_DOORS.forEach((age, b) -> copperDoor(b, CopperFamily.id(age, "copper_door")));
         edgedDoor(ModBlocks.IRON_BARS_DOOR, "iron_bars_door");
-        edgedDoor(ModBlocks.DARK_IRON_BARS_DOOR, "dark_iron_bars_door");
-        edgedDoor(ModBlocks.TARNISHED_DARK_IRON_BARS_DOOR, "tarnished_dark_iron_bars_door");
-        ironBars(ModBlocks.DARK_IRON_BARS);
+        ModBlocks.DARK_IRON_BARS_DOORS.forEach((age, b) -> edgedDoor(b, age.id("dark_iron_bars_door")));
+        ModBlocks.DARK_IRON_BARS.forEach((age, b) -> ironBars(b));
         // the Blockbench model faces north, against a south wall, as vanilla's ladder does
         getVariantBuilder(ModBlocks.DARK_IRON_LADDER.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
                 .modelFile(models().getExistingFile(modLoc("block/dark_iron_ladder")))
                 .rotationY(yaw(state.getValue(LadderBlock.FACING))).build(), LadderBlock.WATERLOGGED);
-        ironBars(ModBlocks.TARNISHED_DARK_IRON_BARS);
         ModBlocks.SHARPENED_LOGS.forEach(this::sharpenedLog);
         ModBlocks.CAPSTONES.forEach((block, source) -> capstone(block, source.get()));
         directionalBlock(ModBlocks.IRON_SPIKES.get(), objModel("iron_spikes", "spikes",
@@ -266,14 +202,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         });
 
         // copper trapdoors (waxed variants reuse the un-waxed trapdoor textures)
-        copperTrapDoor(ModBlocks.COPPER_TRAPDOOR, "copper_trapdoor");
-        copperTrapDoor(ModBlocks.EXPOSED_COPPER_TRAPDOOR, "exposed_copper_trapdoor");
-        copperTrapDoor(ModBlocks.WEATHERED_COPPER_TRAPDOOR, "weathered_copper_trapdoor");
-        copperTrapDoor(ModBlocks.OXIDIZED_COPPER_TRAPDOOR, "oxidized_copper_trapdoor");
-        copperTrapDoor(ModBlocks.WAXED_COPPER_TRAPDOOR, "copper_trapdoor");
-        copperTrapDoor(ModBlocks.WAXED_EXPOSED_COPPER_TRAPDOOR, "exposed_copper_trapdoor");
-        copperTrapDoor(ModBlocks.WAXED_WEATHERED_COPPER_TRAPDOOR, "weathered_copper_trapdoor");
-        copperTrapDoor(ModBlocks.WAXED_OXIDIZED_COPPER_TRAPDOOR, "oxidized_copper_trapdoor");
+        ModBlocks.COPPER_TRAPDOORS.forEach((age, b) -> copperTrapDoor(b, CopperFamily.id(age, "copper_trapdoor")));
 
         // doors
         dungeonDoorBlock((DoorBlock)ModBlocks.SPRUCE_DUNGEON_DOOR.get(), mcLoc("block/spruce_door_bottom"), mcLoc("block/spruce_door_top"));
@@ -1137,6 +1066,16 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .modelFile(state.getValue(SlabTableBlock.PART) == BedPart.FOOT ? foot : head)
                 .rotationY(((int) state.getValue(SlabTableBlock.FACING).toYRot() + 180) % 360)
                 .build());
+    }
+
+    /** Vanilla's copper block texture at an age: copper_block, exposed_copper, ... */
+    private ResourceLocation copperTexture(WeatherState age) {
+        return mcLoc("block/" + (age == WeatherState.UNAFFECTED ? "copper_block" : CopperFamily.id(age, "copper")));
+    }
+
+    /** The mod's dark iron texture at a rust stage: dark_iron, tarnished_dark_iron, ... */
+    private ResourceLocation darkIronTexture(AgedIronFamily.Age age) {
+        return modLoc("block/" + age.id("dark_iron"));
     }
 
     private ModelFile slabTableHalf(String name, ResourceLocation texture) {

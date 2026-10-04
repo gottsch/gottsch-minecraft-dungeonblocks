@@ -187,12 +187,12 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.IRON_BARS_DOOR.get());
         this.tag(BlockTags.DOORS).add(ModBlocks.IRON_BARS_DOOR.get());
         // the dark iron bars and their doors: the same, and pickaxe-only like vanilla iron bars
-        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.DARK_IRON_BARS.get(), ModBlocks.TARNISHED_DARK_IRON_BARS.get(),
-                ModBlocks.DARK_IRON_BARS_DOOR.get(), ModBlocks.TARNISHED_DARK_IRON_BARS_DOOR.get());
+        ModBlocks.DARK_IRON_BARS.forEach((age, b) -> this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get()));
+        ModBlocks.DARK_IRON_BARS_DOORS.forEach((age, b) -> this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get()));
         // a ladder climbs only by this tag, not by being a LadderBlock
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.DARK_IRON_LADDER.get());
         this.tag(BlockTags.CLIMBABLE).add(ModBlocks.DARK_IRON_LADDER.get());
-        this.tag(BlockTags.DOORS).add(ModBlocks.DARK_IRON_BARS_DOOR.get(), ModBlocks.TARNISHED_DARK_IRON_BARS_DOOR.get());
+        ModBlocks.DARK_IRON_BARS_DOORS.forEach((age, b) -> this.tag(BlockTags.DOORS).add(b.get()));
 
         // Sharpened logs are wood: axe, no tier, like vanilla logs. Their ids match nothing in
         // stone_blocks, and must stay out of that sweep, which would tag them for a pickaxe.
@@ -293,11 +293,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // Dark iron grates and heavy trapdoors, plain and rusted, belonged to no tool tag, so a
         // pickaxe mined them no faster than a bare hand. Pickaxe only, no tier tag: they do not
         // require the correct tool for drops and never have, so they still drop to anything.
-        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
-                ModBlocks.DARK_IRON_GRATE.get(), ModBlocks.TARNISHED_DARK_IRON_GRATE.get(),
-                ModBlocks.RUSTED_DARK_IRON_GRATE.get(), ModBlocks.CORRODED_DARK_IRON_GRATE.get(),
-                ModBlocks.DARK_IRON_HEAVY_TRAPDOOR.get(), ModBlocks.TARNISHED_DARK_IRON_HEAVY_TRAPDOOR.get(),
-                ModBlocks.RUSTED_DARK_IRON_HEAVY_TRAPDOOR.get(), ModBlocks.CORRODED_DARK_IRON_HEAVY_TRAPDOOR.get());
+        ModBlocks.DARK_IRON_GRATES.forEach((age, b) -> this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get()));
+        ModBlocks.DARK_IRON_HEAVY_TRAPDOORS.forEach((age, b) -> this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get()));
 
         // Slab tables copy their stone, requiresCorrectToolForDrops included. The two brick ones match
         // "brick" in the sweep above; stone, smooth stone and smooth sandstone match nothing there,

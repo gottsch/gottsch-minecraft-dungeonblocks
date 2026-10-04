@@ -20,6 +20,7 @@
 package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.CopperFamily;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.item.ModItems;
 import net.minecraft.data.PackOutput;
@@ -79,85 +80,27 @@ public class ItemModelsProvider extends ItemModelProvider {
 		basicItem(ModBlocks.MAP.get(ModBlocks.ANGLE_COBWEB_2), mcLoc("block/cobweb"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.CANDLE_SCONCE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.BRAZIER));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.TARNISHED_DARK_IRON_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.RUSTED_DARK_IRON_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.CORRODED_DARK_IRON_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.COPPER_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.COPPER_HEAVY_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_HEAVY_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_HEAVY_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_HEAVY_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_HEAVY_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_HEAVY_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_GRATE));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_GRATE));
+		ModBlocks.DARK_IRON_GRATES.forEach((age, b) -> blockItemParent(ModBlocks.MAP.get(b)));
+		ModBlocks.COPPER_GRATES.forEach((age, b) -> blockItemParent(ModBlocks.MAP.get(b)));
+		ModBlocks.COPPER_HEAVY_GRATES.forEach((age, b) -> blockItemParent(ModBlocks.MAP.get(b)));
+		ModBlocks.COPPER_VALVE_WHEELS.forEach((age, b) -> blockItemParent(ModBlocks.MAP.get(b)));
 
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.COPPER_VALVE_WHEEL));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_VALVE_WHEEL));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_VALVE_WHEEL));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_VALVE_WHEEL));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_VALVE_WHEEL));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_VALVE_WHEEL));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_VALVE_WHEEL));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_VALVE_WHEEL));
+		// heavy trapdoors: the closed bottom model (waxed reuse the un-waxed one)
+		ModBlocks.COPPER_HEAVY_TRAPDOORS.forEach((age, b) -> withExistingParent(ModBlocks.MAP.get(b),
+				modLoc("block/" + CopperFamily.id(age, "copper_heavy_trapdoor") + "_bottom")));
+		ModBlocks.DARK_IRON_HEAVY_TRAPDOORS.forEach((age, b) -> withExistingParent(ModBlocks.MAP.get(b),
+				modLoc("block/" + age.id("dark_iron_heavy_trapdoor") + "_bottom")));
 
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.COPPER_HEAVY_TRAPDOOR), modLoc("block/copper_heavy_trapdoor_bottom"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_HEAVY_TRAPDOOR), modLoc("block/exposed_copper_heavy_trapdoor_bottom"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR), modLoc("block/weathered_copper_heavy_trapdoor_bottom"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_HEAVY_TRAPDOOR), modLoc("block/oxidized_copper_heavy_trapdoor_bottom"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_HEAVY_TRAPDOOR), modLoc("block/copper_heavy_trapdoor_bottom"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_HEAVY_TRAPDOOR), modLoc("block/exposed_copper_heavy_trapdoor_bottom"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_HEAVY_TRAPDOOR), modLoc("block/weathered_copper_heavy_trapdoor_bottom"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_HEAVY_TRAPDOOR), modLoc("block/oxidized_copper_heavy_trapdoor_bottom"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_HEAVY_TRAPDOOR), modLoc("block/dark_iron_heavy_trapdoor_bottom"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.TARNISHED_DARK_IRON_HEAVY_TRAPDOOR), modLoc("block/tarnished_dark_iron_heavy_trapdoor_bottom"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.RUSTED_DARK_IRON_HEAVY_TRAPDOOR), modLoc("block/rusted_dark_iron_heavy_trapdoor_bottom"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.CORRODED_DARK_IRON_HEAVY_TRAPDOOR), modLoc("block/corroded_dark_iron_heavy_trapdoor_bottom"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_HEAVY_TRAPDOOR), modLoc("block/weathered_copper_heavy_trapdoor_bottom"));
-
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.IRON_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.IRON_CORNER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.DARK_IRON_CORNER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.EXPOSED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WEATHERED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.OXIDIZED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
-
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_EXPOSED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_WEATHERED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_CORNER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_OXIDIZED_COPPER_CORNER_PLATE_BRACKET.getId().getPath()));
-
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.IRON_PLATE_BRACKET), modLoc("block/" + ModBlocks.IRON_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_PLATE_BRACKET), modLoc("block/" + ModBlocks.DARK_IRON_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.COPPER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.EXPOSED_COPPER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WEATHERED_COPPER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.OXIDIZED_COPPER_PLATE_BRACKET.getId().getPath()));
-
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_COPPER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_EXPOSED_COPPER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_WEATHERED_COPPER_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_OXIDIZED_COPPER_PLATE_BRACKET.getId().getPath()));
-
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.IRON_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.IRON_ANGLE_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.DARK_IRON_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.DARK_IRON_ANGLE_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.EXPOSED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.WEATHERED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.OXIDIZED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
-
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_EXPOSED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_WEATHERED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_WEATHERED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_ANGLE_PLATE_BRACKET), modLoc("block/" + ModBlocks.WAXED_OXIDIZED_COPPER_ANGLE_PLATE_BRACKET.getId().getPath()));
+		// plate brackets: each block's own model
+		for (RegistryObject<Block> b : List.of(ModBlocks.IRON_CORNER_PLATE_BRACKET, ModBlocks.DARK_IRON_CORNER_PLATE_BRACKET,
+				ModBlocks.IRON_PLATE_BRACKET, ModBlocks.DARK_IRON_PLATE_BRACKET,
+				ModBlocks.IRON_ANGLE_PLATE_BRACKET, ModBlocks.DARK_IRON_ANGLE_PLATE_BRACKET)) {
+			ownBlockModel(b);
+		}
+		for (CopperFamily family : List.of(ModBlocks.COPPER_CORNER_PLATE_BRACKETS, ModBlocks.COPPER_PLATE_BRACKETS,
+				ModBlocks.COPPER_ANGLE_PLATE_BRACKETS)) {
+			family.forEach((age, b) -> ownBlockModel(b));
+		}
 
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.WALL_RING));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_SEWER));
@@ -240,22 +183,13 @@ public class ItemModelsProvider extends ItemModelProvider {
 		basicItem(ModBlocks.MAP.get(ModBlocks.ROOTS_BODY), modLoc("block/roots_body"));
 
 		// copper door items: flat icon from the door item texture (waxed reuse the un-waxed texture)
-		basicItem(ModBlocks.MAP.get(ModBlocks.COPPER_DOOR), modLoc("item/copper_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.EXPOSED_COPPER_DOOR), modLoc("item/exposed_copper_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.WEATHERED_COPPER_DOOR), modLoc("item/weathered_copper_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.OXIDIZED_COPPER_DOOR), modLoc("item/oxidized_copper_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.WAXED_COPPER_DOOR), modLoc("item/copper_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.WAXED_EXPOSED_COPPER_DOOR), modLoc("item/exposed_copper_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.WAX_WEATHERED_COPPER_DOOR), modLoc("item/weathered_copper_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.WAXED_OXIDIZED_COPPER_DOOR), modLoc("item/oxidized_copper_door"));
+		ModBlocks.COPPER_DOORS.forEach((age, b) -> basicItem(ModBlocks.MAP.get(b), modLoc("item/" + CopperFamily.id(age, "copper_door"))));
 		basicItem(ModBlocks.MAP.get(ModBlocks.IRON_BARS_DOOR), modLoc("item/iron_bars_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.DARK_IRON_BARS_DOOR), modLoc("item/dark_iron_bars_door"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.TARNISHED_DARK_IRON_BARS_DOOR), modLoc("item/tarnished_dark_iron_bars_door"));
+		ModBlocks.DARK_IRON_BARS_DOORS.forEach((age, b) -> basicItem(ModBlocks.MAP.get(b), modLoc("item/" + age.id("dark_iron_bars_door"))));
 		// bars show their flat texture in the inventory, as vanilla iron bars do
-		basicItem(ModBlocks.MAP.get(ModBlocks.DARK_IRON_BARS), modLoc("block/dark_iron_bars"));
+		ModBlocks.DARK_IRON_BARS.forEach((age, b) -> basicItem(ModBlocks.MAP.get(b), modLoc("block/" + age.id("dark_iron_bars"))));
 		// drawn flat, as vanilla's ladder is: see tools/gen_prop_item_icons.py
 		basicItem(ModBlocks.MAP.get(ModBlocks.DARK_IRON_LADDER), modLoc("item/dark_iron_ladder"));
-		basicItem(ModBlocks.MAP.get(ModBlocks.TARNISHED_DARK_IRON_BARS), modLoc("block/tarnished_dark_iron_bars"));
 		ModBlocks.SHARPENED_LOGS.forEach(b -> blockItemParent(ModBlocks.MAP.get(b)));
 		ModBlocks.CAPSTONES.keySet().forEach(b -> blockItemParent(ModBlocks.MAP.get(b)));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.IRON_SPIKES));
@@ -319,14 +253,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		basicItem(ModBlocks.MAP.get(ModBlocks.BUBBLING_CAULDRON), modLoc("item/bubbling_cauldron"));
 
 		// copper trapdoor items: parent to the generated bottom model
-		copperTrapdoorItem(ModBlocks.COPPER_TRAPDOOR);
-		copperTrapdoorItem(ModBlocks.EXPOSED_COPPER_TRAPDOOR);
-		copperTrapdoorItem(ModBlocks.WEATHERED_COPPER_TRAPDOOR);
-		copperTrapdoorItem(ModBlocks.OXIDIZED_COPPER_TRAPDOOR);
-		copperTrapdoorItem(ModBlocks.WAXED_COPPER_TRAPDOOR);
-		copperTrapdoorItem(ModBlocks.WAXED_EXPOSED_COPPER_TRAPDOOR);
-		copperTrapdoorItem(ModBlocks.WAXED_WEATHERED_COPPER_TRAPDOOR);
-		copperTrapdoorItem(ModBlocks.WAXED_OXIDIZED_COPPER_TRAPDOOR);
+		ModBlocks.COPPER_TRAPDOORS.forEach((age, b) -> copperTrapdoorItem(b));
 
 		basicItem(ModItems.LICHEN, modLoc("block/lichen"));
 		basicItem(ModItems.MOLD, modLoc("block/mold"));
@@ -419,6 +346,11 @@ public class ItemModelsProvider extends ItemModelProvider {
 	public ItemModelBuilder slabTableItem(RegistryObject<Block> block) {
 		String name = block.getId().getPath();
 		return withExistingParent(name, modLoc("block/" + name + "_foot"));
+	}
+
+	/** An item parented to its block's own model, block/<id>. */
+	private void ownBlockModel(RegistryObject<Block> block) {
+		withExistingParent(ModBlocks.MAP.get(block), modLoc("block/" + block.getId().getPath()));
 	}
 
 	/** Trapdoor item model parents to the block's generated "_bottom" model. */

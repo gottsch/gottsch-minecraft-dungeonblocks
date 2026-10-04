@@ -89,6 +89,13 @@ Three first-pass mistakes worth avoiding, all caught by eye:
 - Full-height drip streaks. They read as painted stripes. Keep streaks short and weak.
 - Saturated orange. It reads as terracotta rather than iron. Keep rust orange near `(130, 78, 47)`.
 
+**Registering them:** age stages are families, not hand-written constants. A dark iron shape is one
+`AgedIronFamily.register(stem, ages, props, factory)` in `ModBlocks` (ids `[tarnished_|rusted_|corroded_]<stem>`);
+a copper shape is one `CopperFamily.register(...)` giving all 4 weathering ages plus 4 waxed twins
+(ids `[waxed_][exposed_|weathered_|oxidized_]<stem>`). Datagen walks a family with
+`family.forEach((age, block) -> ...)`, texturing by age. A new `CopperFamily` joins the weathering
+chain automatically: `ModWeatheringCopper.NEXT_BY_BLOCK` is built from `CopperFamily.ALL`.
+
 ### Retone (one stone's pattern in another stone's colours)
 
 When both source and target are flat palettes with the same number of shade classes, the retone is

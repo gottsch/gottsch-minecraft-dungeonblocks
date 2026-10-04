@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.google.common.collect.Maps;
@@ -59,22 +57,25 @@ public class ModBlocks {
     public static final List<RegistryObject<Block>> BANNERS = new ArrayList<>();
 
     // ------------------------------------------------------------------
-    // Copper helpers. Weathering copper has 4 ages (unaffected -> exposed ->
-    // weathered -> oxidized) plus a waxed counterpart per age. Properties are
-    // always copied from an EXPLICIT source block named right at the call site,
-    // so a waxed block can never accidentally copy the wrong weather state.
+    // Copper helpers. The copper families themselves are CopperFamily.register
+    // calls below; these are the grate's own properties, which most of the
+    // other copper shapes copy.
     // ------------------------------------------------------------------
 
-    /** Register a weathering-copper block of the given age, copying properties from {@code propsFrom}. */
-    private static RegistryObject<Block> weathering(String id, RegistryObject<Block> propsFrom,
-            WeatherState age, BiFunction<WeatherState, Properties, Block> factory) {
-        return Registration.BLOCKS.register(id, () -> factory.apply(age, Properties.copy(propsFrom.get())));
+    private static Properties copperGrateProperties() {
+        return Properties.of().strength(3.0F, 6.0F).sound(SoundType.COPPER).mapColor(MapColor.WARPED_STEM).noOcclusion()
+                .requiresCorrectToolForDrops().isValidSpawn((a, b, c, d) -> false).isRedstoneConductor((a, b, c) -> false)
+                .isSuffocating((a, b, c) -> false).isViewBlocking((a, b, c) -> false);
     }
 
-    /** Register a block whose properties are copied from {@code propsFrom} (waxed copper variants, etc.). */
-    private static RegistryObject<Block> copperLike(String id, RegistryObject<Block> propsFrom,
-            Function<Properties, Block> factory) {
-        return Registration.BLOCKS.register(id, () -> factory.apply(Properties.copy(propsFrom.get())));
+    /** The grate's map colour at each later age (the unaffected grate's is in its properties). */
+    private static MapColor copperGrateColor(WeatherState age) {
+        return switch (age) {
+            case EXPOSED -> MapColor.TERRACOTTA_LIGHT_GRAY;
+            case WEATHERED -> MapColor.COLOR_ORANGE;
+            case OXIDIZED -> MapColor.WARPED_NYLIUM;
+            default -> MapColor.WARPED_STEM;
+        };
     }
 
     // NEW 10/26/2023
@@ -137,83 +138,39 @@ public class ModBlocks {
     public static final RegistryObject<Block> SMOOTH_STONE_SLAB_TABLE = slabTable("smooth_stone_slab_table", Blocks.SMOOTH_STONE);
     public static final RegistryObject<Block> SMOOTH_SANDSTONE_SLAB_TABLE = slabTable("smooth_sandstone_slab_table", Blocks.SMOOTH_SANDSTONE);
 
-    // grate
-    public static final RegistryObject<Block> DARK_IRON_GRATE = Registration.BLOCKS.register("dark_iron_grate", () -> new HeavyGrateBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()));
-    // Rusted stages of the dark iron grate. Separate blocks, not a weathering chain: vanilla iron does
-    // not age, so a builder places whichever stage they want. Same properties as the plain grate -
+    // Dark iron grates in their rust stages. Separate blocks, not a weathering chain (see
+    // AgedIronFamily): a builder places whichever stage they want. Same properties as the plain grate -
     // rust is only the texture (tools/gen_rusted_dark_iron_textures.py).
-    public static final RegistryObject<Block> TARNISHED_DARK_IRON_GRATE = Registration.BLOCKS.register("tarnished_dark_iron_grate", () -> new HeavyGrateBlock(Properties.copy(DARK_IRON_GRATE.get())));
-    public static final RegistryObject<Block> RUSTED_DARK_IRON_GRATE = Registration.BLOCKS.register("rusted_dark_iron_grate", () -> new HeavyGrateBlock(Properties.copy(DARK_IRON_GRATE.get())));
-    public static final RegistryObject<Block> CORRODED_DARK_IRON_GRATE = Registration.BLOCKS.register("corroded_dark_iron_grate", () -> new HeavyGrateBlock(Properties.copy(DARK_IRON_GRATE.get())));
+    public static final AgedIronFamily DARK_IRON_GRATES = AgedIronFamily.register("dark_iron_grate", AgedIronFamily.ALL_AGES,
+            age -> age == AgedIronFamily.Age.PLAIN
+                    ? Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()
+                    : Properties.copy(ModBlocks.DARK_IRON_GRATES.get(AgedIronFamily.Age.PLAIN).get()),
+            HeavyGrateBlock::new);
 
-    public static final RegistryObject<Block> COPPER_GRATE = Registration.BLOCKS.register("copper_grate", () -> {
-        return new WeatheringCopperGrateBlock(WeatheringCopper.WeatherState.UNAFFECTED, Properties.of().strength(3.0F, 6.0F).sound(SoundType.COPPER).mapColor(MapColor.WARPED_STEM).noOcclusion().requiresCorrectToolForDrops().isValidSpawn((a, b, c, d) -> {
-            return false;
-        }).isRedstoneConductor((a, b, c) -> {
-            return false;
-        }).isSuffocating((a, b, c) -> {
-            return false;
-        }).isViewBlocking((a, b, c) -> {
-            return false;
-        }));
-    });
-    public static final RegistryObject<Block> EXPOSED_COPPER_GRATE = copperLike("exposed_copper_grate", COPPER_GRATE,
-            p -> new WeatheringCopperGrateBlock(WeatherState.EXPOSED, p.mapColor(MapColor.TERRACOTTA_LIGHT_GRAY)));
-    public static final RegistryObject<Block> WEATHERED_COPPER_GRATE = copperLike("weathered_copper_grate", COPPER_GRATE,
-            p -> new WeatheringCopperGrateBlock(WeatherState.WEATHERED, p.mapColor(MapColor.COLOR_ORANGE)));
-    public static final RegistryObject<Block> OXIDIZED_COPPER_GRATE = copperLike("oxidized_copper_grate", COPPER_GRATE,
-            p -> new WeatheringCopperGrateBlock(WeatherState.OXIDIZED, p.mapColor(MapColor.WARPED_NYLIUM)));
-    public static final RegistryObject<Block> WAXED_COPPER_GRATE = copperLike("waxed_copper_grate", COPPER_GRATE, WaterloggedCubeBlock::new);
-    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_GRATE = copperLike("waxed_exposed_copper_grate", EXPOSED_COPPER_GRATE, WaterloggedCubeBlock::new);
-    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_GRATE = copperLike("waxed_weathered_copper_grate", WEATHERED_COPPER_GRATE, WaterloggedCubeBlock::new);
-    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_GRATE = copperLike("waxed_oxidized_copper_grate", OXIDIZED_COPPER_GRATE, WaterloggedCubeBlock::new);
+    // Copper families: 4 weathering ages plus a waxed twin of each (CopperFamily). Properties are
+    // always copied from an EXPLICIT source family named right here, so a waxed block can never
+    // copy the wrong age. The grate is the root most of the others borrow from.
+    public static final CopperFamily COPPER_GRATES = CopperFamily.register("copper_grate",
+            age -> age == WeatherState.UNAFFECTED ? copperGrateProperties()
+                    : ModBlocks.COPPER_GRATES.props(WeatherState.UNAFFECTED).mapColor(copperGrateColor(age)),
+            WeatheringCopperGrateBlock::new,
+            age -> ModBlocks.COPPER_GRATES.props(age), WaterloggedCubeBlock::new);
+    public static final CopperFamily COPPER_HEAVY_GRATES = CopperFamily.register("copper_heavy_grate",
+            COPPER_GRATES::props, WeatheringHeavyGrateBlock::new, COPPER_GRATES::props, HeavyGrateBlock::new);
+    public static final CopperFamily COPPER_VALVE_WHEELS = CopperFamily.register("copper_valve_wheel",
+            COPPER_GRATES::props, WeatheringCopperValveWheelBlock::new, COPPER_GRATES::props, ValveWheelBlock::new);
+    public static final CopperFamily COPPER_TRAPDOORS = CopperFamily.register("copper_trapdoor",
+            COPPER_GRATES::props, WeatheringCopperTrapDoorBlock::new,
+            COPPER_GRATES::props, p -> new TrapDoorBlock(p, BlockSetType.DARK_OAK));
 
-    public static final RegistryObject<Block> COPPER_HEAVY_GRATE = weathering("copper_heavy_grate", COPPER_GRATE, WeatherState.UNAFFECTED, WeatheringHeavyGrateBlock::new);
-    public static final RegistryObject<Block> EXPOSED_COPPER_HEAVY_GRATE = weathering("exposed_copper_heavy_grate", EXPOSED_COPPER_GRATE, WeatherState.EXPOSED, WeatheringHeavyGrateBlock::new);
-    public static final RegistryObject<Block> WEATHERED_COPPER_HEAVY_GRATE = weathering("weathered_copper_heavy_grate", WEATHERED_COPPER_GRATE, WeatherState.WEATHERED, WeatheringHeavyGrateBlock::new);
-    public static final RegistryObject<Block> OXIDIZED_COPPER_HEAVY_GRATE = weathering("oxidized_copper_heavy_grate", OXIDIZED_COPPER_GRATE, WeatherState.OXIDIZED, WeatheringHeavyGrateBlock::new);
-    public static final RegistryObject<Block> WAXED_COPPER_HEAVY_GRATE = copperLike("waxed_copper_heavy_grate", COPPER_GRATE, HeavyGrateBlock::new);
-    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_HEAVY_GRATE = copperLike("waxed_exposed_copper_heavy_grate", EXPOSED_COPPER_GRATE, HeavyGrateBlock::new);
-    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_HEAVY_GRATE = copperLike("waxed_weathered_copper_heavy_grate", WEATHERED_COPPER_GRATE, HeavyGrateBlock::new);
-    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_HEAVY_GRATE = copperLike("waxed_oxidized_copper_heavy_grate", OXIDIZED_COPPER_GRATE, HeavyGrateBlock::new);
-
-    // valve wheel
-    public static final RegistryObject<Block> COPPER_VALVE_WHEEL = weathering("copper_valve_wheel", COPPER_GRATE, WeatherState.UNAFFECTED, WeatheringCopperValveWheelBlock::new);
-    public static final RegistryObject<Block> EXPOSED_COPPER_VALVE_WHEEL = weathering("exposed_copper_valve_wheel", EXPOSED_COPPER_GRATE, WeatherState.EXPOSED, WeatheringCopperValveWheelBlock::new);
-    public static final RegistryObject<Block> WEATHERED_COPPER_VALVE_WHEEL = weathering("weathered_copper_valve_wheel", WEATHERED_COPPER_GRATE, WeatherState.WEATHERED, WeatheringCopperValveWheelBlock::new);
-    public static final RegistryObject<Block> OXIDIZED_COPPER_VALVE_WHEEL = weathering("oxidized_copper_valve_wheel", OXIDIZED_COPPER_GRATE, WeatherState.OXIDIZED, WeatheringCopperValveWheelBlock::new);
-    public static final RegistryObject<Block> WAXED_COPPER_VALVE_WHEEL = copperLike("waxed_copper_valve_wheel", COPPER_GRATE, ValveWheelBlock::new);
-    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_VALVE_WHEEL = copperLike("waxed_exposed_copper_valve_wheel", EXPOSED_COPPER_GRATE, ValveWheelBlock::new);
-    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_VALVE_WHEEL = copperLike("waxed_weathered_copper_valve_wheel", WEATHERED_COPPER_GRATE, ValveWheelBlock::new);
-    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_VALVE_WHEEL = copperLike("waxed_oxidized_copper_valve_wheel", OXIDIZED_COPPER_GRATE, ValveWheelBlock::new);
-
-    // trapdoor
-    public static final RegistryObject<Block> COPPER_TRAPDOOR = weathering("copper_trapdoor", COPPER_GRATE, WeatherState.UNAFFECTED, WeatheringCopperTrapDoorBlock::new);
-    public static final RegistryObject<Block> EXPOSED_COPPER_TRAPDOOR = weathering("exposed_copper_trapdoor", EXPOSED_COPPER_GRATE, WeatherState.EXPOSED, WeatheringCopperTrapDoorBlock::new);
-    public static final RegistryObject<Block> WEATHERED_COPPER_TRAPDOOR = weathering("weathered_copper_trapdoor", WEATHERED_COPPER_GRATE, WeatherState.WEATHERED, WeatheringCopperTrapDoorBlock::new);
-    public static final RegistryObject<Block> OXIDIZED_COPPER_TRAPDOOR = weathering("oxidized_copper_trapdoor", OXIDIZED_COPPER_GRATE, WeatherState.OXIDIZED, WeatheringCopperTrapDoorBlock::new);
-    public static final RegistryObject<Block> WAXED_COPPER_TRAPDOOR = copperLike("waxed_copper_trapdoor", COPPER_GRATE, p -> new TrapDoorBlock(p, BlockSetType.DARK_OAK));
-    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_TRAPDOOR = copperLike("waxed_exposed_copper_trapdoor", EXPOSED_COPPER_GRATE, p -> new TrapDoorBlock(p, BlockSetType.DARK_OAK));
-    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_TRAPDOOR = copperLike("waxed_weathered_copper_trapdoor", WEATHERED_COPPER_GRATE, p -> new TrapDoorBlock(p, BlockSetType.DARK_OAK));
-    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_TRAPDOOR = copperLike("waxed_oxidized_copper_trapdoor", OXIDIZED_COPPER_GRATE, p -> new TrapDoorBlock(p, BlockSetType.DARK_OAK));
-
-    // heavy trapdoor
-    public static final RegistryObject<Block> DARK_IRON_HEAVY_TRAPDOOR = Registration.BLOCKS.register("dark_iron_heavy_trapdoor", () -> {
-        return new HeavyTrapDoorBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion());
-    });
-    // rusted stages of the dark iron heavy trapdoor - see the rusted grates above
-    public static final RegistryObject<Block> TARNISHED_DARK_IRON_HEAVY_TRAPDOOR = Registration.BLOCKS.register("tarnished_dark_iron_heavy_trapdoor", () -> new HeavyTrapDoorBlock(Properties.copy(DARK_IRON_HEAVY_TRAPDOOR.get())));
-    public static final RegistryObject<Block> RUSTED_DARK_IRON_HEAVY_TRAPDOOR = Registration.BLOCKS.register("rusted_dark_iron_heavy_trapdoor", () -> new HeavyTrapDoorBlock(Properties.copy(DARK_IRON_HEAVY_TRAPDOOR.get())));
-    public static final RegistryObject<Block> CORRODED_DARK_IRON_HEAVY_TRAPDOOR = Registration.BLOCKS.register("corroded_dark_iron_heavy_trapdoor", () -> new HeavyTrapDoorBlock(Properties.copy(DARK_IRON_HEAVY_TRAPDOOR.get())));
-
-    public static final RegistryObject<Block> COPPER_HEAVY_TRAPDOOR = weathering("copper_heavy_trapdoor", COPPER_TRAPDOOR, WeatherState.UNAFFECTED, WeatheringHeavyTrapDoorBlock::new);
-    public static final RegistryObject<Block> EXPOSED_COPPER_HEAVY_TRAPDOOR = weathering("exposed_copper_heavy_trapdoor", EXPOSED_COPPER_TRAPDOOR, WeatherState.EXPOSED, WeatheringHeavyTrapDoorBlock::new);
-    public static final RegistryObject<Block> WEATHERED_COPPER_HEAVY_TRAPDOOR = weathering("weathered_copper_heavy_trapdoor", WEATHERED_COPPER_TRAPDOOR, WeatherState.WEATHERED, WeatheringHeavyTrapDoorBlock::new);
-    public static final RegistryObject<Block> OXIDIZED_COPPER_HEAVY_TRAPDOOR = weathering("oxidized_copper_heavy_trapdoor", OXIDIZED_COPPER_TRAPDOOR, WeatherState.OXIDIZED, WeatheringHeavyTrapDoorBlock::new);
-    public static final RegistryObject<Block> WAXED_COPPER_HEAVY_TRAPDOOR = copperLike("waxed_copper_heavy_trapdoor", COPPER_TRAPDOOR, HeavyTrapDoorBlock::new);
-    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_HEAVY_TRAPDOOR = copperLike("waxed_exposed_copper_heavy_trapdoor", EXPOSED_COPPER_TRAPDOOR, HeavyTrapDoorBlock::new);
-    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_HEAVY_TRAPDOOR = copperLike("waxed_weathered_copper_heavy_trapdoor", WEATHERED_COPPER_TRAPDOOR, HeavyTrapDoorBlock::new);
-    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_HEAVY_TRAPDOOR = copperLike("waxed_oxidized_copper_heavy_trapdoor", OXIDIZED_COPPER_TRAPDOOR, HeavyTrapDoorBlock::new);
+    // dark iron heavy trapdoors in their rust stages - see the dark iron grates above
+    public static final AgedIronFamily DARK_IRON_HEAVY_TRAPDOORS = AgedIronFamily.register("dark_iron_heavy_trapdoor", AgedIronFamily.ALL_AGES,
+            age -> age == AgedIronFamily.Age.PLAIN
+                    ? Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()
+                    : Properties.copy(ModBlocks.DARK_IRON_HEAVY_TRAPDOORS.get(AgedIronFamily.Age.PLAIN).get()),
+            HeavyTrapDoorBlock::new);
+    public static final CopperFamily COPPER_HEAVY_TRAPDOORS = CopperFamily.register("copper_heavy_trapdoor",
+            COPPER_TRAPDOORS::props, WeatheringHeavyTrapDoorBlock::new, COPPER_TRAPDOORS::props, HeavyTrapDoorBlock::new);
 
     public static final RegistryObject<Block> SQUARE_STONE_BRICK = Registration.BLOCKS.register("square_stone_brick", () -> {
         return new Block(Properties.copy(Blocks.STONE_BRICKS));
@@ -582,40 +539,25 @@ public class ModBlocks {
     // plate bracket
     public static final RegistryObject<Block> IRON_PLATE_BRACKET = Registration.BLOCKS.register("iron_plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> DARK_IRON_PLATE_BRACKET = Registration.BLOCKS.register("dark_iron_plate_bracket_block", () -> new PlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> COPPER_PLATE_BRACKET = weathering("copper_plate_bracket_block", COPPER_TRAPDOOR, WeatherState.UNAFFECTED, WeatheringPlateBracketBlock::new);
-    public static final RegistryObject<Block> EXPOSED_COPPER_PLATE_BRACKET = weathering("exposed_copper_plate_bracket_block", EXPOSED_COPPER_TRAPDOOR, WeatherState.EXPOSED, WeatheringPlateBracketBlock::new);
-    public static final RegistryObject<Block> WEATHERED_COPPER_PLATE_BRACKET = weathering("weathered_copper_plate_bracket_block", WEATHERED_COPPER_TRAPDOOR, WeatherState.WEATHERED, WeatheringPlateBracketBlock::new);
-    public static final RegistryObject<Block> OXIDIZED_COPPER_PLATE_BRACKET = weathering("oxidized_copper_plate_bracket_block", OXIDIZED_COPPER_TRAPDOOR, WeatherState.OXIDIZED, WeatheringPlateBracketBlock::new);
-    public static final RegistryObject<Block> WAXED_COPPER_PLATE_BRACKET = copperLike("waxed_copper_plate_bracket_block", COPPER_GRATE, PlateBracketBlock::new);
-    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_PLATE_BRACKET = copperLike("waxed_exposed_copper_plate_bracket_block", EXPOSED_COPPER_GRATE, PlateBracketBlock::new);
-    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_PLATE_BRACKET = copperLike("waxed_weathered_copper_plate_bracket_block", WEATHERED_COPPER_GRATE, PlateBracketBlock::new);
-    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_PLATE_BRACKET = copperLike("waxed_oxidized_copper_plate_bracket_block", OXIDIZED_COPPER_GRATE, PlateBracketBlock::new);
+    // weathering props from the trapdoor, waxed from the grate - as these always have been
+    public static final CopperFamily COPPER_PLATE_BRACKETS = CopperFamily.register("copper_plate_bracket_block",
+            COPPER_TRAPDOORS::props, WeatheringPlateBracketBlock::new, COPPER_GRATES::props, PlateBracketBlock::new);
 
     // angle/elbow plate bracket
     public static final RegistryObject<Block> IRON_ANGLE_PLATE_BRACKET = Registration.BLOCKS.register("iron_angle_plate_bracket_block", () -> new AnglePlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> DARK_IRON_ANGLE_PLATE_BRACKET = Registration.BLOCKS.register("dark_iron_angle_plate_bracket_block", () -> new AnglePlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
-    public static final RegistryObject<Block> COPPER_ANGLE_PLATE_BRACKET = weathering("copper_angle_plate_bracket_block", COPPER_TRAPDOOR, WeatherState.UNAFFECTED, WeatheringAnglePlateBracketBlock::new);
-    public static final RegistryObject<Block> EXPOSED_COPPER_ANGLE_PLATE_BRACKET = weathering("exposed_copper_angle_plate_bracket_block", EXPOSED_COPPER_TRAPDOOR, WeatherState.EXPOSED, WeatheringAnglePlateBracketBlock::new);
-    public static final RegistryObject<Block> WEATHERED_COPPER_ANGLE_PLATE_BRACKET = weathering("weathered_copper_angle_plate_bracket_block", WEATHERED_COPPER_TRAPDOOR, WeatherState.WEATHERED, WeatheringAnglePlateBracketBlock::new);
-    public static final RegistryObject<Block> OXIDIZED_COPPER_ANGLE_PLATE_BRACKET = weathering("oxidized_copper_angle_plate_bracket_block", OXIDIZED_COPPER_TRAPDOOR, WeatherState.OXIDIZED, WeatheringAnglePlateBracketBlock::new);
-    public static final RegistryObject<Block> WAXED_COPPER_ANGLE_PLATE_BRACKET = copperLike("waxed_copper_angle_plate_bracket_block", COPPER_GRATE, AnglePlateBracketBlock::new);
-    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_ANGLE_PLATE_BRACKET = copperLike("waxed_exposed_copper_angle_plate_bracket_block", EXPOSED_COPPER_GRATE, AnglePlateBracketBlock::new);
-    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_ANGLE_PLATE_BRACKET = copperLike("waxed_weathered_copper_angle_plate_bracket_block", WEATHERED_COPPER_GRATE, AnglePlateBracketBlock::new);
-    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_ANGLE_PLATE_BRACKET = copperLike("waxed_oxidized_copper_angle_plate_bracket_block", OXIDIZED_COPPER_GRATE, AnglePlateBracketBlock::new);
+    // weathering props from the trapdoor, waxed from the grate - as these always have been
+    public static final CopperFamily COPPER_ANGLE_PLATE_BRACKETS = CopperFamily.register("copper_angle_plate_bracket_block",
+            COPPER_TRAPDOORS::props, WeatheringAnglePlateBracketBlock::new, COPPER_GRATES::props, AnglePlateBracketBlock::new);
 
 
     // corner plate bracket
     public static final RegistryObject<Block> IRON_CORNER_PLATE_BRACKET = Registration.BLOCKS.register("iron_corner_plate_bracket_block", () -> new CornerPlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
     public static final RegistryObject<Block> DARK_IRON_CORNER_PLATE_BRACKET = Registration.BLOCKS.register("dark_iron_corner_plate_bracket_block", () -> new CornerPlateBracketBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)));
 
-    public static final RegistryObject<Block> COPPER_CORNER_PLATE_BRACKET = weathering("copper_corner_plate_bracket_block", COPPER_TRAPDOOR, WeatherState.UNAFFECTED, WeatheringCornerPlateBracketBlock::new);
-    public static final RegistryObject<Block> EXPOSED_COPPER_CORNER_PLATE_BRACKET = weathering("exposed_copper_corner_plate_bracket_block", EXPOSED_COPPER_TRAPDOOR, WeatherState.EXPOSED, WeatheringCornerPlateBracketBlock::new);
-    public static final RegistryObject<Block> WEATHERED_COPPER_CORNER_PLATE_BRACKET = weathering("weathered_copper_corner_plate_bracket_block", WEATHERED_COPPER_TRAPDOOR, WeatherState.WEATHERED, WeatheringCornerPlateBracketBlock::new);
-    public static final RegistryObject<Block> OXIDIZED_COPPER_CORNER_PLATE_BRACKET = weathering("oxidized_copper_corner_plate_bracket_block", OXIDIZED_COPPER_TRAPDOOR, WeatherState.OXIDIZED, WeatheringCornerPlateBracketBlock::new);
-    public static final RegistryObject<Block> WAXED_COPPER_CORNER_PLATE_BRACKET = copperLike("waxed_copper_corner_plate_bracket_block", COPPER_GRATE, CornerPlateBracketBlock::new);
-    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_CORNER_PLATE_BRACKET = copperLike("waxed_exposed_copper_corner_plate_bracket_block", EXPOSED_COPPER_GRATE, CornerPlateBracketBlock::new);
-    public static final RegistryObject<Block> WAXED_WEATHERED_COPPER_CORNER_PLATE_BRACKET = copperLike("waxed_weathered_copper_corner_plate_bracket_block", WEATHERED_COPPER_GRATE, CornerPlateBracketBlock::new);
-    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_CORNER_PLATE_BRACKET = copperLike("waxed_oxidized_copper_corner_plate_bracket_block", OXIDIZED_COPPER_GRATE, CornerPlateBracketBlock::new);
+    // weathering props from the trapdoor, waxed from the grate - as these always have been
+    public static final CopperFamily COPPER_CORNER_PLATE_BRACKETS = CopperFamily.register("copper_corner_plate_bracket_block",
+            COPPER_TRAPDOORS::props, WeatheringCornerPlateBracketBlock::new, COPPER_GRATES::props, CornerPlateBracketBlock::new);
 
     // hay patches
     public static final RegistryObject<Block> HAY_PATCH = Registration.BLOCKS.register("hay_patch_block", () -> new CarpetBlock(Properties.copy(Blocks.YELLOW_CARPET)));
@@ -652,30 +594,12 @@ public class ModBlocks {
     public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR_3 = Registration.BLOCKS.register("mangrove_dungeon_door_3", () -> new TallDoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE, 3));
     public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR_4 = Registration.BLOCKS.register("mangrove_dungeon_door_4", () -> new TallDoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE, 4));
 
-    public static final RegistryObject<Block> COPPER_DOOR = Registration.BLOCKS.register("copper_door", () -> {
-        return new WeatheringCopperDoorBlock(BlockSetType.IRON, WeatheringCopper.WeatherState.UNAFFECTED, Properties.copy(Blocks.DARK_OAK_DOOR).mapColor(Blocks.COPPER_BLOCK.defaultMapColor()).strength(3.0F, 6.0F).sound(SoundType.COPPER));
-    });
-    public static final RegistryObject<Block> EXPOSED_COPPER_DOOR = Registration.BLOCKS.register("exposed_copper_door", () -> {
-        return new WeatheringCopperDoorBlock(BlockSetType.IRON, WeatheringCopper.WeatherState.EXPOSED, Properties.copy((BlockBehaviour)COPPER_DOOR.get()).mapColor(((Block)EXPOSED_COPPER_GRATE.get()).defaultMapColor()));
-    });
-    public static final RegistryObject<Block> WEATHERED_COPPER_DOOR = Registration.BLOCKS.register("weathered_copper_door", () -> {
-        return new WeatheringCopperDoorBlock(BlockSetType.IRON, WeatheringCopper.WeatherState.WEATHERED, Properties.copy((BlockBehaviour)COPPER_DOOR.get()).mapColor(((Block)WEATHERED_COPPER_GRATE.get()).defaultMapColor()));
-    });
-    public static final RegistryObject<Block> OXIDIZED_COPPER_DOOR = Registration.BLOCKS.register("oxidized_copper_door", () -> {
-        return new WeatheringCopperDoorBlock(BlockSetType.IRON, WeatheringCopper.WeatherState.OXIDIZED, Properties.copy((BlockBehaviour)COPPER_DOOR.get()).mapColor(((Block)OXIDIZED_COPPER_GRATE.get()).defaultMapColor()));
-    });
-    public static final RegistryObject<Block> WAXED_COPPER_DOOR = Registration.BLOCKS.register("waxed_copper_door", () -> {
-        return new WaxedCopperDoorBlock(Properties.copy((BlockBehaviour)COPPER_DOOR.get()), BlockSetType.IRON);
-    });
-    public static final RegistryObject<Block> WAXED_EXPOSED_COPPER_DOOR = Registration.BLOCKS.register("waxed_exposed_copper_door", () -> {
-        return new WaxedCopperDoorBlock(Properties.copy((BlockBehaviour)EXPOSED_COPPER_DOOR.get()), BlockSetType.IRON);
-    });
-    public static final RegistryObject<Block> WAX_WEATHERED_COPPER_DOOR = Registration.BLOCKS.register("waxed_weathered_copper_door", () -> {
-        return new WaxedCopperDoorBlock(Properties.copy((BlockBehaviour)WEATHERED_COPPER_DOOR.get()), BlockSetType.IRON);
-    });
-    public static final RegistryObject<Block> WAXED_OXIDIZED_COPPER_DOOR = Registration.BLOCKS.register("waxed_oxidized_copper_door", () -> {
-        return new WaxedCopperDoorBlock(Properties.copy((BlockBehaviour)OXIDIZED_COPPER_DOOR.get()), BlockSetType.IRON);
-    });
+    public static final CopperFamily COPPER_DOORS = CopperFamily.register("copper_door",
+            age -> age == WeatherState.UNAFFECTED
+                    ? Properties.copy(Blocks.DARK_OAK_DOOR).mapColor(Blocks.COPPER_BLOCK.defaultMapColor()).strength(3.0F, 6.0F).sound(SoundType.COPPER)
+                    : ModBlocks.COPPER_DOORS.props(WeatherState.UNAFFECTED).mapColor(COPPER_GRATES.get(age).get().defaultMapColor()),
+            (age, p) -> new WeatheringCopperDoorBlock(BlockSetType.IRON, age, p),
+            age -> ModBlocks.COPPER_DOORS.props(age), p -> new WaxedCopperDoorBlock(p, BlockSetType.IRON));
     // A cell door for a wall of vanilla iron bars. Vanilla iron door properties - pickaxe, 5.0
     // strength, metal sound - but it opens by hand; see IronBarsDoorBlock for why it keeps the
     // iron block set type anyway.
@@ -686,19 +610,17 @@ public class ModBlocks {
     // IronBarsBlock, so they connect to each other and to vanilla iron bars exactly as iron bars
     // do. Textures: tools/gen_dark_iron_bars_textures.py. The tarnished pair is one light stage
     // only - rust as staining - and creative-only, like the tarnished dark iron grate.
-    public static final RegistryObject<Block> DARK_IRON_BARS = Registration.BLOCKS.register("dark_iron_bars",
-            () -> new IronBarsBlock(Properties.copy(Blocks.IRON_BARS)));
-    public static final RegistryObject<Block> TARNISHED_DARK_IRON_BARS = Registration.BLOCKS.register("tarnished_dark_iron_bars",
-            () -> new IronBarsBlock(Properties.copy(Blocks.IRON_BARS)));
+    public static final List<AgedIronFamily.Age> BARS_AGES = List.of(AgedIronFamily.Age.PLAIN, AgedIronFamily.Age.TARNISHED);
+    public static final AgedIronFamily DARK_IRON_BARS = AgedIronFamily.register("dark_iron_bars", BARS_AGES,
+            age -> Properties.copy(Blocks.IRON_BARS), IronBarsBlock::new);
     // a vanilla ladder in every way but its look: a 3D model of dark iron rails and rungs, inside
     // the ladder's own shape. Iron bars' toughness, and like them it wants a pickaxe.
     public static final RegistryObject<Block> DARK_IRON_LADDER = Registration.BLOCKS.register("dark_iron_ladder",
             () -> new LadderBlock(Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops()
                     .strength(3.0F, 6.0F).sound(SoundType.METAL).noOcclusion()));
-    public static final RegistryObject<Block> DARK_IRON_BARS_DOOR = Registration.BLOCKS.register("dark_iron_bars_door",
-            () -> new IronBarsDoorBlock(Properties.copy(Blocks.IRON_DOOR)));
-    public static final RegistryObject<Block> TARNISHED_DARK_IRON_BARS_DOOR = Registration.BLOCKS.register("tarnished_dark_iron_bars_door",
-            () -> new IronBarsDoorBlock(Properties.copy(Blocks.IRON_DOOR)));
+    // the bars' cell doors, one per bars age
+    public static final AgedIronFamily DARK_IRON_BARS_DOORS = AgedIronFamily.register("dark_iron_bars_door", BARS_AGES,
+            age -> Properties.copy(Blocks.IRON_DOOR), IronBarsDoorBlock::new);
 
     // Sharpened logs: the point of a palisade stake, set on the end of a log, one per vanilla wood.
     // Named after the stripped block they are crafted from, in vanilla's own words for it (log,
