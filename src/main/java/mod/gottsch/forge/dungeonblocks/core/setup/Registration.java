@@ -53,7 +53,6 @@ public class Registration {
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
 		BarredWindows.register();
-		//KeystoneBlocks.register();
 		LedgeBlocks.register();
 		CorbelBlocks.register();
 
