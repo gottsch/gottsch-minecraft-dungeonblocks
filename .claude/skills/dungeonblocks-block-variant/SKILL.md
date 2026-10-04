@@ -138,10 +138,15 @@ Then, because the family loop only makes the 11 decorative types and never the p
 - `ModBlocks` — register the full block by hand (follow `MOSSY_DEEPSLATE_BRICKS`).
 - `ModBlockStateProvider` — `simpleBlock(...)` for it.
 - `ItemModelsProvider` — `blockItemParent(ModBlocks.MAP.get(...))` for it.
-- `DataGenMaps` — an `m2.put(...)` override pointing at the **variant** block, near the existing
-  ones. `Material.base` is the plain vanilla block, so without this a future stonecutting recipe
-  would produce mossy output from a plain ingredient. Only corbel and ledge generate stonecutting
-  today, so it changes nothing now; it closes the trap.
+- The `Material`'s fourth argument, its **ingredient**, pointing at the **variant** block
+  (`() -> ModBlocks.MOSSY_DEEPSLATE_BRICKS.get()`). `Material.base` is the plain vanilla block, so
+  without this a stonecutting recipe would make mossy output from a plain ingredient.
+- Register the full block with `stone(...)` instead of `Registration.BLOCKS.register(...)`; that
+  puts it in `ModBlocks.STONE_BLOCKS`, which gives it its pickaxe tag (step 3).
+
+The block-types only some materials have (barred windows, ledges, corbels) are name lists in
+`ModMaterials` (`BARRED_WINDOWS`, `LEDGES`, `CORBELS`); add the material's name to the list.
+Woods and the odd extra materials live in `ModMaterials.WOOD` and `OTHER`.
 
 ### Single block
 
@@ -151,16 +156,18 @@ whenever the stone has a distinct top, so the top texture is actually used.
 
 ### Stairs and slabs
 
-Not among the 11 family types — register explicitly (`MOSSY_DEEPSLATE_BRICK_STAIRS`). A slab also
+Not among the 11 family types — register explicitly with `stone(...)` (`MOSSY_DEEPSLATE_BRICK_STAIRS`). A slab also
 needs adding to `BlockTags.SLABS` by hand; `ModBlockLootTables` already has a `SlabBlock` branch so
 a double slab drops two.
 
 ### Why datagen mostly just works
 
-The blockstate, item-model and recipe providers dispatch on **block-id substrings** against
-`DataGenMaps.names`, in an order-dependent if/else chain (`fluted_facade` before `fluted`,
-`quarter_facade` before `facade`). Name a block conventionally and it is picked up for free. That
-same substring dispatch is what causes the trap below.
+Every decorative block is registered through `ModBlocks.decor(...)` and recorded in
+`ModBlocks.DECOR` with its `Material` and `DecorType`. The blockstate, item-model, recipe and tag
+providers iterate `DECOR` and switch on the type, texturing by the material - no block ids are
+matched. A new `DecorType` needs a case in `ModBlockStateProvider.decorBlock` (the switch will not
+compile without one). Anything outside `DECOR` and the families (copper, dark iron) is datagen'd by
+an explicit line.
 
 ### Shapes JSON cannot make (points, slopes, angled timbers)
 
@@ -289,18 +296,20 @@ The sarcophagus, iron maiden and gibbet are the worked examples.
 
 ## Step 3: The tag trap — check this every single time
 
-`ModBlockTagGenerator` tags by substring match against `DataGenMaps.stone_blocks`. **A block whose
-id contains none of those substrings gets no tool tag at all, and if it copies
+`ModBlockTagGenerator` tags the mod's stone in one pass over `ModBlocks.DECOR`,
+`ModBlocks.STONE_BLOCKS` and the capstone, niche, crumbling-floor and hidden-door lists. **A block in
+none of those, and not tagged by an explicit line, gets no tool tag at all, and if it copies
 `requiresCorrectToolForDrops` from its base it then can never be mined for a drop.** It looks fine
-in-world and silently drops nothing.
+in-world and silently drops nothing. (Until 3.0.0 that pass matched id substrings, which is how
+most of the history below happened.)
 
 This is the single most repeated bug in this repo: the 2.3.0 loot incident, 30 of 39 arrow slits,
 all 64 tool-requiring copper blocks, and it would have caught `mossy_deepslate_tiles` and
 `mossy_cobbled_deepslate` (neither id contains "brick", "square", …).
 
-The 11 decorative types are always safe — they match on "facade", "pillar", "sill". **It is the
-plain full block, and any one-off block, that gets missed.** Verify rather than assume; step 4's
-script checks this for you.
+Decorative types are always safe - they are in `DECOR`. **It is the plain full block, and any
+one-off block, that gets missed:** register stone with `stone(...)`, or tag it explicitly. Verify
+rather than assume; step 4's script checks this for you.
 
 **`runData` now enforces this.** The last thing `ModBlockTagGenerator.addTags` does is
 `checkCorrectToolBlocksAreMineable()`, which **fails datagen** and names every mod block that
@@ -308,11 +317,10 @@ requires the correct tool but is in no `mineable/*` tag. If `runData` stops with
 that is this trap: tag the named blocks as below, never by weakening the check. It caught the
 stone, smooth stone and smooth sandstone slab tables on its first run. It does not check the tier.
 
-When a block is missed, prefer tagging it explicitly in `ModBlockTagGenerator` (see the Rubble and
-mossy-deepslate-tiles comments) over adding a new substring to `stone_blocks` — a new substring
-also pulls blocks into model and recipe generation. Adding a substring is right only when a whole
-*category* is missing, as with `arrow_slit`. Match the tier the mod already uses for that family
-rather than inventing one, and say so if that differs from vanilla.
+When a block is missed: if it is the mod's stone, register it with `stone(...)`; otherwise tag it
+explicitly in `ModBlockTagGenerator` (see the Rubble and mossy-deepslate-tiles lines). **Tiers are
+vanilla's** (decided 2026-10-04): stone, bricks, sandstone, deepslate, tuff and basalt take any
+pickaxe, so no tier tag; obsidian needs diamond; copper needs stone. Wood is the axe's.
 
 **The same kind of silent trap in recipes:** a recipe whose RESULT is a vanilla item is saved by
 default under that item's id - in the `minecraft` namespace - and **replaces vanilla's recipe**. The

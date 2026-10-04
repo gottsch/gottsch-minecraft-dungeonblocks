@@ -18,9 +18,7 @@
 package mod.gottsch.forge.dungeonblocks.core.setup;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.BarredWindows;
-import mod.gottsch.forge.dungeonblocks.core.block.CorbelBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.LedgeBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -52,9 +50,7 @@ public class Registration {
 	public static void registerBlocks() {
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		BarredWindows.register();
-		LedgeBlocks.register();
-		CorbelBlocks.register();
+		ModBlocks.registerTrimDecor();
 
 		BLOCKS.register(eventBus);
 	}

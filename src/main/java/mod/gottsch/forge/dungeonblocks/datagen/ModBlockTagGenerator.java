@@ -1,9 +1,9 @@
 package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.CorbelBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.LedgeBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.DecorType;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.ModMaterials;
 import mod.gottsch.forge.dungeonblocks.core.setup.Registration;
 import mod.gottsch.forge.dungeonblocks.core.tag.ModTags;
 import net.minecraft.core.HolderLookup;
@@ -17,11 +17,16 @@ import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTagGenerator extends BlockTagsProvider {
@@ -31,94 +36,36 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        // corbels
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.ACACIA_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.ANDESITE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.COBBLESTONE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.BIRCH_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.BLACKSTONE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.CHERRY_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.COBBLED_DEEPSLATE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.DARK_OAK_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.DEEPSLATE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.DEEPSLATE_BRICKS_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.DEEPSLATE_TILES_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.DIORITE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.GRANITE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.JUNGLE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.MANGROVE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.MOSSY_COBBLESTONE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.MOSSY_STONE_BRICKS_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.OAK_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.POLISHED_ANDESITE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.POLISHED_BLACKSTONE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.POLISHED_BLACKSTONE_BRICKS_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.POLISHED_DEEPSLATE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.POLISHED_DIORITE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.POLISHED_GRANITE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.SMOOTH_STONE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.SPRUCE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.STONE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.STONE_BRICKS_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.STRIPPED_ACACIA_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.STRIPPED_BIRCH_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.STRIPPED_CHERRY_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.STRIPPED_DARK_OAK_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.STRIPPED_JUNGLE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.STRIPPED_MANGROVE_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.STRIPPED_OAK_CORBEL.get());
-        tag(ModTags.Blocks.CORBELS).add(CorbelBlocks.STRIPPED_SPRUCE_CORBEL.get());
-
-        // ledges
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.ANDESITE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.BLACKSTONE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.BRICKS_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.COBBLESTONE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.COBBLED_DEEPSLATE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.DEEPSLATE_BRICKS_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.DEEPSLATE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.DIORITE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.GRANITE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.LIGHT_GRAY_CONCRETE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.MOSSY_COBBLESTONE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.MOSSY_STONE_BRICKS_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.POLISHED_ANDESITE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.POLISHED_BLACKSTONE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.POLISHED_BLACKSTONE_BRICKS_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.POLISHED_DEEPSLATE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.POLISHED_DIORITE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.POLISHED_GRANITE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.SMOOTH_STONE_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.STONE_BRICKS_LEDGE.get());
-        tag(ModTags.Blocks.LEDGES).add(LedgeBlocks.STONE_LEDGE.get());
-        DataGenMaps maps = new DataGenMaps();
-
-        Registration.BLOCKS.getEntries().stream()
-                .filter(b -> {
-                    for(String n : maps.stone_blocks) {
-                        if (b.getId().getPath().contains(n)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                })
-                .forEach(b -> {
-                    String name = b.getId().getPath();
-
-                    if (maps.wood_names.contains(name)) {
-//                        this.tag(BlockTags.MINEABLE_WITH_AXE)
-//                                .add(b.get());
-//                        this.tag(BlockTags.NEEDS_IRON_TOOL)
-//                                .add(b.get());
-                    } else {
-                        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get());
-                        if (name.contains("obsidian")) {
-                            this.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(b.get());
-                        } else {
-                            this.tag(BlockTags.NEEDS_STONE_TOOL).add(b.get());
-                        }
-                    }
-                });
+        // corbels and ledges, from the decorative block table
+        ModBlocks.DECOR.stream().filter(d -> d.type() == DecorType.CORBEL)
+                .forEach(d -> tag(ModTags.Blocks.CORBELS).add(d.block().get()));
+        ModBlocks.DECOR.stream().filter(d -> d.type() == DecorType.LEDGE)
+                .forEach(d -> tag(ModTags.Blocks.LEDGES).add(d.block().get()));
+        // The mod's stone, in one pass in registry order (which is the tag files' entry order):
+        // the decorative blocks, the stone blocks registered with ModBlocks.stone(...), and the
+        // stone pieces kept in lists of their own. Tool tiers are vanilla's: stone, bricks,
+        // sandstone, deepslate and the rest take any pickaxe, so they get no tier tag; obsidian
+        // needs diamond. A decorative block made of wood (the wood corbels) is an axe's.
+        // (Comments below that say a block "matches nothing in stone_blocks" date from when this
+        // pass matched id substrings instead.)
+        Map<Block, ModMaterials.Material> decor = ModBlocks.DECOR.stream()
+                .collect(Collectors.toMap(d -> d.block().get(), DecorType.DecorBlock::material));
+        Set<Block> stone = Stream.of(ModBlocks.STONE_BLOCKS, ModBlocks.CAPSTONES.keySet(), ModBlocks.HIDDEN_DOORS.keySet(),
+                        ModBlocks.CATACOMB_NICHES.keySet(), ModBlocks.CRUMBLING_FLOORS.keySet())
+                .flatMap(Collection::stream).map(b -> (Block) b.get()).collect(Collectors.toSet());
+        Registration.BLOCKS.getEntries().forEach(b -> {
+            ModMaterials.Material material = decor.get(b.get());
+            if (material != null && ModMaterials.WOOD.contains(material)) {
+                this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get());
+            } else if (material != null || stone.contains(b.get())) {
+                this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get());
+                if (material != null && material.base() == Blocks.OBSIDIAN) {
+                    this.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(b.get());
+                }
+            }
+        });
+        // pickaxe, no tier, as vanilla's chain
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.SWINGING_CHAIN.get());
 
         // The skeleton matches nothing in stone_blocks, so the loop above skips it - but it still
         // inherits requiresCorrectToolForDrops from Properties.copy(STONE), and a block that
@@ -142,7 +89,6 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // same reason as the skeleton above: "rubble" matches nothing in stone_blocks, so
         // the loop skips it, but it copies requiresCorrectToolForDrops from cobblestone.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.RUBBLE.get(), ModBlocks.MOSSY_RUBBLE.get());
-        this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.RUBBLE.get(), ModBlocks.MOSSY_RUBBLE.get());
 
         // Same reason again: of the three mossy deepslate full blocks, only "mossy_deepslate_bricks"
         // matches stone_blocks (on "brick"). "tiles" and "cobbled" match nothing there, and both
@@ -150,14 +96,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // fine - those match on "facade", "pillar", "sill" and so on.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(ModBlocks.MOSSY_DEEPSLATE_TILES.get(), ModBlocks.MOSSY_COBBLED_DEEPSLATE.get());
-        this.tag(BlockTags.NEEDS_STONE_TOOL)
-                .add(ModBlocks.MOSSY_DEEPSLATE_TILES.get(), ModBlocks.MOSSY_COBBLED_DEEPSLATE.get());
 
         // "mossy_tuff" matches nothing in stone_blocks either, and copies requiresCorrectToolForDrops
-        // from vanilla tuff. Stone tier to match this mod's tuff decorative blocks, which the sweep
-        // already puts there. It has no decorative types of its own to be caught by the sweep.
+        // from vanilla tuff. Any pickaxe, as vanilla tuff.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.MOSSY_TUFF.get());
-        this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.MOSSY_TUFF.get());
 
         // Every copper block belonged to no tool tag. Most of them - grates, heavy grates, valve
         // wheels, trapdoors, heavy trapdoors, plate brackets - copy requiresCorrectToolForDrops from
@@ -175,10 +117,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 });
 
         // "basalt" matches nothing in stone_blocks, and the block copies requiresCorrectToolForDrops
-        // from vanilla polished basalt. Stone tier to match this mod's own polished_basalt_greek_block,
-        // which the sweep already puts there - note vanilla polished basalt itself drops to any pickaxe.
+        // from vanilla polished basalt. Any pickaxe, as vanilla polished basalt.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.MOSSY_POLISHED_BASALT.get());
-        this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.MOSSY_POLISHED_BASALT.get());
 
         // The iron bars door matches nothing in stone_blocks ("barred_window" is not "bars") and
         // copies requiresCorrectToolForDrops from the iron door. Pickaxe with no tier tag, exactly
@@ -200,25 +140,14 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         ModBlocks.CHEVALS_DE_FRISE.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
         ModBlocks.WALKWAY_BRACKETS.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
 
-        // Capstones copy their source stone, requiresCorrectToolForDrops included. The brick ones
-        // match "brick"/"square"/"large" and the stone_blocks sweep above already tags them; the
-        // sandstones, polished blackstone and polished andesite match nothing there. Those are
-        // tagged here, at the stone tier the sweep gives the rest of the mod's stone.
-        ModBlocks.CAPSTONES.keySet().stream()
-                .filter(b -> maps.stone_blocks.stream().noneMatch(n -> b.getId().getPath().contains(n)))
-                .forEach(b -> {
-                    this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get());
-                    this.tag(BlockTags.NEEDS_STONE_TOOL).add(b.get());
-                });
 
         // Spikes require the correct tool (as iron bars do) and match nothing in stone_blocks.
         // Pickaxe, no tier, like vanilla iron bars.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.IRON_SPIKES.get(), ModBlocks.DARK_IRON_SPIKES.get());
         // Dungeon furniture matches nothing in stone_blocks either. The sarcophagi copy stone bricks
-        // (stone tier, like the mod's other stone); the iron pieces are pickaxe-only like iron bars.
+        // (any pickaxe, like the mod's other stone); the iron pieces are pickaxe-only like iron bars.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.STONE_SARCOPHAGUS.get(), ModBlocks.DEEPSLATE_SARCOPHAGUS.get(),
                 ModBlocks.IRON_MAIDEN.get(), ModBlocks.GIBBET.get());
-        this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.STONE_SARCOPHAGUS.get(), ModBlocks.DEEPSLATE_SARCOPHAGUS.get());
 
         // The pillory and the rack are dark oak, and match nothing in stone_blocks: an axe, no tier
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.PILLORY.get(), ModBlocks.OCCUPIED_PILLORY.get(),
@@ -236,37 +165,16 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         ModBlocks.COFFINS.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.SKULL_PIKE.get(), ModBlocks.ZOMBIE_HEAD_PIKE.get(),
                 ModBlocks.BLOODY_STEVE_HEAD_PIKE.get());
-        // Catacomb niches copy their stone, requiresCorrectToolForDrops included. The brick ones
-        // match "brick" and the stone_blocks sweep above already tags them; the tuff and sandstone
-        // ones match nothing there, and are tagged here at the stone tier the sweep gives the rest.
-        ModBlocks.CATACOMB_NICHES.keySet().stream()
-                .filter(b -> maps.stone_blocks.stream().noneMatch(n -> b.getId().getPath().contains(n)))
-                .forEach(b -> {
-                    this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get());
-                    this.tag(BlockTags.NEEDS_STONE_TOOL).add(b.get());
-                });
         // The gargoyles copy stone, requiresCorrectToolForDrops included, and match nothing in
-        // stone_blocks: pickaxe, at the stone tier the mod's other stone has.
+        // stone_blocks: any pickaxe, as vanilla stone.
         for (RegistryObject<Block> b : List.of(ModBlocks.PERCHED_GARGOYLE, ModBlocks.GARGOYLE_BUST, ModBlocks.GARGOYLE_STATUE)) {
             this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get());
-            this.tag(BlockTags.NEEDS_STONE_TOOL).add(b.get());
         }
         // The lever sconce is the torch sconce's twin: pickaxe, no tier. The hidden doors are doors
-        // (DOORS, as vanilla tags the iron door); their ids all name a brick, so the stone_blocks
-        // sweep has already made them pickaxe at the stone tier. The pedestal copies polished
-        // andesite, requiresCorrectToolForDrops included, and matches nothing in the sweep.
+        // (DOORS, as vanilla tags the iron door); the stone pass above makes them pickaxe. The
+        // pedestal copies polished andesite, requiresCorrectToolForDrops included: any pickaxe.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.LEVER_SCONCE.get(), ModBlocks.PEDESTAL.get());
-        this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.PEDESTAL.get());
         ModBlocks.HIDDEN_DOORS.keySet().forEach(b -> this.tag(BlockTags.DOORS).add(b.get()));
-        // Crumbling floors copy their stone, requiresCorrectToolForDrops included. The brick ones match
-        // "brick" in the sweep above; cobblestone, polished andesite and the deepslate tiles match
-        // nothing there, and are tagged here at the stone tier the sweep gives the rest.
-        ModBlocks.CRUMBLING_FLOORS.keySet().stream()
-                .filter(b -> maps.stone_blocks.stream().noneMatch(n -> b.getId().getPath().contains(n)))
-                .forEach(b -> {
-                    this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get());
-                    this.tag(BlockTags.NEEDS_STONE_TOOL).add(b.get());
-                });
         // Tapestries are cloth, and drop to anything: an axe only takes them down faster, as vanilla's
         // banners are tagged.
         ModBlocks.TAPESTRIES.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
@@ -295,14 +203,6 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // require the correct tool for drops and never have, so they still drop to anything.
         ModBlocks.DARK_IRON_GRATES.forEach((age, b) -> this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get()));
         ModBlocks.DARK_IRON_HEAVY_TRAPDOORS.forEach((age, b) -> this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get()));
-
-        // Slab tables copy their stone, requiresCorrectToolForDrops included. The two brick ones match
-        // "brick" in the sweep above; stone, smooth stone and smooth sandstone match nothing there,
-        // and are tagged here at the stone tier the sweep gives the brick ones.
-        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.STONE_SLAB_TABLE.get(),
-                ModBlocks.SMOOTH_STONE_SLAB_TABLE.get(), ModBlocks.SMOOTH_SANDSTONE_SLAB_TABLE.get());
-        this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.STONE_SLAB_TABLE.get(),
-                ModBlocks.SMOOTH_STONE_SLAB_TABLE.get(), ModBlocks.SMOOTH_SANDSTONE_SLAB_TABLE.get());
 
         // must stay last: it checks the tags built above
         checkCorrectToolBlocksAreMineable();

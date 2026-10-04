@@ -1,7 +1,7 @@
 /*
  * This file is part of  DungeonBlocks.
  * Copyright (c) 2021 Mark Gottschling (gottsch)
- * 
+ *
  * All rights reserved.
  *
  * DungeonBlocks is free software: you can redistribute it and/or modify
@@ -29,24 +29,41 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
+ * A wall-hugging block that turns corners: facade, quarter facade, cornice, crown molding,
+ * fluted facade and ledge are all this one class, differing only in their {@link DecorType}
+ * kind. The kind picks the collision shapes ({@link FacadeShapes}) and decides what forms a
+ * corner with what: only two blocks of the same kind join, in any material.
+ *
  * @author Mark Gottschling on Mar 25, 2020
  *
  */
-public abstract class FacadeShapeBlock extends WaterloggedNonCubeFacingBlock implements IFacadeShapeBlock {
+public class FacadeShapeBlock extends WaterloggedNonCubeFacingBlock implements IFacadeShapeBlock {
+	private final DecorType kind;
+	private final VoxelShape[] shapes;
 
-	/**
-	 * 
-	 * @param properties
-	 */
-	public FacadeShapeBlock(Properties properties) {
+	public FacadeShapeBlock(Properties properties, DecorType kind) {
 		super(properties);
+		this.kind = kind;
+		this.shapes = FacadeShapes.of(kind);
+	}
+
+	public DecorType kind() {
+		return kind;
+	}
+
+	@Override
+	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
+		return shapes[getBlockShapeIndex(state, getter, pos, context)];
 	}
 
 
 	/**
-	 * 
+	 *
 	 */
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
@@ -75,7 +92,7 @@ public abstract class FacadeShapeBlock extends WaterloggedNonCubeFacingBlock imp
 		placementBlockState = getBlockStateForPlacement(level, placementBlockState, blockPos);
 		return placementBlockState;
 	}
-	
+
 	/*
 	 * NOTE rotate() is inherited unchanged from FacingBlock, which turns FACING and
 	 * leaves SHAPE alone. That is correct precisely because LEFT/RIGHT are relative
@@ -102,11 +119,11 @@ public abstract class FacadeShapeBlock extends WaterloggedNonCubeFacingBlock imp
 		};
 	}
 
-	/**
-	 * Checks if a block is same as FacadeBlock
-	 */
+	/** Corners join only blocks of the same kind - a facade with a facade, a ledge with a ledge. */
 	@Override
-	public abstract boolean isBlockInstanceOf(Block block);
+	public boolean isBlockInstanceOf(Block block) {
+		return block instanceof FacadeShapeBlock other && other.kind == kind;
+	}
 
 	@Override
 	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState state2, boolean flag) {

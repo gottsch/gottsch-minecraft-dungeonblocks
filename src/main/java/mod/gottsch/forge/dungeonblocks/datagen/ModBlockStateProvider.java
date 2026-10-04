@@ -45,69 +45,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        DataGenMaps maps = new DataGenMaps();
-
-        Registration.BLOCKS.getEntries().stream()
-                .filter(b -> {
-                    for(String n : maps.names) {
-                        if (b.getId().getPath().contains(n)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                })
-                .forEach(b -> {
-                    String name = b.getId().getPath();
-                    String material;
-                    if (name.contains("arrow_slit")) {
-                        material = b.getId().getPath().split("_arrow_slit_block")[0];
-                        arrowSlitBlock(b, maps.t2.get(material));
-                    } else if (name.contains("barred_window_block")) {
-                        material = b.getId().getPath().split("_barred_window_block")[0];
-                        barredWindowBlock(b, maps.t2.get(material));
-                    } else if (name.contains("barred_window_facade")) {
-                        material = b.getId().getPath().split("_barred_window_facade_block")[0];
-                        barredWindowFacadeBlock(b, maps.t2.get(material));
-                    } else if (name.contains("corbel")) {
-                        material = b.getId().getPath().split("_corbel_block")[0];
-                        horizontalSingleTexture(b, modLoc(ModelProvider.BLOCK_FOLDER + "/corbel_block"), maps.t2.get(material));
-                    } else if (name.contains("double_sill")) {
-                        material = b.getId().getPath().split("_double_sill_block")[0];
-                        // sills are OBJs (tools/gen_obj_models.py): their slopes are true slopes
-                        myHorizontalBlock(b.get(), objModel(b.getId().getPath(), "double_sill", (ResourceLocation)maps.t2.get(material)));
-                    } else if (name.contains("sill") && !name.contains("double")) {
-                        material = b.getId().getPath().split("_sill_block")[0];
-                        myHorizontalBlock(b.get(), objModel(b.getId().getPath(), "sill", (ResourceLocation)maps.t2.get(material)));
-                    } else if (name.contains("fluted_facade")) {
-                        material = b.getId().getPath().split("_fluted_facade_block")[0];
-                        flutedFacadeBlock(b, (ResourceLocation)maps.t2.get(material));
-                    } else if (name.contains("fluted") && !name.contains("facade")) {
-                        material = b.getId().getPath().split("_fluted_block")[0];
-                        simpleSingleTexture(b, modLoc("block/fluted_block_base"), (ResourceLocation)maps.t2.get(material));
-                    } else if (name.contains("ledge")) {
-                        material = b.getId().getPath().split("_ledge_block")[0];
-//                        DungeonBlocks.LOGGER.info("ledge processing material ->{} to texture ->{} ", material, maps.t2.get(material));
-                        ledgeBlock(b, maps.t2.get(material));
-                    } else if (name.contains("cornice")) {
-                        material = b.getId().getPath().split("_cornice")[0];
-                        facadeBlock(b, "cornice", maps.t2.get(material));
-                    } else if (name.contains("crown_molding")) {
-                        material = b.getId().getPath().split("_crown_molding")[0];
-                        facadeBlock(b, "crown_molding", maps.t2.get(material));
-                    } else if (name.contains("quarter_facade")) {
-                            material = b.getId().getPath().split("_quarter_facade")[0];
-                            facadeBlock(b, "quarter_facade", maps.t2.get(material));
-                    } else if (name.contains("facade")) {
-                        material = b.getId().getPath().split("_facade")[0];
-                        facadeBlock(b, "facade", maps.t2.get(material));
-                    } else if (name.contains("pillar_base")) {
-                        material = b.getId().getPath().split("_pillar_base")[0];
-                        basedBlock(b, "pillar_base_block_base", (ResourceLocation)maps.t2.get(material));
-                    } else if (name.contains("pillar_block")) {
-                        material = b.getId().getPath().split("_pillar_block")[0];
-                        basedBlock(b, "pillar_block_base", (ResourceLocation)maps.t2.get(material));
-                    }
-                });
+        // every decorative block, by its type, textured by its material
+        ModBlocks.DECOR.forEach(this::decorBlock);
+        // the square bricks' facades are registered by hand, outside DECOR
+        facadeBlock(ModBlocks.SQUARE_STONE_BRICK_FACADE_BLOCK, "facade", modLoc("block/square_stone_brick"));
+        facadeBlock(ModBlocks.SQUARE_MUD_BRICK_FACADE_BLOCK, "facade", modLoc("block/square_mud_brick"));
+        facadeBlock(ModBlocks.SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK, "facade", modLoc("block/square_deepslate_brick"));
+        facadeBlock(ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK, "facade", modLoc("block/mossy_square_deepslate_brick"));
+        facadeBlock(ModBlocks.SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK, "quarter_facade", modLoc("block/square_stone_brick"));
+        facadeBlock(ModBlocks.SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK, "quarter_facade", modLoc("block/square_mud_brick"));
+        facadeBlock(ModBlocks.SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK, "quarter_facade", modLoc("block/square_deepslate_brick"));
+        facadeBlock(ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK, "quarter_facade", modLoc("block/mossy_square_deepslate_brick"));
 
         // dark iron and copper families: every age (and waxed twin) of a shape is the same model,
         // textured by its age
@@ -1012,7 +960,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     public void sewerBlock(Block block, ModelFile sewer, ModelFile corner) {
         getVariantBuilder(block)
                 .forAllStates(state -> {
-                    Direction facing = state.getValue(LedgeBlock.FACING);
+                    Direction facing = state.getValue(FacadeShapeBlock.FACING);
                     SewerBlock.SewerShape shape = state.getValue(SewerBlock.SHAPE);
                     int yRot = ((int) state.getValue(FACING).toYRot() + DEFAULT_ANGLE_OFFSET) % 360;
                    yRot = switch(shape) {
@@ -1066,6 +1014,31 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .modelFile(state.getValue(SlabTableBlock.PART) == BedPart.FOOT ? foot : head)
                 .rotationY(((int) state.getValue(SlabTableBlock.FACING).toYRot() + 180) % 360)
                 .build());
+    }
+
+    /** The blockstate and models of one decorative block, by its type. */
+    private void decorBlock(DecorType.DecorBlock decor) {
+        RegistryObject<Block> b = decor.block();
+        ResourceLocation texture = decor.material().texture();
+        String name = b.getId().getPath();
+        switch (decor.type()) {
+            case ARROW_SLIT -> arrowSlitBlock(b, texture);
+            case BARRED_WINDOW -> barredWindowBlock(b, texture);
+            case BARRED_WINDOW_FACADE -> barredWindowFacadeBlock(b, texture);
+            case CORBEL -> horizontalSingleTexture(b, modLoc(ModelProvider.BLOCK_FOLDER + "/corbel_block"), texture);
+            // sills are OBJs (tools/gen_obj_models.py): their slopes are true slopes
+            case DOUBLE_SILL -> myHorizontalBlock(b.get(), objModel(name, "double_sill", texture));
+            case SILL -> myHorizontalBlock(b.get(), objModel(name, "sill", texture));
+            case FLUTED_FACADE -> flutedFacadeBlock(b, texture);
+            case FLUTED -> simpleSingleTexture(b, modLoc("block/fluted_block_base"), texture);
+            case LEDGE -> ledgeBlock(b, texture);
+            case CORNICE -> facadeBlock(b, "cornice", texture);
+            case CROWN_MOLDING -> facadeBlock(b, "crown_molding", texture);
+            case QUARTER_FACADE -> facadeBlock(b, "quarter_facade", texture);
+            case FACADE -> facadeBlock(b, "facade", texture);
+            case PILLAR_BASE -> basedBlock(b, "pillar_base_block_base", texture);
+            case PILLAR -> basedBlock(b, "pillar_block_base", texture);
+        }
     }
 
     /** Vanilla's copper block texture at an age: copper_block, exposed_copper, ... */

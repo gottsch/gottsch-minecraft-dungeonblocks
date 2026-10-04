@@ -56,6 +56,20 @@ public class ModBlocks {
      */
     public static final List<RegistryObject<Block>> BANNERS = new ArrayList<>();
 
+    /**
+     * The mod's own stone blocks that are neither decorative types ({@link #DECOR}) nor in a list
+     * of their own (capstones, niches, crumbling floors, hidden doors): its square, large and mossy
+     * bricks with their stairs and slabs, the greek blocks, the square-brick facades and the slab
+     * tables. Datagen tags them for a pickaxe. Register one with {@link #stone}, and it is tagged.
+     */
+    public static final List<RegistryObject<? extends Block>> STONE_BLOCKS = new ArrayList<>();
+
+    private static <B extends Block> RegistryObject<B> stone(String id, Supplier<B> block) {
+        RegistryObject<B> registered = Registration.BLOCKS.register(id, block);
+        STONE_BLOCKS.add(registered);
+        return registered;
+    }
+
     // ------------------------------------------------------------------
     // Copper helpers. The copper families themselves are CopperFamily.register
     // calls below; these are the grate's own properties, which most of the
@@ -128,7 +142,7 @@ public class ModBlocks {
     // PushReaction.DESTROY keeps a piston from separating the halves.
     // ------------------------------------------------------------------
     private static RegistryObject<Block> slabTable(String id, Block propsFrom) {
-        return Registration.BLOCKS.register(id, () -> new SlabTableBlock(
+        return stone(id, () -> new SlabTableBlock(
                 Properties.copy(propsFrom).noOcclusion().pushReaction(PushReaction.DESTROY)));
     }
 
@@ -172,15 +186,15 @@ public class ModBlocks {
     public static final CopperFamily COPPER_HEAVY_TRAPDOORS = CopperFamily.register("copper_heavy_trapdoor",
             COPPER_TRAPDOORS::props, WeatheringHeavyTrapDoorBlock::new, COPPER_TRAPDOORS::props, HeavyTrapDoorBlock::new);
 
-    public static final RegistryObject<Block> SQUARE_STONE_BRICK = Registration.BLOCKS.register("square_stone_brick", () -> {
+    public static final RegistryObject<Block> SQUARE_STONE_BRICK = stone("square_stone_brick", () -> {
         return new Block(Properties.copy(Blocks.STONE_BRICKS));
     });
-    public static final RegistryObject<Block> MOSSY_SQUARE_STONE_BRICK = Registration.BLOCKS.register("mossy_square_stone_brick", () -> {
+    public static final RegistryObject<Block> MOSSY_SQUARE_STONE_BRICK = stone("mossy_square_stone_brick", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
     // square_mud_brick is square_stone_brick's texture remapped onto the vanilla mud brick
     // palette, so its properties come from MUD_BRICKS rather than STONE_BRICKS.
-    public static final RegistryObject<Block> SQUARE_MUD_BRICK = Registration.BLOCKS.register("square_mud_brick", () -> {
+    public static final RegistryObject<Block> SQUARE_MUD_BRICK = stone("square_mud_brick", () -> {
         return new Block(Properties.copy(Blocks.MUD_BRICKS));
     });
 
@@ -188,14 +202,13 @@ public class ModBlocks {
     // square brick stairs / facades.
     // Registered explicitly rather than as ModMaterials.STONE entries: a Material there produces
     // all eleven stone block-types, and only stairs, facade and quarter facade are wanted here.
-    // The blockstate, item-model and block-tag generators all dispatch on the block id, so the
-    // two "<material>_facade_block" ids are picked up with no datagen change beyond registering
-    // the material's texture in DataGenMaps.
+    // Datagen lists these facades by name (they are not DecorType blocks), and stone(...) tags
+    // them for a pickaxe.
     // ------------------------------------------------------------------
-    public static final RegistryObject<StairBlock> SQUARE_STONE_BRICK_STAIRS = Registration.BLOCKS.register("square_stone_brick_stairs", () -> {
+    public static final RegistryObject<StairBlock> SQUARE_STONE_BRICK_STAIRS = stone("square_stone_brick_stairs", () -> {
         return new StairBlock(SQUARE_STONE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.STONE_BRICK_STAIRS));
     });
-    public static final RegistryObject<StairBlock> SQUARE_MUD_BRICK_STAIRS = Registration.BLOCKS.register("square_mud_brick_stairs", () -> {
+    public static final RegistryObject<StairBlock> SQUARE_MUD_BRICK_STAIRS = stone("square_mud_brick_stairs", () -> {
         return new StairBlock(SQUARE_MUD_BRICK.get().defaultBlockState(), Properties.copy(Blocks.MUD_BRICK_STAIRS));
     });
     // The mossy counterpart of SQUARE_STONE_BRICK_STAIRS, added 2026-09-07 for Dungeons2's boss-room
@@ -203,112 +216,112 @@ public class ModBlocks {
     // SQUARE STONE BRICK existed while its stairs did not, so the rule named a block that resolved
     // to air. Follows MOSSY_LARGE_BRICK_STAIRS -- mossy stone brick stairs' properties over the
     // mossy full block's state, and the texture the mossy full block already ships.
-    public static final RegistryObject<StairBlock> MOSSY_SQUARE_STONE_BRICK_STAIRS = Registration.BLOCKS.register("mossy_square_stone_brick_stairs", () -> {
+    public static final RegistryObject<StairBlock> MOSSY_SQUARE_STONE_BRICK_STAIRS = stone("mossy_square_stone_brick_stairs", () -> {
         return new StairBlock(MOSSY_SQUARE_STONE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
     });
 
     // Square stone brick slabs - the mod's first SlabBlock. A double slab drops two items, which
     // the blanket dropSelf in ModBlockLootTables would not do; see the SlabBlock branch there.
-    public static final RegistryObject<SlabBlock> SQUARE_STONE_BRICK_SLAB = Registration.BLOCKS.register("square_stone_brick_slab", () -> {
+    public static final RegistryObject<SlabBlock> SQUARE_STONE_BRICK_SLAB = stone("square_stone_brick_slab", () -> {
         return new SlabBlock(Properties.copy(Blocks.STONE_BRICK_SLAB));
     });
-    public static final RegistryObject<SlabBlock> MOSSY_SQUARE_STONE_BRICK_SLAB = Registration.BLOCKS.register("mossy_square_stone_brick_slab", () -> {
+    public static final RegistryObject<SlabBlock> MOSSY_SQUARE_STONE_BRICK_SLAB = stone("mossy_square_stone_brick_slab", () -> {
         return new SlabBlock(Properties.copy(Blocks.MOSSY_STONE_BRICK_SLAB));
     });
 
-    public static final RegistryObject<Block> SQUARE_STONE_BRICK_FACADE_BLOCK = Registration.BLOCKS.register("square_stone_brick_facade_block", () -> {
-        return new FacadeBlock(Properties.copy(Blocks.STONE_BRICKS));
+    public static final RegistryObject<Block> SQUARE_STONE_BRICK_FACADE_BLOCK = stone("square_stone_brick_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.STONE_BRICKS), DecorType.FACADE);
     });
-    public static final RegistryObject<Block> SQUARE_MUD_BRICK_FACADE_BLOCK = Registration.BLOCKS.register("square_mud_brick_facade_block", () -> {
-        return new FacadeBlock(Properties.copy(Blocks.MUD_BRICKS));
+    public static final RegistryObject<Block> SQUARE_MUD_BRICK_FACADE_BLOCK = stone("square_mud_brick_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MUD_BRICKS), DecorType.FACADE);
     });
-    public static final RegistryObject<Block> SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK = Registration.BLOCKS.register("square_stone_brick_quarter_facade_block", () -> {
-        return new QuarterFacadeBlock(Properties.copy(Blocks.STONE_BRICKS));
+    public static final RegistryObject<Block> SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK = stone("square_stone_brick_quarter_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.STONE_BRICKS), DecorType.QUARTER_FACADE);
     });
-    public static final RegistryObject<Block> SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK = Registration.BLOCKS.register("square_mud_brick_quarter_facade_block", () -> {
-        return new QuarterFacadeBlock(Properties.copy(Blocks.MUD_BRICKS));
+    public static final RegistryObject<Block> SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK = stone("square_mud_brick_quarter_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MUD_BRICKS), DecorType.QUARTER_FACADE);
     });
-    public static final RegistryObject<Block> LEFT_LARGE_STONE_BRICK = Registration.BLOCKS.register("left_large_stone_brick", () -> {
+    public static final RegistryObject<Block> LEFT_LARGE_STONE_BRICK = stone("left_large_stone_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
     });
-    public static final RegistryObject<Block> RIGHT_LARGE_STONE_BRICK = Registration.BLOCKS.register("right_large_stone_brick", () -> {
+    public static final RegistryObject<Block> RIGHT_LARGE_STONE_BRICK = stone("right_large_stone_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
     });
-    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_STONE_BRICK = Registration.BLOCKS.register("mossy_left_large_stone_brick", () -> {
+    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_STONE_BRICK = stone("mossy_left_large_stone_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
     });
-    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_STONE_BRICK = Registration.BLOCKS.register("mossy_right_large_stone_brick", () -> {
+    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_STONE_BRICK = stone("mossy_right_large_stone_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
     });
 
     // the two halves of one large brick spanning two blocks, in the mud brick palette
-    public static final RegistryObject<Block> LEFT_LARGE_MUD_BRICK = Registration.BLOCKS.register("left_large_mud_brick", () -> {
+    public static final RegistryObject<Block> LEFT_LARGE_MUD_BRICK = stone("left_large_mud_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.MUD_BRICKS));
     });
-    public static final RegistryObject<Block> RIGHT_LARGE_MUD_BRICK = Registration.BLOCKS.register("right_large_mud_brick", () -> {
+    public static final RegistryObject<Block> RIGHT_LARGE_MUD_BRICK = stone("right_large_mud_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.MUD_BRICKS));
     });
 
     // Mossy mud bricks take their properties from MUD_BRICKS - vanilla has no mossy mud brick to
     // copy - and their moss is the mod's usual overlay, unchanged from the stone and clay variants.
-    public static final RegistryObject<Block> MOSSY_SQUARE_MUD_BRICK = Registration.BLOCKS.register("mossy_square_mud_brick", () -> {
+    public static final RegistryObject<Block> MOSSY_SQUARE_MUD_BRICK = stone("mossy_square_mud_brick", () -> {
         return new Block(Properties.copy(Blocks.MUD_BRICKS));
     });
-    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_MUD_BRICK = Registration.BLOCKS.register("mossy_left_large_mud_brick", () -> {
+    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_MUD_BRICK = stone("mossy_left_large_mud_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.MUD_BRICKS));
     });
-    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_MUD_BRICK = Registration.BLOCKS.register("mossy_right_large_mud_brick", () -> {
+    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_MUD_BRICK = stone("mossy_right_large_mud_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.MUD_BRICKS));
     });
 
     // The square / large brick set in the deepslate brick palette - the same textures as the stone
     // set, per-shade remapped onto vanilla deepslate_bricks' seven shades (see
     // tools/gen_deepslate_brick_textures.py).
-    public static final RegistryObject<Block> SQUARE_DEEPSLATE_BRICK = Registration.BLOCKS.register("square_deepslate_brick", () -> {
+    public static final RegistryObject<Block> SQUARE_DEEPSLATE_BRICK = stone("square_deepslate_brick", () -> {
         return new Block(Properties.copy(Blocks.DEEPSLATE_BRICKS));
     });
     // As with the mud bricks above, vanilla has no mossy deepslate brick to copy, so the mossy
     // variants take their properties from the plain DEEPSLATE_BRICKS family.
-    public static final RegistryObject<Block> MOSSY_SQUARE_DEEPSLATE_BRICK = Registration.BLOCKS.register("mossy_square_deepslate_brick", () -> {
+    public static final RegistryObject<Block> MOSSY_SQUARE_DEEPSLATE_BRICK = stone("mossy_square_deepslate_brick", () -> {
         return new Block(Properties.copy(Blocks.DEEPSLATE_BRICKS));
     });
-    public static final RegistryObject<StairBlock> SQUARE_DEEPSLATE_BRICK_STAIRS = Registration.BLOCKS.register("square_deepslate_brick_stairs", () -> {
+    public static final RegistryObject<StairBlock> SQUARE_DEEPSLATE_BRICK_STAIRS = stone("square_deepslate_brick_stairs", () -> {
         return new StairBlock(SQUARE_DEEPSLATE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.DEEPSLATE_BRICK_STAIRS));
     });
-    public static final RegistryObject<StairBlock> MOSSY_SQUARE_DEEPSLATE_BRICK_STAIRS = Registration.BLOCKS.register("mossy_square_deepslate_brick_stairs", () -> {
+    public static final RegistryObject<StairBlock> MOSSY_SQUARE_DEEPSLATE_BRICK_STAIRS = stone("mossy_square_deepslate_brick_stairs", () -> {
         return new StairBlock(MOSSY_SQUARE_DEEPSLATE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.DEEPSLATE_BRICK_STAIRS));
     });
-    public static final RegistryObject<SlabBlock> SQUARE_DEEPSLATE_BRICK_SLAB = Registration.BLOCKS.register("square_deepslate_brick_slab", () -> {
+    public static final RegistryObject<SlabBlock> SQUARE_DEEPSLATE_BRICK_SLAB = stone("square_deepslate_brick_slab", () -> {
         return new SlabBlock(Properties.copy(Blocks.DEEPSLATE_BRICK_SLAB));
     });
-    public static final RegistryObject<SlabBlock> MOSSY_SQUARE_DEEPSLATE_BRICK_SLAB = Registration.BLOCKS.register("mossy_square_deepslate_brick_slab", () -> {
+    public static final RegistryObject<SlabBlock> MOSSY_SQUARE_DEEPSLATE_BRICK_SLAB = stone("mossy_square_deepslate_brick_slab", () -> {
         return new SlabBlock(Properties.copy(Blocks.DEEPSLATE_BRICK_SLAB));
     });
     // Unlike the stone and mud square bricks, which have plain facades only, these come in mossy
     // too - the mossy texture already exists for the full block, so the facade costs only the
     // registration and the DataGenMaps texture entry the facade generators look the material up by.
-    public static final RegistryObject<Block> SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK = Registration.BLOCKS.register("square_deepslate_brick_facade_block", () -> {
-        return new FacadeBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    public static final RegistryObject<Block> SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK = stone("square_deepslate_brick_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS), DecorType.FACADE);
     });
-    public static final RegistryObject<Block> MOSSY_SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK = Registration.BLOCKS.register("mossy_square_deepslate_brick_facade_block", () -> {
-        return new FacadeBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    public static final RegistryObject<Block> MOSSY_SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK = stone("mossy_square_deepslate_brick_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS), DecorType.FACADE);
     });
-    public static final RegistryObject<Block> SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK = Registration.BLOCKS.register("square_deepslate_brick_quarter_facade_block", () -> {
-        return new QuarterFacadeBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    public static final RegistryObject<Block> SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK = stone("square_deepslate_brick_quarter_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS), DecorType.QUARTER_FACADE);
     });
-    public static final RegistryObject<Block> MOSSY_SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK = Registration.BLOCKS.register("mossy_square_deepslate_brick_quarter_facade_block", () -> {
-        return new QuarterFacadeBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
+    public static final RegistryObject<Block> MOSSY_SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK = stone("mossy_square_deepslate_brick_quarter_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS), DecorType.QUARTER_FACADE);
     });
-    public static final RegistryObject<Block> LEFT_LARGE_DEEPSLATE_BRICK = Registration.BLOCKS.register("left_large_deepslate_brick", () -> {
+    public static final RegistryObject<Block> LEFT_LARGE_DEEPSLATE_BRICK = stone("left_large_deepslate_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
     });
-    public static final RegistryObject<Block> RIGHT_LARGE_DEEPSLATE_BRICK = Registration.BLOCKS.register("right_large_deepslate_brick", () -> {
+    public static final RegistryObject<Block> RIGHT_LARGE_DEEPSLATE_BRICK = stone("right_large_deepslate_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
     });
-    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_DEEPSLATE_BRICK = Registration.BLOCKS.register("mossy_left_large_deepslate_brick", () -> {
+    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_DEEPSLATE_BRICK = stone("mossy_left_large_deepslate_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
     });
-    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_DEEPSLATE_BRICK = Registration.BLOCKS.register("mossy_right_large_deepslate_brick", () -> {
+    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_DEEPSLATE_BRICK = stone("mossy_right_large_deepslate_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS));
     });
 
@@ -318,10 +331,10 @@ public class ModBlocks {
     // that family's brightness, so a course of it reads as part of a deepslate brick wall.
     // Plural, like Polished Andesite Bricks and vanilla's Chiseled Stone Bricks: the face shows
     // several bricks, unlike the square/large bricks which are one brick per block.
-    public static final RegistryObject<Block> CHISELED_DEEPSLATE_BRICKS = Registration.BLOCKS.register("chiseled_deepslate_bricks", () -> {
+    public static final RegistryObject<Block> CHISELED_DEEPSLATE_BRICKS = stone("chiseled_deepslate_bricks", () -> {
         return new Block(Properties.copy(Blocks.DEEPSLATE_BRICKS));
     });
-    public static final RegistryObject<Block> MOSSY_CHISELED_DEEPSLATE_BRICKS = Registration.BLOCKS.register("mossy_chiseled_deepslate_bricks", () -> {
+    public static final RegistryObject<Block> MOSSY_CHISELED_DEEPSLATE_BRICKS = stone("mossy_chiseled_deepslate_bricks", () -> {
         return new Block(Properties.copy(Blocks.DEEPSLATE_BRICKS));
     });
 
@@ -329,7 +342,7 @@ public class ModBlocks {
     // has no mossy deepslate to source them from, so the full block is registered here by hand
     // while the eleven decorative types come off the STONE loop.
     // Properties come from the plain block the moss grows on; only the texture differs.
-    public static final RegistryObject<Block> MOSSY_DEEPSLATE_BRICKS = Registration.BLOCKS.register("mossy_deepslate_bricks", () -> {
+    public static final RegistryObject<Block> MOSSY_DEEPSLATE_BRICKS = stone("mossy_deepslate_bricks", () -> {
         return new Block(Properties.copy(Blocks.DEEPSLATE_BRICKS));
     });
     public static final RegistryObject<Block> MOSSY_DEEPSLATE_TILES = Registration.BLOCKS.register("mossy_deepslate_tiles", () -> {
@@ -346,7 +359,7 @@ public class ModBlocks {
     // Stairs are not one of the eleven STONE block-types, so this is registered explicitly the way
     // MOSSY_POLISHED_ANDESITE_BRICK_STAIRS is - vanilla deepslate brick stairs' properties over the
     // mossy full block's state.
-    public static final RegistryObject<StairBlock> MOSSY_DEEPSLATE_BRICK_STAIRS = Registration.BLOCKS.register("mossy_deepslate_brick_stairs", () -> {
+    public static final RegistryObject<StairBlock> MOSSY_DEEPSLATE_BRICK_STAIRS = stone("mossy_deepslate_brick_stairs", () -> {
         return new StairBlock(MOSSY_DEEPSLATE_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.DEEPSLATE_BRICK_STAIRS));
     });
 
@@ -354,61 +367,61 @@ public class ModBlocks {
     // own palette, the way vanilla derives deepslate_bricks from polished_deepslate. Plural, because
     // the texture shows several bricks - unlike square/large bricks, which are one brick per block.
     // Not a ModMaterials.STONE entry: that would produce all eleven stone block-types at once.
-    public static final RegistryObject<Block> POLISHED_ANDESITE_BRICKS = Registration.BLOCKS.register("polished_andesite_bricks", () -> {
+    public static final RegistryObject<Block> POLISHED_ANDESITE_BRICKS = stone("polished_andesite_bricks", () -> {
         return new Block(Properties.copy(Blocks.POLISHED_ANDESITE));
     });
-    public static final RegistryObject<StairBlock> POLISHED_ANDESITE_BRICK_STAIRS = Registration.BLOCKS.register("polished_andesite_brick_stairs", () -> {
+    public static final RegistryObject<StairBlock> POLISHED_ANDESITE_BRICK_STAIRS = stone("polished_andesite_brick_stairs", () -> {
         return new StairBlock(POLISHED_ANDESITE_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.POLISHED_ANDESITE_STAIRS));
     });
     // Vanilla has no mossy polished andesite to copy properties from, so - as with mossy_bricks/
     // mossy_large_bricks above - these take their properties from MOSSY_STONE_BRICKS instead.
-    public static final RegistryObject<Block> MOSSY_POLISHED_ANDESITE_BRICKS = Registration.BLOCKS.register("mossy_polished_andesite_bricks", () -> {
+    public static final RegistryObject<Block> MOSSY_POLISHED_ANDESITE_BRICKS = stone("mossy_polished_andesite_bricks", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
-    public static final RegistryObject<StairBlock> MOSSY_POLISHED_ANDESITE_BRICK_STAIRS = Registration.BLOCKS.register("mossy_polished_andesite_brick_stairs", () -> {
+    public static final RegistryObject<StairBlock> MOSSY_POLISHED_ANDESITE_BRICK_STAIRS = stone("mossy_polished_andesite_brick_stairs", () -> {
         return new StairBlock(MOSSY_POLISHED_ANDESITE_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
     });
-    public static final RegistryObject<Block> MOSSY_BRICKS = Registration.BLOCKS.register("mossy_bricks", () -> {
+    public static final RegistryObject<Block> MOSSY_BRICKS = stone("mossy_bricks", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
-    public static final RegistryObject<StairBlock> MOSSY_BRICK_STAIRS = Registration.BLOCKS.register("mossy_brick_stairs", () -> {
+    public static final RegistryObject<StairBlock> MOSSY_BRICK_STAIRS = stone("mossy_brick_stairs", () -> {
         return new StairBlock(Blocks.BRICKS.defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
     });
-    public static final RegistryObject<Block> LARGE_BRICKS = Registration.BLOCKS.register("large_bricks", () -> {
+    public static final RegistryObject<Block> LARGE_BRICKS = stone("large_bricks", () -> {
         return new Block(Properties.copy(Blocks.STONE_BRICKS));
     });
-    public static final RegistryObject<Block> MOSSY_LARGE_BRICKS = Registration.BLOCKS.register("mossy_large_bricks", () -> {
+    public static final RegistryObject<Block> MOSSY_LARGE_BRICKS = stone("mossy_large_bricks", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
-    public static final RegistryObject<StairBlock> LARGE_BRICK_STAIRS = Registration.BLOCKS.register("large_brick_stairs", () -> {
+    public static final RegistryObject<StairBlock> LARGE_BRICK_STAIRS = stone("large_brick_stairs", () -> {
         return new StairBlock(LARGE_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.STONE_BRICK_STAIRS));
     });
-    public static final RegistryObject<StairBlock> MOSSY_LARGE_BRICK_STAIRS = Registration.BLOCKS.register("mossy_large_brick_stairs", () -> {
+    public static final RegistryObject<StairBlock> MOSSY_LARGE_BRICK_STAIRS = stone("mossy_large_brick_stairs", () -> {
         return new StairBlock(MOSSY_LARGE_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
     });
-    public static final RegistryObject<Block> SQUARE_BRICK = Registration.BLOCKS.register("square_brick", () -> {
+    public static final RegistryObject<Block> SQUARE_BRICK = stone("square_brick", () -> {
         return new Block(Properties.copy(Blocks.BRICKS));
     });
-    public static final RegistryObject<Block> MOSSY_SQUARE_BRICK = Registration.BLOCKS.register("mossy_square_brick", () -> {
+    public static final RegistryObject<Block> MOSSY_SQUARE_BRICK = stone("mossy_square_brick", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
-    public static final RegistryObject<Block> LEFT_LARGE_BRICK = Registration.BLOCKS.register("left_large_brick", () -> {
+    public static final RegistryObject<Block> LEFT_LARGE_BRICK = stone("left_large_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.BRICKS));
     });
-    public static final RegistryObject<Block> RIGHT_LARGE_BRICK = Registration.BLOCKS.register("right_large_brick", () -> {
+    public static final RegistryObject<Block> RIGHT_LARGE_BRICK = stone("right_large_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.BRICKS));
     });
-    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_BRICK = Registration.BLOCKS.register("mossy_left_large_brick", () -> {
+    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_BRICK = stone("mossy_left_large_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
     });
-    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_BRICK = Registration.BLOCKS.register("mossy_right_large_brick", () -> {
+    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_BRICK = stone("mossy_right_large_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
     });
 
-    public static final RegistryObject<Block> COBBLESTONE_BRICK = Registration.BLOCKS.register("cobblestone_brick", () -> {
+    public static final RegistryObject<Block> COBBLESTONE_BRICK = stone("cobblestone_brick", () -> {
         return new Block(Properties.copy(Blocks.COBBLESTONE));
     });
-    public static final RegistryObject<Block> MOSSY_COBBLESTONE_BRICK = Registration.BLOCKS.register("mossy_cobblestone_brick", () -> {
+    public static final RegistryObject<Block> MOSSY_COBBLESTONE_BRICK = stone("mossy_cobblestone_brick", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_COBBLESTONE));
     });
     // rubble: plain full blocks, cobblestone-grade properties
@@ -421,10 +434,10 @@ public class ModBlocks {
     // a full block only - it has no material family in ModMaterials.STONE, so no decorative
     // pieces and no stonecutting recipes. Vanilla has no mossy chiseled stone bricks, so it is
     // crafted (chiseled_stone_bricks + vine; a hand-written recipe in src/main/resources).
-    public static final RegistryObject<Block> MOSSY_CHISELED_STONE_BRICKS = Registration.BLOCKS.register("mossy_chiseled_stone_bricks", () -> {
+    public static final RegistryObject<Block> MOSSY_CHISELED_STONE_BRICKS = stone("mossy_chiseled_stone_bricks", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
-    public static final RegistryObject<Block> GRAVEL_BRICK = Registration.BLOCKS.register("gravel_brick", () -> {
+    public static final RegistryObject<Block> GRAVEL_BRICK = stone("gravel_brick", () -> {
         return new GravelBlock(Properties.copy(Blocks.GRAVEL));
     });
     ///// plants /////
@@ -463,10 +476,9 @@ public class ModBlocks {
     // Wall banners. Every variant is the same block with a different texture - the design, the
     // grime, the tears and the bloodstains all live in the PNG, so a variant costs no code.
     //
-    // Cloth, so NO requiresCorrectToolForDrops and no mineable tag. None of these ids matches
-    // anything in DataGenMaps.stone_blocks or .names, which is what would otherwise sweep them
-    // into the stone family's model generation and into the pickaxe/stone-tool tags - and a block
-    // that requires the correct tool while belonging to no tool tag can never be mined for drops.
+    // Cloth, so NO requiresCorrectToolForDrops and no mineable tag (an axe only takes them down
+    // faster) - a block that requires the correct tool while belonging to no tool tag can never be
+    // mined for drops, and datagen now refuses to generate one.
     // ------------------------------------------------------------------
 
     private static Properties bannerProps(MapColor mapColor) {
@@ -567,9 +579,9 @@ public class ModBlocks {
     public static final RegistryObject<Block> DIRTY_HAY_PATCH = Registration.BLOCKS.register("dirty_hay_patch_block", () -> new CarpetBlock(Properties.copy(Blocks.YELLOW_CARPET).noOcclusion()));
 
     // greek blocks
-    public static final RegistryObject<Block> STONE_GREEK_BLOCK = Registration.BLOCKS.register("stone_greek_block", () -> new FacingBlock(Properties.copy(Blocks.STONE)));
-    public static final RegistryObject<Block> ANDESITE_GREEK_BLOCK = Registration.BLOCKS.register("andesite_greek_block", () -> new FacingBlock(Properties.copy(Blocks.ANDESITE)));
-    public static final RegistryObject<Block> POLISHED_BASALT_GREEK_BLOCK = Registration.BLOCKS.register("polished_basalt_greek_block", () -> new FacingBlock(Properties.copy(Blocks.POLISHED_BASALT)));
+    public static final RegistryObject<Block> STONE_GREEK_BLOCK = stone("stone_greek_block", () -> new FacingBlock(Properties.copy(Blocks.STONE)));
+    public static final RegistryObject<Block> ANDESITE_GREEK_BLOCK = stone("andesite_greek_block", () -> new FacingBlock(Properties.copy(Blocks.ANDESITE)));
+    public static final RegistryObject<Block> POLISHED_BASALT_GREEK_BLOCK = stone("polished_basalt_greek_block", () -> new FacingBlock(Properties.copy(Blocks.POLISHED_BASALT)));
 
     // Mossy polished basalt. A rotated pillar like vanilla polished basalt, so it keeps the
     // separate top and side textures rather than wrapping the side texture round every face
@@ -582,7 +594,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> SPRUCE_DUNGEON_DOOR = Registration.BLOCKS.register("spruce_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.SPRUCE_DOOR), BlockSetType.SPRUCE));
     public static final RegistryObject<Block> CRIMSON_DUNGEON_DOOR = Registration.BLOCKS.register("crimson_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.CRIMSON_DOOR), BlockSetType.CRIMSON));
     public static final RegistryObject<Block> DARK_OAK_DUNGEON_DOOR = Registration.BLOCKS.register("dark_oak_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK));
-    public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR = Registration.BLOCKS.register("mangrove_dungeon_door", () -> new DoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE));
+    public static final RegistryObject<Block> MANGROVE_DUNGEON_DOOR = Registration.BLOCKS.register("mangrove_dungeon_door", () -> new DungeonDoorBlock(Properties.copy(Blocks.MANGROVE_DOOR), BlockSetType.MANGROVE));
 
     // tall (3/4-block) doors - placeholder middle textures, see handoff notes
     public static final RegistryObject<Block> SPRUCE_DUNGEON_DOOR_3 = Registration.BLOCKS.register("spruce_dungeon_door_3", () -> new TallDoorBlock(Properties.copy(Blocks.SPRUCE_DOOR), BlockSetType.SPRUCE, 3));
@@ -938,26 +950,44 @@ public class ModBlocks {
     }
 
     // ------------------------------------------------------------------
-    // Stone block families (data-driven). See ModMaterials.STONE.
+    // Decorative block-types (DecorType) in their materials (ModMaterials).
     // Add a material   -> one entry in ModMaterials.STONE.
-    // Add a block-type -> one register(...) line in this loop.
-    // Properties are normalized to Properties.copy(material base block).
+    // Add a block-type -> one DecorType value (and a datagen case for it).
+    // Every block made here is recorded in DECOR, which datagen iterates.
     // ------------------------------------------------------------------
+
+    public static final List<DecorType.DecorBlock> DECOR = new ArrayList<>();
+
+    private static void decor(ModMaterials.Material material, DecorType type, Block propsFrom) {
+        DECOR.add(new DecorType.DecorBlock(material, type, Registration.BLOCKS.register(type.id(material),
+                () -> type.create(Properties.copy(propsFrom)))));
+    }
+
     static {
         for (ModMaterials.Material m : ModMaterials.STONE) {
-            String id = m.name();
-            Registration.BLOCKS.register(id + "_facade_block",         () -> new FacadeBlock(m.props()));
-            Registration.BLOCKS.register(id + "_quarter_facade_block", () -> new QuarterFacadeBlock(m.props()));
-            Registration.BLOCKS.register(id + "_fluted_block",         () -> new FlutedBlock(m.props()));
-            Registration.BLOCKS.register(id + "_fluted_facade_block",  () -> new FlutedFacadeBlock(m.props()));
-            Registration.BLOCKS.register(id + "_sill_block",           () -> new SillBlock(m.props()));
-            Registration.BLOCKS.register(id + "_double_sill_block",    () -> new DoubleSillBlock(m.props()));
-            Registration.BLOCKS.register(id + "_cornice_block",        () -> new CorniceBlock(m.props()));
-            Registration.BLOCKS.register(id + "_crown_molding_block",  () -> new CrownMoldingBlock(m.props()));
-            Registration.BLOCKS.register(id + "_pillar_base_block",    () -> new PillarBaseBlock(m.props()));
-            Registration.BLOCKS.register(id + "_pillar_block",         () -> new PillarBlock(m.props()));
-            Registration.BLOCKS.register(id + "_arrow_slit_block",     () -> new FacingBlock(m.props()));
+            for (DecorType type : DecorType.STONE_TYPES) {
+                decor(m, type, m.base());
+            }
         }
+    }
+
+    /**
+     * The block-types only some materials have. Called by Registration after every block above,
+     * where their own classes used to be registered, so the registration (and creative tab)
+     * order is unchanged.
+     */
+    public static void registerTrimDecor() {
+        ModMaterials.BARRED_WINDOWS.forEach(name -> decor(ModMaterials.get(name), DecorType.BARRED_WINDOW, ModMaterials.get(name).base()));
+        ModMaterials.BARRED_WINDOWS.forEach(name -> decor(ModMaterials.get(name), DecorType.BARRED_WINDOW_FACADE, ModMaterials.get(name).base()));
+        ModMaterials.LEDGES.forEach(name -> decor(ModMaterials.get(name), DecorType.LEDGE,
+                ModMaterials.LEDGE_PROPS.getOrDefault(name, ModMaterials.get(name).base())));
+        ModMaterials.CORBELS.forEach(name -> decor(ModMaterials.get(name), DecorType.CORBEL, ModMaterials.get(name).base()));
+    }
+
+    /** The decorative block of this type in this material. */
+    public static RegistryObject<Block> decor(String material, DecorType type) {
+        return DECOR.stream().filter(d -> d.type() == type && d.material().name().equals(material))
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("no " + type + " in " + material)).block();
     }
 
     private static Properties tortureWood() {

@@ -53,6 +53,30 @@ public interface ModWeatheringCopper extends ChangeOverTimeBlock<net.minecraft.w
         return NEXT_BY_BLOCK.get().inverse();
     });
 
+    /**
+     * Each weathering block to its waxed twin, for every {@link CopperFamily}: what a honeycomb
+     * turns a block into, and (inverted) what an axe's wax-off turns it back to.
+     */
+    Supplier<BiMap<Block, Block>> WAXED_BY_BLOCK = Suppliers.memoize(() -> {
+        ImmutableBiMap.Builder<Block, Block> waxed = ImmutableBiMap.builder();
+        for (CopperFamily family : CopperFamily.ALL) {
+            for (WeatherState age : WeatherState.values()) {
+                waxed.put(family.get(age).get(), family.waxed(age).get());
+            }
+        }
+        return waxed.build();
+    });
+
+    /** The waxed twin of a weathering copper state, if it has one. */
+    static Optional<BlockState> getWaxed(BlockState state) {
+        return Optional.ofNullable(WAXED_BY_BLOCK.get().get(state.getBlock())).map(b -> b.withPropertiesOf(state));
+    }
+
+    /** The weathering block a waxed copper state was waxed from, if it is one. */
+    static Optional<BlockState> getUnwaxed(BlockState state) {
+        return Optional.ofNullable(WAXED_BY_BLOCK.get().inverse().get(state.getBlock())).map(b -> b.withPropertiesOf(state));
+    }
+
     static Optional<Block> getPrevious(Block p_154891_) {
         return Optional.ofNullable(PREVIOUS_BY_BLOCK.get().get(p_154891_));
     }

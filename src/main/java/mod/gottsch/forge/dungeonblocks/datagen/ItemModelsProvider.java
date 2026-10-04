@@ -52,24 +52,16 @@ public class ItemModelsProvider extends ItemModelProvider {
 		/*
 		 * block items
 		 */
-		ModBlocks.MAP.forEach((k, v) -> {
-			if (k.getId().getPath().contains("barred_window")
-					|| k.getId().getPath().contains("arrow_slit")
-					|| k.getId().getPath().contains("greek_block")
-						|| k.getId().getPath().contains("ledge")
-					|| k.getId().getPath().contains("corbel")
-					|| k.getId().getPath().contains("sill")
-					|| k.getId().getPath().contains("fluted_block")
-					|| k.getId().getPath().contains("fluted_facade_block")
-					|| k.getId().getPath().contains("cornice")
-					|| k.getId().getPath().contains("facade_block")
-					|| k.getId().getPath().contains("crown_molding")
-					|| k.getId().getPath().contains("pillar")
-					|| k.getId().getPath().contains("quarter")
-			) {
-				blockItemParent(v);
-			}
-		});
+		// every decorative block shows its block model
+		ModBlocks.DECOR.forEach(d -> blockItemParent(ModBlocks.MAP.get(d.block())));
+		for (RegistryObject<Block> b : List.of(ModBlocks.STONE_GREEK_BLOCK, ModBlocks.ANDESITE_GREEK_BLOCK,
+				ModBlocks.POLISHED_BASALT_GREEK_BLOCK,
+				ModBlocks.SQUARE_STONE_BRICK_FACADE_BLOCK, ModBlocks.SQUARE_MUD_BRICK_FACADE_BLOCK,
+				ModBlocks.SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK,
+				ModBlocks.SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK, ModBlocks.SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK,
+				ModBlocks.SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK)) {
+			blockItemParent(ModBlocks.MAP.get(b));
+		}
 
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.TORCH_SCONCE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_CHISELED_STONE_BRICKS));
