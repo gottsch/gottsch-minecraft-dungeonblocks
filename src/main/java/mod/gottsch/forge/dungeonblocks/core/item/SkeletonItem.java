@@ -13,11 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public class SkeletonItem extends BlockItem {
 
-	/**
-	 *
-	 * @param block
-	 * @param properties
-	 */
 	public SkeletonItem(Block block, Properties properties) {
 		super(block, properties); //.stacksTo(MAX_STACK_SIZE));
 	}

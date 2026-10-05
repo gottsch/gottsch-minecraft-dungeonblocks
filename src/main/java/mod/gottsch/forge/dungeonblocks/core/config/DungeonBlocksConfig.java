@@ -64,10 +64,6 @@ public class DungeonBlocksConfig {
 		CLIENT_CONFIG = CLIENT_BUILDER.build();
 	}
 
-	/**
-	 * 
-	 * @param mod
-	 */
 	public DungeonBlocksConfig() {
 	}
 }

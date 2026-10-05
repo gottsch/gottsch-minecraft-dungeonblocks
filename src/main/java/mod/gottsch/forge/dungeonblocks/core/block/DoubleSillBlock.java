@@ -40,10 +40,6 @@ public class DoubleSillBlock extends WaterloggedNonCubeFacingBlock {
 	private static final VoxelShape NORTH_SOUTH_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 	private static final VoxelShape EAST_WEST_AABB = NORTH_SOUTH_AABB;
 	
-	/**
-	 * 
-	 * @param properties
-	 */
 	public DoubleSillBlock(Properties properties) {
 		super(properties);
 	}

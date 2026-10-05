@@ -44,9 +44,6 @@ public class Registration {
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, DungeonBlocks.MOD_ID);
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, DungeonBlocks.MOD_ID);
 
-	/**
-	 * 
-	 */
 	public static void registerBlocks() {
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -55,9 +52,6 @@ public class Registration {
 		BLOCKS.register(eventBus);
 	}
 	
-	/**
-	 * 
-	 */
 	public static void registerItems() {
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		ITEMS.register(eventBus);

@@ -63,7 +63,6 @@ public class Mold extends GlowLichenBlock {
         double xPos = (x + 0.5D);
         double yPos = y - 0.1D;
         double zPos = (z + 0.5D);
-        // initial velocities
         double velocityX = 0;
         double velocityY = -0.1; //0
         double velocityZ = 0;

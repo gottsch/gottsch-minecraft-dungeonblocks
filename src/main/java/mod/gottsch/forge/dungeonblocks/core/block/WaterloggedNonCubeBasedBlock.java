@@ -45,19 +45,12 @@ public class WaterloggedNonCubeBasedBlock extends BasedBlock implements SimpleWa
 
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	
-	/**
-	 * 
-	 * @param properties
-	 */
 	public WaterloggedNonCubeBasedBlock(Properties properties) {
 		super(properties);
 		this.registerDefaultState(this.stateDefinition.any()
 				.setValue(WATERLOGGED, Boolean.valueOf(false)));
 	}
 	
-	/**
-	 * 
-	 */
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
@@ -108,9 +101,4 @@ public class WaterloggedNonCubeBasedBlock extends BasedBlock implements SimpleWa
 	public FluidState getFluidState(BlockState blockState) {
 		return Waterlogging.fluid(blockState, super.getFluidState(blockState));
 	}
-	
-//	@Override
-//	public boolean useShapeForLightOcclusion(BlockState state) {
-//		return true;
-//	}
 }

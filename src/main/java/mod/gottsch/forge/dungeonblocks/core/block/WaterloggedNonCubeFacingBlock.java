@@ -41,19 +41,12 @@ public class WaterloggedNonCubeFacingBlock extends FacingBlock implements Simple
 
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	
-	/**
-	 * 
-	 * @param properties
-	 */
 	public WaterloggedNonCubeFacingBlock(Block.Properties properties) {
 		super(properties);
 		this.registerDefaultState(this.stateDefinition.any()
 				.setValue(WATERLOGGED, Boolean.valueOf(false)));
 	}
 	
-	/**
-	 * 
-	 */
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);

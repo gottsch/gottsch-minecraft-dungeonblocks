@@ -62,9 +62,6 @@ public class FacadeShapeBlock extends WaterloggedNonCubeFacingBlock implements I
 	}
 
 
-	/**
-	 *
-	 */
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
@@ -79,7 +76,6 @@ public class FacadeShapeBlock extends WaterloggedNonCubeFacingBlock implements I
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		BlockState blockState = super.getStateForPlacement(context);
-		// custom method to get block state
 		BlockState placementBlockState = getBlockStateForPlacement(context.getLevel(), blockState, context.getClickedPos());
 
 		return placementBlockState;
@@ -88,7 +84,6 @@ public class FacadeShapeBlock extends WaterloggedNonCubeFacingBlock implements I
 	@Override
 	public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor level, BlockPos blockPos, BlockPos blockPos2) {
 		BlockState placementBlockState = super.updateShape(blockState, direction, blockState2, level, blockPos, blockPos2);
-		// custom method to get block state
 		placementBlockState = getBlockStateForPlacement(level, placementBlockState, blockPos);
 		return placementBlockState;
 	}

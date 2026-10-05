@@ -44,10 +44,6 @@ public class SillBlock extends WaterloggedNonCubeFacingBlock {
 	private static final VoxelShape SOUTH_FACING_AABB = Shapes.or(BODY, Block.box(0.0D, 12.0D, 0.0D, 16.0D, 16.0D, 8.0D));
 	private static final VoxelShape WEST_FACING_AABB = Shapes.or(BODY, Block.box(8.0D, 12.0D, 0.0D, 16.0D, 16.0D, 16.0D));
 	
-	/**
-	 * 
-	 * @param properties
-	 */
 	public SillBlock(Properties properties) {
 		super(properties);
 	}

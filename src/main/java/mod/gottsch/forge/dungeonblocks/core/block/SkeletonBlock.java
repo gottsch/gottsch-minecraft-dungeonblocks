@@ -54,9 +54,6 @@ public class SkeletonBlock extends FacingBlock implements SimpleWaterloggedBlock
 
 	public static final EnumProperty<EnumPartType> PART = EnumProperty.<EnumPartType>create("part", EnumPartType.class);
 
-	/**
-	 * 
-	 */
 	public SkeletonBlock(Block.Properties properties) {
 		super(properties);
 		this.registerDefaultState(this.stateDefinition.any()
@@ -76,18 +73,12 @@ public class SkeletonBlock extends FacingBlock implements SimpleWaterloggedBlock
 				});
 	}
 
-	/**
-	 * 
-	 */
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
 		builder.add(WATERLOGGED, PART);
 	}
 
-	/**
-	 *
-	 */
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
 		switch(state.getValue(FACING)) {
@@ -142,7 +133,6 @@ public class SkeletonBlock extends FacingBlock implements SimpleWaterloggedBlock
 		if (!level.isClientSide) {
 			BlockPos blockPos = pos.relative(state.getValue(FACING).getOpposite());
 
-			// Check for water at the second position
 			FluidState otherFluidState = level.getFluidState(blockPos);
 			boolean isWaterAtOther = otherFluidState.getType() == Fluids.WATER;
 

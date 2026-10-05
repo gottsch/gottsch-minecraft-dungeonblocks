@@ -42,10 +42,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
  */
 @Mod(value = DungeonBlocks.MOD_ID)
 public class DungeonBlocks {
-	// logger
 	public static final Logger LOGGER = LogManager.getLogger(DungeonBlocks.class.getSimpleName());
 
-	// constants
 	public static final String MOD_ID = "dungeonblocks";
 	public static DungeonBlocks instance;
 
@@ -56,7 +54,6 @@ public class DungeonBlocks {
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		// register the deferred registries
 		ModBlocks.register();
 		ModItems.register();
 		ModParticles.register(modEventBus);
@@ -65,15 +62,9 @@ public class DungeonBlocks {
 
 		ModCreativeModeTabs.TABS.register(modEventBus);
 
-		// Register the setup method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 	}
 
-	/**
-	 * ie. preint
-	 * 
-	 * @param event
-	 */
 	private void setup(final FMLCommonSetupEvent event) {
 	}
 

@@ -38,10 +38,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  *
  */
 public class TorchSconceBlock extends NonCubeFacingBlock {
-	// TODO remove waterlogged and look at torch code to pop if submerged
-	// OR make another model without torch, no light, that this turns into if waterlogged
-
-	// TODO update sizes
 	private static final VoxelShape NORTH_FACING_SHAPE = Block
 			.box(5, 3, 8, 11, 13, 16);
 	private static final VoxelShape EAST_FACING_SHAPE = Block
@@ -51,10 +47,6 @@ public class TorchSconceBlock extends NonCubeFacingBlock {
 	private static final VoxelShape WEST_FACING_SHAPE = Block
 			.box(8, 3, 5, 16, 13, 11);
 
-	/**
-	 *
-	 * @param properties
-	 */
 	public TorchSconceBlock(Properties properties) {
 		super(properties);
 	}
@@ -71,13 +63,6 @@ public class TorchSconceBlock extends NonCubeFacingBlock {
 		return blockstate.isFaceSturdy(level, blockpos, direction);
 	}
 
-	/**
-	 *
-	 * @param state
-	 * @param level
-	 * @param pos
-	 * @param rand
-	 */
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource rand) {
 		Direction direction = state.getValue(FACING);
@@ -112,9 +97,6 @@ public class TorchSconceBlock extends NonCubeFacingBlock {
 		return 0.05D;
 	}
 
-	/**
-	 * 
-	 */
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
 		Direction direction = state.getValue(FACING);

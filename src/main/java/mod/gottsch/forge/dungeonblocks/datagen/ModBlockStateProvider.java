@@ -31,9 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-/**
- *
- */
 public class ModBlockStateProvider extends BlockStateProvider {
     private static EnumProperty<Direction> FACING = EnumProperty.create("facing", Direction.class);
     private static EnumProperty<Direction> BASE = EnumProperty.create("base", Direction.class);
@@ -85,7 +82,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         wallRingBlock(ModBlocks.WALL_RING);
         hayPatchBlock(ModBlocks.HAY_PATCH);
         hayPatchBlock(ModBlocks.DIRTY_HAY_PATCH, modLoc("block/dirty_hay"));
-//        basedBlock(ModBlocks.ANGLE_PLATE_BRACKET_BLOCK, "angle_plate_bracket_block");
 
         sewerBlock(ModBlocks.WEATHERED_COPPER_SEWER, modLoc("block/weathered_copper_pipe"), mcLoc("block/weathered_copper"));
         sewerBlock(ModBlocks.TERRACOTTA_SEWER, mcLoc("block/terracotta"), mcLoc("block/terracotta"));
@@ -850,11 +846,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
     public void wallRingBlock(RegistryObject<Block> block) {
        ModelFile model = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/wall_ring"));
        ModelFile openModel = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/wall_ring_open"));
-       // TODO get the extended model
-
-        // TODO be more like trapdoor. if down, use the extended model, else use normal
-        // also, up and down need special case to rotate x:
-//       myHorizontalBlock(block.get(), model);
         wallRingBlock(block.get(), model, openModel);
     }
 
@@ -945,11 +936,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModelFile model = twoTextures(
                 block.getId().getPath(),
                 modLoc(ModelProvider.BLOCK_FOLDER + "/template_sewer_block"), "0", texture, "1", texture1);
-
-//        ModelFile model = models().singleTexture(block.getId().getPath(), modLoc(ModelProvider.BLOCK_FOLDER + "/template_sewer_block"), "0", texture);
-     //        ModelFile model = models().getExistingFile(modLoc(ModelProvider.BLOCK_FOLDER + "/sewer_block"));
-        // TODO get the extended model
-
         myHorizontalBlock(block.get(), model);
     }
 

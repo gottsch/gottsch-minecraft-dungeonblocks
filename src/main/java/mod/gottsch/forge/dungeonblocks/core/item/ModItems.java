@@ -55,7 +55,6 @@ public class ModItems {
 	public static final RegistryObject<Item> LOGO = Registration.ITEMS.register("dungeonblocks_logo", () -> new Item(new Item.Properties()));
 
 	static {
-		// create items
 		Registration.BLOCKS.getEntries().forEach(block -> {
 			if (block != ModBlocks.MOLD && block != ModBlocks.LICHEN
 			&& block != ModBlocks.SKELETON) {
@@ -151,11 +150,7 @@ public class ModItems {
 			BIG_BLUE_POTION, BLUE_FLASK,
 			BIG_GREEN_POTION, GREEN_FLASK), Stream.concat(TOMES.values().stream(), SCROLLS.values().stream())).toList();
 
-	/**
-	 * 
-	 */
 	public static void register() {
-		// cycle through all block and create items
 		Registration.registerItems();
 	}
 	

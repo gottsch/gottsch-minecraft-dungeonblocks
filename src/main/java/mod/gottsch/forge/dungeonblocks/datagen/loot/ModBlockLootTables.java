@@ -129,14 +129,6 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                                         .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(stages, n)))))));
     }
 
-//    protected LootTable.Builder createCopperLikeOreDrops(Block pBlock, Item item) {
-//        return createSilkTouchDispatchTable(pBlock,
-//                this.applyExplosionDecay(pBlock,
-//                        LootItem.lootTableItem(item)
-//                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F)))
-//                                .apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
-//    }
-
     @Override
     protected Iterable<Block> getKnownBlocks() {
         // must match exactly the set of blocks handled in generate()

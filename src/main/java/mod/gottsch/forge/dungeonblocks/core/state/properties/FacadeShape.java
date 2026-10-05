@@ -1,6 +1,3 @@
-/**
- * 
- */
 package mod.gottsch.forge.dungeonblocks.core.state.properties;
 
 import net.minecraft.util.StringRepresentable;

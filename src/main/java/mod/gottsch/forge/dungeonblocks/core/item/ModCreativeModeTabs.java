@@ -37,8 +37,6 @@ import net.minecraftforge.registries.RegistryObject;
  */
 @Mod.EventBusSubscriber(modid = DungeonBlocks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModCreativeModeTabs {
-//	public static CreativeModeTab MOD_TAB;
-
 	public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, DungeonBlocks.MOD_ID);
 
 	public static final RegistryObject<CreativeModeTab> MOD_TAB = TABS.register("treasure_tab",
@@ -60,8 +58,8 @@ public class ModCreativeModeTabs {
 	);
 
 	/**
-	 * Home for the entity-backed decorative props (pots today; crates, braziers and rubble to
-	 * follow). Kept separate from the block tab because these are Entities, not Blocks, and behave
+	 * Home for the entity-backed decorative props: pots, potions, tomes and scrolls. Kept separate
+	 * from the block tab because these are Entities, not Blocks, and behave
 	 * differently in-world — and because the block tab is already large.
 	 */
 	public static final RegistryObject<CreativeModeTab> ENTITIES_TAB = TABS.register("entities_tab",
@@ -74,10 +72,4 @@ public class ModCreativeModeTabs {
 									output.accept(item.get(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)))
 					.build()
 	);
-
-//	@SubscribeEvent
-//	public static void registerTab(CreativeModeTabEvent.Register event) {
-//		MOD_TAB = event.registerCreativeModeTab(new ResourceLocation(DungeonBlocks.MOD_ID, "dungeon_blocks_tab"),
-//				builder -> builder.icon(() -> new ItemStack(ModItems.LOGO.get())).title(Component.translatable("itemGroup.dungeonblocks")));
-//	}
 }

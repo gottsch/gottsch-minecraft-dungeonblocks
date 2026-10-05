@@ -43,16 +43,10 @@ public class PlateBracketBlock extends WaterloggedNonCubeFacingBlock {
     private static final VoxelShape WEST_SHAPE = Block.box(14D, 0D, 0D, 16, 16D, 16D);
 
 
-    /**
-     * @param properties
-     */
     public PlateBracketBlock(Properties properties) {
         super(properties);
     }
 
-    /**
-     *
-     */
     @Override
     public @NotNull VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);

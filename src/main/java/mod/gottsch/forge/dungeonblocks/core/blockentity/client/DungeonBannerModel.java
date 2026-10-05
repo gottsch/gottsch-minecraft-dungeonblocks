@@ -47,8 +47,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * <li><b>Zero thickness makes the seams exact.</b> Each slice hinges on its own top edge, and with
  *     no depth that edge lies <em>exactly</em> on the rotation axis — so it cannot move at all, and
  *     two neighbouring slices stay joined however far apart their angles drift. A 1px-deep slice has
- *     its top edge half a pixel off the axis, which is enough to open a hairline; that is what the
- *     overlap fudge used to be papering over, and it is gone.</li>
+ *     its top edge half a pixel off the axis, which is enough to open a hairline.</li>
  * <li><b>The taper is alpha in the texture.</b> Slices are all the same width, so the art is a plain
  *     rectangle laid out contiguously in the atlas rather than one column-inset strip per slice. The
  *     silhouette costs no geometry, is not quantised to the slice height, and can be reshaped — a

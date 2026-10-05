@@ -45,7 +45,6 @@ import net.minecraftforge.registries.RegistryObject;
  * @author Mark Gottschling on Jan 12, 2020
  */
 public class ModBlocks {
-    // map from registry block to registry item
     public static final Map<RegistryObject<Block>, RegistryObject<Item>> MAP = Maps.newHashMap();
 
     /**
@@ -92,7 +91,6 @@ public class ModBlocks {
         };
     }
 
-    // NEW 10/26/2023
     // wall sconce
     public static final RegistryObject<Block> TORCH_SCONCE = Registration.BLOCKS.register("torch_sconce_block",
             () -> new TorchSconceBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)
@@ -211,11 +209,9 @@ public class ModBlocks {
     public static final RegistryObject<StairBlock> SQUARE_MUD_BRICK_STAIRS = stone("square_mud_brick_stairs", () -> {
         return new StairBlock(SQUARE_MUD_BRICK.get().defaultBlockState(), Properties.copy(Blocks.MUD_BRICK_STAIRS));
     });
-    // The mossy counterpart of SQUARE_STONE_BRICK_STAIRS, added 2026-09-07 for Dungeons2's boss-room
-    // weathering: it ages square stone brick stairs into their mossy form, and until now the mossy
-    // SQUARE STONE BRICK existed while its stairs did not, so the rule named a block that resolved
-    // to air. Follows MOSSY_LARGE_BRICK_STAIRS -- mossy stone brick stairs' properties over the
-    // mossy full block's state, and the texture the mossy full block already ships.
+    // The mossy counterpart of SQUARE_STONE_BRICK_STAIRS; Dungeons2's weathering rules age square stone
+    // brick stairs into it. Follows MOSSY_LARGE_BRICK_STAIRS -- mossy stone brick stairs' properties
+    // over the mossy full block's state, and the mossy full block's texture.
     public static final RegistryObject<StairBlock> MOSSY_SQUARE_STONE_BRICK_STAIRS = stone("mossy_square_stone_brick_stairs", () -> {
         return new StairBlock(MOSSY_SQUARE_STONE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
     });
@@ -984,8 +980,7 @@ public class ModBlocks {
 
     /**
      * The block-types only some materials have. Called by Registration after every block above,
-     * where their own classes used to be registered, so the registration (and creative tab)
-     * order is unchanged.
+     * which fixes their place in the registration (and creative tab) order.
      */
     public static void registerTrimDecor() {
         ModMaterials.BARRED_WINDOWS.forEach(name -> decor(ModMaterials.get(name), DecorType.BARRED_WINDOW, ModMaterials.get(name).base()));
@@ -1006,9 +1001,6 @@ public class ModBlocks {
                 .ignitedByLava().noOcclusion();
     }
 
-    /**
-     *
-     */
     public static void register() {
         Registration.registerBlocks();
     }

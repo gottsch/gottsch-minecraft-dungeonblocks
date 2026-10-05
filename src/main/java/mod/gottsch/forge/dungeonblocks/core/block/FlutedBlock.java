@@ -44,7 +44,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class FlutedBlock extends Block implements SimpleWaterloggedBlock {
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	
-	// Voxels are like the bounding boxes (AABBs)
 	private static final VoxelShape MAIN_PART = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 	private static final VoxelShape NW_PART = Block.box(0.0D, 0.0D, 0.0D, 4.0D, 16.0D, 4.0D);
 	private static final VoxelShape NE_PART = Block.box(12.0D, 0.0D, 0.0D, 16.0D, 16.0D, 4.0D);
@@ -52,19 +51,12 @@ public class FlutedBlock extends Block implements SimpleWaterloggedBlock {
 	private static final VoxelShape SE_PART = Block.box(12.0D, 0.0D, 12.0D, 16.0D, 16.0D, 16.0D);
 	private static final VoxelShape AABB = Shapes.or(MAIN_PART, NW_PART, NE_PART, SW_PART, SE_PART);
 	
-	/**
-	 * 
-	 * @param properties
-	 */
 	public FlutedBlock(Properties properties) {
 		super(properties);
 		this.registerDefaultState(this.stateDefinition.any()
 				.setValue(WATERLOGGED, Boolean.valueOf(false)));
 	}
 
-	/**
-	 * 
-	 */
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
@@ -94,9 +86,6 @@ public class FlutedBlock extends Block implements SimpleWaterloggedBlock {
 		return Waterlogging.fluid(blockState, super.getFluidState(blockState));
 	}
 	
-	/**
-	 * 
-	 */
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
 		return AABB;
