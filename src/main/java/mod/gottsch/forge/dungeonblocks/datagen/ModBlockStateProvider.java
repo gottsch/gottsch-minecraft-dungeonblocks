@@ -153,8 +153,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModBlocks.COPPER_TRAPDOORS.forEach((age, b) -> copperTrapDoor(b, CopperFamily.id(age, "copper_trapdoor")));
 
         // dungeon doors: vanilla's door textures. The tall dark oak doors use the mod's own dark oak
-        // dungeon door textures, and the 4-high one its top texture for the bottom as well. Each tall
-        // door's middle is a placeholder: its top texture, until real tiling art exists.
+        // dungeon door textures. A tall door's middle repeats its top texture where that tiles (spruce's
+        // plain boards, dark oak's panels); mangrove and crimson have their own middle, and a top and
+        // bottom with the handle moved wholly onto the bottom segment (tools/gen_tall_door_middle_textures.py)
         ModBlocks.DUNGEON_DOORS.forEach(door -> {
             ResourceLocation bottom = mcLoc("block/" + door.wood() + "_door_bottom");
             ResourceLocation top = mcLoc("block/" + door.wood() + "_door_top");
@@ -162,11 +163,24 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 dungeonDoorBlock((DoorBlock) door.block().get(), bottom, top);
                 return;
             }
-            if (door.wood().equals("dark_oak")) {
-                top = modLoc("block/dungeon_dark_oak_door_top");
-                bottom = door.height() == 4 ? top : modLoc("block/dungeon_dark_oak_door_bottom");
+            ResourceLocation middle = top;
+            switch (door.wood()) {
+                case "dark_oak" -> {
+                    top = middle = modLoc("block/dungeon_dark_oak_door_top");
+                    bottom = modLoc("block/dungeon_dark_oak_door_bottom");
+                }
+                case "mangrove" -> {
+                    top = modLoc("block/dungeon_mangrove_tall_door_top");
+                    middle = modLoc("block/dungeon_mangrove_door_middle");
+                }
+                case "crimson" -> {
+                    top = modLoc("block/dungeon_crimson_tall_door_top");
+                    middle = modLoc("block/dungeon_crimson_door_middle");
+                    bottom = modLoc("block/dungeon_crimson_tall_door_bottom");
+                }
+                default -> { }
             }
-            tallDungeonDoorBlock((TallDoorBlock) door.block().get(), bottom, top, top);
+            tallDungeonDoorBlock((TallDoorBlock) door.block().get(), bottom, middle, top);
         });
 
         // light source

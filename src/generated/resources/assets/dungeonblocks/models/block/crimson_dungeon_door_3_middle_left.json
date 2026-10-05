@@ -1,6 +1,6 @@
 {
   "parent": "dungeonblocks:block/dungeon_door_middle_left",
   "textures": {
-    "middle": "minecraft:block/crimson_door_top"
+    "middle": "dungeonblocks:block/dungeon_crimson_door_middle"
   }
 }
