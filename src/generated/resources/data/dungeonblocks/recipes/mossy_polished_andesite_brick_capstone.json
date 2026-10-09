@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "dungeonblocks:mossy_polished_andesite_bricks"
+  },
+  "result": "dungeonblocks:mossy_polished_andesite_brick_capstone"
+}

@@ -18,12 +18,12 @@
 package mod.gottsch.forge.dungeonblocks.core.setup;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.BarredWindows;
-import mod.gottsch.forge.dungeonblocks.core.block.CorbelBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.LedgeBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -41,24 +41,17 @@ public class Registration {
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, DungeonBlocks.MOD_ID);
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, DungeonBlocks.MOD_ID);
 	public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, DungeonBlocks.MOD_ID);
+	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, DungeonBlocks.MOD_ID);
+	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, DungeonBlocks.MOD_ID);
 
-	/**
-	 * 
-	 */
 	public static void registerBlocks() {
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		BarredWindows.register();
-		//KeystoneBlocks.register();
-		LedgeBlocks.register();
-		CorbelBlocks.register();
+		ModBlocks.registerTrimDecor();
 
 		BLOCKS.register(eventBus);
 	}
 	
-	/**
-	 * 
-	 */
 	public static void registerItems() {
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		ITEMS.register(eventBus);
@@ -66,5 +59,13 @@ public class Registration {
 
 	public static void registerParticles(IEventBus bus) {
 		PARTICLES.register(bus);
+	}
+
+	public static void registerEntityTypes(IEventBus bus) {
+		ENTITY_TYPES.register(bus);
+	}
+
+	public static void registerBlockEntityTypes(IEventBus bus) {
+		BLOCK_ENTITY_TYPES.register(bus);
 	}
 }

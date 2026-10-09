@@ -1,6 +1,0 @@
-// 1.20.1	2026-06-21T15:41:58.0490928	Tags for minecraft:block mod id dungeonblocks
-bbd3b6443fb41a9aca43d3377b1513f2d3589811 data/dungeonblocks/tags/blocks/corbels.json
-a21c8b45da3392cfb38ffac36f9d213ec0c6cc05 data/dungeonblocks/tags/blocks/ledges.json
-a3ab12ac695bceb4e3e80d949d073235717ef091 data/minecraft/tags/blocks/mineable/pickaxe.json
-e3fbaf2a8c4dec1ddef13cdbbeec023698792d42 data/minecraft/tags/blocks/needs_diamond_tool.json
-e6b4d9282597259f5e49b025bc39bb850de33248 data/minecraft/tags/blocks/needs_stone_tool.json

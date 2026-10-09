@@ -19,6 +19,8 @@
  */
 package mod.gottsch.forge.dungeonblocks;
 
+import mod.gottsch.forge.dungeonblocks.core.blockentity.ModBlockEntityTypes;
+import mod.gottsch.forge.dungeonblocks.core.entity.ModEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.item.ModCreativeModeTabs;
 import mod.gottsch.forge.dungeonblocks.core.particle.ModParticles;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -40,35 +42,29 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
  */
 @Mod(value = DungeonBlocks.MOD_ID)
 public class DungeonBlocks {
-	// logger
 	public static final Logger LOGGER = LogManager.getLogger(DungeonBlocks.class.getSimpleName());
 
-	// constants
 	public static final String MOD_ID = "dungeonblocks";
 	public static DungeonBlocks instance;
 
 	public DungeonBlocks() {
 		DungeonBlocks.instance = this;
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonBlocksConfig.COMMON_CONFIG);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, DungeonBlocksConfig.CLIENT_CONFIG);
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		// register the deferred registries
 		ModBlocks.register();
 		ModItems.register();
 		ModParticles.register(modEventBus);
+		ModEntityTypes.register(modEventBus);
+		ModBlockEntityTypes.register(modEventBus);
 
 		ModCreativeModeTabs.TABS.register(modEventBus);
 
-		// Register the setup method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 	}
 
-	/**
-	 * ie. preint
-	 * 
-	 * @param event
-	 */
 	private void setup(final FMLCommonSetupEvent event) {
 	}
 

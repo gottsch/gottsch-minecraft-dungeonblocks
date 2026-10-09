@@ -20,7 +20,6 @@
 package mod.gottsch.forge.dungeonblocks.core.config;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
-import mod.gottsch.forge.gottschcore.config.AbstractConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
@@ -30,7 +29,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
  *
  */
 @EventBusSubscriber(modid = DungeonBlocks.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
-public class DungeonBlocksConfig extends AbstractConfig {
+public class DungeonBlocksConfig {
 	protected static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
 	protected static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 
@@ -38,15 +37,33 @@ public class DungeonBlocksConfig extends AbstractConfig {
 	public static ForgeConfigSpec CLIENT_CONFIG;
 
 	public static DungeonBlocksConfig instance = new DungeonBlocksConfig();
-	
-	static {
-		COMMON_CONFIG = COMMON_BUILDER.build();
-	}
 
 	/**
-	 * 
-	 * @param mod
+	 * Purely visual settings, so they live in the CLIENT spec: a player who wants still banners gets
+	 * them without anything having to agree with the server about it.
 	 */
+	public static final class Visuals {
+		public final ForgeConfigSpec.BooleanValue animateBanners;
+
+		Visuals(ForgeConfigSpec.Builder builder) {
+			builder.comment("Visual settings. These affect only your own client.").push("visuals");
+			animateBanners = builder
+					.comment("Master switch for Dungeon Banner cloth movement. Each banner also has its own",
+							"animated blockstate, toggled in-world with an empty hand; this setting can turn",
+							"all of them off, but cannot animate a banner that was deliberately stilled.")
+					.define("animateBanners", true);
+			builder.pop();
+		}
+	}
+
+	public static Visuals VISUALS;
+
+	static {
+		COMMON_CONFIG = COMMON_BUILDER.build();
+		VISUALS = new Visuals(CLIENT_BUILDER);
+		CLIENT_CONFIG = CLIENT_BUILDER.build();
+	}
+
 	public DungeonBlocksConfig() {
 	}
 }

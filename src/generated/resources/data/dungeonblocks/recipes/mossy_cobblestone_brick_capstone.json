@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "dungeonblocks:mossy_cobblestone_brick"
+  },
+  "result": "dungeonblocks:mossy_cobblestone_brick_capstone"
+}

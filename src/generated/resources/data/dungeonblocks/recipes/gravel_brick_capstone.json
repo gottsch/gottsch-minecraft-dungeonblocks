@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "dungeonblocks:gravel_brick"
+  },
+  "result": "dungeonblocks:gravel_brick_capstone"
+}

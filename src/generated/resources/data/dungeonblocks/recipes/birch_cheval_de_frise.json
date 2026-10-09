@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "l": {
+      "item": "minecraft:birch_log"
+    },
+    "s": {
+      "item": "dungeonblocks:sharpened_birch_log"
+    }
+  },
+  "pattern": [
+    "sls"
+  ],
+  "result": {
+    "item": "dungeonblocks:birch_cheval_de_frise"
+  },
+  "show_notification": true
+}
