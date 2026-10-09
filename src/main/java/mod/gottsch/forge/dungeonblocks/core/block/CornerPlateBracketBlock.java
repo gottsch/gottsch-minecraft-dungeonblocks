@@ -22,7 +22,6 @@ package mod.gottsch.forge.dungeonblocks.core.block;
 import mod.gottsch.forge.gottschcore.block.WaterloggedFacingHalfBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -66,18 +65,6 @@ public class CornerPlateBracketBlock extends WaterloggedFacingHalfBlock {
 
     public CornerPlateBracketBlock(Properties properties) {
         super(properties);
-    }
-
-    /**
-     * GottschCore's WaterloggedFacingHalfBlock (2.4.0) works out WATERLOGGED on placement and then
-     * discards it - setValue returns a new state - so a bracket never kept the water it was placed
-     * into. Set here until GottschCore is fixed; harmless after.
-     */
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockState state = super.getStateForPlacement(context);
-        return state == null ? null : state.setValue(WATERLOGGED,
-                Waterlogging.placedInWater(context));
     }
 
     @Override
