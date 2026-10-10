@@ -5,6 +5,7 @@ wall-mounted blocks and a ceiling over the hanging ones.
 
     python tools/gen_showcase_datapack.py                         # -> build/showcase/dungeonblocks_showcase
     python tools/gen_showcase_datapack.py --install run/world     # straight into a world's datapacks
+    python tools/gen_showcase_datapack.py --mc 1.21.1             # the NeoForge 1.21.1 build's layout
 
 In the world (creative, cheats on):
     /reload
@@ -25,6 +26,11 @@ import shutil
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ASSETS = "assets/dungeonblocks"
 LANG = os.path.join(ROOT, "src/generated/resources", ASSETS, "lang/en_us.json")
+# per game version: pack_format, the functions folder, the entity type tags folder
+PACK_LAYOUT = {
+    "1.20.1": (15, "functions", "entity_types"),
+    "1.21.1": (48, "function", "entity_type"),
+}
 STATE_DIRS = [os.path.join(ROOT, d, ASSETS, "blockstates") for d in ("src/generated/resources", "src/main/resources")]
 NS = "dungeonblocks"
 PACK = "dungeonblocks_showcase"
@@ -179,6 +185,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(ROOT, "build", "showcase"))
     ap.add_argument("--install", help="a world folder; the pack is copied into its datapacks")
+    ap.add_argument("--mc", choices=sorted(PACK_LAYOUT), default="1.20.1",
+                    help="game version: sets pack_format and the data folder names (1.21 made them singular)")
     args = ap.parse_args()
 
     lang = json.load(open(LANG, encoding="utf-8"))
@@ -267,13 +275,14 @@ def main():
     out = os.path.join(args.out, PACK)
     if os.path.isdir(out):
         shutil.rmtree(out)
-    fdir = os.path.join(out, "data", PACK, "functions")
+    pack_format, functions, entity_types = PACK_LAYOUT[args.mc]
+    fdir = os.path.join(out, "data", PACK, functions)
     os.makedirs(fdir)
-    os.makedirs(os.path.join(out, "data", PACK, "tags", "entity_types"))
-    json.dump({"pack": {"pack_format": 15, "description": "DungeonBlocks showcase"}},
+    os.makedirs(os.path.join(out, "data", PACK, "tags", entity_types))
+    json.dump({"pack": {"pack_format": pack_format, "description": "DungeonBlocks showcase"}},
               open(os.path.join(out, "pack.mcmeta"), "w"), indent=2)
     json.dump({"values": sorted({f"{NS}:{e}" for e, _ in ents})},
-              open(os.path.join(out, "data", PACK, "tags", "entity_types", "props.json"), "w"), indent=2)
+              open(os.path.join(out, "data", PACK, "tags", entity_types, "props.json"), "w"), indent=2)
     for name, cmds in (("build", build), ("clear", clear)):
         with open(os.path.join(fdir, name + ".mcfunction"), "w", encoding="utf-8") as f:
             f.write("\n".join(cmds) + "\n")
