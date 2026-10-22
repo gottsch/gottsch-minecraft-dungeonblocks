@@ -123,12 +123,13 @@ JOBS.append(("weapon_rack", "weapon_rack_item", RACK, {"frame": (0, 0, 0), "disp
 BONES = {"skull": "dungeonblocks:block/skeleton_head", "bone": "dungeonblocks:block/skeleton_bottom"}
 # a template per thing that can lie in the niche (CatacombNicheBlock's REMAINS): the wall and that
 # group, the wall alone for `empty`. Datagen makes one child of each per stone, filling `stone`.
-for remains in ("empty", "skull", "bones", "skull_and_bones", "skulls"):
+for remains in ("empty", "skull", "bones", "skull_and_bones", "skulls", "skull_heap"):
     JOBS.append(("catacomb_niche", f"template_catacomb_niche_{remains}", {"stone": "minecraft:block/stone_bricks", **BONES},
                  {"wall": (0, 0, 0), **({} if remains == "empty" else {f"remains_{remains}": (0, 0, 0)})}))
 # one model per fill stage: bone_pile_N is groups pile_1..pile_N
 for n in range(1, 5):
     JOBS.append(("bone_pile", f"bone_pile_{n}", BONES, {f"pile_{i}": (0, 0, 0) for i in range(1, n + 1)}))
+    JOBS.append(("skull_pile", f"skull_pile_{n}", BONES, {f"pile_{i}": (0, 0, 0) for i in range(1, n + 1)}))
 # one model per stage (RubbleScatterBlock's CHIPS): rubble_scatter_N is groups chips_1..chips_N;
 # rubble_scatter_4, the full scatter, is also the item's model
 for n in range(1, 5):
@@ -152,6 +153,19 @@ for lit, candle in (("", "candle"), ("_lit", "candle_lit")):
     JOBS.append(("chandelier", f"chandelier{lit}",
                  {"iron": "dungeonblocks:block/dark_iron", "candle": f"minecraft:block/{candle}", "chain": "minecraft:block/chain"},
                  {"frame": (0, 0, 0), "candles": (0, 0, 0)}))
+# the large candles: a model per size (and per half, for the huge one), lit and unlit, which differ
+# only in the wax textures - the flame's glow on the wax near the wick
+for lit in ("", "_lit"):
+    wax = {"wax": f"dungeonblocks:block/large_candle{lit}", "top": f"dungeonblocks:block/large_candle_top{lit}"}
+    for size in ("small", "medium", "large"):
+        JOBS.append(("large_candle", f"large_candle_{size}{lit}", wax, {size: (0, 0, 0)}))
+    huge = {**wax, "wax": f"dungeonblocks:block/huge_candle{lit}"}
+    for half in ("lower", "upper"):
+        JOBS.append((f"huge_candle_{half}", f"huge_candle_{half}{lit}", huge, {"candle": (0, 0, 0)}))
+    JOBS.append(("candle_cluster", f"candle_cluster{lit}", wax, {"candles": (0, 0, 0)}))
+STACKS.append(("huge_candle_item", {"wax": "dungeonblocks:block/huge_candle", "top": "dungeonblocks:block/large_candle_top"},
+               [("huge_candle_lower", {"candle": (0, -8, 0)}), ("huge_candle_upper", {"candle": (0, 8, 0)})],
+               two_block_display(0.45)))
 # chain fixtures: the manacles, meat hook and censer blocks' models, which SwingingChainRenderer also
 # draws in a swinging chain's bottom link when one is hung there.
 IRON_CHAIN = {"iron": "dungeonblocks:block/dark_iron", "chain": "minecraft:block/chain"}

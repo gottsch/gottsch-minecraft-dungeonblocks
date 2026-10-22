@@ -5,7 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.0.1] - Unreleased
+## [3.1.0] - Unreleased
+
+### Added
+
+- **Skull Pile** — the Bone Pile's grimmer twin: a heap of skulls with a few femurs wedged between them, for an ossuary floor or the corner of a catacomb. It builds up the same way, in four stages: placed as two skulls on the floor, then use a bone on it to heap it higher, up to six skulls nearly a block tall. Like the Bone Pile you wade through it rather than stand on top, and the skulls look the way you were facing when you placed it. Crafted from a bone block and three bones.
+- **Catacomb Niches can be packed with skulls** — a new choice of remains that fills the recess floor to lintel, an ossuary wall in a single block. Cycle to it with an empty hand like the others, and freshly placed niches now sometimes pick it on their own, so a wall of niches mixes it in. Niches already placed keep what they hold.
+- **Large Candles** — pillar candles of plain cream wax that stand on the floor, up to knee height, for lighting a crypt or a shrine. Place one and it starts small; use another Large Candle on it to make it medium, then large. Breaking it gives back each candle that went into it. Lit with flint and steel, a fire charge or a burning arrow, and put out with an empty hand or by water, exactly like vanilla candles. The bigger the candle, the more light it gives. Crafted from two vanilla candles.
+- **Huge Candle** — a candle a block and a half tall and half a block across, placed and broken as one piece. Light either half and the whole candle burns, at full light.
+- **Candle Cluster** — four candles of different heights burnt down unevenly in one block, for a group of candles without filling the floor. Crafted from three Large Candles. The candle textures are placeholder art.
+- **Flagstones** — a floor of big irregular paving stones whose joints run across block edges, so a floor of it reads as one laid surface rather than a grid of blocks. The pattern repeats every three blocks each way, and each block picks its part of it from where it is placed, so a floor laid by hand lines up on its own. Cut from stone bricks in a stonecutter. Placeholder art for now.
+
+## [3.0.1] - 2026-10-09
 
 ### 🛠️ Fixed
 

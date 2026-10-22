@@ -105,6 +105,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		ModBlocks.DUNGEON_DOORS.forEach(door -> basicItem(ModBlocks.MAP.get(door.block()), mcLoc("item/" + door.wood() + "_door")));
 
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK));
+		// the pattern's middle tile, which crosses no edge of the sheet
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.FLAGSTONES), modLoc("block/flagstones_4"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK_SLAB));
@@ -209,7 +211,12 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.BLOODY_STEVE_HEAD_PIKE), modLoc("block/bloody_steve_head_pike_upper"));
 		// a full heap, though a placed pile starts small
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.BONE_PILE), modLoc("block/bone_pile_4"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.SKULL_PILE), modLoc("block/skull_pile_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.CHANDELIER), modLoc("block/chandelier"));
+		// the largest size, though a placed one starts small; the huge candle whole, shrunk to fit
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.LARGE_CANDLE), modLoc("block/large_candle_large"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.HUGE_CANDLE), modLoc("block/huge_candle_item"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.CANDLE_CLUSTER), modLoc("block/candle_cluster"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.PERCHED_GARGOYLE));
 		// the lever sconce shows as the torch sconce it pretends to be
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.LEVER_SCONCE), modLoc("block/torch_sconce_block"));

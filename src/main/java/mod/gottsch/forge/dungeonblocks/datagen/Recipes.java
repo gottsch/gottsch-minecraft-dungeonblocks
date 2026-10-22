@@ -340,6 +340,12 @@ public class Recipes extends RecipeProvider {
 					.requires(Items.BONE, 4)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.BONE))
 					.save(recipe);
+			// skull pile: a bone block for the skulls, as on the skull pike, and bones
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.SKULL_PILE.get())
+					.requires(Blocks.BONE_BLOCK)
+					.requires(Items.BONE, 3)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.BONE_BLOCK))
+					.save(recipe);
 
 			// chandelier: a row of candles on a row of iron, hung from a chain
 			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.CHANDELIER.get())
@@ -350,6 +356,28 @@ public class Recipes extends RecipeProvider {
 					.define('k', ItemTags.CANDLES)
 					.define('i', Items.IRON_INGOT)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CHAIN))
+					.save(recipe);
+
+			// large candles, of vanilla's plain candles (their wax): two make a Large Candle, three of
+			// those a cluster, and two stacked a Huge Candle
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.LARGE_CANDLE.get())
+					.requires(Items.CANDLE, 2)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.CANDLE))
+					.save(recipe);
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.CANDLE_CLUSTER.get())
+					.requires(ModBlocks.LARGE_CANDLE.get(), 3)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.LARGE_CANDLE.get()))
+					.save(recipe);
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.HUGE_CANDLE.get())
+					.pattern("c")
+					.pattern("c")
+					.define('c', ModBlocks.LARGE_CANDLE.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.LARGE_CANDLE.get()))
+					.save(recipe);
+
+			// flagstones: stone bricks, cut to slabs of floor
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.STONE_BRICKS), RecipeCategory.BUILDING_BLOCKS, ModBlocks.FLAGSTONES.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.STONE_BRICKS))
 					.save(recipe);
 
 			// gargoyles: the perched one and the bust are carved in a stonecutter; the statue stands

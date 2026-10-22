@@ -145,9 +145,9 @@ FAMILIES = [
     ("pillory", "Torture"), ("iron_maiden", "Torture"), ("gibbet", "Torture"),
     ("left_large", "Large Brick"), ("right_large", "Large Brick"), ("polished_basalt", "Stone and brick"),
     ("brazier", "Fire and light"), ("sconce", "Fire and light"), ("lantern", "Fire and light"),
-    ("chandelier", "Fire and light"), ("censer", "Hanging"), ("manacles", "Hanging"), ("meat_hook", "Hanging"),
+    ("chandelier", "Fire and light"), ("candle", "Fire and light"), ("censer", "Hanging"), ("manacles", "Hanging"), ("meat_hook", "Hanging"),
     ("swinging_chain", "Hanging"), ("cobweb", "Clutter"), ("hay_patch", "Clutter"), ("roots_", "Clutter"),
-    ("lichen", "Clutter"), ("mold", "Clutter"), ("bone_pile", "Clutter"), ("rubble_scatter", "Clutter"),
+    ("lichen", "Clutter"), ("mold", "Clutter"), ("bone_pile", "Clutter"), ("skull_pile", "Clutter"), ("rubble_scatter", "Clutter"),
 ]
 
 

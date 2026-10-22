@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "dungeonblocks:block/candle_cluster"
+    },
+    "lit=true": {
+      "model": "dungeonblocks:block/candle_cluster_lit"
+    }
+  }
+}

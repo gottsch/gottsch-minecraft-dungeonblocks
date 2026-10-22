@@ -187,6 +187,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         brazierBlock(ModBlocks.BRAZIER);
 
         simpleBlock(ModBlocks.SQUARE_STONE_BRICK.get());
+        patternTiles(ModBlocks.FLAGSTONES);
         simpleBlock(ModBlocks.MOSSY_SQUARE_STONE_BRICK.get());
         simpleBlock(ModBlocks.SQUARE_MUD_BRICK.get());
         // the facade / quarter facade variants are listed with the decorative blocks above
@@ -603,11 +604,35 @@ public class ModBlockStateProvider extends BlockStateProvider {
         // bone pile: a model per stage
         horizontalBlock(ModBlocks.BONE_PILE.get(), state -> models().getExistingFile(
                 modLoc("block/bone_pile_" + state.getValue(BonePileBlock.BONES))));
+        horizontalBlock(ModBlocks.SKULL_PILE.get(), state -> models().getExistingFile(
+                modLoc("block/skull_pile_" + state.getValue(BonePileBlock.BONES))));
 
         // chandelier: lit and unlit differ only in the candles' wicks
         getVariantBuilder(ModBlocks.CHANDELIER.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(models().getExistingFile(modLoc(state.getValue(ChandelierBlock.LIT)
                         ? "block/chandelier_lit" : "block/chandelier"))).build());
+
+        // large candles: a model per size or half, lit and unlit, which differ only in the wax's glow
+        getVariantBuilder(ModBlocks.LARGE_CANDLE.get()).forAllStatesExcept(state -> candle(state,
+                "large_candle_" + state.getValue(LargeCandleBlock.SIZE).getSerializedName()), CandlePropBlock.WATERLOGGED);
+        getVariantBuilder(ModBlocks.HUGE_CANDLE.get()).forAllStatesExcept(state -> candle(state,
+                "huge_candle_" + state.getValue(HugeCandleBlock.HALF).getSerializedName()), CandlePropBlock.WATERLOGGED);
+        getVariantBuilder(ModBlocks.CANDLE_CLUSTER.get()).forAllStatesExcept(state -> candle(state, "candle_cluster"),
+                CandlePropBlock.WATERLOGGED);
+    }
+
+    private ConfiguredModel[] candle(BlockState state, String model) {
+        return ConfiguredModel.builder().modelFile(models().getExistingFile(
+                modLoc("block/" + model + (state.getValue(CandlePropBlock.LIT) ? "_lit" : "")))).build();
+    }
+
+    /** A PatternTileBlock: a cube per TILE, textured <name>_<tile>. */
+    private void patternTiles(RegistryObject<Block> block) {
+        String name = block.getId().getPath();
+        getVariantBuilder(block.get()).forAllStates(state -> {
+            String tile = name + "_" + state.getValue(PatternTileBlock.TILE);
+            return ConfiguredModel.builder().modelFile(models().cubeAll(tile, modLoc("block/" + tile))).build();
+        });
     }
 
     /** A TallPropBlock: a model per half, turned to its FACING. */

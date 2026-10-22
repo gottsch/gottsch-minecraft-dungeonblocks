@@ -39,6 +39,7 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
@@ -187,6 +188,10 @@ public class ModBlocks {
     public static final RegistryObject<Block> SQUARE_STONE_BRICK = stone("square_stone_brick", () -> {
         return new Block(Properties.copy(Blocks.STONE_BRICKS));
     });
+    // A floor of irregular flagstones, a pattern three blocks square whose stones cross block edges:
+    // each block shows the TILE its position picks. Stone bricks' properties.
+    public static final RegistryObject<Block> FLAGSTONES = stone("flagstones",
+            () -> new PatternTileBlock(Properties.copy(Blocks.STONE_BRICKS)));
     public static final RegistryObject<Block> MOSSY_SQUARE_STONE_BRICK = stone("mossy_square_stone_brick", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
@@ -811,6 +816,22 @@ public class ModBlocks {
     public static final RegistryObject<Block> BONE_PILE = Registration.BLOCKS.register("bone_pile",
             () -> new BonePileBlock(Properties.of().mapColor(MapColor.SAND).strength(0.5F).sound(SoundType.BONE_BLOCK)
                     .noOcclusion().pushReaction(PushReaction.DESTROY)));
+    // The bone pile's heap of skulls: the same block, its stages the skulls' heights (6px each).
+    public static final RegistryObject<Block> SKULL_PILE = Registration.BLOCKS.register("skull_pile",
+            () -> new BonePileBlock(Properties.of().mapColor(MapColor.SAND).strength(0.5F).sound(SoundType.BONE_BLOCK)
+                    .noOcclusion().pushReaction(PushReaction.DESTROY),
+                    new VoxelShape[]{Block.box(0, 0, 0, 16, 6, 16), Block.box(0, 0, 0, 16, 6, 16),
+                            Block.box(0, 0, 0, 16, 11, 16), Block.box(0, 0, 0, 16, 16, 16)},
+                    new VoxelShape[]{Block.box(0, 0, 0, 16, 3, 16), Block.box(0, 0, 0, 16, 3, 16),
+                            Block.box(0, 0, 0, 16, 6, 16), Block.box(0, 0, 0, 16, 8, 16)}));
+    // Large candles, burning as vanilla candles do (CandlePropBlock): a vanilla candle's
+    // properties, with each one's own light.
+    public static final RegistryObject<Block> LARGE_CANDLE = Registration.BLOCKS.register("large_candle",
+            () -> new LargeCandleBlock(candleProperties().lightLevel(LargeCandleBlock.LIGHT_EMISSION)));
+    public static final RegistryObject<Block> HUGE_CANDLE = Registration.BLOCKS.register("huge_candle",
+            () -> new HugeCandleBlock(candleProperties().lightLevel(HugeCandleBlock.LIGHT_EMISSION)));
+    public static final RegistryObject<Block> CANDLE_CLUSTER = Registration.BLOCKS.register("candle_cluster",
+            () -> new CandleClusterBlock(candleProperties().lightLevel(CandleClusterBlock.LIGHT_EMISSION)));
     // An iron wheel of candles hung from the ceiling. The dungeon lantern's strength and sound, but
     // like the sconces it needs no tool to take down.
     public static final RegistryObject<Block> CHANDELIER = Registration.BLOCKS.register("chandelier",
@@ -837,6 +858,12 @@ public class ModBlocks {
 
     private static Properties fixtureProperties(SoundType sound) {
         return Properties.of().mapColor(MapColor.METAL).strength(3.5F).sound(sound).noOcclusion()
+                .pushReaction(PushReaction.DESTROY);
+    }
+
+    /** A vanilla candle's: wax, gone at a touch, broken rather than pushed by a piston. */
+    private static Properties candleProperties() {
+        return Properties.of().mapColor(MapColor.SAND).strength(0.1F).sound(SoundType.CANDLE).noOcclusion()
                 .pushReaction(PushReaction.DESTROY);
     }
 
