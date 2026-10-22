@@ -379,6 +379,20 @@ public class Recipes extends RecipeProvider {
 			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.STONE_BRICKS), RecipeCategory.BUILDING_BLOCKS, ModBlocks.FLAGSTONES.get())
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.STONE_BRICKS))
 					.save(recipe);
+			// their weathered twins as vanilla makes its stone bricks': cracked in a furnace,
+			// mossy with a vine or a moss block
+			SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.FLAGSTONES.get()), RecipeCategory.BUILDING_BLOCKS,
+							ModBlocks.CRACKED_FLAGSTONES.get(), 0.1F, 200)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.FLAGSTONES.get()))
+					.save(recipe);
+			for (Block moss : List.of(Blocks.VINE, Blocks.MOSS_BLOCK)) {
+				ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.MOSSY_FLAGSTONES.get())
+						.requires(ModBlocks.FLAGSTONES.get())
+						.requires(moss)
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(moss))
+						.save(recipe, new ResourceLocation(DungeonBlocks.MOD_ID, "mossy_flagstones_from_"
+								+ ForgeRegistries.BLOCKS.getKey(moss).getPath()));
+			}
 
 			// gargoyles: the perched one and the bust are carved in a stonecutter; the statue stands
 			// on a smooth stone plinth, a block of chiseled stone bricks for its body

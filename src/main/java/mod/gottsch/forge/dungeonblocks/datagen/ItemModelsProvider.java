@@ -107,6 +107,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK));
 		// the pattern's middle tile, which crosses no edge of the sheet
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.FLAGSTONES), modLoc("block/flagstones_4"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.CRACKED_FLAGSTONES), modLoc("block/cracked_flagstones_4"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.MOSSY_FLAGSTONES), modLoc("block/mossy_flagstones_4"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK_SLAB));

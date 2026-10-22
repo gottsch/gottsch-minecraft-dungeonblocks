@@ -192,6 +192,11 @@ public class ModBlocks {
     // each block shows the TILE its position picks. Stone bricks' properties.
     public static final RegistryObject<Block> FLAGSTONES = stone("flagstones",
             () -> new PatternTileBlock(Properties.copy(Blocks.STONE_BRICKS)));
+    // its weathered twins, the same pattern with the same TILE, so a weathering rule can swap them
+    public static final RegistryObject<Block> CRACKED_FLAGSTONES = stone("cracked_flagstones",
+            () -> new PatternTileBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
+    public static final RegistryObject<Block> MOSSY_FLAGSTONES = stone("mossy_flagstones",
+            () -> new PatternTileBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS)));
     public static final RegistryObject<Block> MOSSY_SQUARE_STONE_BRICK = stone("mossy_square_stone_brick", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });

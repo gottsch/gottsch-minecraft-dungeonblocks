@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Huge Candle** — a candle a block and a half tall and half a block across, placed and broken as one piece. Light either half and the whole candle burns, at full light.
 - **Candle Cluster** — four candles of different heights burnt down unevenly in one block, for a group of candles without filling the floor. Crafted from three Large Candles. The candle textures are placeholder art.
 - **Flagstones** — a floor of big irregular paving stones whose joints run across block edges, so a floor of it reads as one laid surface rather than a grid of blocks. The pattern repeats every three blocks each way, and each block picks its part of it from where it is placed, so a floor laid by hand lines up on its own. Cut from stone bricks in a stonecutter. Placeholder art for now.
+- **Cracked Flagstones** and **Mossy Flagstones** — the same floor, worn: slabs split by cracks and corners chipped away, or moss grown along the joints in drifts. Every block of either shows its wear, so a dungeon floor weathered patchily, with plain and worn blocks mixed, still reads block by block. The stones sit exactly where they do on plain Flagstones, so the three mix freely in one floor without breaking the pattern. Cracked comes from smelting Flagstones; Mossy from Flagstones and a vine or a moss block. Placeholder art for now.
 
 ## [3.0.1] - 2026-10-09
 
