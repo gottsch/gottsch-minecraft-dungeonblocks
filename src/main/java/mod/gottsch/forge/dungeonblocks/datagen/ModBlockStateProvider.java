@@ -619,8 +619,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 "large_candle_" + state.getValue(LargeCandleBlock.SIZE).getSerializedName()), CandlePropBlock.WATERLOGGED);
         getVariantBuilder(ModBlocks.HUGE_CANDLE.get()).forAllStatesExcept(state -> candle(state,
                 "huge_candle_" + state.getValue(HugeCandleBlock.HALF).getSerializedName()), CandlePropBlock.WATERLOGGED);
-        getVariantBuilder(ModBlocks.CANDLE_CLUSTER.get()).forAllStatesExcept(state -> candle(state, "candle_cluster"),
-                CandlePropBlock.WATERLOGGED);
+        // the cluster turned to its FACING: the model is authored with its short candles to the north
+        getVariantBuilder(ModBlocks.CANDLE_CLUSTER.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
+                .modelFile(candle(state, "candle_cluster")[0].model)
+                .rotationY(yaw(state.getValue(CandleClusterBlock.FACING))).build(), CandlePropBlock.WATERLOGGED);
     }
 
     private ConfiguredModel[] candle(BlockState state, String model) {
