@@ -223,6 +223,15 @@ public class Recipes extends RecipeProvider {
 			// sarcophagi: a lid of slabs over a chest of the carved block
 			sarcophagus(recipe, ModBlocks.STONE_SARCOPHAGUS, Blocks.SMOOTH_STONE_SLAB, Blocks.CHISELED_STONE_BRICKS);
 			sarcophagus(recipe, ModBlocks.DEEPSLATE_SARCOPHAGUS, Blocks.POLISHED_DEEPSLATE_SLAB, Blocks.CHISELED_DEEPSLATE);
+			// the altar: a slab top on polished deepslate, a carved block in the middle of its front
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.DEEPSLATE_ALTAR.get())
+					.pattern("sss")
+					.pattern("pcp")
+					.define('s', Blocks.POLISHED_DEEPSLATE_SLAB)
+					.define('p', Blocks.POLISHED_DEEPSLATE)
+					.define('c', Blocks.CHISELED_DEEPSLATE)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CHISELED_DEEPSLATE))
+					.save(recipe);
 
 			// iron maiden: an iron case around iron bars
 			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.IRON_MAIDEN.get())

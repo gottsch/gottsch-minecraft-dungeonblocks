@@ -407,6 +407,19 @@ public class ModBlockStateProvider extends BlockStateProvider {
             });
         });
 
+        // altar: per-material children of the templates (blockbench/altar_*.bbmodel), a model per
+        // part, and the three side by side for the item
+        Map<RegistryObject<Block>, ResourceLocation[]> altars = Map.of(
+                ModBlocks.DEEPSLATE_ALTAR, new ResourceLocation[] {mcLoc("block/polished_deepslate"),
+                        mcLoc("block/polished_deepslate"), mcLoc("block/chiseled_deepslate")});
+        altars.forEach((block, tex) -> {
+            String name = block.getId().getPath();
+            altarModel(name, "item", tex);
+            getVariantBuilder(block.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
+                    .modelFile(altarModel(name, state.getValue(AltarBlock.PART).getSerializedName(), tex))
+                    .rotationY(yaw(state.getValue(AltarBlock.FACING))).build(), AltarBlock.WATERLOGGED);
+        });
+
         // iron maiden: multipart, so each state layers the Blockbench body over the OBJ spikes
         MultiPartBlockStateBuilder maiden = getMultipartBuilder(ModBlocks.IRON_MAIDEN.get());
         for (Direction facing : Direction.Plane.HORIZONTAL) {
@@ -662,6 +675,13 @@ public class ModBlockStateProvider extends BlockStateProvider {
                         modLoc("block/template_sarcophagus_" + part + "_" + variant))
                 .texture("side", tex[0]).texture("lid", tex[1]).texture("effigy", tex[2])
                 .texture("particle", tex[1]);
+    }
+
+    /** `tex` is body, top, panel. */
+    private ModelFile altarModel(String name, String part, ResourceLocation[] tex) {
+        return models().withExistingParent(name + "_" + part, modLoc("block/template_altar_" + part))
+                .texture("body", tex[0]).texture("top", tex[1]).texture("panel", tex[2])
+                .texture("particle", tex[0]);
     }
 
     /** The y rotation that turns a north-authored model to face `facing`. */

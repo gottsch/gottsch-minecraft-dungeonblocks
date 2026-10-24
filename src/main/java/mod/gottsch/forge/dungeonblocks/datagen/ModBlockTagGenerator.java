@@ -147,6 +147,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // Dungeon furniture matches nothing in stone_blocks either. The sarcophagi copy stone bricks
         // (any pickaxe, like the mod's other stone); the iron pieces are pickaxe-only like iron bars.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.STONE_SARCOPHAGUS.get(), ModBlocks.DEEPSLATE_SARCOPHAGUS.get(),
+                ModBlocks.DEEPSLATE_ALTAR.get(),
                 ModBlocks.IRON_MAIDEN.get(), ModBlocks.GIBBET.get());
 
         // The pillory and the rack are dark oak, and match nothing in stone_blocks: an axe, no tier

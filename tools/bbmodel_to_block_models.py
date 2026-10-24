@@ -201,6 +201,18 @@ for occupied in ("", "occupied_"):
                      {"frame": (0, 0, 0), f"ropes_{n}": (0, 0, 0), **limbs}))
 
 JOBS.append(("dark_iron_ladder", "dark_iron_ladder", {"iron": "dungeonblocks:block/dark_iron"}, {"ladder": (0, 0, 0)}))
+# the altar: templates, as the sarcophagus's are; datagen gives each material body / top / panel
+for part in ("left", "middle", "right"):
+    JOBS.append((f"altar_{part}", f"template_altar_{part}",
+                 {"body": "minecraft:block/polished_deepslate", "top": "minecraft:block/polished_deepslate",
+                  "panel": "minecraft:block/chiseled_deepslate"}, {"altar": (0, 0, 0)}))
+# and the whole altar for the item, centred on the middle: the left part is east (x +16), seen
+# from the front. A template too: datagen's per-material item models are its children.
+STACKS.append(("template_altar_item", {"body": "minecraft:block/polished_deepslate",
+                                       "top": "minecraft:block/polished_deepslate",
+                                       "panel": "minecraft:block/chiseled_deepslate"}, [
+    ("altar_left", {"altar": (16, 0, 0)}), ("altar_middle", {"altar": (0, 0, 0)}),
+    ("altar_right", {"altar": (-16, 0, 0)})], two_block_display(0.3)))
 
 # models whose textures have see-through pixels: the skeleton's ribs, the chain's links. Without
 # cutout those pixels draw black.

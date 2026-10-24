@@ -720,6 +720,9 @@ public class ModBlocks {
             () -> new SarcophagusBlock(Properties.copy(Blocks.STONE_BRICKS)));
     public static final RegistryObject<Block> DEEPSLATE_SARCOPHAGUS = Registration.BLOCKS.register("deepslate_sarcophagus",
             () -> new SarcophagusBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS)));
+    // An altar three blocks wide, placed and broken as one; pistons cannot split it.
+    public static final RegistryObject<Block> DEEPSLATE_ALTAR = Registration.BLOCKS.register("deepslate_altar",
+            () -> new AltarBlock(Properties.copy(Blocks.POLISHED_DEEPSLATE).noOcclusion().pushReaction(PushReaction.BLOCK)));
     public static final RegistryObject<Block> IRON_MAIDEN = Registration.BLOCKS.register("iron_maiden",
             () -> new IronMaidenBlock(Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops()
                     .strength(5.0F, 6.0F).sound(SoundType.METAL).noOcclusion()));

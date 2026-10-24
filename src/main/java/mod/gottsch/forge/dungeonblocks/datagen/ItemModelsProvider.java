@@ -188,6 +188,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		// multi-block props show the part that says what they are: the effigy's head end
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.STONE_SARCOPHAGUS), modLoc("block/stone_sarcophagus_head_closed"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_SARCOPHAGUS), modLoc("block/deepslate_sarcophagus_head_closed"));
+		// the altar whole, its three parts side by side
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_ALTAR), modLoc("block/deepslate_altar_item"));
 		// the iron maiden whole, shut, as the gibbet
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.IRON_MAIDEN), modLoc("block/iron_maiden_item"));
 		// no one block of the gibbet reads as a gibbet, so the item is the whole cage at a third size

@@ -789,7 +789,40 @@ def dark_iron_ladder():
     return p
 
 
+ALTAR_TEX = {"body": "minecraft:block/polished_deepslate", "top": "minecraft:block/polished_deepslate",
+             "panel": "minecraft:block/chiseled_deepslate"}
+
+
+def altar(part):
+    """An altar three blocks wide (left, middle, right as seen from in front), authored facing north:
+    its front, the side a congregation sees, is the north face, so the viewer's left is east and the
+    left part's open end is at x=16. A plinth, an inset body, a moulding and a top slab that
+    overhangs the body all round; a carved panel on the middle's front and a pilaster at each outer
+    front corner. The top is a whole 16x16 at every part, so candles stand on it. The parts only
+    differ at their ends; the joins (west of left, east of right, both of middle) are left open.
+    Texture keys body / top / panel are templates: datagen gives each material its own."""
+    p = Project(f"altar_{part}", ALTAR_TEX)
+    left, right = part == "left", part == "right"
+    x0 = lambda inset: inset if right else 0          # the west end: open unless this is the right part
+    x1 = lambda inset: 16 - inset if left else 16     # the east end: open unless this is the left part
+    joins = (("west",) if not right else ()) + (("east",) if not left else ())
+    p.box("altar", "plinth", (x0(1), 0, 1), (x1(1), 2, 15), "body", skip=joins)
+    p.box("altar", "body", (x0(2), 2, 3), (x1(2), 12, 13), "body", skip=joins + ("down", "up"))
+    p.box("altar", "moulding", (x0(1), 12, 2), (x1(1), 13, 14), "body", skip=joins + ("up",))
+    p.box("altar", "top", (0, 13, 0), (16, 16, 16), "top", skip=joins)
+    if part == "middle":
+        p.box("altar", "panel", (3, 4, 2), (13, 10, 3), {"north": "panel", "east": "body", "west": "body",
+                                                         "up": "body", "down": "body"})
+    else:
+        x = (2, 5) if right else (11, 14)
+        p.box("altar", "pilaster", (x[0], 2, 2), (x[1], 12, 3), "body", skip=("down", "up", "south"))
+    return p
+
+
 PROJECTS = {
+    "altar_left": lambda: altar("left"),
+    "altar_middle": lambda: altar("middle"),
+    "altar_right": lambda: altar("right"),
     "catacomb_niche": catacomb_niche,
     "pedestal": pedestal,
     "rubble_scatter": rubble_scatter,
