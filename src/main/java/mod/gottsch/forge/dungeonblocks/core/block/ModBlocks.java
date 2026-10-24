@@ -817,6 +817,15 @@ public class ModBlocks {
             () -> new TallPropBlock(Properties.copy(Blocks.STONE).noOcclusion(),
                     Shapes.or(Block.box(1, 0, 1, 15, 3, 15), Block.box(3, 3, 3, 13, 16, 13)),
                     Block.box(2, 0, 2, 14, 15.75, 14)));
+    // The same three carved in deepslate, for the deep levels: polished deepslate's properties.
+    public static final RegistryObject<Block> PERCHED_DEEPSLATE_GARGOYLE = Registration.BLOCKS.register("perched_deepslate_gargoyle",
+            () -> new StatueBlock(Properties.copy(Blocks.POLISHED_DEEPSLATE).noOcclusion(), 2, 2, 14, 14, 15.5));
+    public static final RegistryObject<Block> DEEPSLATE_GARGOYLE_BUST = Registration.BLOCKS.register("deepslate_gargoyle_bust",
+            () -> new StatueBlock(Properties.copy(Blocks.POLISHED_DEEPSLATE).noOcclusion(), 2, 4, 14, 12, 14.5));
+    public static final RegistryObject<Block> DEEPSLATE_GARGOYLE_STATUE = Registration.BLOCKS.register("deepslate_gargoyle_statue",
+            () -> new TallPropBlock(Properties.copy(Blocks.POLISHED_DEEPSLATE).noOcclusion(),
+                    Shapes.or(Block.box(1, 0, 1, 15, 3, 15), Block.box(3, 3, 3, 13, 16, 13)),
+                    Block.box(2, 0, 2, 14, 15.75, 14)));
     // A heap of loose bones, filled in stages. Breaks quickly by hand, like a pile of anything loose.
     public static final RegistryObject<Block> BONE_PILE = Registration.BLOCKS.register("bone_pile",
             () -> new BonePileBlock(Properties.of().mapColor(MapColor.SAND).strength(0.5F).sound(SoundType.BONE_BLOCK)

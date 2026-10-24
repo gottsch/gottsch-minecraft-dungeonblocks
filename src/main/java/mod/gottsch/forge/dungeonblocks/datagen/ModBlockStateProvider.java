@@ -602,6 +602,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 objModel("gargoyle_statue_lower", "gargoyle_statue_lower", gargoyle, plinth).renderType("minecraft:cutout"),
                 objModel("gargoyle_statue_upper", "gargoyle_statue_upper", gargoyle, plinth).renderType("minecraft:cutout"));
         objModel("gargoyle_statue_item", "gargoyle_statue_item", gargoyle, plinth).renderType("minecraft:cutout");
+        // the same models in deepslate, on polished deepslate plinths
+        ResourceLocation deepslateGargoyle = modLoc("block/deepslate_gargoyle_statue");
+        ResourceLocation deepslatePlinth = mcLoc("block/polished_deepslate");
+        horizontalBlock(ModBlocks.PERCHED_DEEPSLATE_GARGOYLE.get(),
+                objModel("perched_deepslate_gargoyle", "gargoyle_perched", deepslateGargoyle, deepslatePlinth).renderType("minecraft:cutout"));
+        horizontalBlock(ModBlocks.DEEPSLATE_GARGOYLE_BUST.get(),
+                objModel("deepslate_gargoyle_bust", "gargoyle_bust", deepslateGargoyle, deepslatePlinth).renderType("minecraft:cutout"));
+        tallProp(ModBlocks.DEEPSLATE_GARGOYLE_STATUE,
+                objModel("deepslate_gargoyle_statue_lower", "gargoyle_statue_lower", deepslateGargoyle, deepslatePlinth).renderType("minecraft:cutout"),
+                objModel("deepslate_gargoyle_statue_upper", "gargoyle_statue_upper", deepslateGargoyle, deepslatePlinth).renderType("minecraft:cutout"));
+        objModel("deepslate_gargoyle_statue_item", "gargoyle_statue_item", deepslateGargoyle, deepslatePlinth).renderType("minecraft:cutout");
 
         // bone pile: a model per stage
         horizontalBlock(ModBlocks.BONE_PILE.get(), state -> models().getExistingFile(

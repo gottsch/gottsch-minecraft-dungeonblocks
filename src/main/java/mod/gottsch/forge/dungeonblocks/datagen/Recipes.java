@@ -410,6 +410,22 @@ public class Recipes extends RecipeProvider {
 					.define('s', Blocks.SMOOTH_STONE)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CHISELED_STONE_BRICKS))
 					.save(recipe);
+			// the deepslate ones the same way: cut from cobbled deepslate, as vanilla's deepslate
+			// pieces are; the statue of chiseled deepslate on a polished deepslate plinth
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.COBBLED_DEEPSLATE), RecipeCategory.DECORATIONS, ModBlocks.PERCHED_DEEPSLATE_GARGOYLE.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.COBBLED_DEEPSLATE))
+					.save(recipe);
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.COBBLED_DEEPSLATE), RecipeCategory.DECORATIONS, ModBlocks.DEEPSLATE_GARGOYLE_BUST.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.COBBLED_DEEPSLATE))
+					.save(recipe);
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.DEEPSLATE_GARGOYLE_STATUE.get())
+					.pattern("c")
+					.pattern("c")
+					.pattern("s")
+					.define('c', Blocks.CHISELED_DEEPSLATE)
+					.define('s', Blocks.POLISHED_DEEPSLATE)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CHISELED_DEEPSLATE))
+					.save(recipe);
 
 			// the secret passage: a torch sconce with a lever in it; a door of the wall's own stone,
 			// its redstone set in; a pedestal of polished andesite

@@ -235,6 +235,9 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.GARGOYLE_BUST));
 		// the whole statue, shrunk to fit: its top half alone is a pair of wings
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.GARGOYLE_STATUE), modLoc("block/gargoyle_statue_item"));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.PERCHED_DEEPSLATE_GARGOYLE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_GARGOYLE_BUST));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_GARGOYLE_STATUE), modLoc("block/deepslate_gargoyle_statue_item"));
 		// the chain fixtures show the model they hang as - bar the meat hook, a thin line of iron
 		// at icon size, which has a flat icon (tools/gen_prop_item_icons.py) as vanilla's chain does
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.MANACLES), modLoc("block/chain_fixture_manacles"));

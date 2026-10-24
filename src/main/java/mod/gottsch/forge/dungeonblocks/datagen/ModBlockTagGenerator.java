@@ -165,9 +165,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         ModBlocks.COFFINS.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.SKULL_PIKE.get(), ModBlocks.ZOMBIE_HEAD_PIKE.get(),
                 ModBlocks.BLOODY_STEVE_HEAD_PIKE.get());
-        // The gargoyles copy stone, requiresCorrectToolForDrops included, and match nothing in
-        // stone_blocks: any pickaxe, as vanilla stone.
-        for (RegistryObject<Block> b : List.of(ModBlocks.PERCHED_GARGOYLE, ModBlocks.GARGOYLE_BUST, ModBlocks.GARGOYLE_STATUE)) {
+        // The gargoyles copy stone (or polished deepslate), requiresCorrectToolForDrops included,
+        // and match nothing in stone_blocks: any pickaxe, as vanilla stone and deepslate.
+        for (RegistryObject<Block> b : List.of(ModBlocks.PERCHED_GARGOYLE, ModBlocks.GARGOYLE_BUST, ModBlocks.GARGOYLE_STATUE,
+                ModBlocks.PERCHED_DEEPSLATE_GARGOYLE, ModBlocks.DEEPSLATE_GARGOYLE_BUST, ModBlocks.DEEPSLATE_GARGOYLE_STATUE)) {
             this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get());
         }
         // The lever sconce is the torch sconce's twin: pickaxe, no tier. The hidden doors are doors
