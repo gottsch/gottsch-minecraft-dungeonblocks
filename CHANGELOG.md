@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - desert
+
+### Added
+
+- **Desert Flagstones** — broken red sandstone paving half buried in sand, for a desert ruin or a tomb approach. Angular stones lie in drifts with sand between them, and like Flagstones the pattern repeats every three blocks and lines up on its own as you lay it; every block shows some stone, so a floor of it never has a bare patch of plain sand. Crafted from red sandstone and sand. Placeholder art for now.
+
 ## [3.1.0] - Unreleased
 
 ### Added

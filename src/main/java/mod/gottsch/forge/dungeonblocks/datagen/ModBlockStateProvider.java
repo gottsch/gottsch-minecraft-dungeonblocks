@@ -190,6 +190,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         patternTiles(ModBlocks.FLAGSTONES);
         patternTiles(ModBlocks.CRACKED_FLAGSTONES);
         patternTiles(ModBlocks.MOSSY_FLAGSTONES);
+        patternTiles(ModBlocks.DESERT_FLAGSTONES);
         simpleBlock(ModBlocks.MOSSY_SQUARE_STONE_BRICK.get());
         simpleBlock(ModBlocks.SQUARE_MUD_BRICK.get());
         // the facade / quarter facade variants are listed with the decorative blocks above

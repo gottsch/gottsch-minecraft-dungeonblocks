@@ -197,6 +197,10 @@ public class ModBlocks {
             () -> new PatternTileBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
     public static final RegistryObject<Block> MOSSY_FLAGSTONES = stone("mossy_flagstones",
             () -> new PatternTileBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS)));
+    // Desert flagstones: broken red sandstone paving sunk in sand, the same three-block pattern.
+    // Red sandstone's properties, the need for a pickaxe included.
+    public static final RegistryObject<Block> DESERT_FLAGSTONES = stone("desert_flagstones",
+            () -> new PatternTileBlock(Properties.copy(Blocks.RED_SANDSTONE)));
     public static final RegistryObject<Block> MOSSY_SQUARE_STONE_BRICK = stone("mossy_square_stone_brick", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });

@@ -109,6 +109,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.FLAGSTONES), modLoc("block/flagstones_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.CRACKED_FLAGSTONES), modLoc("block/cracked_flagstones_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.MOSSY_FLAGSTONES), modLoc("block/mossy_flagstones_4"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.DESERT_FLAGSTONES), modLoc("block/desert_flagstones_4"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK_SLAB));

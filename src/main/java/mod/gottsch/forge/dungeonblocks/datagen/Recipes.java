@@ -394,6 +394,13 @@ public class Recipes extends RecipeProvider {
 								+ ForgeRegistries.BLOCKS.getKey(moss).getPath()));
 			}
 
+			// desert flagstones: red sandstone laid in sand, two at a time
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.DESERT_FLAGSTONES.get(), 2)
+					.requires(Blocks.RED_SANDSTONE)
+					.requires(Blocks.SAND)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.RED_SANDSTONE))
+					.save(recipe);
+
 			// gargoyles: the perched one and the bust are carved in a stonecutter; the statue stands
 			// on a smooth stone plinth, a block of chiseled stone bricks for its body
 			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.STONE), RecipeCategory.DECORATIONS, ModBlocks.PERCHED_GARGOYLE.get())
