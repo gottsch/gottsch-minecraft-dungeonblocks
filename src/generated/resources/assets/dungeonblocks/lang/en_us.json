@@ -972,6 +972,7 @@
   "entity.dungeonblocks.thin_red_pot": "Red Pot",
   "entity.dungeonblocks.thin_stone_pot": "Stone Pot",
   "entity.dungeonblocks.tome": "Tome",
+  "entity.dungeonblocks.wooden_bucket": "Wooden Bucket",
   "entity.dungeonblocks.yellow_flask": "Yellow Flask",
   "item.dungeonblocks.big_blue_potion": "Big Blue Potion",
   "item.dungeonblocks.big_green_potion": "Big Green Potion",
@@ -1008,6 +1009,7 @@
   "item.dungeonblocks.thin_red_pot": "Red Pot",
   "item.dungeonblocks.thin_stone_pot": "Stone Pot",
   "item.dungeonblocks.wind_scroll": "Wind Scroll",
+  "item.dungeonblocks.wooden_bucket": "Wooden Bucket",
   "item.dungeonblocks.yellow_flask": "Yellow Flask",
   "itemGroup.dungeonblocks": "DungeonBlocks",
   "itemGroup.dungeonblocks.entities": "DungeonBlocks Entities"

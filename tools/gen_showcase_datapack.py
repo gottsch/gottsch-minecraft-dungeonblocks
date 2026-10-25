@@ -257,7 +257,7 @@ def main():
     for pid in ("pot", "squat_clay_pot", "thin_clay_pot", "stone_pot", "squat_stone_pot", "thin_stone_pot",
                 "red_pot", "squat_red_pot", "thin_red_pot", "blue_pot", "squat_blue_pot", "thin_blue_pot",
                 "big_red_potion", "big_yellow_potion", "big_blue_potion", "big_green_potion",
-                "red_flask", "yellow_flask", "blue_flask", "green_flask"):
+                "red_flask", "yellow_flask", "blue_flask", "green_flask", "wooden_bucket"):
         ents.append((pid, "{}"))
     for v in ("old_binder", "crimson_magic_book", "golden_skull_tome", "occult_bible", "ominous_manuscript",
               "tall_leather_tome"):

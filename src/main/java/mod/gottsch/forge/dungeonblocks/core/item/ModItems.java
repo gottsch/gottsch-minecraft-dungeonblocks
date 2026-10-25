@@ -110,6 +110,8 @@ public class ModItems {
 			() -> new PotItem(() -> ModEntityTypes.BIG_GREEN_POTION.get(), new Item.Properties()));
 	public static final RegistryObject<Item> GREEN_FLASK = Registration.ITEMS.register("green_flask",
 			() -> new PotItem(() -> ModEntityTypes.GREEN_FLASK.get(), new Item.Properties()));
+	public static final RegistryObject<Item> WOODEN_BUCKET = Registration.ITEMS.register("wooden_bucket",
+			() -> new PotItem(() -> ModEntityTypes.WOODEN_BUCKET.get(), new Item.Properties()));
 
 	/** A tome item per cover, each laying down a TomeEntity with that cover. */
 	public static final Map<TomeVariant, RegistryObject<Item>> TOMES = tomes();
@@ -148,7 +150,8 @@ public class ModItems {
 			BIG_RED_POTION, RED_FLASK,
 			BIG_YELLOW_POTION, YELLOW_FLASK,
 			BIG_BLUE_POTION, BLUE_FLASK,
-			BIG_GREEN_POTION, GREEN_FLASK), Stream.concat(TOMES.values().stream(), SCROLLS.values().stream())).toList();
+			BIG_GREEN_POTION, GREEN_FLASK,
+			WOODEN_BUCKET), Stream.concat(TOMES.values().stream(), SCROLLS.values().stream())).toList();
 
 	public static void register() {
 		Registration.registerItems();

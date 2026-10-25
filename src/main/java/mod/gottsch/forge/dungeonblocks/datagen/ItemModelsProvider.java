@@ -297,6 +297,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		potItem(ModItems.BLUE_FLASK);
 		potItem(ModItems.BIG_GREEN_POTION);
 		potItem(ModItems.GREEN_FLASK);
+		potItem(ModItems.WOODEN_BUCKET);
 		// a tome's item is the icon its cover was taken from, as it is
 		ModItems.TOMES.values().forEach(tome -> basicItem(tome.get()));
 		// and a scroll's, likewise
