@@ -819,7 +819,33 @@ def altar(part):
     return p
 
 
+def offering_bowl():
+    """A bowl on a short foot (oxidized copper as shipped, so it reads apart from the stone it sits on), for an altar or the floor before it: 8px across and 6 tall. Its
+    contents are groups the converter switches: nothing, `blood` (a still surface just under the
+    rim) or `soul_fire` (a bed of soul soil with two crossed planes of vanilla's soul fire). The soul
+    fire texture is an animation strip, 16 wide and 512 tall, and the project's UV space is the
+    whole strip, so its planes take UV [0, 0, 16, 512]: that converts to 0-16, one frame, which is
+    what the game animates. (Blockbench shows the strip squashed; the game does not.) Texture key
+    `stone` is a template: datagen gives each material its own."""
+    p = Project("offering_bowl", {"stone": "minecraft:block/oxidized_copper", "blood": "dungeonblocks:block/blood_pool",
+                                  "soil": "minecraft:block/soul_soil", "fire": "minecraft:block/soul_fire_0"})
+    p.box("bowl", "foot", (6, 0, 6), (10, 2, 10), "stone", skip=("up",))
+    p.box("bowl", "base", (4, 2, 4), (12, 3, 12), "stone")
+    p.box("bowl", "wall_north", (4, 3, 4), (12, 6, 5), "stone", skip=("down",))
+    p.box("bowl", "wall_south", (4, 3, 11), (12, 6, 12), "stone", skip=("down",))
+    p.box("bowl", "wall_west", (4, 3, 5), (5, 6, 11), "stone", skip=("down", "north", "south"))
+    p.box("bowl", "wall_east", (11, 3, 5), (12, 6, 11), "stone", skip=("down", "north", "south"))
+    p.box("blood", "surface", (5, 3, 5), (11, 5, 11), {"up": "blood"})
+    p.box("soul_fire", "bed", (5, 3, 5), (11, 4, 11), {"up": "soil"})
+    strip = {"north": [0, 0, 16, 512], "south": [0, 0, 16, 512]}
+    for n in (0, 1):
+        p.box("soul_fire", f"flame_{n}", (4, 4, 8), (12, 12, 8), {"north": "fire", "south": "fire"}, uv=strip,
+              rot=("y", 45 if n == 0 else -45), origin=(8, 8, 8))
+    return p
+
+
 PROJECTS = {
+    "offering_bowl": offering_bowl,
     "altar_left": lambda: altar("left"),
     "altar_middle": lambda: altar("middle"),
     "altar_right": lambda: altar("right"),

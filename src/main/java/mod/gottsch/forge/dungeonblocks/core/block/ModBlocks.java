@@ -197,6 +197,12 @@ public class ModBlocks {
             () -> new PatternTileBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
     public static final RegistryObject<Block> MOSSY_FLAGSTONES = stone("mossy_flagstones",
             () -> new PatternTileBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS)));
+    // A ritual circle chalked on a slab of polished deepslate or blackstone, three blocks across:
+    // kept where its author drew it by structures, which only turn it (RitualCircleBlock).
+    public static final RegistryObject<Block> DEEPSLATE_RITUAL_CIRCLE = stone("deepslate_ritual_circle",
+            () -> new RitualCircleBlock(Properties.copy(Blocks.POLISHED_DEEPSLATE)));
+    public static final RegistryObject<Block> BLACKSTONE_RITUAL_CIRCLE = stone("blackstone_ritual_circle",
+            () -> new RitualCircleBlock(Properties.copy(Blocks.POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> MOSSY_SQUARE_STONE_BRICK = stone("mossy_square_stone_brick", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
@@ -723,6 +729,11 @@ public class ModBlocks {
     // An altar three blocks wide, placed and broken as one; pistons cannot split it.
     public static final RegistryObject<Block> DEEPSLATE_ALTAR = Registration.BLOCKS.register("deepslate_altar",
             () -> new AltarBlock(Properties.copy(Blocks.POLISHED_DEEPSLATE).noOcclusion().pushReaction(PushReaction.BLOCK)));
+    // An old copper bowl, green with age, that holds nothing, blood, or soul fire (light 10). Copper
+    // so it reads as a vessel set on the altar, not a lump of the altar's own stone.
+    public static final RegistryObject<Block> COPPER_OFFERING_BOWL = Registration.BLOCKS.register("copper_offering_bowl",
+            () -> new OfferingBowlBlock(Properties.copy(Blocks.OXIDIZED_COPPER).noOcclusion()
+                    .lightLevel(OfferingBowlBlock.LIGHT_EMISSION)));
     public static final RegistryObject<Block> IRON_MAIDEN = Registration.BLOCKS.register("iron_maiden",
             () -> new IronMaidenBlock(Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops()
                     .strength(5.0F, 6.0F).sound(SoundType.METAL).noOcclusion()));
@@ -784,6 +795,9 @@ public class ModBlocks {
                     .noCollission().lightLevel(state -> 14).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> PEDESTAL = Registration.BLOCKS.register("pedestal",
             () -> new PedestalBlock(Properties.copy(Blocks.POLISHED_ANDESITE).noOcclusion()));
+    // the same pedestal in polished blackstone, for the dark deep levels
+    public static final RegistryObject<Block> BLACKSTONE_PEDESTAL = Registration.BLOCKS.register("blackstone_pedestal",
+            () -> new PedestalBlock(Properties.copy(Blocks.POLISHED_BLACKSTONE).noOcclusion()));
     // One hidden door per wall stone Dungeons2 builds in - its motifs' walls, and the cracked and
     // mossy stone bricks its weathering turns them into - each copying its stone's properties.
     public static final Map<RegistryObject<Block>, Supplier<Block>> HIDDEN_DOORS = new LinkedHashMap<>();

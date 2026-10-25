@@ -206,6 +206,11 @@ for part in ("left", "middle", "right"):
     JOBS.append((f"altar_{part}", f"template_altar_{part}",
                  {"body": "minecraft:block/polished_deepslate", "top": "minecraft:block/polished_deepslate",
                   "panel": "minecraft:block/chiseled_deepslate"}, {"altar": (0, 0, 0)}))
+# the offering bowl, one model per contents: templates, datagen gives each material its `stone`
+BOWL = {"stone": "minecraft:block/oxidized_copper", "blood": "dungeonblocks:block/blood_pool",
+        "soil": "minecraft:block/soul_soil", "fire": "minecraft:block/soul_fire_0"}
+for contents, groups in (("empty", {}), ("blood", {"blood": (0, 0, 0)}), ("soul_fire", {"soul_fire": (0, 0, 0)})):
+    JOBS.append(("offering_bowl", f"template_offering_bowl_{contents}", BOWL, {"bowl": (0, 0, 0), **groups}))
 # and the whole altar for the item, centred on the middle: the left part is east (x +16), seen
 # from the front. A template too: datagen's per-material item models are its children.
 STACKS.append(("template_altar_item", {"body": "minecraft:block/polished_deepslate",

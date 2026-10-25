@@ -39,6 +39,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -223,6 +224,22 @@ public class Recipes extends RecipeProvider {
 			// sarcophagi: a lid of slabs over a chest of the carved block
 			sarcophagus(recipe, ModBlocks.STONE_SARCOPHAGUS, Blocks.SMOOTH_STONE_SLAB, Blocks.CHISELED_STONE_BRICKS);
 			sarcophagus(recipe, ModBlocks.DEEPSLATE_SARCOPHAGUS, Blocks.POLISHED_DEEPSLATE_SLAB, Blocks.CHISELED_DEEPSLATE);
+			// the offering bowl: three copper ingots in a bowl's shape, as vanilla's bowl is planks
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.COPPER_OFFERING_BOWL.get())
+					.pattern("c c")
+					.pattern(" c ")
+					.define('c', Items.COPPER_INGOT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.COPPER_INGOT))
+					.save(recipe);
+			// the ritual circles: their polished stone chalked with bone meal, one tile each
+			for (Map.Entry<RegistryObject<Block>, Block> circle : Map.of(ModBlocks.DEEPSLATE_RITUAL_CIRCLE, Blocks.POLISHED_DEEPSLATE,
+					ModBlocks.BLACKSTONE_RITUAL_CIRCLE, Blocks.POLISHED_BLACKSTONE).entrySet()) {
+				ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, circle.getKey().get())
+						.requires(circle.getValue())
+						.requires(Items.BONE_MEAL)
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(circle.getValue()))
+						.save(recipe);
+			}
 			// the altar: a slab top on polished deepslate, a carved block in the middle of its front
 			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.DEEPSLATE_ALTAR.get())
 					.pattern("sss")
@@ -452,13 +469,16 @@ public class Recipes extends RecipeProvider {
 							.define('r', Items.REDSTONE)
 							.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(source.get()))
 							.save(recipe));
-			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.PEDESTAL.get())
-					.pattern("sss")
-					.pattern(" s ")
-					.pattern("sss")
-					.define('s', Blocks.POLISHED_ANDESITE)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.POLISHED_ANDESITE))
-					.save(recipe);
+			for (Map.Entry<RegistryObject<Block>, Block> pedestal : Map.of(ModBlocks.PEDESTAL, Blocks.POLISHED_ANDESITE,
+					ModBlocks.BLACKSTONE_PEDESTAL, Blocks.POLISHED_BLACKSTONE).entrySet()) {
+				ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, pedestal.getKey().get())
+						.pattern("sss")
+						.pattern(" s ")
+						.pattern("sss")
+						.define('s', pedestal.getValue())
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(pedestal.getValue()))
+						.save(recipe);
+			}
 
 			// tapestries: wool woven on a rod of sticks, a dye for the scene; a pristine one aged with
 			// coarse dirt

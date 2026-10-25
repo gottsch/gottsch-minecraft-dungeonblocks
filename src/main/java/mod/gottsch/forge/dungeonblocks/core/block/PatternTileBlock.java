@@ -67,4 +67,14 @@ public class PatternTileBlock extends Block {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return defaultBlockState().setValue(TILE, tileAt(context.getClickedPos()));
     }
+
+    /**
+     * Whether a structure should re-derive TILE from each block's world position ({@link #tileAt}).
+     * True for a repeating floor such as the flagstones, which must line up with whatever is around
+     * it. False for a picture that belongs to its own place, such as a ritual circle, which a
+     * structure must keep where its author drew it (see {@link RitualCircleBlock}).
+     */
+    public boolean alignsToWorld() {
+        return true;
+    }
 }

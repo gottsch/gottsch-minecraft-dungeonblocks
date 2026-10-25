@@ -147,7 +147,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // Dungeon furniture matches nothing in stone_blocks either. The sarcophagi copy stone bricks
         // (any pickaxe, like the mod's other stone); the iron pieces are pickaxe-only like iron bars.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.STONE_SARCOPHAGUS.get(), ModBlocks.DEEPSLATE_SARCOPHAGUS.get(),
-                ModBlocks.DEEPSLATE_ALTAR.get(),
+                ModBlocks.DEEPSLATE_ALTAR.get(), ModBlocks.COPPER_OFFERING_BOWL.get(),
                 ModBlocks.IRON_MAIDEN.get(), ModBlocks.GIBBET.get());
 
         // The pillory and the rack are dark oak, and match nothing in stone_blocks: an axe, no tier
@@ -166,6 +166,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         ModBlocks.COFFINS.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.SKULL_PIKE.get(), ModBlocks.ZOMBIE_HEAD_PIKE.get(),
                 ModBlocks.BLOODY_STEVE_HEAD_PIKE.get());
+        // The copper offering bowl is copper: a stone pickaxe or better, as vanilla's copper.
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.COPPER_OFFERING_BOWL.get());
         // The gargoyles copy stone (or polished deepslate), requiresCorrectToolForDrops included,
         // and match nothing in stone_blocks: any pickaxe, as vanilla stone and deepslate.
         for (RegistryObject<Block> b : List.of(ModBlocks.PERCHED_GARGOYLE, ModBlocks.GARGOYLE_BUST, ModBlocks.GARGOYLE_STATUE,
@@ -175,7 +177,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // The lever sconce is the torch sconce's twin: pickaxe, no tier. The hidden doors are doors
         // (DOORS, as vanilla tags the iron door); the stone pass above makes them pickaxe. The
         // pedestal copies polished andesite, requiresCorrectToolForDrops included: any pickaxe.
-        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.LEVER_SCONCE.get(), ModBlocks.PEDESTAL.get());
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.LEVER_SCONCE.get(), ModBlocks.PEDESTAL.get(),
+                ModBlocks.BLACKSTONE_PEDESTAL.get());
         ModBlocks.HIDDEN_DOORS.keySet().forEach(b -> this.tag(BlockTags.DOORS).add(b.get()));
         // Tapestries are cloth, and drop to anything: an axe only takes them down faster, as vanilla's
         // banners are tagged.

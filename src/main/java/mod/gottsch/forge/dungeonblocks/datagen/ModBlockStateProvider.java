@@ -190,6 +190,16 @@ public class ModBlockStateProvider extends BlockStateProvider {
         patternTiles(ModBlocks.FLAGSTONES);
         patternTiles(ModBlocks.CRACKED_FLAGSTONES);
         patternTiles(ModBlocks.MOSSY_FLAGSTONES);
+        // the circles are chalked on the top only: their sides and bottom are their plain stone
+        Map.of(ModBlocks.DEEPSLATE_RITUAL_CIRCLE, mcLoc("block/polished_deepslate"),
+                ModBlocks.BLACKSTONE_RITUAL_CIRCLE, mcLoc("block/polished_blackstone")).forEach((block, stone) -> {
+            String circle = block.getId().getPath();
+            getVariantBuilder(block.get()).forAllStates(state -> {
+                String tile = circle + "_" + state.getValue(PatternTileBlock.TILE);
+                return ConfiguredModel.builder().modelFile(models().cubeBottomTop(tile, stone, stone,
+                        modLoc("block/" + tile))).build();
+            });
+        });
         simpleBlock(ModBlocks.MOSSY_SQUARE_STONE_BRICK.get());
         simpleBlock(ModBlocks.SQUARE_MUD_BRICK.get());
         // the facade / quarter facade variants are listed with the decorative blocks above
@@ -420,6 +430,20 @@ public class ModBlockStateProvider extends BlockStateProvider {
                     .rotationY(yaw(state.getValue(AltarBlock.FACING))).build(), AltarBlock.WATERLOGGED);
         });
 
+        // offering bowl: a child of the templates per contents (blockbench/offering_bowl.bbmodel),
+        // its metal or stone per material ("stone" is the template's key); cutout for the flames
+        Map<RegistryObject<Block>, ResourceLocation> bowls = Map.of(
+                ModBlocks.COPPER_OFFERING_BOWL, mcLoc("block/oxidized_copper"));
+        bowls.forEach((block, stone) -> {
+            String name = block.getId().getPath();
+            getVariantBuilder(block.get()).forAllStatesExcept(state -> {
+                String contents = state.getValue(OfferingBowlBlock.CONTENTS).getSerializedName();
+                return ConfiguredModel.builder().modelFile(models()
+                        .withExistingParent(name + "_" + contents, modLoc("block/template_offering_bowl_" + contents))
+                        .texture("stone", stone).texture("particle", stone).renderType("minecraft:cutout")).build();
+            }, OfferingBowlBlock.WATERLOGGED);
+        });
+
         // iron maiden: multipart, so each state layers the Blockbench body over the OBJ spikes
         MultiPartBlockStateBuilder maiden = getMultipartBuilder(ModBlocks.IRON_MAIDEN.get());
         for (Direction facing : Direction.Plane.HORIZONTAL) {
@@ -574,6 +598,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
             doorBlock((DoorBlock) block.get(), wall, wall);
         });
         simpleBlock(ModBlocks.PEDESTAL.get(), models().getExistingFile(modLoc("block/pedestal")));
+        // the blackstone pedestal: the same model (blockbench/pedestal.bbmodel), retextured
+        simpleBlock(ModBlocks.BLACKSTONE_PEDESTAL.get(), models().withExistingParent("blackstone_pedestal",
+                        modLoc("block/pedestal")).texture("stone", mcLoc("block/polished_blackstone"))
+                .texture("particle", mcLoc("block/polished_blackstone")));
 
         // chain fixtures hung as blocks: the same Blockbench models SwingingChainRenderer draws in a
         // swinging chain's bottom link, which are symmetrical enough to need no facing

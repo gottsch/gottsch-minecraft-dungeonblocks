@@ -109,6 +109,9 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.FLAGSTONES), modLoc("block/flagstones_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.CRACKED_FLAGSTONES), modLoc("block/cracked_flagstones_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.MOSSY_FLAGSTONES), modLoc("block/mossy_flagstones_4"));
+		// the circle's centre, the sun
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_RITUAL_CIRCLE), modLoc("block/deepslate_ritual_circle_4"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.BLACKSTONE_RITUAL_CIRCLE), modLoc("block/blackstone_ritual_circle_4"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_STONE_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK_SLAB));
@@ -190,6 +193,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_SARCOPHAGUS), modLoc("block/deepslate_sarcophagus_head_closed"));
 		// the altar whole, its three parts side by side
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_ALTAR), modLoc("block/deepslate_altar_item"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.COPPER_OFFERING_BOWL), modLoc("block/copper_offering_bowl_empty"));
 		// the iron maiden whole, shut, as the gibbet
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.IRON_MAIDEN), modLoc("block/iron_maiden_item"));
 		// no one block of the gibbet reads as a gibbet, so the item is the whole cage at a third size
@@ -229,6 +233,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		ModBlocks.HIDDEN_DOORS.keySet().forEach(b ->
 				basicItem(ModBlocks.MAP.get(b), modLoc("item/" + b.getId().getPath())));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.PEDESTAL));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.BLACKSTONE_PEDESTAL));
 		// a tapestry shows its whole scene, shrunk flat (tools/gen_tapestry_textures.py)
 		ModBlocks.TAPESTRIES.forEach(b -> basicItem(ModBlocks.MAP.get(b), modLoc("item/" + b.getId().getPath())));
 		ModBlocks.CRUMBLING_FLOORS.keySet().forEach(b -> blockItemParent(ModBlocks.MAP.get(b)));
