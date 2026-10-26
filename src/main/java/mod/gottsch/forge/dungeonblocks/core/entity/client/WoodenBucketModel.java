@@ -20,6 +20,7 @@ package mod.gottsch.forge.dungeonblocks.core.entity.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.entity.BucketEntity;
 import mod.gottsch.forge.dungeonblocks.core.entity.PotEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -39,7 +40,7 @@ import net.minecraft.resources.ResourceLocation;
  * the lower hoop; 10px tall in all.
  *
  * <p>The water is its own part, a 10x4x8 box on the foot whose top lies 2px below the rim, so
- * {@link #setupAnim} can hide it once the bucket is on its side - a tipped bucket is an empty one.
+ * {@link #setupAnim} can hide it whenever the bucket is empty - emptied by hand, or tipped over.
  * The inventory renderer never calls {@code setupAnim}, so the item always shows it full.
  *
  * @author Mark Gottschling on 10/25/2026
@@ -81,11 +82,11 @@ public class WoodenBucketModel extends EntityModel<PotEntity> {
 		return LayerDefinition.create(mesh, 64, 64);
 	}
 
-	/** Empty once tipped: the water goes as soon as it starts over, not when it lands. */
+	/** Tipping empties it at once, so the water goes as soon as it starts over, not when it lands. */
 	@Override
 	public void setupAnim(PotEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks,
 			float netHeadYaw, float headPitch) {
-		this.water.visible = !entity.isTumbled();
+		this.water.visible = entity instanceof BucketEntity bucket ? bucket.isFilled() : !entity.isTumbled();
 	}
 
 	@Override
