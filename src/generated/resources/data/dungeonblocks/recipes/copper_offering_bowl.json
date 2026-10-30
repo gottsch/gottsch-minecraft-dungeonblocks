@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "pattern": [
+    "c c",
+    " c "
+  ],
+  "result": {
+    "item": "dungeonblocks:copper_offering_bowl"
+  },
+  "show_notification": true
+}

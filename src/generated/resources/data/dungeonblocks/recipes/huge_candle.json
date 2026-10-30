@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "item": "dungeonblocks:large_candle"
+    }
+  },
+  "pattern": [
+    "c",
+    "c"
+  ],
+  "result": {
+    "item": "dungeonblocks:huge_candle"
+  },
+  "show_notification": true
+}

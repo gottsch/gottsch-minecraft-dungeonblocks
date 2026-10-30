@@ -200,6 +200,9 @@ the edges from a dedicated `<name>_edge.png` (strip layout in `gen_iron_bars_doo
 A door that opens by hand but must keep villagers out and survive zombies keeps `BlockSetType.IRON`
 and overrides `use()` (see `IronBarsDoorBlock`) - a hand-openable set type makes it a wooden door
 to the AI. `ModBlockLootTables` has a `DoorBlock` branch so only the lower half drops.
+A bars door SHUTS on the centre plane, in line with the bars beside it (3.1.0): the four non-`_open`
+`template_edged_door_*` models put the panel at x 6.5-9.5, and `IronBarsDoorBlock#getShape` matches.
+Open, it is vanilla's edge position. Move both together, or the outline and the model part.
 
 ### Multi-block props, moving parts and Blockbench models
 

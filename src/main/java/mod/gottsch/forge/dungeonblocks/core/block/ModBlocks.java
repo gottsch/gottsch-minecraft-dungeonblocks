@@ -39,6 +39,7 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
@@ -187,6 +188,21 @@ public class ModBlocks {
     public static final RegistryObject<Block> SQUARE_STONE_BRICK = stone("square_stone_brick", () -> {
         return new Block(Properties.copy(Blocks.STONE_BRICKS));
     });
+    // A floor of irregular flagstones, a pattern three blocks square whose stones cross block edges:
+    // each block shows the TILE its position picks. Stone bricks' properties.
+    public static final RegistryObject<Block> FLAGSTONES = stone("flagstones",
+            () -> new PatternTileBlock(Properties.copy(Blocks.STONE_BRICKS)));
+    // its weathered twins, the same pattern with the same TILE, so a weathering rule can swap them
+    public static final RegistryObject<Block> CRACKED_FLAGSTONES = stone("cracked_flagstones",
+            () -> new PatternTileBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
+    public static final RegistryObject<Block> MOSSY_FLAGSTONES = stone("mossy_flagstones",
+            () -> new PatternTileBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS)));
+    // A ritual circle chalked on a slab of polished deepslate or blackstone, three blocks across:
+    // kept where its author drew it by structures, which only turn it (RitualCircleBlock).
+    public static final RegistryObject<Block> DEEPSLATE_RITUAL_CIRCLE = stone("deepslate_ritual_circle",
+            () -> new RitualCircleBlock(Properties.copy(Blocks.POLISHED_DEEPSLATE)));
+    public static final RegistryObject<Block> BLACKSTONE_RITUAL_CIRCLE = stone("blackstone_ritual_circle",
+            () -> new RitualCircleBlock(Properties.copy(Blocks.POLISHED_BLACKSTONE)));
     public static final RegistryObject<Block> MOSSY_SQUARE_STONE_BRICK = stone("mossy_square_stone_brick", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
@@ -710,6 +726,14 @@ public class ModBlocks {
             () -> new SarcophagusBlock(Properties.copy(Blocks.STONE_BRICKS)));
     public static final RegistryObject<Block> DEEPSLATE_SARCOPHAGUS = Registration.BLOCKS.register("deepslate_sarcophagus",
             () -> new SarcophagusBlock(Properties.copy(Blocks.DEEPSLATE_BRICKS)));
+    // An altar three blocks wide, placed and broken as one; pistons cannot split it.
+    public static final RegistryObject<Block> DEEPSLATE_ALTAR = Registration.BLOCKS.register("deepslate_altar",
+            () -> new AltarBlock(Properties.copy(Blocks.POLISHED_DEEPSLATE).noOcclusion().pushReaction(PushReaction.BLOCK)));
+    // An old copper bowl, green with age, that holds nothing, blood, or soul fire (light 10). Copper
+    // so it reads as a vessel set on the altar, not a lump of the altar's own stone.
+    public static final RegistryObject<Block> COPPER_OFFERING_BOWL = Registration.BLOCKS.register("copper_offering_bowl",
+            () -> new OfferingBowlBlock(Properties.copy(Blocks.OXIDIZED_COPPER).noOcclusion()
+                    .lightLevel(OfferingBowlBlock.LIGHT_EMISSION)));
     public static final RegistryObject<Block> IRON_MAIDEN = Registration.BLOCKS.register("iron_maiden",
             () -> new IronMaidenBlock(Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops()
                     .strength(5.0F, 6.0F).sound(SoundType.METAL).noOcclusion()));
@@ -771,6 +795,9 @@ public class ModBlocks {
                     .noCollission().lightLevel(state -> 14).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> PEDESTAL = Registration.BLOCKS.register("pedestal",
             () -> new PedestalBlock(Properties.copy(Blocks.POLISHED_ANDESITE).noOcclusion()));
+    // the same pedestal in polished blackstone, for the dark deep levels
+    public static final RegistryObject<Block> BLACKSTONE_PEDESTAL = Registration.BLOCKS.register("blackstone_pedestal",
+            () -> new PedestalBlock(Properties.copy(Blocks.POLISHED_BLACKSTONE).noOcclusion()));
     // One hidden door per wall stone Dungeons2 builds in - its motifs' walls, and the cracked and
     // mossy stone bricks its weathering turns them into - each copying its stone's properties.
     public static final Map<RegistryObject<Block>, Supplier<Block>> HIDDEN_DOORS = new LinkedHashMap<>();
@@ -807,10 +834,35 @@ public class ModBlocks {
             () -> new TallPropBlock(Properties.copy(Blocks.STONE).noOcclusion(),
                     Shapes.or(Block.box(1, 0, 1, 15, 3, 15), Block.box(3, 3, 3, 13, 16, 13)),
                     Block.box(2, 0, 2, 14, 15.75, 14)));
+    // The same three carved in deepslate, for the deep levels: polished deepslate's properties.
+    public static final RegistryObject<Block> PERCHED_DEEPSLATE_GARGOYLE = Registration.BLOCKS.register("perched_deepslate_gargoyle",
+            () -> new StatueBlock(Properties.copy(Blocks.POLISHED_DEEPSLATE).noOcclusion(), 2, 2, 14, 14, 15.5));
+    public static final RegistryObject<Block> DEEPSLATE_GARGOYLE_BUST = Registration.BLOCKS.register("deepslate_gargoyle_bust",
+            () -> new StatueBlock(Properties.copy(Blocks.POLISHED_DEEPSLATE).noOcclusion(), 2, 4, 14, 12, 14.5));
+    public static final RegistryObject<Block> DEEPSLATE_GARGOYLE_STATUE = Registration.BLOCKS.register("deepslate_gargoyle_statue",
+            () -> new TallPropBlock(Properties.copy(Blocks.POLISHED_DEEPSLATE).noOcclusion(),
+                    Shapes.or(Block.box(1, 0, 1, 15, 3, 15), Block.box(3, 3, 3, 13, 16, 13)),
+                    Block.box(2, 0, 2, 14, 15.75, 14)));
     // A heap of loose bones, filled in stages. Breaks quickly by hand, like a pile of anything loose.
     public static final RegistryObject<Block> BONE_PILE = Registration.BLOCKS.register("bone_pile",
             () -> new BonePileBlock(Properties.of().mapColor(MapColor.SAND).strength(0.5F).sound(SoundType.BONE_BLOCK)
                     .noOcclusion().pushReaction(PushReaction.DESTROY)));
+    // The bone pile's heap of skulls: the same block, its stages the skulls' heights (6px each).
+    public static final RegistryObject<Block> SKULL_PILE = Registration.BLOCKS.register("skull_pile",
+            () -> new BonePileBlock(Properties.of().mapColor(MapColor.SAND).strength(0.5F).sound(SoundType.BONE_BLOCK)
+                    .noOcclusion().pushReaction(PushReaction.DESTROY),
+                    new VoxelShape[]{Block.box(0, 0, 0, 16, 6, 16), Block.box(0, 0, 0, 16, 6, 16),
+                            Block.box(0, 0, 0, 16, 11, 16), Block.box(0, 0, 0, 16, 16, 16)},
+                    new VoxelShape[]{Block.box(0, 0, 0, 16, 3, 16), Block.box(0, 0, 0, 16, 3, 16),
+                            Block.box(0, 0, 0, 16, 6, 16), Block.box(0, 0, 0, 16, 8, 16)}));
+    // Large candles, burning as vanilla candles do (CandlePropBlock): a vanilla candle's
+    // properties, with each one's own light.
+    public static final RegistryObject<Block> LARGE_CANDLE = Registration.BLOCKS.register("large_candle",
+            () -> new LargeCandleBlock(candleProperties().lightLevel(LargeCandleBlock.LIGHT_EMISSION)));
+    public static final RegistryObject<Block> HUGE_CANDLE = Registration.BLOCKS.register("huge_candle",
+            () -> new HugeCandleBlock(candleProperties().lightLevel(HugeCandleBlock.LIGHT_EMISSION)));
+    public static final RegistryObject<Block> CANDLE_CLUSTER = Registration.BLOCKS.register("candle_cluster",
+            () -> new CandleClusterBlock(candleProperties().lightLevel(CandleClusterBlock.LIGHT_EMISSION)));
     // An iron wheel of candles hung from the ceiling. The dungeon lantern's strength and sound, but
     // like the sconces it needs no tool to take down.
     public static final RegistryObject<Block> CHANDELIER = Registration.BLOCKS.register("chandelier",
@@ -837,6 +889,12 @@ public class ModBlocks {
 
     private static Properties fixtureProperties(SoundType sound) {
         return Properties.of().mapColor(MapColor.METAL).strength(3.5F).sound(sound).noOcclusion()
+                .pushReaction(PushReaction.DESTROY);
+    }
+
+    /** A vanilla candle's: wax, gone at a touch, broken rather than pushed by a piston. */
+    private static Properties candleProperties() {
+        return Properties.of().mapColor(MapColor.SAND).strength(0.1F).sound(SoundType.CANDLE).noOcclusion()
                 .pushReaction(PushReaction.DESTROY);
     }
 
