@@ -32,9 +32,7 @@ the ashlar read - the dark joints and the stones' lit and shadowed edges - under
 It follows the masonry, not the sheet: it fills the joints first, piles up where joints meet, and
 spreads from them onto the stones, a pixel or two in on most, further on a few, and leaves some
 joints open, set stone by stone (DRIFT) - the stones are small, and a few pixels more buried the
-masonry outright. Sand thins toward each block's edges (EDGE_FADE), so beside a plain block a drift
-ends raggedly inside its own block, not in a straight line along the edge, which read as cubes of
-sand in a mixed floor. The edge of a drift is darker, as a ridge of sand casts a little shadow.
+masonry outright; the edge of a drift is a shade darker, as a ridge of sand casts a little shadow.
 Every block's tile has at least MIN_SAND of its pixels under sand, so none reads as plain. The
 sand's greys are vanilla sand.png's.
 
@@ -55,13 +53,8 @@ SAND = [(198, 174, 113), (209, 186, 138), (213, 196, 150), (218, 210, 163), (227
 JOINT = SAND[0]
 # vanilla 1.20.1 sand.png's main shades, darkest to brightest: the drifts' grain
 GRAIN = [(213, 196, 150), (218, 207, 163), (227, 219, 176)]
-# a drift's edge, where it meets bare stone: darker than the grain, so a drift reads as a ridge of
-# sand on the stone. A shade under the grain alone was too faint to see on sandstone.
-DRIFT_EDGE = [(198, 174, 113), (209, 186, 138), (209, 186, 138)]
-# sand thins toward a block's edges, over this many px: a drift that ran up to the edge stopped
-# there in a straight line beside a plain block, and the sand read as cubes in a mixed floor
-EDGE_FADE_PX = 3
-EDGE_FADE = 0.5   # less sand a pixel nearer the edge, inside EDGE_FADE_PX
+# a drift's edge: a shade darker than the grain
+DRIFT_EDGE = (209, 186, 138)
 # how far sand spreads from a joint onto a stone, in px, per stone: most a little, some far
 DRIFT = (-1, 0, 0, 1, 1, 3)
 # the least share of each block's pixels under sand
@@ -193,14 +186,8 @@ def drifted(sheet, joint, stone, rng):
                        min((p[1] - m[1]) % SIZE, (m[1] - p[1]) % SIZE)) for m in meets)
 
     reach = {s: rng.choice(DRIFT) for s in sorted(set(stone.values()))}
-    def to_block_edge(p):
-        x, y = p[0] % TILE, p[1] % TILE
-        return min(x, TILE - 1 - x, y, TILE - 1 - y)
-
-    # sand depth: positive is buried. A stone's own reach, more near a meeting of joints, less near
-    # a block's edge, ragged
+    # sand depth: positive is buried. A stone's own reach, more near a meeting of joints, ragged
     score = {p: reach[stone[p]] + max(0, 2 - to_meet(p)) - depth[p] + rng.uniform(-0.8, 0.8)
-                - EDGE_FADE * max(0, EDGE_FADE_PX - to_block_edge(p))
              for p in stone}
     sand = {p for p, v in score.items() if v > 0}
     for row in range(3):
@@ -212,7 +199,7 @@ def drifted(sheet, joint, stone, rng):
     for x, y in sand:
         # the edge of a drift, where it meets bare stone, a shade darker; inside, grain
         bare = any(((x + a) % SIZE, (y + b) % SIZE) not in sand for a, b in sides)
-        img.putpixel((x, y), rng.choice(DRIFT_EDGE) if bare and (x, y) not in joint
+        img.putpixel((x, y), DRIFT_EDGE if bare and (x, y) not in joint and rng.random() < 0.6
                      else rng.choice(GRAIN))
     return img
 
