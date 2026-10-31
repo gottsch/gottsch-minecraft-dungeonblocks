@@ -683,12 +683,19 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 modLoc("block/" + model + (state.getValue(CandlePropBlock.LIT) ? "_lit" : "")))).build();
     }
 
-    /** A PatternTileBlock: a cube per TILE, textured <name>_<tile>. */
+    /**
+     * A PatternTileBlock: a cube per TILE, textured <name>_<tile>; a FacingPatternTileBlock's turned
+     * to its FACING, the texture with it.
+     */
     private void patternTiles(RegistryObject<Block> block) {
         String name = block.getId().getPath();
         getVariantBuilder(block.get()).forAllStates(state -> {
             String tile = name + "_" + state.getValue(PatternTileBlock.TILE);
-            return ConfiguredModel.builder().modelFile(models().cubeAll(tile, modLoc("block/" + tile))).build();
+            ConfiguredModel.Builder<?> model = ConfiguredModel.builder().modelFile(models().cubeAll(tile, modLoc("block/" + tile)));
+            if (state.hasProperty(FacingPatternTileBlock.FACING)) {
+                model.rotationY(yaw(state.getValue(FacingPatternTileBlock.FACING)));
+            }
+            return model.build();
         });
     }
 

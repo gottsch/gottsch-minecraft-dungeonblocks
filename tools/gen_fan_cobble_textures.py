@@ -6,7 +6,9 @@ overlapping arcs (fan paving), whose joints cross block edges, cut into nine 16x
 
 Run from the repo root. Writes textures/block/fan_cobbles_<tile>.png for tile 0-8, where tile is
 col + 3 * row of the 48x48 sheet - the value PatternTileBlock's TILE takes from a position:
-col = x mod 3, row = z mod 3, as for the flagstones (gen_flagstone_textures.py).
+col = x mod 3, row = z mod 3, as for the flagstones (gen_flagstone_textures.py). The sheet is drawn
+facing north, its arcs bulging up the sheet; FacingPatternTileBlock turns the model and the
+position together for the other three facings, so only the one sheet is needed.
 
 METHOD
 ------

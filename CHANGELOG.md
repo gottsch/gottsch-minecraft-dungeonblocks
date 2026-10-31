@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - Unreleased
+
+### Added
+
+- **Fan Cobbles** — a floor of small square setts laid in overlapping arcs, the fan paving of old town squares and courtyards, each arc three blocks across. Like the Flagstones, its joints run across block edges and each block picks its part of the pattern from where it is placed, so a floor laid by hand lines up into one sweep of arcs on its own. The arcs bulge the way you face when you lay the first block; every block laid beside it follows that block's direction, so the floor stays one way however you turn. Sneak while placing to start a new direction beside an old one. Cut from cobblestone in a stonecutter. Placeholder art for now.
+
 ## [3.1.0] - 2026-10-30
 
 ### Added
@@ -16,7 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Candle Cluster** — four candles of different heights burnt down unevenly in one block, for a group of candles without filling the floor. It is placed with its shortest candles toward you, so none hides behind a taller one. Crafted from three Large Candles. The candle textures are placeholder art.
 - **Flagstones** — a floor of big irregular paving stones whose joints run across block edges, so a floor of it reads as one laid surface rather than a grid of blocks. The pattern repeats every three blocks each way, and each block picks its part of it from where it is placed, so a floor laid by hand lines up on its own. Cut from stone bricks in a stonecutter. Placeholder art for now.
 - **Cracked Flagstones** and **Mossy Flagstones** — the same floor, worn: slabs split by cracks and corners chipped away, or moss grown along the joints in drifts. Every block of either shows its wear, so a dungeon floor weathered patchily, with plain and worn blocks mixed, still reads block by block. The stones sit exactly where they do on plain Flagstones, so the three mix freely in one floor without breaking the pattern. Cracked comes from smelting Flagstones; Mossy from Flagstones and a vine or a moss block. Placeholder art for now.
-- **Fan Cobbles** — a floor of small square setts laid in overlapping arcs, the fan paving of old town squares and courtyards, each arc three blocks across. Like the Flagstones, its joints run across block edges and each block picks its part of the pattern from where it is placed, so a floor laid by hand lines up into one sweep of arcs on its own. Cut from cobblestone in a stonecutter. Placeholder art for now.
 - **Deepslate Gargoyles** — the Perched Gargoyle, Gargoyle Bust and Gargoyle Statue carved in dark deepslate on polished deepslate plinths, so the watchers in a deep crypt match the stone around them. The perched one and the bust are cut from cobbled deepslate in a stonecutter; the statue is two chiseled deepslate on a polished deepslate.
 - **Deepslate Altar** — a stone altar three blocks wide for a crypt chapel or a shrine: a plinth, a carved panel on its front and a slab top that overhangs all round, flat enough to stand candles on. Place it and all three parts go down at once, centred where you click and facing you; it needs the blocks either side to be clear. Break any part and the whole altar comes down as one item. Crafted from three polished deepslate slabs over polished deepslate either side of a chiseled deepslate. Placeholder model for now.
 - **Blackstone Pedestal** — the Pedestal in polished blackstone, for a shrine in the dark deep levels: it shows one item on its top and can open a door when the right one is set there, exactly like the stone one. Crafted the same way, from polished blackstone.
