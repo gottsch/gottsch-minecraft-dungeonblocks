@@ -63,9 +63,9 @@ MORTAR = [(90, 89, 90), (99, 99, 99)]
 # the script runs without one
 MOSS = [(82, 93, 57), (90, 109, 65), (98, 121, 65), (115, 133, 82), (122, 143, 85)]
 # the least share of each block's joints that is mossed
-MIN_JOINT_MOSS = 0.5
+MIN_JOINT_MOSS = 0.75
 # how much less moss each pixel further in from a fan's arc joint
-DEPTH_FADE = 0.07
+DEPTH_FADE = 0.06
 
 FAN_W = 48        # px, a fan's width: three blocks
 FAN_H = 24        # px between rows of fans
@@ -168,7 +168,7 @@ def mossy(sheet, mortar, sett, fan_joint, rng):
         edge = nxt
 
     fans_ = sorted({s[0] for s in sett.values()})
-    amount = {f: rng.uniform(0.0, 0.6) for f in fans_}
+    amount = {f: rng.uniform(0.25, 0.7) for f in fans_}
     phase = {f: rng.uniform(0, 2 * math.pi) for f in fans_}
     patch = {s: rng.uniform(-0.15, 0.15) for s in sorted(set(sett.values()))}
 
