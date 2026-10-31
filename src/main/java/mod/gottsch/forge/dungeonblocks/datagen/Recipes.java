@@ -419,6 +419,10 @@ public class Recipes extends RecipeProvider {
 						.save(recipe, new ResourceLocation(DungeonBlocks.MOD_ID, "mossy_flagstones_from_"
 								+ ForgeRegistries.BLOCKS.getKey(moss).getPath()));
 			}
+			// fan cobbles: cobblestone, cut to small setts
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.COBBLESTONE), RecipeCategory.BUILDING_BLOCKS, ModBlocks.FAN_COBBLES.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.COBBLESTONE))
+					.save(recipe);
 
 			// gargoyles: the perched one and the bust are carved in a stonecutter; the statue stands
 			// on a smooth stone plinth, a block of chiseled stone bricks for its body

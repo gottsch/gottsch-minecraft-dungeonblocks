@@ -197,6 +197,10 @@ public class ModBlocks {
             () -> new PatternTileBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
     public static final RegistryObject<Block> MOSSY_FLAGSTONES = stone("mossy_flagstones",
             () -> new PatternTileBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS)));
+    // A floor of small setts laid in overlapping arcs, fan paving, on the same three-block pattern
+    // as the flagstones: the arcs cross block edges. Cobblestone's properties.
+    public static final RegistryObject<Block> FAN_COBBLES = stone("fan_cobbles",
+            () -> new PatternTileBlock(Properties.copy(Blocks.COBBLESTONE)));
     // A ritual circle chalked on a slab of polished deepslate or blackstone, three blocks across:
     // kept where its author drew it by structures, which only turn it (RitualCircleBlock).
     public static final RegistryObject<Block> DEEPSLATE_RITUAL_CIRCLE = stone("deepslate_ritual_circle",
