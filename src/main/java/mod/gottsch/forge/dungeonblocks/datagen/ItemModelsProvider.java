@@ -112,6 +112,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.FAN_COBBLES), modLoc("block/fan_cobbles_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.MOSSY_FAN_COBBLES), modLoc("block/mossy_fan_cobbles_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.SANDSTONE_ASHLAR), modLoc("block/sandstone_ashlar_4"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.DRIFTED_SANDSTONE_ASHLAR), modLoc("block/drifted_sandstone_ashlar_4"));
 		// the circle's centre, the sun
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_RITUAL_CIRCLE), modLoc("block/deepslate_ritual_circle_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.BLACKSTONE_RITUAL_CIRCLE), modLoc("block/blackstone_ritual_circle_4"));

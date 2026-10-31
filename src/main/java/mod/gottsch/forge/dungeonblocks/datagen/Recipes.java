@@ -440,6 +440,12 @@ public class Recipes extends RecipeProvider {
 			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.SANDSTONE), RecipeCategory.BUILDING_BLOCKS, ModBlocks.SANDSTONE_ASHLAR.get())
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.SANDSTONE))
 					.save(recipe);
+			// drifted: the ashlar and sand, as mossy blocks take a vine
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.DRIFTED_SANDSTONE_ASHLAR.get())
+					.requires(ModBlocks.SANDSTONE_ASHLAR.get())
+					.requires(Blocks.SAND)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.SANDSTONE_ASHLAR.get()))
+					.save(recipe);
 
 			// gargoyles: the perched one and the bust are carved in a stonecutter; the statue stands
 			// on a smooth stone plinth, a block of chiseled stone bricks for its body

@@ -23,6 +23,19 @@ draws its slab: lit along its top and left edge, shadowed along its bottom and r
 between. The mean luma sits a few points under vanilla cut_sandstone's (about 201 against 204),
 the joints darkening it a little.
 
+DRIFTED TWIN
+------------
+drifted_sandstone_ashlar_<tile> is the same sheet with sand blown over it, the stones exactly where
+they are on the plain one, so the two mix in one floor without breaking the courses. Sand and
+sandstone share their colours, so the sand cannot show by its tint: it shows by burying what makes
+the ashlar read - the dark joints and the stones' lit and shadowed edges - under flat, grainy sand.
+It follows the masonry, not the sheet: it fills the joints first, piles up where joints meet, and
+spreads from them onto the stones, a pixel or two in on most, further on a few, and leaves some
+joints open, set stone by stone (DRIFT) - the stones are small, and a few pixels more buried the
+masonry outright; the edge of a drift is a shade darker, as a ridge of sand casts a little shadow.
+Every block's tile has at least MIN_SAND of its pixels under sand, so none reads as plain. The
+sand's greys are vanilla sand.png's.
+
 Deterministic (a fixed seed): re-running gives the same files. Hand edits are overwritten, so
 change this script instead.
 """
@@ -38,6 +51,14 @@ TILE = 16
 SAND = [(198, 174, 113), (209, 186, 138), (213, 196, 150), (218, 210, 163), (227, 219, 176),
         (231, 228, 187), (237, 235, 203)]
 JOINT = SAND[0]
+# vanilla 1.20.1 sand.png's main shades, darkest to brightest: the drifts' grain
+GRAIN = [(213, 196, 150), (218, 207, 163), (227, 219, 176)]
+# a drift's edge: a shade darker than the grain
+DRIFT_EDGE = (209, 186, 138)
+# how far sand spreads from a joint onto a stone, in px, per stone: most a little, some far
+DRIFT = (-1, 0, 0, 1, 1, 3)
+# the least share of each block's pixels under sand
+MIN_SAND = 0.2
 
 # course heights, joint included, top to bottom; they must add up to SIZE
 COURSES = [12, 9, 15, 12]
@@ -136,7 +157,51 @@ def build(rng):
             elif is_joint(x, y + 1) or is_joint(x + 1, y):
                 shade = min(shade, tone[stone[x, y]]) - 1
             sheet.putpixel((x, y), SAND[max(1, min(len(SAND) - 1, shade))])
-    return sheet
+    return sheet, joint, stone
+
+
+def drifted(sheet, joint, stone, rng):
+    """Sand in the joints, piled where joints meet and spread onto the stones, stone by stone."""
+    img = sheet.copy()
+    sides = ((1, 0), (-1, 0), (0, 1), (0, -1))
+
+    # how far each pixel lies from the nearest joint
+    depth = {p: 0 for p in joint}
+    edge = list(joint)
+    while edge:
+        nxt = []
+        for x, y in edge:
+            for a, b in sides:
+                q = ((x + a) % SIZE, (y + b) % SIZE)
+                if q not in depth:
+                    depth[q] = depth[x, y] + 1
+                    nxt.append(q)
+        edge = nxt
+
+    # where joints meet (a course joint and an end joint): sand piles up there
+    meets = [p for p in joint if sum(((p[0] + a) % SIZE, (p[1] + b) % SIZE) in joint for a, b in sides) >= 3]
+
+    def to_meet(p):
+        return min(max(min((p[0] - m[0]) % SIZE, (m[0] - p[0]) % SIZE),
+                       min((p[1] - m[1]) % SIZE, (m[1] - p[1]) % SIZE)) for m in meets)
+
+    reach = {s: rng.choice(DRIFT) for s in sorted(set(stone.values()))}
+    # sand depth: positive is buried. A stone's own reach, more near a meeting of joints, ragged
+    score = {p: reach[stone[p]] + max(0, 2 - to_meet(p)) - depth[p] + rng.uniform(-0.8, 0.8)
+             for p in stone}
+    sand = {p for p, v in score.items() if v > 0}
+    for row in range(3):
+        for col in range(3):
+            cells = sorted((p for p in stone if p[0] // TILE == col and p[1] // TILE == row),
+                           key=lambda p: -score[p])
+            sand.update(cells[:int(len(cells) * MIN_SAND)])
+
+    for x, y in sand:
+        # the edge of a drift, where it meets bare stone, a shade darker; inside, grain
+        bare = any(((x + a) % SIZE, (y + b) % SIZE) not in sand for a, b in sides)
+        img.putpixel((x, y), DRIFT_EDGE if bare and (x, y) not in joint and rng.random() < 0.6
+                     else rng.choice(GRAIN))
+    return img
 
 
 def save_tiles(sheet, name):
@@ -147,7 +212,10 @@ def save_tiles(sheet, name):
 
 
 def main():
-    save_tiles(build(random.Random(7039)), "sandstone_ashlar")
+    sheet, joint, stone = build(random.Random(7039))
+    save_tiles(sheet, "sandstone_ashlar")
+    # its own seed, so changing the sand leaves the plain sheet as it is
+    save_tiles(drifted(sheet, joint, stone, random.Random(7211)), "drifted_sandstone_ashlar")
 
 
 if __name__ == "__main__":

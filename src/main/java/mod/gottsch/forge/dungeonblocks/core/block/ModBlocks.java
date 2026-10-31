@@ -210,6 +210,10 @@ public class ModBlocks {
     // properties.
     public static final RegistryObject<Block> SANDSTONE_ASHLAR = stone("sandstone_ashlar",
             () -> new FacingPatternTileBlock(Properties.copy(Blocks.CUT_SANDSTONE)));
+    // its aged twin, sand blown into the joints, the same stones with the same TILE and FACING, so
+    // a rule can swap them
+    public static final RegistryObject<Block> DRIFTED_SANDSTONE_ASHLAR = stone("drifted_sandstone_ashlar",
+            () -> new FacingPatternTileBlock(Properties.copy(Blocks.CUT_SANDSTONE)));
     // A ritual circle chalked on a slab of polished deepslate or blackstone, three blocks across:
     // kept where its author drew it by structures, which only turn it (RitualCircleBlock).
     public static final RegistryObject<Block> DEEPSLATE_RITUAL_CIRCLE = stone("deepslate_ritual_circle",
