@@ -32,7 +32,8 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
 /**
  * A {@link PatternTileBlock} whose pattern has a direction and can be laid four ways: the fan
- * cobbles, whose arcs bulge toward FACING. The textures are drawn facing north; the model turns
+ * cobbles, whose arcs bulge toward FACING, and the sandstone ashlar, whose courses run across it.
+ * The textures are drawn facing north; the model turns
  * to FACING, and TILE is taken from the position turned back the same way ({@link #tileAt}), so a
  * floor laid in any one direction lines up as the north one does.
  *

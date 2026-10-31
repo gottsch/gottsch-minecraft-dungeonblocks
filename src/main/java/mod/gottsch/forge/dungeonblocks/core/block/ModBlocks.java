@@ -205,6 +205,11 @@ public class ModBlocks {
     // its mossy twin, the same setts with the same TILE and FACING, so a rule can swap them
     public static final RegistryObject<Block> MOSSY_FAN_COBBLES = stone("mossy_fan_cobbles",
             () -> new FacingPatternTileBlock(Properties.copy(Blocks.MOSSY_COBBLESTONE)));
+    // A floor of squared sandstone blocks laid in courses, on the same three-block pattern: the
+    // joints cross block edges, and the courses run across FACING, so either way. Cut sandstone's
+    // properties.
+    public static final RegistryObject<Block> SANDSTONE_ASHLAR = stone("sandstone_ashlar",
+            () -> new FacingPatternTileBlock(Properties.copy(Blocks.CUT_SANDSTONE)));
     // A ritual circle chalked on a slab of polished deepslate or blackstone, three blocks across:
     // kept where its author drew it by structures, which only turn it (RitualCircleBlock).
     public static final RegistryObject<Block> DEEPSLATE_RITUAL_CIRCLE = stone("deepslate_ritual_circle",

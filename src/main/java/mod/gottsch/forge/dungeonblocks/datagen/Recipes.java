@@ -436,6 +436,10 @@ public class Recipes extends RecipeProvider {
 			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.MOSSY_COBBLESTONE), RecipeCategory.BUILDING_BLOCKS, ModBlocks.MOSSY_FAN_COBBLES.get())
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.MOSSY_COBBLESTONE))
 					.save(recipe);
+			// sandstone ashlar: sandstone, squared into blocks
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.SANDSTONE), RecipeCategory.BUILDING_BLOCKS, ModBlocks.SANDSTONE_ASHLAR.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.SANDSTONE))
+					.save(recipe);
 
 			// gargoyles: the perched one and the bust are carved in a stonecutter; the statue stands
 			// on a smooth stone plinth, a block of chiseled stone bricks for its body
