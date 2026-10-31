@@ -423,6 +423,19 @@ public class Recipes extends RecipeProvider {
 			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.COBBLESTONE), RecipeCategory.BUILDING_BLOCKS, ModBlocks.FAN_COBBLES.get())
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.COBBLESTONE))
 					.save(recipe);
+			// mossy: as vanilla makes mossy cobblestone, with a vine or a moss block; or cut from
+			// mossy cobblestone
+			for (Block moss : List.of(Blocks.VINE, Blocks.MOSS_BLOCK)) {
+				ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.MOSSY_FAN_COBBLES.get())
+						.requires(ModBlocks.FAN_COBBLES.get())
+						.requires(moss)
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(moss))
+						.save(recipe, new ResourceLocation(DungeonBlocks.MOD_ID, "mossy_fan_cobbles_from_"
+								+ ForgeRegistries.BLOCKS.getKey(moss).getPath()));
+			}
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.MOSSY_COBBLESTONE), RecipeCategory.BUILDING_BLOCKS, ModBlocks.MOSSY_FAN_COBBLES.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.MOSSY_COBBLESTONE))
+					.save(recipe);
 
 			// gargoyles: the perched one and the bust are carved in a stonecutter; the statue stands
 			// on a smooth stone plinth, a block of chiseled stone bricks for its body

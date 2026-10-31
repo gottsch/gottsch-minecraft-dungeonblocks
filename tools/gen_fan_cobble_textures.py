@@ -27,6 +27,17 @@ shadowed on the bottom-right. The joint between two fans is the darker mortar gr
 inside a fan the lighter, so the arcs read over several blocks; the sheet's mean luma sits within a
 couple of points of the flagstones' (about 120), though two fifths of it is joint.
 
+MOSSY TWIN
+----------
+mossy_fan_cobbles_<tile> is the same sheet with moss grown into it, the setts exactly where they
+are on the plain one, so the two mix in one floor without breaking the arcs. As for the mossy
+flagstones (gen_flagstone_textures.py's mossy()), it is painted on the 48x48 sheet rather than per
+tile, so it does not repeat block by block: moss fills the joints and creeps a pixel onto the
+setts' edges, more where a wrapping low-frequency field is high, so it grows in drifts, and every
+block's tile has at least MIN_JOINT_MOSS of its joints mossed, so none reads as plain. The greens
+are vanilla's own, never retoned: the darker in the joints, the lighter on stone. No cracked twin:
+the setts are too small to show a crack.
+
 Deterministic (a fixed seed): re-running gives the same files. Hand edits are overwritten, so
 change this script instead.
 """
@@ -34,6 +45,8 @@ import math
 import random
 
 from PIL import Image
+
+from gen_flagstone_textures import field
 
 OUT = "src/main/resources/assets/dungeonblocks/textures/block/"
 SIZE = 48
@@ -43,6 +56,13 @@ TILE = 16
 # the mortar its two darkest
 GREYS = [(104, 104, 104), (116, 116, 116), (127, 127, 127), (139, 137, 139), (156, 153, 156)]
 MORTAR = [(90, 89, 90), (99, 99, 99)]
+
+# vanilla's moss greens, darkest first: the pixels mossy_stone_bricks turns green on stone_bricks, as
+# gen_flagstone_textures.py's vanilla_moss() harvests them from the game jar - written out here so
+# the script runs without one
+MOSS = [(82, 93, 57), (90, 109, 65), (98, 121, 65), (115, 133, 82), (122, 143, 85)]
+# the least share of each block's joints that is mossed
+MIN_JOINT_MOSS = 0.4
 
 FAN_W = 48        # px, a fan's width: three blocks
 FAN_H = 24        # px between rows of fans
@@ -121,7 +141,34 @@ def build(rng):
             elif is_mortar(x, y + 1) or is_mortar(x + 1, y):
                 shade -= 1
             sheet.putpixel((x, y), GREYS[max(0, min(len(GREYS) - 1, shade))])
-    return sheet
+    return sheet, mortar
+
+
+def mossy(sheet, mortar, rng):
+    """Moss in the joints and on the setts' edges, in drifts, and some on every block."""
+    img = sheet.copy()
+    dark, light = MOSS[:3], MOSS[2:]
+    drift = field(rng)
+    score = {(x, y): drift(x, y) + rng.uniform(-0.35, 0.35) for y in range(SIZE) for x in range(SIZE)}
+
+    mossed = {p for p in mortar if score[p] > -0.1}
+    for row in range(3):
+        for col in range(3):
+            joints = sorted((p for p in mortar if p[0] // TILE == col and p[1] // TILE == row),
+                            key=lambda p: -score[p])
+            mossed.update(joints[:int(len(joints) * MIN_JOINT_MOSS)])
+
+    def near_moss(x, y):
+        return any(((x + a) % SIZE, (y + b) % SIZE) in mossed for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+
+    for (x, y), d in score.items():
+        if (x, y) in mossed:
+            img.putpixel((x, y), rng.choice(dark))
+        # onto a sett only from a mossed joint beside it, a pixel deep: a sett is a few pixels
+        # across, and moss two deep buried the small ones
+        elif (x, y) not in mortar and d > 0.15 and near_moss(x, y):
+            img.putpixel((x, y), rng.choice(light))
+    return img
 
 
 def save_tiles(sheet, name):
@@ -132,7 +179,10 @@ def save_tiles(sheet, name):
 
 
 def main():
-    save_tiles(build(random.Random(6211)), "fan_cobbles")
+    sheet, mortar = build(random.Random(6211))
+    save_tiles(sheet, "fan_cobbles")
+    # its own seed, so changing the moss leaves the plain sheet as it is
+    save_tiles(mossy(sheet, mortar, random.Random(6427)), "mossy_fan_cobbles")
 
 
 if __name__ == "__main__":

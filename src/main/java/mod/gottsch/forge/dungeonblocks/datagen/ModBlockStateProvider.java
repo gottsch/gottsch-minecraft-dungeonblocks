@@ -191,6 +191,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         patternTiles(ModBlocks.CRACKED_FLAGSTONES);
         patternTiles(ModBlocks.MOSSY_FLAGSTONES);
         patternTiles(ModBlocks.FAN_COBBLES);
+        patternTiles(ModBlocks.MOSSY_FAN_COBBLES);
         // the circles are chalked on the top only: their sides and bottom are their plain stone
         Map.of(ModBlocks.DEEPSLATE_RITUAL_CIRCLE, mcLoc("block/polished_deepslate"),
                 ModBlocks.BLACKSTONE_RITUAL_CIRCLE, mcLoc("block/polished_blackstone")).forEach((block, stone) -> {

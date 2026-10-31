@@ -202,6 +202,9 @@ public class ModBlocks {
     // Cobblestone's properties.
     public static final RegistryObject<Block> FAN_COBBLES = stone("fan_cobbles",
             () -> new FacingPatternTileBlock(Properties.copy(Blocks.COBBLESTONE)));
+    // its mossy twin, the same setts with the same TILE and FACING, so a rule can swap them
+    public static final RegistryObject<Block> MOSSY_FAN_COBBLES = stone("mossy_fan_cobbles",
+            () -> new FacingPatternTileBlock(Properties.copy(Blocks.MOSSY_COBBLESTONE)));
     // A ritual circle chalked on a slab of polished deepslate or blackstone, three blocks across:
     // kept where its author drew it by structures, which only turn it (RitualCircleBlock).
     public static final RegistryObject<Block> DEEPSLATE_RITUAL_CIRCLE = stone("deepslate_ritual_circle",

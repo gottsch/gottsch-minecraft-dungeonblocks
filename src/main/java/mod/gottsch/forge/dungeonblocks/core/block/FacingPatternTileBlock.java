@@ -36,9 +36,10 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
  * to FACING, and TILE is taken from the position turned back the same way ({@link #tileAt}), so a
  * floor laid in any one direction lines up as the north one does.
  *
- * <p>Placed by hand it faces the way the player looks, unless it is laid beside one already down,
- * whose FACING it takes, so a floor stays one way however the player turns while laying it.
- * Sneak to start a new direction beside an old one.
+ * <p>Placed by hand it faces the way the player looks, unless it is laid beside one already down -
+ * any FacingPatternTileBlock, so plain and mossy mix in one floor - whose FACING it takes, so a
+ * floor stays one way however the player turns while laying it. Sneak to start a new direction
+ * beside an old one.
  *
  * <p>A structure rotating a template turns FACING and keeps TILE, which turns the floor rigidly
  * and keeps it whole. Mirroring cannot be shown (the art has no mirror image), so a mirrored floor
@@ -84,7 +85,7 @@ public class FacingPatternTileBlock extends PatternTileBlock {
         if (!context.isSecondaryUseActive()) {
             for (Direction side : Direction.Plane.HORIZONTAL) {
                 BlockState neighbour = context.getLevel().getBlockState(pos.relative(side));
-                if (neighbour.is(this)) {
+                if (neighbour.getBlock() instanceof FacingPatternTileBlock) {
                     facing = neighbour.getValue(FACING);
                     break;
                 }

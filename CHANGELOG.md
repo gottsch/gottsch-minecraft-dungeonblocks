@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Fan Cobbles** — a floor of small square setts laid in overlapping arcs, the fan paving of old town squares and courtyards, each arc three blocks across. Like the Flagstones, its joints run across block edges and each block picks its part of the pattern from where it is placed, so a floor laid by hand lines up into one sweep of arcs on its own. The arcs bulge the way you face when you lay the first block; every block laid beside it follows that block's direction, so the floor stays one way however you turn. Sneak while placing to start a new direction beside an old one. Cut from cobblestone in a stonecutter. Placeholder art for now.
+- **Mossy Fan Cobbles** — the same floor gone green: moss grown along the joints between the setts in drifts, so some stretches are thick with it and others barely touched, though every block carries some. The setts sit exactly where they do on plain Fan Cobbles and the two share a direction when laid side by side, so they mix freely in one floor without breaking the arcs. Made from Fan Cobbles and a vine or a moss block, or cut from mossy cobblestone in a stonecutter. Placeholder art for now.
 
 ## [3.1.0] - 2026-10-30
 
