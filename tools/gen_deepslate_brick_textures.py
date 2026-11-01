@@ -91,6 +91,9 @@ PAIRS = [
 # As PAIRS, retoned with BONE_SHADE instead.
 BONE_PAIRS = [
     ("stone_bricks",                   "ossuary_bricks",                     True),
+    ("square_stone_brick",             "square_ossuary_brick",               False),
+    ("left_large_stone_brick",         "left_large_ossuary_brick",           False),
+    ("right_large_stone_brick",        "right_large_ossuary_brick",          False),
 ]
 
 

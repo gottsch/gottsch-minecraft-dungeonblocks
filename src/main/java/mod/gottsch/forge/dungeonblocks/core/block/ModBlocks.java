@@ -150,6 +150,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> MOSSY_STONE_BRICKS_SLAB_TABLE = slabTable("mossy_stone_bricks_slab_table", Blocks.MOSSY_STONE_BRICKS);
     public static final RegistryObject<Block> SMOOTH_STONE_SLAB_TABLE = slabTable("smooth_stone_slab_table", Blocks.SMOOTH_STONE);
     public static final RegistryObject<Block> SMOOTH_SANDSTONE_SLAB_TABLE = slabTable("smooth_sandstone_slab_table", Blocks.SMOOTH_SANDSTONE);
+    public static final RegistryObject<Block> OSSUARY_BRICKS_SLAB_TABLE = slabTable("ossuary_bricks_slab_table", Blocks.STONE_BRICKS);
 
     // Dark iron grates in their rust stages. Separate blocks, not a weathering chain (see
     // AgedIronFamily): a builder places whichever stage they want. Same properties as the plain grate -
@@ -402,6 +403,16 @@ public class ModBlocks {
         return new Block(Properties.copy(Blocks.TUFF));
     });
 
+    public static final RegistryObject<Block> SQUARE_OSSUARY_BRICK = stone("square_ossuary_brick", () -> {
+        return new Block(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> LEFT_LARGE_OSSUARY_BRICK = stone("left_large_ossuary_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> RIGHT_LARGE_OSSUARY_BRICK = stone("right_large_ossuary_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
+    });
+
     // Packed Skulls: a wall of skulls crammed together on tufa, a pattern three blocks square.
     public static final RegistryObject<Block> PACKED_SKULLS = stone("packed_skulls",
             () -> new WallPatternBlock(Properties.copy(Blocks.BONE_BLOCK)));
@@ -414,6 +425,11 @@ public class ModBlocks {
     // three-block pattern as the flagstones: the joints cross block edges. Stone bricks' properties.
     public static final RegistryObject<Block> GRAVE_SLAB_PAVEMENT = stone("grave_slab_pavement",
             () -> new PatternTileBlock(Properties.copy(Blocks.STONE_BRICKS)));
+
+    // Knucklebone Paving: a dark pebble floor with small bones set in as a mosaic, on the same
+    // three-block pattern. Cobblestone's properties.
+    public static final RegistryObject<Block> KNUCKLEBONE_PAVING = stone("knucklebone_paving",
+            () -> new PatternTileBlock(Properties.copy(Blocks.COBBLESTONE)));
 
     // Polished Andesite Bricks: the vanilla stone brick pattern re-toned onto polished andesite's
     // own palette, the way vanilla derives deepslate_bricks from polished_deepslate. Plural, because

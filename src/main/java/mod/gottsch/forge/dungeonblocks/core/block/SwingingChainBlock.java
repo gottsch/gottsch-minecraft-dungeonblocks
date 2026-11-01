@@ -126,7 +126,8 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return SHAPE;
+		// a chandelier is mostly wheel: a player clicks that to light it, not the chain up its middle
+		return state.getValue(FIXTURE) == ChainFixture.CHANDELIER ? ChandelierBlock.SHAPE : SHAPE;
 	}
 
 	/** Walk-through: you're meant to be able to push through a chain, which is what makes it swing. */
@@ -322,6 +323,9 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 		if (stack.is(ModBlocks.CENSER.get().asItem())) {
 			return ChainFixture.CENSER;
 		}
+		if (stack.is(ModBlocks.CHANDELIER.get().asItem())) {
+			return ChainFixture.CHANDELIER;
+		}
 		return ChainFixture.NONE;
 	}
 
@@ -333,6 +337,7 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 			case MANACLES -> new ItemStack(ModBlocks.MANACLES.get());
 			case MEAT_HOOK -> new ItemStack(ModBlocks.MEAT_HOOK.get());
 			case CENSER -> new ItemStack(ModBlocks.CENSER.get());
+			case CHANDELIER -> new ItemStack(ModBlocks.CHANDELIER.get());
 			case NONE -> ItemStack.EMPTY;
 		};
 	}
@@ -361,16 +366,21 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 	}
 
 	/**
-	 * A lit censer smokes. The smoke rises from where the censer is drawn - swung aside, the smoke
-	 * goes with it - which {@link SwingingChainBlockEntity#bottomPoint} works out from the same swing
-	 * the renderer draws.
+	 * A lit censer smokes, and a lit chandelier burns. The particles rise from where the fixture is
+	 * drawn - swung aside, they go with it - which {@link SwingingChainBlockEntity#bottomPoint} works
+	 * out from the same swing the renderer draws.
 	 */
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-		if (state.getValue(FIXTURE) != ChainFixture.CENSER || !state.getValue(LIT)) {
+		ChainFixture fixture = state.getValue(FIXTURE);
+		if ((fixture != ChainFixture.CENSER && fixture != ChainFixture.CHANDELIER) || !state.getValue(LIT)) {
 			return;
 		}
 		if (!(level.getBlockEntity(findTop(level, pos)) instanceof SwingingChainBlockEntity chain)) {
+			return;
+		}
+		if (fixture == ChainFixture.CHANDELIER) {
+			ChandelierBlock.flames(level, random, wick -> chain.bottomPoint(level.getGameTime(), wick));
 			return;
 		}
 		Vec3 at = chain.bottomPoint(level.getGameTime(), CenserBlock.smokeOrigin(random));

@@ -42,7 +42,8 @@ public enum ChainFixture implements StringRepresentable {
 	DUNGEON_LANTERN("dungeon_lantern"),
 	MANACLES("manacles"),
 	MEAT_HOOK("meat_hook"),
-	CENSER("censer");
+	CENSER("censer"),
+	CHANDELIER("chandelier");
 
 	private final String name;
 
@@ -75,7 +76,7 @@ public enum ChainFixture implements StringRepresentable {
 	 * mirrors that rather than silently forcing it alight.
 	 */
 	public boolean isLightable() {
-		return this == DUNGEON_LANTERN || this == CENSER;
+		return this == DUNGEON_LANTERN || this == CENSER || this == CHANDELIER;
 	}
 
 	/** Block light emitted while attached. Matches each source's own vanilla/mod value. */
@@ -83,7 +84,7 @@ public enum ChainFixture implements StringRepresentable {
 		return switch (this) {
 			case LANTERN -> 15;
 			case SOUL_LANTERN -> 10;
-			case DUNGEON_LANTERN -> lit ? 15 : 0;
+			case DUNGEON_LANTERN, CHANDELIER -> lit ? 15 : 0;
 			// smouldering incense: a glow, not a lamp. CenserBlock gives the same.
 			case CENSER -> lit ? 7 : 0;
 			case NONE, MANACLES, MEAT_HOOK -> 0;
@@ -100,6 +101,8 @@ public enum ChainFixture implements StringRepresentable {
 			case MANACLES -> "chain_fixture_manacles";
 			case MEAT_HOOK -> "chain_fixture_meat_hook";
 			case CENSER -> lit ? "chain_fixture_censer_lit" : "chain_fixture_censer";
+			// its own block's models, which already reach the top of the block
+			case CHANDELIER -> lit ? "chandelier_lit" : "chandelier";
 			case NONE, LANTERN, SOUL_LANTERN, DUNGEON_LANTERN -> null;
 		};
 	}

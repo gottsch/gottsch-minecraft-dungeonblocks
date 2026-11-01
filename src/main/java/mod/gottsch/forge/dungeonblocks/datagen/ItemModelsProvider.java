@@ -114,6 +114,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.SANDSTONE_ASHLAR), modLoc("block/sandstone_ashlar_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DRIFTED_SANDSTONE_ASHLAR), modLoc("block/drifted_sandstone_ashlar_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.GRAVE_SLAB_PAVEMENT), modLoc("block/grave_slab_pavement_4"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.KNUCKLEBONE_PAVING), modLoc("block/knucklebone_paving_4"));
 		// the circle's centre, the sun
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_RITUAL_CIRCLE), modLoc("block/deepslate_ritual_circle_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.BLACKSTONE_RITUAL_CIRCLE), modLoc("block/blackstone_ritual_circle_4"));
@@ -147,6 +148,9 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.CHISELED_DEEPSLATE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_CHISELED_DEEPSLATE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.OSSUARY_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_OSSUARY_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.LEFT_LARGE_OSSUARY_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_OSSUARY_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.HEWN_TUFA));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.PACKED_SKULLS), modLoc("block/packed_skulls_1_1_1"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.JUMBLED_FEMURS), modLoc("block/jumbled_femurs_1_1_1"));
@@ -279,11 +283,12 @@ public class ItemModelsProvider extends ItemModelProvider {
 		ModBlocks.BANNERS.forEach(banner ->
 				basicItem(ModBlocks.MAP.get(banner), modLoc("block/" + banner.getId().getPath())));
 
-		slabTableItem(ModBlocks.STONE_SLAB_TABLE);
-		slabTableItem(ModBlocks.STONE_BRICKS_SLAB_TABLE);
-		slabTableItem(ModBlocks.MOSSY_STONE_BRICKS_SLAB_TABLE);
-		slabTableItem(ModBlocks.SMOOTH_STONE_SLAB_TABLE);
-		slabTableItem(ModBlocks.SMOOTH_SANDSTONE_SLAB_TABLE);
+		slabTableItem(ModBlocks.STONE_SLAB_TABLE, mcLoc("block/stone"), mcLoc("block/stone"));
+		slabTableItem(ModBlocks.STONE_BRICKS_SLAB_TABLE, modLoc("block/left_large_stone_brick"), modLoc("block/right_large_stone_brick"));
+		slabTableItem(ModBlocks.MOSSY_STONE_BRICKS_SLAB_TABLE, modLoc("block/mossy_left_large_stone_brick"), modLoc("block/mossy_right_large_stone_brick"));
+		slabTableItem(ModBlocks.OSSUARY_BRICKS_SLAB_TABLE, modLoc("block/left_large_ossuary_brick"), modLoc("block/right_large_ossuary_brick"));
+		slabTableItem(ModBlocks.SMOOTH_STONE_SLAB_TABLE, mcLoc("block/smooth_stone"), mcLoc("block/smooth_stone"));
+		slabTableItem(ModBlocks.SMOOTH_SANDSTONE_SLAB_TABLE, mcLoc("block/sandstone_top"), mcLoc("block/sandstone_top"));
 
 		// pot props render as real 3D geometry in the inventory, not as sprites — see PotItemRenderer
 		potItem(ModItems.POT);
@@ -354,9 +359,10 @@ public class ItemModelsProvider extends ItemModelProvider {
 	 * The slab table has no model under its own name — only "_foot" and "_head" halves — so the item
 	 * shows the foot, which is the half that lands where the player clicks.
 	 */
-	public ItemModelBuilder slabTableItem(RegistryObject<Block> block) {
-		String name = block.getId().getPath();
-		return withExistingParent(name, modLoc("block/" + name + "_foot"));
+	/** The whole table, both halves, not the one block the item's own model could show. */
+	public ItemModelBuilder slabTableItem(RegistryObject<Block> block, ResourceLocation left, ResourceLocation right) {
+		return withExistingParent(block.getId().getPath(), modLoc("block/slab_table_item"))
+				.texture("left", left).texture("right", right);
 	}
 
 	/** An item parented to its block's own model, block/<id>. */

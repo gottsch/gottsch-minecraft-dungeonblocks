@@ -195,6 +195,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         patternTiles(ModBlocks.SANDSTONE_ASHLAR);
         patternTiles(ModBlocks.DRIFTED_SANDSTONE_ASHLAR);
         patternTiles(ModBlocks.GRAVE_SLAB_PAVEMENT);
+        patternTiles(ModBlocks.KNUCKLEBONE_PAVING);
         // the circles are chalked on the top only: their sides and bottom are their plain stone
         Map.of(ModBlocks.DEEPSLATE_RITUAL_CIRCLE, mcLoc("block/polished_deepslate"),
                 ModBlocks.BLACKSTONE_RITUAL_CIRCLE, mcLoc("block/polished_blackstone")).forEach((block, stone) -> {
@@ -233,6 +234,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         // the eleven decorative types for these three come off the ModMaterials.STONE loop above;
         // only the full block and the stairs are generated here
         simpleBlock(ModBlocks.OSSUARY_BRICKS.get());
+        simpleBlock(ModBlocks.SQUARE_OSSUARY_BRICK.get());
+        largeBrickPair(ModBlocks.LEFT_LARGE_OSSUARY_BRICK, ModBlocks.RIGHT_LARGE_OSSUARY_BRICK);
         // four variants with matching edges, so its pick marks don't repeat block by block
         simpleBlock(ModBlocks.HEWN_TUFA.get(),
                 new ConfiguredModel(cubeAll(ModBlocks.HEWN_TUFA.get())),
@@ -273,11 +276,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
         swingingChainBlock(ModBlocks.SWINGING_CHAIN);
         ModBlocks.BANNERS.forEach(this::dungeonBannerBlock);
 
-        // slab tables. The two textures are the FOOT half and the HEAD half, in that order - pass
-        // different ones to get a table that reads differently at each end.
+        // slab tables. The two textures are a large brick's left and right, one brick along the table;
+        // a plain stone passes the same texture for both.
         slabTableBlock(ModBlocks.STONE_SLAB_TABLE, mcLoc("block/stone"), mcLoc("block/stone"));
-        slabTableBlock(ModBlocks.STONE_BRICKS_SLAB_TABLE, mcLoc("block/stone_bricks"), mcLoc("block/stone_bricks"));
-        slabTableBlock(ModBlocks.MOSSY_STONE_BRICKS_SLAB_TABLE, mcLoc("block/mossy_stone_bricks"), mcLoc("block/mossy_stone_bricks"));
+        slabTableBlock(ModBlocks.STONE_BRICKS_SLAB_TABLE, modLoc("block/left_large_stone_brick"), modLoc("block/right_large_stone_brick"));
+        slabTableBlock(ModBlocks.MOSSY_STONE_BRICKS_SLAB_TABLE, modLoc("block/mossy_left_large_stone_brick"), modLoc("block/mossy_right_large_stone_brick"));
+        slabTableBlock(ModBlocks.OSSUARY_BRICKS_SLAB_TABLE, modLoc("block/left_large_ossuary_brick"), modLoc("block/right_large_ossuary_brick"));
         slabTableBlock(ModBlocks.SMOOTH_STONE_SLAB_TABLE, mcLoc("block/smooth_stone"), mcLoc("block/smooth_stone"));
         // smooth sandstone has no texture of its own — vanilla draws it with sandstone_top,
         // the same override ModMaterials.STONE carries for it
@@ -1120,22 +1124,25 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     /**
-     * A bed-like two-block table. Both halves share the {@code block/slab_table} geometry - it is
-     * symmetric in both horizontal axes, so the HEAD needs no separate rotation - and differ only in
-     * the texture their child model resolves.
+     * A bed-like two-block table. Both halves share one geometry (tools/gen_slab_table_models.py) and
+     * are turned end for end: the template has its leg at the block's far side, which on the HEAD is
+     * the opposite way. They differ in how the top is textured, so that it reads as one brick.
      *
-     * <p>The template is authored facing NORTH while {@link Direction#toYRot()} puts SOUTH at 0, so
-     * the +180 offset is what makes facing=north come out unrotated.
+     * <p>The template is authored as the FOOT facing NORTH while {@link Direction#toYRot()} puts SOUTH
+     * at 0, so the +180 offset is what makes facing=north come out unrotated.
      */
-    public void slabTableBlock(RegistryObject<Block> block, ResourceLocation footTexture, ResourceLocation headTexture) {
+    public void slabTableBlock(RegistryObject<Block> block, ResourceLocation left, ResourceLocation right) {
         String name = block.getId().getPath();
-        ModelFile foot = slabTableHalf(name + "_foot", footTexture);
-        ModelFile head = slabTableHalf(name + "_head", headTexture);
+        ModelFile foot = slabTableHalf(name + "_foot", "block/slab_table", left, right);
+        ModelFile head = slabTableHalf(name + "_head", "block/slab_table_head", left, right);
 
-        getVariantBuilder(block.get()).forAllStates(state -> ConfiguredModel.builder()
-                .modelFile(state.getValue(SlabTableBlock.PART) == BedPart.FOOT ? foot : head)
-                .rotationY(((int) state.getValue(SlabTableBlock.FACING).toYRot() + 180) % 360)
-                .build());
+        getVariantBuilder(block.get()).forAllStates(state -> {
+            boolean isFoot = state.getValue(SlabTableBlock.PART) == BedPart.FOOT;
+            return ConfiguredModel.builder()
+                    .modelFile(isFoot ? foot : head)
+                    .rotationY(((int) state.getValue(SlabTableBlock.FACING).toYRot() + (isFoot ? 180 : 0)) % 360)
+                    .build();
+        });
     }
 
     /** The blockstate and models of one decorative block, by its type. */
@@ -1173,8 +1180,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         return modLoc("block/" + age.id("dark_iron"));
     }
 
-    private ModelFile slabTableHalf(String name, ResourceLocation texture) {
-        return models().withExistingParent(name, modLoc("block/slab_table")).texture("all", texture);
+    private ModelFile slabTableHalf(String name, String template, ResourceLocation left, ResourceLocation right) {
+        return models().withExistingParent(name, modLoc(template)).texture("left", left).texture("right", right);
     }
 
     public ModelFile rectangleLeft(String name, ResourceLocation texture, ResourceLocation texture2) {
