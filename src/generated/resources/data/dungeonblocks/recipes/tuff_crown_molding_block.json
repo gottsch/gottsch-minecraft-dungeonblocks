@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "minecraft:tuff"
+  },
+  "result": "dungeonblocks:tuff_crown_molding_block"
+}

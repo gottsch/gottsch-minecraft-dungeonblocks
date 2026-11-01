@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "minecraft:obsidian"
+  },
+  "result": "dungeonblocks:obsidian_arrow_slit_block"
+}

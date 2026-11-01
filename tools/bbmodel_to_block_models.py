@@ -126,6 +126,9 @@ BONES = {"skull": "dungeonblocks:block/skeleton_head", "bone": "dungeonblocks:bl
 for remains in ("empty", "skull", "bones", "skull_and_bones", "skulls", "skull_heap"):
     JOBS.append(("catacomb_niche", f"template_catacomb_niche_{remains}", {"stone": "minecraft:block/stone_bricks", **BONES},
                  {"wall": (0, 0, 0), **({} if remains == "empty" else {f"remains_{remains}": (0, 0, 0)})}))
+JOBS.append(("catacomb_niche_soul_lamp", "template_catacomb_niche_soul_lamp",
+             {"stone": "minecraft:block/stone_bricks", "soil": "minecraft:block/soul_soil", "flame": "minecraft:block/soul_fire_0"},
+             {"wall": (0, 0, 0), "lamp": (0, 0, 0)}))
 # one model per fill stage: bone_pile_N is groups pile_1..pile_N
 for n in range(1, 5):
     JOBS.append(("bone_pile", f"bone_pile_{n}", BONES, {f"pile_{i}": (0, 0, 0) for i in range(1, n + 1)}))

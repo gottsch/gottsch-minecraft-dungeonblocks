@@ -245,6 +245,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 new ConfiguredModel(models().cubeAll("hewn_tufa_3", modLoc("block/hewn_tufa_3"))));
         wallPattern(ModBlocks.PACKED_SKULLS, modLoc("block/hewn_tufa"));
         wallPattern(ModBlocks.JUMBLED_FEMURS, modLoc("block/hewn_tufa"));
+        wallPattern(ModBlocks.CRUMBLING_BONE_WALL, modLoc("block/hewn_tufa"));
         simpleBlock(ModBlocks.MOSSY_DEEPSLATE_BRICKS.get());
         simpleBlock(ModBlocks.MOSSY_DEEPSLATE_TILES.get());
         simpleBlock(ModBlocks.MOSSY_COBBLED_DEEPSLATE.get());
@@ -545,8 +546,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
             Map<CatacombNicheBlock.Remains, ModelFile> niches = new EnumMap<>(CatacombNicheBlock.Remains.class);
             for (CatacombNicheBlock.Remains remains : CatacombNicheBlock.Remains.values()) {
                 String suffix = "_" + remains.getSerializedName();
-                niches.put(remains, models().withExistingParent(block.getId().getPath() + suffix,
-                        modLoc("block/template_catacomb_niche" + suffix)).texture("stone", texture).texture("particle", texture));
+                BlockModelBuilder niche = models().withExistingParent(block.getId().getPath() + suffix,
+                        modLoc("block/template_catacomb_niche" + suffix)).texture("stone", texture).texture("particle", texture);
+                // the lamp's flame has gaps
+                niches.put(remains, remains == CatacombNicheBlock.Remains.SOUL_LAMP ? niche.renderType("cutout") : niche);
             }
             horizontalBlock(block.get(), state -> niches.get(state.getValue(CatacombNicheBlock.REMAINS)));
         });
@@ -758,12 +761,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
             int y = state.getValue(WallPatternBlock.Y);
             int z = state.getValue(WallPatternBlock.Z);
             int row = span - 1 - y;
-            ResourceLocation north = modLoc("block/" + name + "_" + (Math.floorMod(-x, span) + span * row));
-            ResourceLocation south = modLoc("block/" + name + "_" + (x + span * row));
-            ResourceLocation east = modLoc("block/" + name + "_" + (Math.floorMod(-z, span) + span * row));
-            ResourceLocation west = modLoc("block/" + name + "_" + (z + span * row));
+            // a crumbling wall has a second set of slices for while it shakes
+            String stem = state.hasProperty(CrumblingBoneWallBlock.SHAKING) && state.getValue(CrumblingBoneWallBlock.SHAKING)
+                    ? name + "_shaking" : name;
+            ResourceLocation north = modLoc("block/" + stem + "_" + (Math.floorMod(-x, span) + span * row));
+            ResourceLocation south = modLoc("block/" + stem + "_" + (x + span * row));
+            ResourceLocation east = modLoc("block/" + stem + "_" + (Math.floorMod(-z, span) + span * row));
+            ResourceLocation west = modLoc("block/" + stem + "_" + (z + span * row));
             return ConfiguredModel.builder().modelFile(models()
-                    .cube(name + "_" + x + "_" + y + "_" + z, ends, ends, north, south, east, west)
+                    .cube(stem + "_" + x + "_" + y + "_" + z, ends, ends, north, south, east, west)
                     .texture("particle", south)).build();
         });
     }

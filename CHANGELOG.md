@@ -21,13 +21,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Ossuary Bricks Slab Table** — the slab table in ossuary brick, one long brick along its top. Crafted from five Ossuary Bricks.
 - **Hewn Tufa** — soft rock left rough by the pick, for tunnels and the plain stretches between burial galleries. Its four variants match at the edges, so a long wall shows no repeat. Cut from tuff in a stonecutter.
 - **Packed Skulls** and **Jumbled Femurs** — ossuary walls of bones set in the rock, with plain Hewn Tufa on top and bottom. Each block picks its part of the pattern from where it is placed, so a wall built by hand reads as one packed surface. Hewn Tufa and a bone block makes Packed Skulls; Hewn Tufa and three bones makes Jumbled Femurs.
+- **Crumbling Bone Wall** — a false wall to hide a secret room behind. It passes for Jumbled Femurs at a glance, with a few hairline cracks for anyone who looks closely. Punch it, use it with an empty hand or give it a redstone signal and it shudders, its cracks opening and dust sifting out, then collapses a second later in a wave through every Crumbling Bone Wall touching it. The lowest blocks leave Bone Piles on the floor. Mobs walking into it do not set it off, and sneaking lets you mine it back without setting it off. Crafted from Jumbled Femurs and gravel.
 - **Grave Slab Pavement** — a floor of worn grave slabs laid in rows running east to west, its joints crossing block edges so a floor reads as one laid surface. Cut from Hewn Tufa in a stonecutter.
 - **Knucklebone Paving** — a dark floor of pebbles with small bones set among them as a mosaic, also laid as one continuous pattern. Crafted from cobblestone and a bone.
+- **Catacomb Niches can hold a soul lamp** — use a Soul Torch on a niche to set a blue flame in a stone dish of soul soil in its recess, in place of the remains. It gives only a little light, so a corridor lit by them stays gloomy and mobs can still spawn a few blocks away. An empty hand takes the torch back out, and breaking the niche returns it.
+- **Ossuary Brick and Hewn Tufa Catacomb Niches** — the burial niche in the Catacombs' own stones. Crafted like the other niches, from the stone and a bone.
 - **Chandeliers hang from Swinging Chains** — use a Chandelier on the bottom link to attach it. It swings with the chain with its flames following, lights and goes out as usual, and an empty hand on an unlit one takes it back off.
 
 ### Changed
 
 - **Slab Tables redesigned** as refectory tables: a 4-pixel top with a leg panel and foot at each far end and a stretcher between them. Stone Brick and Mossy Stone Brick tables now show one long brick along the top, and table icons show the whole table. Tables already placed update on their own. The stretcher is decoration only: you can walk through it.
+- **Square and Large Bricks can be crafted** — the stone, mud, deepslate and brick versions had no recipe, which also left their Capstones out of reach. Cut them from the matching bricks in a stonecutter. Their mossy versions are the plain block with a vine or a moss block, or cut from the mossy bricks where those exist. Their stairs, slabs, facades and quarter facades are cut from the brick: one stair, two slabs, two facades or four quarter facades.
+- **More decorative pieces can be crafted** — every stone's arrow slit now has a stonecutter recipe, one per block, and stone, tuff and the mossy deepslates now have the rest of their pieces too. Mossy Bricks, Mossy Deepslate Bricks, Mossy Deepslate Tiles, Mossy Cobbled Deepslate and Mossy Tuff are crafted from the plain stone with a vine or a moss block.
+- **Stonecutter fixes** — every stone now gives two facades per block; deepslate and blackstone stones gave one. Mossy stone brick pieces no longer come from plain stone bricks, and smooth sandstone and smooth red sandstone pieces are now cut from the smooth stone instead of the plain one.
 
 ## [3.1.0] - 2026-10-30
 

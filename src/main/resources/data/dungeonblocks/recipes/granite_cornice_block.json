@@ -1,8 +1,0 @@
-{
-    "type": "minecraft:stonecutting",
-    "ingredient": {
-        "item": "minecraft:granite"
-    },
-    "result": "dungeonblocks:granite_cornice_block",
-    "count": 2
-}

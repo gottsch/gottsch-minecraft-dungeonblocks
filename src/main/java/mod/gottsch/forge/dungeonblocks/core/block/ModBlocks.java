@@ -420,6 +420,8 @@ public class ModBlocks {
     // Jumbled Femurs: a wall of femurs thrown together on tufa, a pattern three blocks square.
     public static final RegistryObject<Block> JUMBLED_FEMURS = stone("jumbled_femurs",
             () -> new WallPatternBlock(Properties.copy(Blocks.BONE_BLOCK)));
+    public static final RegistryObject<Block> CRUMBLING_BONE_WALL = stone("crumbling_bone_wall",
+            () -> new CrumblingBoneWallBlock(Properties.copy(Blocks.BONE_BLOCK)));
 
     // Grave Slab Pavement: a floor of worn, faintly carved slabs in tufa's colours, on the same
     // three-block pattern as the flagstones: the joints cross block edges. Stone bricks' properties.
@@ -1098,13 +1100,15 @@ public class ModBlocks {
         catacombNiche("cracked_deepslate_bricks", () -> Blocks.CRACKED_DEEPSLATE_BRICKS);
         catacombNiche("tuff", () -> Blocks.TUFF);
         catacombNiche("sandstone", () -> Blocks.SANDSTONE);
+        catacombNiche("ossuary_bricks", () -> OSSUARY_BRICKS.get());
+        catacombNiche("hewn_tufa", () -> HEWN_TUFA.get());
     }
 
     /** Registers "<source>_catacomb_niche", singular like the capstones: stone_brick_catacomb_niche. */
     private static void catacombNiche(String source, Supplier<Block> block) {
         String name = source.endsWith("bricks") ? source.substring(0, source.length() - 1) : source;
         CATACOMB_NICHES.put(Registration.BLOCKS.register(name + "_catacomb_niche",
-                () -> new CatacombNicheBlock(Properties.copy(block.get()))), block);
+                () -> new CatacombNicheBlock(Properties.copy(block.get()).lightLevel(CatacombNicheBlock::lightOf))), block);
     }
 
     // ------------------------------------------------------------------

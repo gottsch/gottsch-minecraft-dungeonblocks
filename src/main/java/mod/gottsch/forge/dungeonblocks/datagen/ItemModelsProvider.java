@@ -154,6 +154,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.HEWN_TUFA));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.PACKED_SKULLS), modLoc("block/packed_skulls_1_1_1"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.JUMBLED_FEMURS), modLoc("block/jumbled_femurs_1_1_1"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.CRUMBLING_BONE_WALL), modLoc("block/crumbling_bone_wall_1_1_1"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_DEEPSLATE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_DEEPSLATE_TILES));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_COBBLED_DEEPSLATE));

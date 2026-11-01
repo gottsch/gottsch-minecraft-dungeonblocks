@@ -1,8 +1,0 @@
-{
-    "type": "minecraft:stonecutting",
-    "ingredient": {
-        "item": "minecraft:mossy_cobblestone"
-    },
-    "result": "dungeonblocks:mossy_cobblestone_cornice_block",
-    "count": 2
-}

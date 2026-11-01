@@ -428,6 +428,39 @@ public class Recipes extends RecipeProvider {
 				}
 			});
 
+			// square and large bricks are cut from the stone's own bricks, as the ossuary ones are
+			cutBricks(recipe, Blocks.STONE_BRICKS, Blocks.MOSSY_STONE_BRICKS, Map.of(
+					ModBlocks.SQUARE_STONE_BRICK, ModBlocks.MOSSY_SQUARE_STONE_BRICK,
+					ModBlocks.LEFT_LARGE_STONE_BRICK, ModBlocks.MOSSY_LEFT_LARGE_STONE_BRICK,
+					ModBlocks.RIGHT_LARGE_STONE_BRICK, ModBlocks.MOSSY_RIGHT_LARGE_STONE_BRICK));
+			// the mod has no mossy mud bricks to cut from, so these only take a vine or a moss block
+			cutBricks(recipe, Blocks.MUD_BRICKS, null, Map.of(
+					ModBlocks.SQUARE_MUD_BRICK, ModBlocks.MOSSY_SQUARE_MUD_BRICK,
+					ModBlocks.LEFT_LARGE_MUD_BRICK, ModBlocks.MOSSY_LEFT_LARGE_MUD_BRICK,
+					ModBlocks.RIGHT_LARGE_MUD_BRICK, ModBlocks.MOSSY_RIGHT_LARGE_MUD_BRICK));
+			cutBricks(recipe, Blocks.DEEPSLATE_BRICKS, ModBlocks.MOSSY_DEEPSLATE_BRICKS.get(), Map.of(
+					ModBlocks.SQUARE_DEEPSLATE_BRICK, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK,
+					ModBlocks.LEFT_LARGE_DEEPSLATE_BRICK, ModBlocks.MOSSY_LEFT_LARGE_DEEPSLATE_BRICK,
+					ModBlocks.RIGHT_LARGE_DEEPSLATE_BRICK, ModBlocks.MOSSY_RIGHT_LARGE_DEEPSLATE_BRICK));
+			cutBricks(recipe, Blocks.BRICKS, ModBlocks.MOSSY_BRICKS.get(), Map.of(
+					ModBlocks.LARGE_BRICKS, ModBlocks.MOSSY_LARGE_BRICKS,
+					ModBlocks.SQUARE_BRICK, ModBlocks.MOSSY_SQUARE_BRICK,
+					ModBlocks.LEFT_LARGE_BRICK, ModBlocks.MOSSY_LEFT_LARGE_BRICK,
+					ModBlocks.RIGHT_LARGE_BRICK, ModBlocks.MOSSY_RIGHT_LARGE_BRICK));
+			// their pieces are cut from the brick, in as many as the block's volume makes
+			cutPieces(recipe, ModBlocks.SQUARE_STONE_BRICK, ModBlocks.SQUARE_STONE_BRICK_STAIRS, ModBlocks.SQUARE_STONE_BRICK_SLAB,
+					ModBlocks.SQUARE_STONE_BRICK_FACADE_BLOCK, ModBlocks.SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK);
+			cutPieces(recipe, ModBlocks.MOSSY_SQUARE_STONE_BRICK, ModBlocks.MOSSY_SQUARE_STONE_BRICK_STAIRS, ModBlocks.MOSSY_SQUARE_STONE_BRICK_SLAB,
+					null, null);
+			cutPieces(recipe, ModBlocks.SQUARE_MUD_BRICK, ModBlocks.SQUARE_MUD_BRICK_STAIRS, null,
+					ModBlocks.SQUARE_MUD_BRICK_FACADE_BLOCK, ModBlocks.SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK);
+			cutPieces(recipe, ModBlocks.SQUARE_DEEPSLATE_BRICK, ModBlocks.SQUARE_DEEPSLATE_BRICK_STAIRS, ModBlocks.SQUARE_DEEPSLATE_BRICK_SLAB,
+					ModBlocks.SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK, ModBlocks.SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK);
+			cutPieces(recipe, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_STAIRS, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_SLAB,
+					ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK);
+			cutPieces(recipe, ModBlocks.LARGE_BRICKS, ModBlocks.LARGE_BRICK_STAIRS, null, null, null);
+			cutPieces(recipe, ModBlocks.MOSSY_LARGE_BRICKS, ModBlocks.MOSSY_LARGE_BRICK_STAIRS, null, null, null);
+
 			// catacombs. Ossuary bricks are stone bricks bleached with bone meal, and their large and
 			// square bricks are cut from them
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.OSSUARY_BRICKS.get())
@@ -459,6 +492,12 @@ public class Recipes extends RecipeProvider {
 					.requires(ModBlocks.HEWN_TUFA.get())
 					.requires(Items.BONE, 3)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.HEWN_TUFA.get()))
+					.save(recipe);
+			// the crumbling bone wall: femurs and gravel, as the crumbling floors are their stone and gravel
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.CRUMBLING_BONE_WALL.get())
+					.requires(ModBlocks.JUMBLED_FEMURS.get())
+					.requires(Blocks.GRAVEL)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.JUMBLED_FEMURS.get()))
 					.save(recipe);
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.KNUCKLEBONE_PAVING.get())
 					.requires(Blocks.COBBLESTONE)
@@ -724,6 +763,85 @@ public class Recipes extends RecipeProvider {
 								.save(recipe);
 					});
 
+			// the stone types are too, in as many as the piece's volume makes
+			ModBlocks.DECOR.stream()
+					.filter(d -> DecorType.STONE_TYPES.contains(d.type()))
+					.forEach(d -> {
+						Block ingredient = d.material().ingredient().get();
+						SingleItemRecipeBuilder.stonecutting(Ingredient.of(ingredient), RecipeCategory.BUILDING_BLOCKS, d.block().get(), stonecutCount(d.type()))
+								.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ingredient))
+								.save(recipe);
+					});
+
+			// the mod's mossy stones those are cut from: the plain stone with a vine or a moss block
+			mossy(recipe, ModBlocks.MOSSY_BRICKS, Blocks.BRICKS);
+			mossy(recipe, ModBlocks.MOSSY_DEEPSLATE_BRICKS, Blocks.DEEPSLATE_BRICKS);
+			mossy(recipe, ModBlocks.MOSSY_DEEPSLATE_TILES, Blocks.DEEPSLATE_TILES);
+			mossy(recipe, ModBlocks.MOSSY_COBBLED_DEEPSLATE, Blocks.COBBLED_DEEPSLATE);
+			mossy(recipe, ModBlocks.MOSSY_TUFF, Blocks.TUFF);
+		}
+
+		private static int stonecutCount(DecorType type) {
+			return switch (type) {
+				case QUARTER_FACADE -> 4;
+				case FACADE, FLUTED_FACADE, CORNICE, CROWN_MOLDING -> 2;
+				default -> 1;
+			};
+		}
+
+		private static void mossy(Consumer<FinishedRecipe> recipe, RegistryObject<Block> mossy, Block plain) {
+			for (Block moss : List.of(Blocks.VINE, Blocks.MOSS_BLOCK)) {
+				ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, mossy.get())
+						.requires(plain)
+						.requires(moss)
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(moss))
+						.save(recipe, new ResourceLocation(DungeonBlocks.MOD_ID, mossy.getId().getPath() + "_from_"
+								+ ForgeRegistries.BLOCKS.getKey(moss).getPath()));
+			}
+		}
+
+		/**
+		 * Each brick shape is cut from the base bricks. Its mossy twin is that shape with a vine or a
+		 * moss block, or cut from the mossy base where the stone has one.
+		 */
+		private static void cutBricks(Consumer<FinishedRecipe> recipe, Block base, Block mossyBase,
+									  Map<RegistryObject<Block>, RegistryObject<Block>> shapes) {
+			shapes.forEach((plain, mossy) -> {
+				SingleItemRecipeBuilder.stonecutting(Ingredient.of(base), RecipeCategory.BUILDING_BLOCKS, plain.get())
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(base))
+						.save(recipe);
+				for (Block moss : List.of(Blocks.VINE, Blocks.MOSS_BLOCK)) {
+					ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, mossy.get())
+							.requires(plain.get())
+							.requires(moss)
+							.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(moss))
+							.save(recipe, new ResourceLocation(DungeonBlocks.MOD_ID, mossy.getId().getPath() + "_from_"
+									+ ForgeRegistries.BLOCKS.getKey(moss).getPath()));
+				}
+				if (mossyBase != null) {
+					SingleItemRecipeBuilder.stonecutting(Ingredient.of(mossyBase), RecipeCategory.BUILDING_BLOCKS, mossy.get())
+							.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(mossyBase))
+							.save(recipe);
+				}
+			});
+		}
+
+		/** One stair, two slabs, two facades or four quarter facades to a brick. A family lacking a piece passes null. */
+		private static void cutPieces(Consumer<FinishedRecipe> recipe, RegistryObject<Block> brick, RegistryObject<? extends Block> stairs,
+									  RegistryObject<? extends Block> slab, RegistryObject<Block> facade, RegistryObject<Block> quarterFacade) {
+			cutPiece(recipe, brick, stairs, 1);
+			cutPiece(recipe, brick, slab, 2);
+			cutPiece(recipe, brick, facade, 2);
+			cutPiece(recipe, brick, quarterFacade, 4);
+		}
+
+		private static void cutPiece(Consumer<FinishedRecipe> recipe, RegistryObject<Block> brick, RegistryObject<? extends Block> piece, int count) {
+			if (piece == null) {
+				return;
+			}
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(brick.get()), RecipeCategory.BUILDING_BLOCKS, piece.get(), count)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(brick.get()))
+					.save(recipe);
 		}
 
 		/**

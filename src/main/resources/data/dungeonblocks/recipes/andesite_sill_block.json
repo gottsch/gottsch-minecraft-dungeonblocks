@@ -1,8 +1,0 @@
-{
-    "type": "minecraft:stonecutting",
-    "ingredient": {
-        "item": "minecraft:andesite"
-    },
-    "result": "dungeonblocks:andesite_sill_block",
-    "count": 1
-}

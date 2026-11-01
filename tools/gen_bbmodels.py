@@ -233,19 +233,38 @@ def chain(p, group, name, x, z, y0, y1):
 # projects
 # ---------------------------------------------------------------------------------------------
 
+def niche_wall(p):
+    """The wall around a recess x 2-14, y 2-14, 12 deep. Every face takes vanilla's default UV, so
+    the stone's courses run on unbroken across the pieces and into the neighbouring blocks."""
+    p.box("wall", "sill", (0, 0, 0), (16, 2, 16), "stone")
+    p.box("wall", "lintel", (0, 14, 0), (16, 16, 16), "stone")
+    p.box("wall", "jamb_west", (0, 2, 0), (2, 14, 16), "stone", skip=("up", "down"))
+    p.box("wall", "jamb_east", (14, 2, 0), (16, 14, 16), "stone", skip=("up", "down"))
+    p.box("wall", "back", (2, 2, 12), (14, 14, 16), "stone", skip=("up", "down", "east", "west"))
+
+
+def catacomb_niche_soul_lamp():
+    """The niche's SOUL_LAMP remains, its own project so catacomb_niche.bbmodel and any edits to it
+    stay untouched: a stone dish of soul soil in the middle of the recess, with a crossed soul flame."""
+    p = Project("catacomb_niche_soul_lamp", {"stone": "minecraft:block/stone_bricks",
+                                             "soil": "minecraft:block/soul_soil", "flame": "minecraft:block/soul_fire_0"})
+    niche_wall(p)
+    p.box("lamp", "dish", (4, 2, 2), (12, 4, 10), {"north": "stone", "south": "stone", "east": "stone", "west": "stone", "up": "soil"})
+    # the whole first frame: an animated sprite's project UV spans its whole strip, one frame in game
+    w, h = p.size("flame")
+    for n, angle in enumerate((45, -45)):
+        p.box("lamp", f"flame_{n}", (4, 4, 6), (12, 12, 6), {"north": "flame", "south": "flame"},
+              uv={"north": [0, 0, w, h], "south": [0, 0, w, h]}, rot=("y", angle), origin=(8, 4, 6))
+    return p
+
+
 def catacomb_niche():
     """A burial niche cut into a wall, authored facing north (the opening is the north face), with a
     group for each thing that can lie in it - CatacombNicheBlock's REMAINS, "remains_<value>", one
     template per value in bbmodel_to_block_models.py. `stone` is filled per material by datagen;
     the template's stone bricks are only for display."""
     p = Project("catacomb_niche", {"stone": "minecraft:block/stone_bricks", "skull": SKULL, "bone": BONE})
-    # the wall around a recess x 2-14, y 2-14, 12 deep. Every face takes vanilla's default UV, so
-    # the stone's courses run on unbroken across the pieces and into the neighbouring blocks.
-    p.box("wall", "sill", (0, 0, 0), (16, 2, 16), "stone")
-    p.box("wall", "lintel", (0, 14, 0), (16, 16, 16), "stone")
-    p.box("wall", "jamb_west", (0, 2, 0), (2, 14, 16), "stone", skip=("up", "down"))
-    p.box("wall", "jamb_east", (14, 2, 0), (16, 14, 16), "stone", skip=("up", "down"))
-    p.box("wall", "back", (2, 2, 12), (14, 14, 16), "stone", skip=("up", "down", "east", "west"))
+    niche_wall(p)
 
     # skull_and_bones: a skull on one side, turned to look out past the two femurs heaped on the
     # other. Two symmetric layouts were tried first. A skull on crossed femurs hid the crossing, and
@@ -950,6 +969,7 @@ PROJECTS = {
     "altar_middle": lambda: altar("middle"),
     "altar_right": lambda: altar("right"),
     "catacomb_niche": catacomb_niche,
+    "catacomb_niche_soul_lamp": catacomb_niche_soul_lamp,
     "pedestal": pedestal,
     "rubble_scatter": rubble_scatter,
     "bone_pile": bone_pile,
