@@ -919,6 +919,10 @@ public class ModBlocks {
             () -> new HugeCandleBlock(candleProperties().lightLevel(HugeCandleBlock.LIGHT_EMISSION)));
     public static final RegistryObject<Block> CANDLE_CLUSTER = Registration.BLOCKS.register("candle_cluster",
             () -> new CandleClusterBlock(candleProperties().lightLevel(CandleClusterBlock.LIGHT_EMISSION)));
+    public static final RegistryObject<Block> SKULL_CANDLE = Registration.BLOCKS.register("skull_candle",
+            () -> new SkullCandleBlock(candleProperties().sound(SoundType.BONE_BLOCK).lightLevel(SkullCandleBlock.LIGHT_EMISSION)));
+    public static final RegistryObject<Block> BLACK_SKULL_CANDLE = Registration.BLOCKS.register("black_skull_candle",
+            () -> new SkullCandleBlock(candleProperties().sound(SoundType.BONE_BLOCK).lightLevel(SkullCandleBlock.LIGHT_EMISSION)));
     // An iron wheel of candles hung from the ceiling. The dungeon lantern's strength and sound, but
     // like the sconces it needs no tool to take down.
     public static final RegistryObject<Block> CHANDELIER = Registration.BLOCKS.register("chandelier",

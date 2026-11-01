@@ -396,6 +396,18 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.BONE_BLOCK))
 					.save(recipe);
 
+			// skull candles: a bone block for the skull, as on the skull pike, and a candle
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.SKULL_CANDLE.get())
+					.requires(Blocks.BONE_BLOCK)
+					.requires(Blocks.CANDLE)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.BONE_BLOCK))
+					.save(recipe);
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.BLACK_SKULL_CANDLE.get())
+					.requires(Blocks.BONE_BLOCK)
+					.requires(Blocks.BLACK_CANDLE)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.BONE_BLOCK))
+					.save(recipe);
+
 			// wall shelves: a block of the stone cuts into two; a mossy one is the plain shelf with a
 			// vine or a moss block, as mossy flagstones are
 			ModBlocks.SHELVES.forEach(shelf -> {

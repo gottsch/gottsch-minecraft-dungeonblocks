@@ -22,6 +22,8 @@ package mod.gottsch.forge.dungeonblocks.core.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -33,8 +35,11 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
  * the block keeps its position mod 3, and its model gives each face the slice that position shows from
  * that side. No direction is needed from the player, and a wall lines up from either side.
  *
- * <p>The state is set once, on placement, for the reason given on {@link PatternTileBlock}. A structure
- * keeps the state it was saved with, so rotating one changes which way its faces read.
+ * <p>The state is set once, on placement, for the reason given on {@link PatternTileBlock}. A rotated or
+ * mirrored structure moves its blocks, so {@link #rotate} and {@link #mirror} turn X and Z as the
+ * position turns. Each block then holds the state it would have if placed there by hand, give or take
+ * a shift that is the same for the whole structure: its walls stay whole, though they need not line
+ * up with a wall outside it.
  *
  * @author Mark Gottschling on 10/31/2026
  */
@@ -61,5 +66,34 @@ public class WallPatternBlock extends Block {
                 .setValue(X, Math.floorMod(pos.getX(), SPAN))
                 .setValue(Y, Math.floorMod(pos.getY(), SPAN))
                 .setValue(Z, Math.floorMod(pos.getZ(), SPAN));
+    }
+
+    /** As BlockPos#rotate turns a position. */
+    @Override
+    public BlockState rotate(BlockState state, Rotation rotation) {
+        int x = state.getValue(X);
+        int z = state.getValue(Z);
+        return switch (rotation) {
+            case CLOCKWISE_90 -> withColumn(state, -z, x);
+            case CLOCKWISE_180 -> withColumn(state, -x, -z);
+            case COUNTERCLOCKWISE_90 -> withColumn(state, z, -x);
+            case NONE -> state;
+        };
+    }
+
+    /** As StructureTemplate mirrors a position: LEFT_RIGHT negates z, FRONT_BACK negates x. */
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        int x = state.getValue(X);
+        int z = state.getValue(Z);
+        return switch (mirror) {
+            case LEFT_RIGHT -> withColumn(state, x, -z);
+            case FRONT_BACK -> withColumn(state, -x, z);
+            case NONE -> state;
+        };
+    }
+
+    private static BlockState withColumn(BlockState state, int x, int z) {
+        return state.setValue(X, Math.floorMod(x, SPAN)).setValue(Z, Math.floorMod(z, SPAN));
     }
 }

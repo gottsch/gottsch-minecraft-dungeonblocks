@@ -538,6 +538,38 @@ def bone_chandelier():
     return p
 
 
+def skull_candle():
+    """A full-size skull with a candle melted on its crown, on the floor (`floor`) or on an iron
+    bracket against a wall to the south (`wall`). The poured wax has its own texture key, always the
+    unlit sprite: the lit one paints the flame's glow on the rows it samples, which turned every run
+    of wax orange. SkullCandleBlock's shapes and flames match these numbers."""
+    p = Project("skull_candle", {"skull": SKULL, "candle": "minecraft:block/candle", "wax": "minecraft:block/candle",
+                                 "iron": DARK_IRON})
+    wax_side = [0, 8, 1, 9]
+    wax_top = [0, 6, 2, 8]
+
+    def wax(box_group, name, frm, to):
+        p.box(box_group, name, frm, to, "wax",
+              uv={"north": wax_side, "south": wax_side, "east": wax_side, "west": wax_side,
+                  "up": wax_top, "down": wax_top})
+
+    for group, y, z in (("floor", 0, 4), ("wall", 2, 8)):
+        top = y + 8
+        skull(p, group, "skull", 4, y, z, size=8)
+        # a pool on the crown, the candle in it, and runs of wax over the brow and one side
+        wax(group, "pool", (6, top, z + 2), (10, top + 1, z + 6))
+        candle(p, group, "candle", 8, z + 4, top + 1, 3)
+        # sunk half a pixel into the skull: a full pixel proud, they read as legs gripping it
+        wax(group, "run_brow_long", (9, top - 0.5, z + 0.5), (10, top + 0.5, z + 2))
+        wax(group, "drip_brow_long", (9, top - 2, z - 0.5), (10, top + 0.5, z + 0.5))
+        wax(group, "run_brow_short", (6, top - 0.5, z + 0.5), (7, top + 0.5, z + 2))
+        wax(group, "drip_brow_short", (6, top - 1, z - 0.5), (7, top + 0.5, z + 0.5))
+        wax(group, "run_side", (10, top - 0.5, z + 3), (11.5, top + 0.5, z + 4))
+        wax(group, "drip_side", (11.5, top - 3, z + 3), (12.5, top + 0.5, z + 4))
+    p.box("wall", "bracket", (4, 1, 8), (12, 2, 16), "iron")
+    return p
+
+
 def shelf():
     """A wall shelf, authored facing north with its wall to the south: a 4px board 10 deep on a
     stepped corbel, a template per ShelfBlock CONTENTS (`brick` is filled per material by datagen).
@@ -930,6 +962,7 @@ PROJECTS = {
     "chandelier": chandelier,
     "bone_chandelier": bone_chandelier,
     "shelf": shelf,
+    "skull_candle": skull_candle,
     "large_candle": large_candle,
     "huge_candle_lower": lambda: huge_candle("lower"),
     "huge_candle_upper": lambda: huge_candle("upper"),

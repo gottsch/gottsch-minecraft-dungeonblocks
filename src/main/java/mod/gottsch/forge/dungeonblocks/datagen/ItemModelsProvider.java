@@ -241,6 +241,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.LARGE_CANDLE), modLoc("block/large_candle_large"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.HUGE_CANDLE), modLoc("block/huge_candle_item"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.CANDLE_CLUSTER), modLoc("block/candle_cluster"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.SKULL_CANDLE), modLoc("block/skull_candle_floor"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.BLACK_SKULL_CANDLE), modLoc("block/black_skull_candle_floor"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.PERCHED_GARGOYLE));
 		// the lever sconce shows as the torch sconce it pretends to be
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.LEVER_SCONCE), modLoc("block/torch_sconce_block"));

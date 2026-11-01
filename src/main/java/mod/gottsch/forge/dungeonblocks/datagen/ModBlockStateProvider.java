@@ -716,6 +716,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(ModBlocks.CANDLE_CLUSTER.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
                 .modelFile(candle(state, "candle_cluster")[0].model)
                 .rotationY(yaw(state.getValue(CandleClusterBlock.FACING))).build(), CandlePropBlock.WATERLOGGED);
+        // skull candles: on the floor or on a wall bracket, turned to the way the skull looks
+        for (RegistryObject<Block> block : List.of(ModBlocks.SKULL_CANDLE, ModBlocks.BLACK_SKULL_CANDLE)) {
+            getVariantBuilder(block.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
+                    .modelFile(candle(state, block.getId().getPath() + (state.getValue(SkullCandleBlock.WALL) ? "_wall" : "_floor"))[0].model)
+                    .rotationY(yaw(state.getValue(SkullCandleBlock.FACING))).build(), CandlePropBlock.WATERLOGGED);
+        }
     }
 
     private ConfiguredModel[] candle(BlockState state, String model) {
