@@ -924,6 +924,10 @@ public class ModBlocks {
     public static final RegistryObject<Block> CHANDELIER = Registration.BLOCKS.register("chandelier",
             () -> new ChandelierBlock(Properties.of().mapColor(MapColor.METAL).strength(3.5F).sound(SoundType.LANTERN)
                     .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
+    // Skulls and femurs instead of iron, and as easy to take down.
+    public static final RegistryObject<Block> BONE_CHANDELIER = Registration.BLOCKS.register("bone_chandelier",
+            () -> new BoneChandelierBlock(Properties.of().mapColor(MapColor.SAND).strength(2.0F).sound(SoundType.BONE_BLOCK)
+                    .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
     // Chain fixtures, hung as blocks under a vanilla chain or from a ceiling, as a lantern hangs. On
     // a swinging chain they are its fixture instead (SwingingChainBlock#use), drawn from the same
     // models. The chandelier's strength and leniency. Each shape is its model's: a thin chain or
@@ -1052,6 +1056,35 @@ public class ModBlocks {
     // sandstone for desert tombs. Adding one is a line here. Each copies its source's properties,
     // and datagen reads the stone texture off the source's id, as for the capstones.
     public static final Map<RegistryObject<Block>, Supplier<Block>> CATACOMB_NICHES = new LinkedHashMap<>();
+
+    /**
+     * A wall shelf, the large brick pair that textures it, and what it is made from: a stone it is
+     * cut from, or for a mossy one, the plain shelf it is grown from.
+     *
+     * @author Mark Gottschling on 11/01/2026
+     */
+    public record Shelf(RegistryObject<Block> block, RegistryObject<Block> left, RegistryObject<Block> right,
+                        Supplier<Block> source) {}
+
+    public static final List<Shelf> SHELVES = new ArrayList<>();
+
+    static {
+        RegistryObject<Block> stoneShelf = shelf("stone_brick_shelf", LEFT_LARGE_STONE_BRICK, RIGHT_LARGE_STONE_BRICK, () -> Blocks.STONE_BRICKS);
+        shelf("mossy_stone_brick_shelf", MOSSY_LEFT_LARGE_STONE_BRICK, MOSSY_RIGHT_LARGE_STONE_BRICK, stoneShelf);
+        RegistryObject<Block> mudShelf = shelf("mud_brick_shelf", LEFT_LARGE_MUD_BRICK, RIGHT_LARGE_MUD_BRICK, () -> Blocks.MUD_BRICKS);
+        shelf("mossy_mud_brick_shelf", MOSSY_LEFT_LARGE_MUD_BRICK, MOSSY_RIGHT_LARGE_MUD_BRICK, mudShelf);
+        RegistryObject<Block> deepslateShelf = shelf("deepslate_brick_shelf", LEFT_LARGE_DEEPSLATE_BRICK, RIGHT_LARGE_DEEPSLATE_BRICK, () -> Blocks.DEEPSLATE_BRICKS);
+        shelf("mossy_deepslate_brick_shelf", MOSSY_LEFT_LARGE_DEEPSLATE_BRICK, MOSSY_RIGHT_LARGE_DEEPSLATE_BRICK, deepslateShelf);
+        shelf("ossuary_brick_shelf", LEFT_LARGE_OSSUARY_BRICK, RIGHT_LARGE_OSSUARY_BRICK, OSSUARY_BRICKS);
+        RegistryObject<Block> brickShelf = shelf("brick_shelf", LEFT_LARGE_BRICK, RIGHT_LARGE_BRICK, () -> Blocks.BRICKS);
+        shelf("mossy_brick_shelf", MOSSY_LEFT_LARGE_BRICK, MOSSY_RIGHT_LARGE_BRICK, brickShelf);
+    }
+
+    private static RegistryObject<Block> shelf(String id, RegistryObject<Block> left, RegistryObject<Block> right, Supplier<Block> source) {
+        RegistryObject<Block> block = stone(id, () -> new ShelfBlock(Properties.copy(left.get()).noOcclusion()));
+        SHELVES.add(new Shelf(block, left, right, source));
+        return block;
+    }
 
     static {
         catacombNiche("stone_bricks", () -> Blocks.STONE_BRICKS);

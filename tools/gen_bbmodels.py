@@ -505,6 +505,74 @@ def chandelier():
     return p
 
 
+# a bone chandelier's candles, one on the crown of each skull. BoneChandelierBlock's FLAMES match.
+BONE_CHANDELIER_CANDLES = [(8, 3), (8, 13), (3, 8), (13, 8)]
+
+
+def bone_chandelier():
+    """Sedlec's idea in one block: four skulls looking outward, a candle on each crown, femurs from
+    skull to skull and across the middle, four ribs up to the chain. 5px skulls: at 6 neighbours
+    cut into each other at the corners. The candles are the iron chandelier's height at the same y,
+    so the flames sit at the same FLAME_Y."""
+    p = Project("bone_chandelier", {"bone": BONE, "skull": SKULL, "candle": "minecraft:block/candle",
+                                    "chain": CHAIN})
+    for n, (x, z, facing) in enumerate(((5.5, 0.5, "north"), (5.5, 10.5, "south"), (0.5, 5.5, "west"),
+                                        (10.5, 5.5, "east"))):
+        skull(p, "frame", f"skull_{n}", x, 0, z, size=5, facing=facing)
+    # femurs from skull to skull, across each corner
+    for n, (x, z, yaw) in enumerate(((4.5, 4.5, 45), (11.5, 4.5, -45), (4.5, 11.5, -45), (11.5, 11.5, 45))):
+        femur(p, "frame", f"corner_{n}", (x, 2, z), 8, yaw=yaw)
+    # the hub, the arms out to the backs of the skulls, and the chain
+    bone(p, "frame", "hub", (7, 0, 7), (9, 5, 9), axis="y")
+    bone(p, "frame", "arm_x", (5.5, 2, 7.25), (10.5, 3.5, 8.75), axis="x")
+    bone(p, "frame", "arm_z", (7.25, 2, 5.5), (8.75, 3.5, 10.5), axis="z")
+    chain(p, "frame", "chain", 8, 8, 5, 16)
+    # ribs from behind each skull's crown up to the chain
+    for n, (axis, angle, centre) in enumerate((("z", -22.5, (6.5, 8, 8)), ("z", 22.5, (9.5, 8, 8)),
+                                                ("x", 22.5, (8, 8, 6.5)), ("x", -22.5, (8, 8, 9.5)))):
+        cx, cy, cz = centre
+        bone(p, "frame", f"rib_{n}", (cx - 0.5, cy - 3.5, cz - 0.5), (cx + 0.5, cy + 3.5, cz + 0.5), axis="y",
+             rot=(axis, angle), origin=centre)
+    for n, (x, z) in enumerate(BONE_CHANDELIER_CANDLES):
+        candle(p, "candles", f"candle_{n}", x, z, CHANDELIER_CANDLE_Y, CHANDELIER_CANDLE_HEIGHT)
+    return p
+
+
+def shelf():
+    """A wall shelf, authored facing north with its wall to the south: a 4px board 10 deep on a
+    stepped corbel, a template per ShelfBlock CONTENTS (`brick` is filled per material by datagen).
+    The board's front is the brick's bottom band, joint along its foot, and its top runs the joint
+    along the wall, so a run of them reads as one long brick. `empty` holds only the board: a tome
+    lies on it."""
+    p = Project("shelf", {"brick": "minecraft:block/stone_bricks", "skull": SKULL, "bone": BONE})
+    band = [0, 12, 16, 16]
+    p.box("board", "board", (0, 4, 6), (16, 8, 16), "brick", skip=("south",),
+          uv={"north": band, "up": [0, 6, 16, 16], "down": [0, 6, 16, 16], "west": [0, 12, 10, 16],
+              "east": [6, 12, 16, 16]})
+    p.box("board", "corbel_upper", (5, 2, 10), (11, 4, 16), "brick", skip=("south", "up"),
+          uv={"north": [5, 8, 11, 10], "down": [5, 6, 11, 12], "west": [0, 8, 6, 10], "east": [10, 8, 16, 10]})
+    p.box("board", "corbel_lower", (5, 0, 13), (11, 2, 16), "brick", skip=("south", "up"),
+          uv={"north": [5, 10, 11, 12], "down": [5, 9, 11, 12], "west": [0, 10, 3, 12], "east": [13, 10, 16, 12]})
+
+    # bones: long bones stacked knuckles out, a course of five with the next in its hollows. Femurs,
+    # not plain boxes: touching 3px boxes merged into one solid white block.
+    g = "contents_bones"
+    for row, (y, xs) in enumerate(((8, (2, 5, 8, 11, 14)), (10, (3.5, 6.5, 9.5, 12.5)), (12, (5, 8, 11)))):
+        for n, x in enumerate(xs):
+            femur(p, g, f"femur_{row}_{n}", (x, y, 11), 9, along="z")
+
+    # skulls: two side by side, looking out
+    for n, x in enumerate((1.5, 8.5)):
+        skull(p, "contents_skulls", f"skull_{n}", x, 8, 8, size=6)
+
+    # skull_and_bones: a skull at one end, a little stack of femurs at the other
+    g = "contents_skull_and_bones"
+    skull(p, g, "skull", 2, 8, 8, size=6)
+    for n, (x, y) in enumerate(((10, 8), (13, 8), (11.5, 10))):
+        femur(p, g, f"femur_{n}", (x, y, 11), 9, along="z")
+    return p
+
+
 def iron_ring(p, group, name, centre, size, plane, bar=0.75, depth=1.5):
     """A square ring of iron bars, `size` px across, in the "xy" or "zy" plane, `depth` thick."""
     cx, cy, cz = centre
@@ -860,6 +928,8 @@ PROJECTS = {
     "bloody_steve_head_pike_upper": lambda: skull_pike("upper", "dungeonblocks:block/bloody_steve_head",
                                                        "bloody_steve_head_pike"),
     "chandelier": chandelier,
+    "bone_chandelier": bone_chandelier,
+    "shelf": shelf,
     "large_candle": large_candle,
     "huge_candle_lower": lambda: huge_candle("lower"),
     "huge_candle_upper": lambda: huge_candle("upper"),

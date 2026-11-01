@@ -234,6 +234,9 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.BONE_PILE), modLoc("block/bone_pile_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.SKULL_PILE), modLoc("block/skull_pile_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.CHANDELIER), modLoc("block/chandelier"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.BONE_CHANDELIER), modLoc("block/bone_chandelier"));
+		ModBlocks.SHELVES.forEach(shelf -> withExistingParent(shelf.block().getId().getPath(),
+				modLoc("block/" + shelf.block().getId().getPath() + "_empty_left")));
 		// the largest size, though a placed one starts small; the huge candle whole, shrunk to fit
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.LARGE_CANDLE), modLoc("block/large_candle_large"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.HUGE_CANDLE), modLoc("block/huge_candle_item"));

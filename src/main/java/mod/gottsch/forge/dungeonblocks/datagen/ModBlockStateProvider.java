@@ -27,6 +27,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -550,6 +551,25 @@ public class ModBlockStateProvider extends BlockStateProvider {
             horizontalBlock(block.get(), state -> niches.get(state.getValue(CatacombNicheBlock.REMAINS)));
         });
 
+        // wall shelves: a child of the Blockbench template for each CONTENTS and each half of the brick
+        ModBlocks.SHELVES.forEach(shelf -> {
+            Map<String, ModelFile> shelves = new HashMap<>();
+            for (ShelfBlock.Contents contents : ShelfBlock.Contents.values()) {
+                String suffix = "_" + contents.getSerializedName();
+                for (RegistryObject<Block> brick : List.of(shelf.left(), shelf.right())) {
+                    ResourceLocation texture = modLoc("block/" + brick.getId().getPath());
+                    String half = brick == shelf.left() ? "_left" : "_right";
+                    shelves.put(suffix + half, models().withExistingParent(shelf.block().getId().getPath() + suffix + half,
+                            modLoc("block/template_shelf" + suffix)).texture("brick", texture).texture("particle", texture));
+                }
+            }
+            getVariantBuilder(shelf.block().get()).forAllStates(state -> ConfiguredModel.builder()
+                    .modelFile(shelves.get("_" + state.getValue(ShelfBlock.CONTENTS).getSerializedName()
+                            + (state.getValue(ShelfBlock.LEFT) ? "_left" : "_right")))
+                    .rotationY(((int) state.getValue(ShelfBlock.FACING).toYRot() + 180) % 360)
+                    .build());
+        });
+
         // skull pike: one model per half
         // tapestries: a model per part, each the cloth's 16x16 window of the one 64x48 texture, a
         // plane hanging from the rod's centreline, 1px off the wall; the top row carries the rod, flush
@@ -679,6 +699,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         horizontalBlock(ModBlocks.SKULL_PILE.get(), state -> models().getExistingFile(
                 modLoc("block/skull_pile_" + state.getValue(BonePileBlock.BONES))));
 
+        getVariantBuilder(ModBlocks.BONE_CHANDELIER.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(models().getExistingFile(modLoc(state.getValue(ChandelierBlock.LIT)
+                        ? "block/bone_chandelier_lit" : "block/bone_chandelier"))).build());
         // chandelier: lit and unlit differ only in the candles' wicks
         getVariantBuilder(ModBlocks.CHANDELIER.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(models().getExistingFile(modLoc(state.getValue(ChandelierBlock.LIT)

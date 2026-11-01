@@ -188,7 +188,12 @@ public class ChandelierBlock extends Block implements SimpleWaterloggedBlock {
      * world: straight across for the block, and along the swing on a swinging chain.
      */
     static void flames(Level level, RandomSource random, Function<Vector3f, Vec3> place) {
-        for (double[] flame : FLAMES) {
+        flames(FLAMES, level, random, place);
+    }
+
+    /** The same, on the given wicks, each {x, z} in pixels at FLAME_Y. */
+    static void flames(double[][] wicks, Level level, RandomSource random, Function<Vector3f, Vec3> place) {
+        for (double[] flame : wicks) {
             Vec3 at = place.apply(new Vector3f((float) (flame[0] / 16.0), (float) (FLAME_Y / 16.0), (float) (flame[1] / 16.0)));
             double x = at.x;
             double y = at.y;

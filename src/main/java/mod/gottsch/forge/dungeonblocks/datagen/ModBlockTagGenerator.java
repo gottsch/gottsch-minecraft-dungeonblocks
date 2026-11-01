@@ -187,7 +187,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.RUBBLE_SCATTER.get());
         // The bone pile, the chandelier and the chain fixtures drop to anything; a pickaxe only
         // takes them down faster.
-        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.BONE_PILE.get(), ModBlocks.SKULL_PILE.get(), ModBlocks.CHANDELIER.get(),
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.BONE_PILE.get(), ModBlocks.SKULL_PILE.get(), ModBlocks.CHANDELIER.get(), ModBlocks.BONE_CHANDELIER.get(),
                 ModBlocks.MANACLES.get(), ModBlocks.MEAT_HOOK.get(), ModBlocks.CENSER.get());
         // The large candles are lit by vanilla's flint and steel and fire charge, which light only
         // what is in #candles (CandlePropBlock). Like vanilla's candles they need no tool.

@@ -24,6 +24,7 @@ import mod.gottsch.forge.dungeonblocks.core.block.DecorType;
 import mod.gottsch.forge.dungeonblocks.core.block.ModMaterials;
 import mod.gottsch.forge.dungeonblocks.core.block.AgedIronFamily;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.ShelfBlock;
 import net.minecraft.world.level.block.WeatheringCopper.WeatherState;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.PackOutput;
@@ -382,6 +383,75 @@ public class Recipes extends RecipeProvider {
 					.define('k', ItemTags.CANDLES)
 					.define('i', Items.IRON_INGOT)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CHAIN))
+					.save(recipe);
+
+			// bone chandelier: the chandelier's chain and candles, on bone blocks for its skulls
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.BONE_CHANDELIER.get())
+					.pattern(" c ")
+					.pattern("kkk")
+					.pattern("bbb")
+					.define('c', Blocks.CHAIN)
+					.define('k', ItemTags.CANDLES)
+					.define('b', Blocks.BONE_BLOCK)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.BONE_BLOCK))
+					.save(recipe);
+
+			// wall shelves: a block of the stone cuts into two; a mossy one is the plain shelf with a
+			// vine or a moss block, as mossy flagstones are
+			ModBlocks.SHELVES.forEach(shelf -> {
+				Block source = shelf.source().get();
+				if (!(source instanceof ShelfBlock)) {
+					SingleItemRecipeBuilder.stonecutting(Ingredient.of(source), RecipeCategory.DECORATIONS, shelf.block().get(), 2)
+							.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(source))
+							.save(recipe);
+					return;
+				}
+				for (Block moss : List.of(Blocks.VINE, Blocks.MOSS_BLOCK)) {
+					ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, shelf.block().get())
+							.requires(source)
+							.requires(moss)
+							.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(moss))
+							.save(recipe, new ResourceLocation(DungeonBlocks.MOD_ID, shelf.block().getId().getPath() + "_from_"
+									+ ForgeRegistries.BLOCKS.getKey(moss).getPath()));
+				}
+			});
+
+			// catacombs. Ossuary bricks are stone bricks bleached with bone meal, and their large and
+			// square bricks are cut from them
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.OSSUARY_BRICKS.get())
+					.requires(Blocks.STONE_BRICKS)
+					.requires(Items.BONE_MEAL)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.BONE_MEAL))
+					.save(recipe);
+			for (RegistryObject<Block> brick : List.of(ModBlocks.SQUARE_OSSUARY_BRICK, ModBlocks.LEFT_LARGE_OSSUARY_BRICK, ModBlocks.RIGHT_LARGE_OSSUARY_BRICK)) {
+				SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.OSSUARY_BRICKS.get()), RecipeCategory.BUILDING_BLOCKS, brick.get())
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.OSSUARY_BRICKS.get()))
+						.save(recipe);
+			}
+			slabTable(recipe, ModBlocks.OSSUARY_BRICKS_SLAB_TABLE, ModBlocks.OSSUARY_BRICKS.get(), ModBlocks.OSSUARY_BRICKS.get());
+			// hewn tufa is cut from tuff, and the grave slabs from that
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.TUFF), RecipeCategory.BUILDING_BLOCKS, ModBlocks.HEWN_TUFA.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.TUFF))
+					.save(recipe);
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.HEWN_TUFA.get()), RecipeCategory.BUILDING_BLOCKS, ModBlocks.GRAVE_SLAB_PAVEMENT.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.HEWN_TUFA.get()))
+					.save(recipe);
+			// bone walls are hewn tufa packed with a bone block for the skulls, as on the skull
+			// pike, or with bones; knucklebone paving is cobblestone set with a bone
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.PACKED_SKULLS.get())
+					.requires(ModBlocks.HEWN_TUFA.get())
+					.requires(Blocks.BONE_BLOCK)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.HEWN_TUFA.get()))
+					.save(recipe);
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.JUMBLED_FEMURS.get())
+					.requires(ModBlocks.HEWN_TUFA.get())
+					.requires(Items.BONE, 3)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.HEWN_TUFA.get()))
+					.save(recipe);
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.KNUCKLEBONE_PAVING.get())
+					.requires(Blocks.COBBLESTONE)
+					.requires(Items.BONE)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.BONE))
 					.save(recipe);
 
 			// large candles, of vanilla's plain candles (their wax): two make a Large Candle, three of

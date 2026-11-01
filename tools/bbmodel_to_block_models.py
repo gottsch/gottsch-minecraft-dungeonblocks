@@ -153,6 +153,14 @@ for lit, candle in (("", "candle"), ("_lit", "candle_lit")):
     JOBS.append(("chandelier", f"chandelier{lit}",
                  {"iron": "dungeonblocks:block/dark_iron", "candle": f"minecraft:block/{candle}", "chain": "minecraft:block/chain"},
                  {"frame": (0, 0, 0), "candles": (0, 0, 0)}))
+    JOBS.append(("bone_chandelier", f"bone_chandelier{lit}",
+                 {**BONES, "candle": f"minecraft:block/{candle}", "chain": "minecraft:block/chain"},
+                 {"frame": (0, 0, 0), "candles": (0, 0, 0)}))
+# the wall shelf: a template per ShelfBlock CONTENTS, the board and that group, the board alone for
+# `empty`. Datagen makes one child of each per brick half, filling `brick`.
+for contents in ("empty", "bones", "skulls", "skull_and_bones"):
+    JOBS.append(("shelf", f"template_shelf_{contents}", {"brick": "minecraft:block/stone_bricks", **BONES},
+                 {"board": (0, 0, 0), **({} if contents == "empty" else {f"contents_{contents}": (0, 0, 0)})}))
 # the large candles: a model per size (and per half, for the huge one), lit and unlit, which differ
 # only in the wax textures - the flame's glow on the wax near the wick
 for lit in ("", "_lit"):
@@ -221,7 +229,7 @@ STACKS.append(("template_altar_item", {"body": "minecraft:block/polished_deepsla
 
 # models whose textures have see-through pixels: the skeleton's ribs, the chain's links. Without
 # cutout those pixels draw black.
-CUTOUT = ("gibbet", "chandelier", "chain_fixture_", "occupied_")
+CUTOUT = ("gibbet", "chandelier", "bone_chandelier", "chain_fixture_", "occupied_")
 
 BOUNDARY = {"north": (2, 0, "from"), "south": (2, 16, "to"), "west": (0, 0, "from"),
             "east": (0, 16, "to"), "down": (1, 0, "from"), "up": (1, 16, "to")}

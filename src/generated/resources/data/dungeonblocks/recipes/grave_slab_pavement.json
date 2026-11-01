@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "dungeonblocks:hewn_tufa"
+  },
+  "result": "dungeonblocks:grave_slab_pavement"
+}

@@ -127,7 +127,11 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		// a chandelier is mostly wheel: a player clicks that to light it, not the chain up its middle
-		return state.getValue(FIXTURE) == ChainFixture.CHANDELIER ? ChandelierBlock.SHAPE : SHAPE;
+		return switch (state.getValue(FIXTURE)) {
+			case CHANDELIER -> ChandelierBlock.SHAPE;
+			case BONE_CHANDELIER -> BoneChandelierBlock.SHAPE;
+			default -> SHAPE;
+		};
 	}
 
 	/** Walk-through: you're meant to be able to push through a chain, which is what makes it swing. */
@@ -326,6 +330,9 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 		if (stack.is(ModBlocks.CHANDELIER.get().asItem())) {
 			return ChainFixture.CHANDELIER;
 		}
+		if (stack.is(ModBlocks.BONE_CHANDELIER.get().asItem())) {
+			return ChainFixture.BONE_CHANDELIER;
+		}
 		return ChainFixture.NONE;
 	}
 
@@ -338,6 +345,7 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 			case MEAT_HOOK -> new ItemStack(ModBlocks.MEAT_HOOK.get());
 			case CENSER -> new ItemStack(ModBlocks.CENSER.get());
 			case CHANDELIER -> new ItemStack(ModBlocks.CHANDELIER.get());
+			case BONE_CHANDELIER -> new ItemStack(ModBlocks.BONE_CHANDELIER.get());
 			case NONE -> ItemStack.EMPTY;
 		};
 	}
@@ -373,7 +381,8 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
 		ChainFixture fixture = state.getValue(FIXTURE);
-		if ((fixture != ChainFixture.CENSER && fixture != ChainFixture.CHANDELIER) || !state.getValue(LIT)) {
+		if ((fixture != ChainFixture.CENSER && fixture != ChainFixture.CHANDELIER && fixture != ChainFixture.BONE_CHANDELIER)
+				|| !state.getValue(LIT)) {
 			return;
 		}
 		if (!(level.getBlockEntity(findTop(level, pos)) instanceof SwingingChainBlockEntity chain)) {
@@ -381,6 +390,10 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 		}
 		if (fixture == ChainFixture.CHANDELIER) {
 			ChandelierBlock.flames(level, random, wick -> chain.bottomPoint(level.getGameTime(), wick));
+			return;
+		}
+		if (fixture == ChainFixture.BONE_CHANDELIER) {
+			BoneChandelierBlock.flames(level, random, wick -> chain.bottomPoint(level.getGameTime(), wick));
 			return;
 		}
 		Vec3 at = chain.bottomPoint(level.getGameTime(), CenserBlock.smokeOrigin(random));
