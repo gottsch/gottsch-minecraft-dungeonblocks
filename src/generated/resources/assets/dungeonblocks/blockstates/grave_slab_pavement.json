@@ -1,0 +1,31 @@
+{
+  "variants": {
+    "tile=0": {
+      "model": "dungeonblocks:block/grave_slab_pavement_0"
+    },
+    "tile=1": {
+      "model": "dungeonblocks:block/grave_slab_pavement_1"
+    },
+    "tile=2": {
+      "model": "dungeonblocks:block/grave_slab_pavement_2"
+    },
+    "tile=3": {
+      "model": "dungeonblocks:block/grave_slab_pavement_3"
+    },
+    "tile=4": {
+      "model": "dungeonblocks:block/grave_slab_pavement_4"
+    },
+    "tile=5": {
+      "model": "dungeonblocks:block/grave_slab_pavement_5"
+    },
+    "tile=6": {
+      "model": "dungeonblocks:block/grave_slab_pavement_6"
+    },
+    "tile=7": {
+      "model": "dungeonblocks:block/grave_slab_pavement_7"
+    },
+    "tile=8": {
+      "model": "dungeonblocks:block/grave_slab_pavement_8"
+    }
+  }
+}

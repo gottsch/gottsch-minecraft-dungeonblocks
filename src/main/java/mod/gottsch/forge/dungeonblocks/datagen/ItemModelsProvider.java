@@ -113,6 +113,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.MOSSY_FAN_COBBLES), modLoc("block/mossy_fan_cobbles_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.SANDSTONE_ASHLAR), modLoc("block/sandstone_ashlar_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DRIFTED_SANDSTONE_ASHLAR), modLoc("block/drifted_sandstone_ashlar_4"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.GRAVE_SLAB_PAVEMENT), modLoc("block/grave_slab_pavement_4"));
 		// the circle's centre, the sun
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_RITUAL_CIRCLE), modLoc("block/deepslate_ritual_circle_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.BLACKSTONE_RITUAL_CIRCLE), modLoc("block/blackstone_ritual_circle_4"));
@@ -145,6 +146,10 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_RIGHT_LARGE_DEEPSLATE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.CHISELED_DEEPSLATE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_CHISELED_DEEPSLATE_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.OSSUARY_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.HEWN_TUFA));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.PACKED_SKULLS), modLoc("block/packed_skulls_1_1_1"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.JUMBLED_FEMURS), modLoc("block/jumbled_femurs_1_1_1"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_DEEPSLATE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_DEEPSLATE_TILES));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_COBBLED_DEEPSLATE));

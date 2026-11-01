@@ -194,6 +194,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         patternTiles(ModBlocks.MOSSY_FAN_COBBLES);
         patternTiles(ModBlocks.SANDSTONE_ASHLAR);
         patternTiles(ModBlocks.DRIFTED_SANDSTONE_ASHLAR);
+        patternTiles(ModBlocks.GRAVE_SLAB_PAVEMENT);
         // the circles are chalked on the top only: their sides and bottom are their plain stone
         Map.of(ModBlocks.DEEPSLATE_RITUAL_CIRCLE, mcLoc("block/polished_deepslate"),
                 ModBlocks.BLACKSTONE_RITUAL_CIRCLE, mcLoc("block/polished_blackstone")).forEach((block, stone) -> {
@@ -231,6 +232,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.MOSSY_CHISELED_DEEPSLATE_BRICKS.get());
         // the eleven decorative types for these three come off the ModMaterials.STONE loop above;
         // only the full block and the stairs are generated here
+        simpleBlock(ModBlocks.OSSUARY_BRICKS.get());
+        // four variants with matching edges, so its pick marks don't repeat block by block
+        simpleBlock(ModBlocks.HEWN_TUFA.get(),
+                new ConfiguredModel(cubeAll(ModBlocks.HEWN_TUFA.get())),
+                new ConfiguredModel(models().cubeAll("hewn_tufa_1", modLoc("block/hewn_tufa_1"))),
+                new ConfiguredModel(models().cubeAll("hewn_tufa_2", modLoc("block/hewn_tufa_2"))),
+                new ConfiguredModel(models().cubeAll("hewn_tufa_3", modLoc("block/hewn_tufa_3"))));
+        wallPattern(ModBlocks.PACKED_SKULLS, modLoc("block/hewn_tufa"));
+        wallPattern(ModBlocks.JUMBLED_FEMURS, modLoc("block/hewn_tufa"));
         simpleBlock(ModBlocks.MOSSY_DEEPSLATE_BRICKS.get());
         simpleBlock(ModBlocks.MOSSY_DEEPSLATE_TILES.get());
         simpleBlock(ModBlocks.MOSSY_COBBLED_DEEPSLATE.get());
@@ -699,6 +709,29 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 model.rotationY(yaw(state.getValue(FacingPatternTileBlock.FACING)));
             }
             return model.build();
+        });
+    }
+
+    /**
+     * A WallPatternBlock: a cube per position mod 3, each side face textured with the slice
+     * <name>_<col + 3 * row> it shows from that side, since a face's texture runs along +x from the
+     * south and -x from the north, +z from the west and -z from the east.
+     */
+    private void wallPattern(RegistryObject<Block> block, ResourceLocation ends) {
+        String name = block.getId().getPath();
+        int span = WallPatternBlock.SPAN;
+        getVariantBuilder(block.get()).forAllStates(state -> {
+            int x = state.getValue(WallPatternBlock.X);
+            int y = state.getValue(WallPatternBlock.Y);
+            int z = state.getValue(WallPatternBlock.Z);
+            int row = span - 1 - y;
+            ResourceLocation north = modLoc("block/" + name + "_" + (Math.floorMod(-x, span) + span * row));
+            ResourceLocation south = modLoc("block/" + name + "_" + (x + span * row));
+            ResourceLocation east = modLoc("block/" + name + "_" + (Math.floorMod(-z, span) + span * row));
+            ResourceLocation west = modLoc("block/" + name + "_" + (z + span * row));
+            return ConfiguredModel.builder().modelFile(models()
+                    .cube(name + "_" + x + "_" + y + "_" + z, ends, ends, north, south, east, west)
+                    .texture("particle", south)).build();
         });
     }
 

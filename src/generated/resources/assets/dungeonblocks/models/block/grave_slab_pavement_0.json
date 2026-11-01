@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "dungeonblocks:block/grave_slab_pavement_0"
+  }
+}

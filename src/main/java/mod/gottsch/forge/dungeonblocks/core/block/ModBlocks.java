@@ -392,6 +392,29 @@ public class ModBlocks {
         return new StairBlock(MOSSY_DEEPSLATE_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.DEEPSLATE_BRICK_STAIRS));
     });
 
+    // Ossuary Bricks: the vanilla stone brick pattern re-toned to a dirty bone, for the catacombs.
+    public static final RegistryObject<Block> OSSUARY_BRICKS = stone("ossuary_bricks", () -> {
+        return new Block(Properties.copy(Blocks.STONE_BRICKS));
+    });
+
+    // Hewn Tufa: soft tunnel rock with pick marks, for catacomb walls that were dug rather than built.
+    public static final RegistryObject<Block> HEWN_TUFA = stone("hewn_tufa", () -> {
+        return new Block(Properties.copy(Blocks.TUFF));
+    });
+
+    // Packed Skulls: a wall of skulls crammed together on tufa, a pattern three blocks square.
+    public static final RegistryObject<Block> PACKED_SKULLS = stone("packed_skulls",
+            () -> new WallPatternBlock(Properties.copy(Blocks.BONE_BLOCK)));
+
+    // Jumbled Femurs: a wall of femurs thrown together on tufa, a pattern three blocks square.
+    public static final RegistryObject<Block> JUMBLED_FEMURS = stone("jumbled_femurs",
+            () -> new WallPatternBlock(Properties.copy(Blocks.BONE_BLOCK)));
+
+    // Grave Slab Pavement: a floor of worn, faintly carved slabs in tufa's colours, on the same
+    // three-block pattern as the flagstones: the joints cross block edges. Stone bricks' properties.
+    public static final RegistryObject<Block> GRAVE_SLAB_PAVEMENT = stone("grave_slab_pavement",
+            () -> new PatternTileBlock(Properties.copy(Blocks.STONE_BRICKS)));
+
     // Polished Andesite Bricks: the vanilla stone brick pattern re-toned onto polished andesite's
     // own palette, the way vanilla derives deepslate_bricks from polished_deepslate. Plural, because
     // the texture shows several bricks - unlike square/large bricks, which are one brick per block.
