@@ -408,6 +408,9 @@ public class ModBlocks {
     public static final RegistryObject<Block> HEWN_TUFA = stone("hewn_tufa", () -> {
         return new Block(Properties.copy(Blocks.TUFF));
     });
+    public static final RegistryObject<Block> MOSSY_HEWN_TUFA = stone("mossy_hewn_tufa", () -> {
+        return new Block(Properties.copy(Blocks.TUFF));
+    });
 
     public static final RegistryObject<StairBlock> OSSUARY_BRICK_STAIRS = stone("ossuary_brick_stairs", () -> {
         return new StairBlock(OSSUARY_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.STONE_BRICK_STAIRS));
@@ -469,6 +472,10 @@ public class ModBlocks {
     });
     public static final RegistryObject<Block> MOSSY_BRICKS = stone("mossy_bricks", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    // vanilla has no cracked red bricks; texture from tools/gen_cracked_bricks_texture.py
+    public static final RegistryObject<Block> CRACKED_BRICKS = stone("cracked_bricks", () -> {
+        return new Block(Properties.copy(Blocks.BRICKS));
     });
     public static final RegistryObject<StairBlock> MOSSY_BRICK_STAIRS = stone("mossy_brick_stairs", () -> {
         return new StairBlock(Blocks.BRICKS.defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
@@ -1118,6 +1125,9 @@ public class ModBlocks {
         catacombNiche("sandstone", () -> Blocks.SANDSTONE);
         catacombNiche("ossuary_bricks", () -> OSSUARY_BRICKS.get());
         catacombNiche("hewn_tufa", () -> HEWN_TUFA.get());
+        catacombNiche("bricks", () -> Blocks.BRICKS);
+        catacombNiche("mossy_bricks", () -> MOSSY_BRICKS.get());
+        catacombNiche("cracked_bricks", () -> CRACKED_BRICKS.get());
     }
 
     /** Registers "<source>_catacomb_niche", singular like the capstones: stone_brick_catacomb_niche. */

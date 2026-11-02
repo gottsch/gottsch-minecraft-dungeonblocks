@@ -470,6 +470,7 @@ public class Recipes extends RecipeProvider {
 					.save(recipe);
 			// weathered as vanilla's stone bricks are: mossy with a vine or a moss block, cracked in a furnace
 			mossy(recipe, ModBlocks.MOSSY_OSSUARY_BRICKS, ModBlocks.OSSUARY_BRICKS.get());
+			mossy(recipe, ModBlocks.MOSSY_HEWN_TUFA, ModBlocks.HEWN_TUFA.get());
 			SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.OSSUARY_BRICKS.get()), RecipeCategory.BUILDING_BLOCKS,
 							ModBlocks.CRACKED_OSSUARY_BRICKS.get(), 0.1F, 200)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.OSSUARY_BRICKS.get()))
@@ -784,6 +785,10 @@ public class Recipes extends RecipeProvider {
 
 			// the mod's mossy stones those are cut from: the plain stone with a vine or a moss block
 			mossy(recipe, ModBlocks.MOSSY_BRICKS, Blocks.BRICKS);
+			SimpleCookingRecipeBuilder.smelting(Ingredient.of(Blocks.BRICKS), RecipeCategory.BUILDING_BLOCKS,
+							ModBlocks.CRACKED_BRICKS.get(), 0.1F, 200)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.BRICKS))
+					.save(recipe);
 			mossy(recipe, ModBlocks.MOSSY_DEEPSLATE_BRICKS, Blocks.DEEPSLATE_BRICKS);
 			mossy(recipe, ModBlocks.MOSSY_DEEPSLATE_TILES, Blocks.DEEPSLATE_TILES);
 			mossy(recipe, ModBlocks.MOSSY_COBBLED_DEEPSLATE, Blocks.COBBLED_DEEPSLATE);

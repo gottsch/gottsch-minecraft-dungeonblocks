@@ -248,6 +248,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 new ConfiguredModel(models().cubeAll("hewn_tufa_1", modLoc("block/hewn_tufa_1"))),
                 new ConfiguredModel(models().cubeAll("hewn_tufa_2", modLoc("block/hewn_tufa_2"))),
                 new ConfiguredModel(models().cubeAll("hewn_tufa_3", modLoc("block/hewn_tufa_3"))));
+        simpleBlock(ModBlocks.MOSSY_HEWN_TUFA.get(),
+                new ConfiguredModel(cubeAll(ModBlocks.MOSSY_HEWN_TUFA.get())),
+                new ConfiguredModel(models().cubeAll("mossy_hewn_tufa_1", modLoc("block/mossy_hewn_tufa_1"))),
+                new ConfiguredModel(models().cubeAll("mossy_hewn_tufa_2", modLoc("block/mossy_hewn_tufa_2"))),
+                new ConfiguredModel(models().cubeAll("mossy_hewn_tufa_3", modLoc("block/mossy_hewn_tufa_3"))));
         wallPattern(ModBlocks.PACKED_SKULLS, modLoc("block/hewn_tufa"));
         wallPattern(ModBlocks.JUMBLED_FEMURS, modLoc("block/hewn_tufa"));
         wallPattern(ModBlocks.CRUMBLING_BONE_WALL, modLoc("block/hewn_tufa"));
@@ -262,6 +267,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         stairsBlock(ModBlocks.MOSSY_POLISHED_ANDESITE_BRICK_STAIRS.get(), modLoc("block/mossy_polished_andesite_bricks"));
 
         simpleBlock(ModBlocks.MOSSY_BRICKS.get());
+        simpleBlock(ModBlocks.CRACKED_BRICKS.get());
         stairsBlock(ModBlocks.MOSSY_BRICK_STAIRS.get(), modLoc("block/mossy_bricks"));
 
         simpleBlock(ModBlocks.LARGE_BRICKS.get());

@@ -72,6 +72,11 @@ BASALT_STRIATIONS: FrozenSet[RGBA] = frozenset({
 # volcanic tuff rather than generic grey rock, so moss is held off them.
 TUFF_ASH_FLECKS: FrozenSet[RGBA] = frozenset({(160, 162, 151, 255)})
 
+# Hewn tufa's pits, pick-mark cuts and the lit pixel under each cut (gen_hewn_tufa_texture.py's
+# PIT, CUT and LIT) -- what makes it read as dug rock rather than plain tuff.
+HEWN_TUFA_MARKS: FrozenSet[RGBA] = frozenset({
+    (66, 61, 51, 255), (68, 63, 53, 255), (118, 111, 95, 255)})
+
 
 @dataclass(frozen=True)
 class Job:
@@ -107,6 +112,13 @@ JOBS = [
     # Tuff: lumpy, no mortar courses, so the cobble mask - the brick mask's straight course lines
     # read as mortar that tuff does not have. The ash flecks stay clear of moss.
     Job(base="tuff", out="mossy_tuff", mask="cobble", protect=TUFF_ASH_FLECKS),
+
+    # Hewn tufa: lumpy like tuff, so the cobble mask, mirrored so it differs from mossy tuff. All
+    # four variants take the SAME mask: it tiles with itself, so the variants still tile against
+    # each other. A different mask per variant would cut moss off at block edges. The pick marks
+    # and pits are the stone's identity and stay clear.
+    *[Job(base=f"hewn_tufa{s}", out=f"mossy_hewn_tufa{s}", mask="cobble", mirror=True,
+          protect=HEWN_TUFA_MARKS, base_from="mod") for s in ("", "_1", "_2", "_3")],
 ]
 
 _jar = None
