@@ -188,15 +188,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
         brazierBlock(ModBlocks.BRAZIER);
 
         simpleBlock(ModBlocks.SQUARE_STONE_BRICK.get());
-        patternTiles(ModBlocks.FLAGSTONES);
-        patternTiles(ModBlocks.CRACKED_FLAGSTONES);
-        patternTiles(ModBlocks.MOSSY_FLAGSTONES);
+        stackedPatternTiles(ModBlocks.FLAGSTONES);
+        stackedPatternTiles(ModBlocks.CRACKED_FLAGSTONES);
+        stackedPatternTiles(ModBlocks.MOSSY_FLAGSTONES);
         patternTiles(ModBlocks.FAN_COBBLES);
         patternTiles(ModBlocks.MOSSY_FAN_COBBLES);
         patternTiles(ModBlocks.SANDSTONE_ASHLAR);
         patternTiles(ModBlocks.DRIFTED_SANDSTONE_ASHLAR);
-        patternTiles(ModBlocks.GRAVE_SLAB_PAVEMENT);
-        patternTiles(ModBlocks.KNUCKLEBONE_PAVING);
+        stackedPatternTiles(ModBlocks.GRAVE_SLAB_PAVEMENT);
+        stackedPatternTiles(ModBlocks.KNUCKLEBONE_PAVING);
         // the circles are chalked on the top only: their sides and bottom are their plain stone
         Map.of(ModBlocks.DEEPSLATE_RITUAL_CIRCLE, mcLoc("block/polished_deepslate"),
                 ModBlocks.BLACKSTONE_RITUAL_CIRCLE, mcLoc("block/polished_blackstone")).forEach((block, stone) -> {
@@ -235,6 +235,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         // the eleven decorative types for these three come off the ModMaterials.STONE loop above;
         // only the full block and the stairs are generated here
         simpleBlock(ModBlocks.OSSUARY_BRICKS.get());
+        simpleBlock(ModBlocks.MOSSY_OSSUARY_BRICKS.get());
+        simpleBlock(ModBlocks.CRACKED_OSSUARY_BRICKS.get());
+        stairsBlock(ModBlocks.OSSUARY_BRICK_STAIRS.get(), modLoc("block/ossuary_bricks"));
+        stairsBlock(ModBlocks.MOSSY_OSSUARY_BRICK_STAIRS.get(), modLoc("block/mossy_ossuary_bricks"));
+        stairsBlock(ModBlocks.HEWN_TUFA_STAIRS.get(), modLoc("block/hewn_tufa"));
         simpleBlock(ModBlocks.SQUARE_OSSUARY_BRICK.get());
         largeBrickPair(ModBlocks.LEFT_LARGE_OSSUARY_BRICK, ModBlocks.RIGHT_LARGE_OSSUARY_BRICK);
         // four variants with matching edges, so its pick marks don't repeat block by block
@@ -745,6 +750,30 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 model.rotationY(yaw(state.getValue(FacingPatternTileBlock.FACING)));
             }
             return model.build();
+        });
+    }
+
+    /**
+     * A StackedPatternTileBlock: a cube per TILE and LAYER, TILE's slice on top and bottom. The sides
+     * take their slices as {@link #wallPattern} does, from TILE's col and row as x and z.
+     */
+    private void stackedPatternTiles(RegistryObject<Block> block) {
+        String name = block.getId().getPath();
+        int span = PatternTileBlock.SPAN;
+        getVariantBuilder(block.get()).forAllStates(state -> {
+            int tile = state.getValue(PatternTileBlock.TILE);
+            int layer = state.getValue(StackedPatternTileBlock.LAYER);
+            int x = tile % span;
+            int z = tile / span;
+            int row = span - 1 - layer;
+            ResourceLocation ends = modLoc("block/" + name + "_" + tile);
+            ResourceLocation north = modLoc("block/" + name + "_" + (Math.floorMod(-x, span) + span * row));
+            ResourceLocation south = modLoc("block/" + name + "_" + (x + span * row));
+            ResourceLocation east = modLoc("block/" + name + "_" + (Math.floorMod(-z, span) + span * row));
+            ResourceLocation west = modLoc("block/" + name + "_" + (z + span * row));
+            return ConfiguredModel.builder().modelFile(models()
+                    .cube(name + "_" + tile + "_" + layer, ends, ends, north, south, east, west)
+                    .texture("particle", ends)).build();
         });
     }
 

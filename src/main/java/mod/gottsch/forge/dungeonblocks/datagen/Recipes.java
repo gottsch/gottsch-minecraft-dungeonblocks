@@ -468,11 +468,20 @@ public class Recipes extends RecipeProvider {
 					.requires(Items.BONE_MEAL)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.BONE_MEAL))
 					.save(recipe);
+			// weathered as vanilla's stone bricks are: mossy with a vine or a moss block, cracked in a furnace
+			mossy(recipe, ModBlocks.MOSSY_OSSUARY_BRICKS, ModBlocks.OSSUARY_BRICKS.get());
+			SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.OSSUARY_BRICKS.get()), RecipeCategory.BUILDING_BLOCKS,
+							ModBlocks.CRACKED_OSSUARY_BRICKS.get(), 0.1F, 200)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.OSSUARY_BRICKS.get()))
+					.save(recipe);
 			for (RegistryObject<Block> brick : List.of(ModBlocks.SQUARE_OSSUARY_BRICK, ModBlocks.LEFT_LARGE_OSSUARY_BRICK, ModBlocks.RIGHT_LARGE_OSSUARY_BRICK)) {
 				SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.OSSUARY_BRICKS.get()), RecipeCategory.BUILDING_BLOCKS, brick.get())
 						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.OSSUARY_BRICKS.get()))
 						.save(recipe);
 			}
+			cutPiece(recipe, ModBlocks.OSSUARY_BRICKS, ModBlocks.OSSUARY_BRICK_STAIRS, 1);
+			cutPiece(recipe, ModBlocks.MOSSY_OSSUARY_BRICKS, ModBlocks.MOSSY_OSSUARY_BRICK_STAIRS, 1);
+			cutPiece(recipe, ModBlocks.HEWN_TUFA, ModBlocks.HEWN_TUFA_STAIRS, 1);
 			slabTable(recipe, ModBlocks.OSSUARY_BRICKS_SLAB_TABLE, ModBlocks.OSSUARY_BRICKS.get(), ModBlocks.OSSUARY_BRICKS.get());
 			// hewn tufa is cut from tuff, and the grave slabs from that
 			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.TUFF), RecipeCategory.BUILDING_BLOCKS, ModBlocks.HEWN_TUFA.get())

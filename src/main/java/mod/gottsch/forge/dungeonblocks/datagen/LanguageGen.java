@@ -151,6 +151,9 @@ public class LanguageGen extends LanguageProvider {
         add(ModItems.WOODEN_BUCKET.get(), "Wooden Bucket");
         add("entity." + DungeonBlocks.MOD_ID + ".wooden_bucket", "Wooden Bucket");
 
+        add(ModItems.CINERARY_URN.get(), "Cinerary Urn");
+        add("entity." + DungeonBlocks.MOD_ID + ".cinerary_urn", "Cinerary Urn");
+
         add("entity." + DungeonBlocks.MOD_ID + ".pot_shard", "Pot Shard");
 
     }

@@ -192,12 +192,12 @@ public class ModBlocks {
     // A floor of irregular flagstones, a pattern three blocks square whose stones cross block edges:
     // each block shows the TILE its position picks. Stone bricks' properties.
     public static final RegistryObject<Block> FLAGSTONES = stone("flagstones",
-            () -> new PatternTileBlock(Properties.copy(Blocks.STONE_BRICKS)));
+            () -> new StackedPatternTileBlock(Properties.copy(Blocks.STONE_BRICKS)));
     // its weathered twins, the same pattern with the same TILE, so a weathering rule can swap them
     public static final RegistryObject<Block> CRACKED_FLAGSTONES = stone("cracked_flagstones",
-            () -> new PatternTileBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
+            () -> new StackedPatternTileBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
     public static final RegistryObject<Block> MOSSY_FLAGSTONES = stone("mossy_flagstones",
-            () -> new PatternTileBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS)));
+            () -> new StackedPatternTileBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS)));
     // A floor of small setts laid in overlapping arcs, fan paving, on the same three-block pattern
     // as the flagstones: the arcs cross block edges, and bulge toward FACING, any of four ways.
     // Cobblestone's properties.
@@ -397,10 +397,26 @@ public class ModBlocks {
     public static final RegistryObject<Block> OSSUARY_BRICKS = stone("ossuary_bricks", () -> {
         return new Block(Properties.copy(Blocks.STONE_BRICKS));
     });
+    public static final RegistryObject<Block> MOSSY_OSSUARY_BRICKS = stone("mossy_ossuary_bricks", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> CRACKED_OSSUARY_BRICKS = stone("cracked_ossuary_bricks", () -> {
+        return new Block(Properties.copy(Blocks.CRACKED_STONE_BRICKS));
+    });
 
     // Hewn Tufa: soft tunnel rock with pick marks, for catacomb walls that were dug rather than built.
     public static final RegistryObject<Block> HEWN_TUFA = stone("hewn_tufa", () -> {
         return new Block(Properties.copy(Blocks.TUFF));
+    });
+
+    public static final RegistryObject<StairBlock> OSSUARY_BRICK_STAIRS = stone("ossuary_brick_stairs", () -> {
+        return new StairBlock(OSSUARY_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.STONE_BRICK_STAIRS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_OSSUARY_BRICK_STAIRS = stone("mossy_ossuary_brick_stairs", () -> {
+        return new StairBlock(MOSSY_OSSUARY_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
+    });
+    public static final RegistryObject<StairBlock> HEWN_TUFA_STAIRS = stone("hewn_tufa_stairs", () -> {
+        return new StairBlock(HEWN_TUFA.get().defaultBlockState(), Properties.copy(Blocks.TUFF));
     });
 
     public static final RegistryObject<Block> SQUARE_OSSUARY_BRICK = stone("square_ossuary_brick", () -> {
@@ -426,12 +442,12 @@ public class ModBlocks {
     // Grave Slab Pavement: a floor of worn, faintly carved slabs in tufa's colours, on the same
     // three-block pattern as the flagstones: the joints cross block edges. Stone bricks' properties.
     public static final RegistryObject<Block> GRAVE_SLAB_PAVEMENT = stone("grave_slab_pavement",
-            () -> new PatternTileBlock(Properties.copy(Blocks.STONE_BRICKS)));
+            () -> new StackedPatternTileBlock(Properties.copy(Blocks.STONE_BRICKS)));
 
     // Knucklebone Paving: a dark pebble floor with small bones set in as a mosaic, on the same
     // three-block pattern. Cobblestone's properties.
     public static final RegistryObject<Block> KNUCKLEBONE_PAVING = stone("knucklebone_paving",
-            () -> new PatternTileBlock(Properties.copy(Blocks.COBBLESTONE)));
+            () -> new StackedPatternTileBlock(Properties.copy(Blocks.COBBLESTONE)));
 
     // Polished Andesite Bricks: the vanilla stone brick pattern re-toned onto polished andesite's
     // own palette, the way vanilla derives deepslate_bricks from polished_deepslate. Plural, because

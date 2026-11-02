@@ -106,15 +106,15 @@ public class ItemModelsProvider extends ItemModelProvider {
 
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_STONE_BRICK));
 		// the pattern's middle tile, which crosses no edge of the sheet
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.FLAGSTONES), modLoc("block/flagstones_4"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.CRACKED_FLAGSTONES), modLoc("block/cracked_flagstones_4"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.MOSSY_FLAGSTONES), modLoc("block/mossy_flagstones_4"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.FLAGSTONES), modLoc("block/flagstones_4_1"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.CRACKED_FLAGSTONES), modLoc("block/cracked_flagstones_4_1"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.MOSSY_FLAGSTONES), modLoc("block/mossy_flagstones_4_1"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.FAN_COBBLES), modLoc("block/fan_cobbles_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.MOSSY_FAN_COBBLES), modLoc("block/mossy_fan_cobbles_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.SANDSTONE_ASHLAR), modLoc("block/sandstone_ashlar_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DRIFTED_SANDSTONE_ASHLAR), modLoc("block/drifted_sandstone_ashlar_4"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.GRAVE_SLAB_PAVEMENT), modLoc("block/grave_slab_pavement_4"));
-		withExistingParent(ModBlocks.MAP.get(ModBlocks.KNUCKLEBONE_PAVING), modLoc("block/knucklebone_paving_4"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.GRAVE_SLAB_PAVEMENT), modLoc("block/grave_slab_pavement_4_1"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.KNUCKLEBONE_PAVING), modLoc("block/knucklebone_paving_4_1"));
 		// the circle's centre, the sun
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_RITUAL_CIRCLE), modLoc("block/deepslate_ritual_circle_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.BLACKSTONE_RITUAL_CIRCLE), modLoc("block/blackstone_ritual_circle_4"));
@@ -148,6 +148,11 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.CHISELED_DEEPSLATE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_CHISELED_DEEPSLATE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.OSSUARY_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_OSSUARY_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.CRACKED_OSSUARY_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.OSSUARY_BRICK_STAIRS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_OSSUARY_BRICK_STAIRS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.HEWN_TUFA_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_OSSUARY_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.LEFT_LARGE_OSSUARY_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_OSSUARY_BRICK));
@@ -318,6 +323,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		potItem(ModItems.BIG_GREEN_POTION);
 		potItem(ModItems.GREEN_FLASK);
 		potItem(ModItems.WOODEN_BUCKET);
+		potItem(ModItems.CINERARY_URN);
 		// a tome's item is the icon its cover was taken from, as it is
 		ModItems.TOMES.values().forEach(tome -> basicItem(tome.get()));
 		// and a scroll's, likewise
