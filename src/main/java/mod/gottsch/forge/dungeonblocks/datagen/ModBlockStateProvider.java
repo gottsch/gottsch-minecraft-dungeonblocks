@@ -744,6 +744,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         }
 
         // soul vent: hand-written lit and unlit models; the lit one's fire and bed glow
+        // one plate for every state: FACING and MIRRORED only carry the chain offsets' frame
+        simpleBlock(ModBlocks.GIANT_CHAIN_ANCHOR.get());
         getVariantBuilder(ModBlocks.SOUL_VENT.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
                 .modelFile(models().getExistingFile(modLoc(state.getValue(SoulVentBlock.LIT)
                         ? "block/soul_vent" : "block/soul_vent_unlit"))).build(), SoulVentBlock.WATERLOGGED);

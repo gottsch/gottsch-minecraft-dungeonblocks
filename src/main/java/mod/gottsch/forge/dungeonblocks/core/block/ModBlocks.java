@@ -975,6 +975,11 @@ public class ModBlocks {
     public static final RegistryObject<Block> SOUL_VENT = Registration.BLOCKS.register("soul_vent",
             () -> new SoulVentBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()
                     .lightLevel(SoulVentBlock.LIGHT_EMISSION)));
+    // Dark iron plate that a giant chain is fixed to, centre to centre with another anchor; drawn
+    // by GiantChainRenderer, not a block entity renderer. The grate's strength.
+    public static final RegistryObject<Block> GIANT_CHAIN_ANCHOR = Registration.BLOCKS.register("giant_chain_anchor",
+            () -> new GiantChainAnchorBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)
+                    .sound(SoundType.CHAIN).requiresCorrectToolForDrops()));
     // Chain fixtures, hung as blocks under a vanilla chain or from a ceiling, as a lantern hangs. On
     // a swinging chain they are its fixture instead (SwingingChainBlock#use), drawn from the same
     // models. The chandelier's strength and leniency. Each shape is its model's: a thin chain or

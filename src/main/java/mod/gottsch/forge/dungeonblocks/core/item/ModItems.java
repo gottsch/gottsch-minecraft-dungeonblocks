@@ -68,6 +68,9 @@ public class ModItems {
 	public static RegistryObject<Item> LICHEN = fromBlock(ModBlocks.LICHEN, ITEM_PROPERTIES);
 	public static RegistryObject<Item> SKELETON = Registration.ITEMS.register("skeleton", () -> new SkeletonItem(ModBlocks.SKELETON.get(), new Item.Properties()));
 
+	// hung between two giant chain anchors; one makes one chain
+	public static final RegistryObject<Item> GIANT_CHAIN = Registration.ITEMS.register("giant_chain", () -> new GiantChainItem(new Item.Properties()));
+
 	// entity-backed decorative props. The lambdas defer ModEntityTypes' class init so it isn't
 	// forced during ModItems' own static initialization.
 	public static final RegistryObject<Item> POT = Registration.ITEMS.register("pot",

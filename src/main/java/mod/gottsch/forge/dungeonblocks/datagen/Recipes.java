@@ -32,6 +32,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
+import mod.gottsch.forge.dungeonblocks.core.item.ModItems;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
@@ -401,6 +402,19 @@ public class Recipes extends RecipeProvider {
 					.requires(ModBlocks.DARK_IRON_GRATES.get(AgedIronFamily.Age.PLAIN).get())
 					.requires(Items.SOUL_CAMPFIRE)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.SOUL_CAMPFIRE))
+					.save(recipe);
+
+			// giant chain: an iron block blackened with coal for the anchor, and four chains for the
+			// chain - one makes a chain of any length
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.GIANT_CHAIN_ANCHOR.get())
+					.requires(Blocks.IRON_BLOCK)
+					.requires(Items.COAL)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.CHAIN))
+					.save(recipe);
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.GIANT_CHAIN.get())
+					.requires(Items.CHAIN, 4)
+					.requires(Items.COAL)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.CHAIN))
 					.save(recipe);
 
 			// stained glass windows: red and blue panes leaded round an iron nugget, one window a pane;
