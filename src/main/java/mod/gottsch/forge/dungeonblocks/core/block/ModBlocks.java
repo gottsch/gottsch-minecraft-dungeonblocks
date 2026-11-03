@@ -957,6 +957,12 @@ public class ModBlocks {
     public static final RegistryObject<Block> BONE_CHANDELIER = Registration.BLOCKS.register("bone_chandelier",
             () -> new BoneChandelierBlock(Properties.of().mapColor(MapColor.SAND).strength(2.0F).sound(SoundType.BONE_BLOCK)
                     .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
+    // Leaded stained glass that stacks into a lancet window, and a broken one for a ruined church.
+    // A glass pane's strength and sound; textures from tools/gen_stained_glass_window_textures.py
+    public static final RegistryObject<Block> STAINED_GLASS_WINDOW = Registration.BLOCKS.register("stained_glass_window",
+            () -> new StainedGlassWindowBlock(Properties.copy(Blocks.GLASS_PANE)));
+    public static final RegistryObject<Block> BROKEN_STAINED_GLASS_WINDOW = Registration.BLOCKS.register("broken_stained_glass_window",
+            () -> new StainedGlassWindowBlock(Properties.copy(Blocks.GLASS_PANE)));
     // Chain fixtures, hung as blocks under a vanilla chain or from a ceiling, as a lantern hangs. On
     // a swinging chain they are its fixture instead (SwingingChainBlock#use), drawn from the same
     // models. The chandelier's strength and leniency. Each shape is its model's: a thin chain or

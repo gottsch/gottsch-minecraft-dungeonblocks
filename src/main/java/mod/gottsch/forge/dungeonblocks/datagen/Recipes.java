@@ -396,6 +396,23 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.BONE_BLOCK))
 					.save(recipe);
 
+			// stained glass windows: red and blue panes leaded round an iron nugget, one window a pane;
+			// a stone through one breaks it
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.STAINED_GLASS_WINDOW.get(), 8)
+					.pattern("rbr")
+					.pattern("bnb")
+					.pattern("rbr")
+					.define('r', Blocks.RED_STAINED_GLASS_PANE)
+					.define('b', Blocks.BLUE_STAINED_GLASS_PANE)
+					.define('n', Items.IRON_NUGGET)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.RED_STAINED_GLASS_PANE))
+					.save(recipe);
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.BROKEN_STAINED_GLASS_WINDOW.get())
+					.requires(ModBlocks.STAINED_GLASS_WINDOW.get())
+					.requires(Items.FLINT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.STAINED_GLASS_WINDOW.get()))
+					.save(recipe);
+
 			// skull candles: a bone block for the skull, as on the skull pike, and a candle
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.SKULL_CANDLE.get())
 					.requires(Blocks.BONE_BLOCK)

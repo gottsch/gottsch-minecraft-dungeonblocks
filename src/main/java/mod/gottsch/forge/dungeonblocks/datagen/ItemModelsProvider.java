@@ -243,6 +243,11 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.SKULL_PILE), modLoc("block/skull_pile_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.CHANDELIER), modLoc("block/chandelier"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.BONE_CHANDELIER), modLoc("block/bone_chandelier"));
+		// flat, as vanilla's glass panes are: a window one block tall
+		for (var window : List.of(ModBlocks.STAINED_GLASS_WINDOW, ModBlocks.BROKEN_STAINED_GLASS_WINDOW)) {
+			withExistingParent(window.getId().getPath(), mcLoc("item/generated"))
+					.texture("layer0", modLoc("block/" + window.getId().getPath() + "_single"));
+		}
 		ModBlocks.SHELVES.forEach(shelf -> withExistingParent(shelf.block().getId().getPath(),
 				modLoc("block/" + shelf.block().getId().getPath() + "_empty_left")));
 		// the largest size, though a placed one starts small; the huge candle whole, shrunk to fit

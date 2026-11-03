@@ -26,6 +26,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -716,6 +717,30 @@ public class ModBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(ModBlocks.BONE_CHANDELIER.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(models().getExistingFile(modLoc(state.getValue(ChandelierBlock.LIT)
                         ? "block/bone_chandelier_lit" : "block/bone_chandelier"))).build());
+        // stained glass windows: a 2px panel per PART, running along X; turned for a Z window. The
+        // back face is mirrored, so a broken pane's hole lines up from both sides. The broken middle
+        // has two variants, picked by position.
+        for (RegistryObject<Block> window : List.of(ModBlocks.STAINED_GLASS_WINDOW, ModBlocks.BROKEN_STAINED_GLASS_WINDOW)) {
+            String name = window.getId().getPath();
+            Map<StainedGlassWindowBlock.Part, List<ModelFile>> parts = new EnumMap<>(StainedGlassWindowBlock.Part.class);
+            for (StainedGlassWindowBlock.Part part : StainedGlassWindowBlock.Part.values()) {
+                List<String> textures = new ArrayList<>(List.of(name + "_" + part.getSerializedName()));
+                if (window == ModBlocks.BROKEN_STAINED_GLASS_WINDOW && part == StainedGlassWindowBlock.Part.MIDDLE) {
+                    textures.add(name + "_middle_1");
+                }
+                parts.put(part, textures.stream().map(texture -> (ModelFile) glassWindow(texture)).toList());
+            }
+            getVariantBuilder(window.get()).forAllStatesExcept(state -> {
+                int rotation = state.getValue(StainedGlassWindowBlock.AXIS) == Direction.Axis.Z ? 90 : 0;
+                List<ModelFile> models = parts.get(state.getValue(StainedGlassWindowBlock.PART));
+                ConfiguredModel.Builder<?> builder = ConfiguredModel.builder().modelFile(models.get(0)).rotationY(rotation);
+                for (ModelFile model : models.subList(1, models.size())) {
+                    builder = builder.nextModel().modelFile(model).rotationY(rotation);
+                }
+                return builder.build();
+            }, StainedGlassWindowBlock.WATERLOGGED);
+        }
+
         // chandelier: lit and unlit differ only in the candles' wicks
         getVariantBuilder(ModBlocks.CHANDELIER.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(models().getExistingFile(modLoc(state.getValue(ChandelierBlock.LIT)
@@ -807,6 +832,25 @@ public class ModBlockStateProvider extends BlockStateProvider {
                     .cube(stem + "_" + x + "_" + y + "_" + z, ends, ends, north, south, east, west)
                     .texture("particle", south)).build();
         });
+    }
+
+    /**
+     * A stained glass window panel, 2px thick, running along X. The edges are the frame's lead
+     * column and the texture's end rows, and are culled against the next panel of the window.
+     */
+    private BlockModelBuilder glassWindow(String texture) {
+        BlockModelBuilder model = models().withExistingParent(texture, mcLoc("block/block"))
+                .renderType("minecraft:translucent")
+                .texture("glass", modLoc("block/" + texture)).texture("particle", modLoc("block/" + texture));
+        model.element().from(0, 0, 7).to(16, 16, 9)
+                .face(Direction.NORTH).uvs(0, 0, 16, 16).texture("#glass").end()
+                .face(Direction.SOUTH).uvs(16, 0, 0, 16).texture("#glass").end()
+                .face(Direction.EAST).uvs(0, 0, 1, 16).texture("#glass").cullface(Direction.EAST).end()
+                .face(Direction.WEST).uvs(0, 0, 1, 16).texture("#glass").cullface(Direction.WEST).end()
+                .face(Direction.UP).uvs(0, 0, 16, 1).texture("#glass").cullface(Direction.UP).end()
+                .face(Direction.DOWN).uvs(0, 15, 16, 16).texture("#glass").cullface(Direction.DOWN).end()
+                .end();
+        return model;
     }
 
     /** A TallPropBlock: a model per half, turned to its FACING. */
