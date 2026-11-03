@@ -396,6 +396,13 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.BONE_BLOCK))
 					.save(recipe);
 
+			// soul vent: a dark iron grate over a soul campfire
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.SOUL_VENT.get())
+					.requires(ModBlocks.DARK_IRON_GRATES.get(AgedIronFamily.Age.PLAIN).get())
+					.requires(Items.SOUL_CAMPFIRE)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.SOUL_CAMPFIRE))
+					.save(recipe);
+
 			// stained glass windows: red and blue panes leaded round an iron nugget, one window a pane;
 			// a stone through one breaks it
 			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.STAINED_GLASS_WINDOW.get(), 8)
@@ -488,6 +495,7 @@ public class Recipes extends RecipeProvider {
 			// weathered as vanilla's stone bricks are: mossy with a vine or a moss block, cracked in a furnace
 			mossy(recipe, ModBlocks.MOSSY_OSSUARY_BRICKS, ModBlocks.OSSUARY_BRICKS.get());
 			mossy(recipe, ModBlocks.MOSSY_HEWN_TUFA, ModBlocks.HEWN_TUFA.get());
+			mossy(recipe, ModBlocks.MOSSY_HERRINGBONE_BRICKS, ModBlocks.HERRINGBONE_BRICKS.get());
 			SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.OSSUARY_BRICKS.get()), RecipeCategory.BUILDING_BLOCKS,
 							ModBlocks.CRACKED_OSSUARY_BRICKS.get(), 0.1F, 200)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.OSSUARY_BRICKS.get()))
@@ -507,6 +515,10 @@ public class Recipes extends RecipeProvider {
 					.save(recipe);
 			SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.HEWN_TUFA.get()), RecipeCategory.BUILDING_BLOCKS, ModBlocks.GRAVE_SLAB_PAVEMENT.get())
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.HEWN_TUFA.get()))
+					.save(recipe);
+			// herringbone bricks are relaid bricks
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.BRICKS), RecipeCategory.BUILDING_BLOCKS, ModBlocks.HERRINGBONE_BRICKS.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.BRICKS))
 					.save(recipe);
 			// bone walls are hewn tufa packed with a bone block for the skulls, as on the skull
 			// pike, or with bones; knucklebone paving is cobblestone set with a bone

@@ -172,6 +172,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_POLISHED_ANDESITE_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.CRACKED_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.HERRINGBONE_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_HERRINGBONE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.LARGE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LARGE_BRICKS));
@@ -243,6 +245,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.SKULL_PILE), modLoc("block/skull_pile_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.CHANDELIER), modLoc("block/chandelier"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.BONE_CHANDELIER), modLoc("block/bone_chandelier"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.SOUL_VENT), modLoc("block/soul_vent"));
 		// flat, as vanilla's glass panes are: a window one block tall
 		for (var window : List.of(ModBlocks.STAINED_GLASS_WINDOW, ModBlocks.BROKEN_STAINED_GLASS_WINDOW)) {
 			withExistingParent(window.getId().getPath(), mcLoc("item/generated"))

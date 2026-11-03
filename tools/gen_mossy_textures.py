@@ -77,6 +77,11 @@ TUFF_ASH_FLECKS: FrozenSet[RGBA] = frozenset({(160, 162, 151, 255)})
 HEWN_TUFA_MARKS: FrozenSet[RGBA] = frozenset({
     (66, 61, 51, 255), (68, 63, 53, 255), (118, 111, 95, 255)})
 
+# Red brick's three mortar shades (gen_herringbone_bricks_texture.py's MORTAR): on herringbone the
+# joints ARE the pattern, and moss over them leaves a green field with no zigzag.
+BRICK_MORTAR: FrozenSet[RGBA] = frozenset({
+    (139, 110, 103, 255), (162, 134, 125, 255), (169, 148, 141, 255)})
+
 
 @dataclass(frozen=True)
 class Job:
@@ -119,6 +124,11 @@ JOBS = [
     # and pits are the stone's identity and stay clear.
     *[Job(base=f"hewn_tufa{s}", out=f"mossy_hewn_tufa{s}", mask="cobble", mirror=True,
           protect=HEWN_TUFA_MARKS, base_from="mod") for s in ("", "_1", "_2", "_3")],
+
+    # Herringbone bricks: the brick mask, lighter than the cobble one, whose coverage buried the
+    # zigzag; mirrored, so it differs from the mossy wall bricks. The joints stay clear.
+    Job(base="herringbone_bricks", out="mossy_herringbone_bricks", mirror=True, protect=BRICK_MORTAR,
+        base_from="mod"),
 ]
 
 _jar = None

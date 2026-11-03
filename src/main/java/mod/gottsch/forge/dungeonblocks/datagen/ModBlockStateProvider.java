@@ -269,6 +269,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         simpleBlock(ModBlocks.MOSSY_BRICKS.get());
         simpleBlock(ModBlocks.CRACKED_BRICKS.get());
+        simpleBlock(ModBlocks.HERRINGBONE_BRICKS.get());
+        simpleBlock(ModBlocks.MOSSY_HERRINGBONE_BRICKS.get());
         stairsBlock(ModBlocks.MOSSY_BRICK_STAIRS.get(), modLoc("block/mossy_bricks"));
 
         simpleBlock(ModBlocks.LARGE_BRICKS.get());
@@ -740,6 +742,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 return builder.build();
             }, StainedGlassWindowBlock.WATERLOGGED);
         }
+
+        // soul vent: hand-written lit and unlit models; the lit one's fire and bed glow
+        getVariantBuilder(ModBlocks.SOUL_VENT.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
+                .modelFile(models().getExistingFile(modLoc(state.getValue(SoulVentBlock.LIT)
+                        ? "block/soul_vent" : "block/soul_vent_unlit"))).build(), SoulVentBlock.WATERLOGGED);
 
         // chandelier: lit and unlit differ only in the candles' wicks
         getVariantBuilder(ModBlocks.CHANDELIER.get()).forAllStates(state -> ConfiguredModel.builder()

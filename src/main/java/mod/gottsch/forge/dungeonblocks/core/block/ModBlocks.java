@@ -477,7 +477,14 @@ public class ModBlocks {
     public static final RegistryObject<Block> CRACKED_BRICKS = stone("cracked_bricks", () -> {
         return new Block(Properties.copy(Blocks.BRICKS));
     });
-    public static final RegistryObject<StairBlock> MOSSY_BRICK_STAIRS = stone("mossy_brick_stairs", () -> {
+    // red bricks laid flat in a herringbone, for floors; texture from tools/gen_herringbone_bricks_texture.py
+    public static final RegistryObject<Block> HERRINGBONE_BRICKS = stone("herringbone_bricks", () -> {
+        return new Block(Properties.copy(Blocks.BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_HERRINGBONE_BRICKS = stone("mossy_herringbone_bricks", () -> {
+        return new Block(Properties.copy(Blocks.BRICKS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_BRICK_STAIRS =stone("mossy_brick_stairs", () -> {
         return new StairBlock(Blocks.BRICKS.defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
     });
     public static final RegistryObject<Block> LARGE_BRICKS = stone("large_bricks", () -> {
@@ -963,6 +970,11 @@ public class ModBlocks {
             () -> new StainedGlassWindowBlock(Properties.copy(Blocks.GLASS_PANE)));
     public static final RegistryObject<Block> BROKEN_STAINED_GLASS_WINDOW = Registration.BLOCKS.register("broken_stained_glass_window",
             () -> new StainedGlassWindowBlock(Properties.copy(Blocks.GLASS_PANE)));
+    // A dark iron floor grate over a pit of soul fire, giving off soul mist; the grate's strength.
+    // Put out and relit like a campfire (SoulVentBlock).
+    public static final RegistryObject<Block> SOUL_VENT = Registration.BLOCKS.register("soul_vent",
+            () -> new SoulVentBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()
+                    .lightLevel(SoulVentBlock.LIGHT_EMISSION)));
     // Chain fixtures, hung as blocks under a vanilla chain or from a ceiling, as a lantern hangs. On
     // a swinging chain they are its fixture instead (SwingingChainBlock#use), drawn from the same
     // models. The chandelier's strength and leniency. Each shape is its model's: a thin chain or
