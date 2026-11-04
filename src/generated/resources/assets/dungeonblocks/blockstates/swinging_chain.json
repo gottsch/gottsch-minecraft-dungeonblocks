@@ -84,6 +84,18 @@
     "fixture=meat_hook,lit=true,top=true": {
       "model": "dungeonblocks:block/swinging_chain"
     },
+    "fixture=medium_bone_chandelier,lit=false,top=false": {
+      "model": "dungeonblocks:block/swinging_chain"
+    },
+    "fixture=medium_bone_chandelier,lit=false,top=true": {
+      "model": "dungeonblocks:block/swinging_chain"
+    },
+    "fixture=medium_bone_chandelier,lit=true,top=false": {
+      "model": "dungeonblocks:block/swinging_chain"
+    },
+    "fixture=medium_bone_chandelier,lit=true,top=true": {
+      "model": "dungeonblocks:block/swinging_chain"
+    },
     "fixture=none,lit=false,top=false": {
       "model": "dungeonblocks:block/swinging_chain"
     },

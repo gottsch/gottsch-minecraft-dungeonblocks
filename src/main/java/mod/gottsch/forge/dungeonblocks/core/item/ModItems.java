@@ -20,6 +20,7 @@
 package mod.gottsch.forge.dungeonblocks.core.item;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
+import mod.gottsch.forge.dungeonblocks.core.block.ChainSize;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
 import mod.gottsch.forge.dungeonblocks.core.entity.ModEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.entity.ScrollVariant;
@@ -68,8 +69,9 @@ public class ModItems {
 	public static RegistryObject<Item> LICHEN = fromBlock(ModBlocks.LICHEN, ITEM_PROPERTIES);
 	public static RegistryObject<Item> SKELETON = Registration.ITEMS.register("skeleton", () -> new SkeletonItem(ModBlocks.SKELETON.get(), new Item.Properties()));
 
-	// hung between two giant chain anchors; one makes one chain
-	public static final RegistryObject<Item> GIANT_CHAIN = Registration.ITEMS.register("giant_chain", () -> new GiantChainItem(new Item.Properties()));
+	// hung between two chain anchors; one makes one chain
+	public static final RegistryObject<Item> GIANT_CHAIN = Registration.ITEMS.register("giant_chain", () -> new ChainItem(new Item.Properties(), ChainSize.GIANT));
+	public static final RegistryObject<Item> MEDIUM_CHAIN = Registration.ITEMS.register("medium_chain", () -> new ChainItem(new Item.Properties(), ChainSize.MEDIUM));
 
 	// entity-backed decorative props. The lambdas defer ModEntityTypes' class init so it isn't
 	// forced during ModItems' own static initialization.

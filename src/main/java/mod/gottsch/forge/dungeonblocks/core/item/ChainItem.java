@@ -20,8 +20,9 @@
 package mod.gottsch.forge.dungeonblocks.core.item;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
-import mod.gottsch.forge.dungeonblocks.core.block.GiantChainAnchorBlock;
-import mod.gottsch.forge.dungeonblocks.core.blockentity.GiantChainAnchorBlockEntity;
+import mod.gottsch.forge.dungeonblocks.core.block.ChainSize;
+import mod.gottsch.forge.dungeonblocks.core.block.ChainAnchorBlock;
+import mod.gottsch.forge.dungeonblocks.core.blockentity.ChainAnchorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -37,28 +38,34 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 /**
- * A giant chain, before it is hung. Use it on one giant chain anchor, then on a second, and a chain
+ * A giant or medium chain, before it is hung. Use it on one chain anchor, then on a second, and a chain
  * runs between their centres; one item makes one chain of any length up to
- * {@link GiantChainAnchorBlock#MAX_LENGTH}. Using it on the first anchor again lets go of it.
+ * {@link ChainAnchorBlock#MAX_LENGTH}. Using it on the first anchor again lets go of it.
  *
  * <p>The first anchor is kept on the stack, with its dimension, and the stack glints while it is
  * held. An anchor can start only one chain, but any number may end at it.
  *
+ * <p>One class for every {@link ChainSize}: the Giant Chain and the Medium Chain are two items of it,
+ * and hang chains of their own size on the same anchors.
+ *
  * @author Mark Gottschling on 11/03/2026
  */
-public class GiantChainItem extends Item {
+public class ChainItem extends Item {
     private static final String ANCHOR = "Anchor";
     private static final String DIMENSION = "AnchorDimension";
 
-    public GiantChainItem(Properties properties) {
+    private final ChainSize size;
+
+    public ChainItem(Properties properties, ChainSize size) {
         super(properties);
+        this.size = size;
     }
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        if (!(level.getBlockEntity(pos) instanceof GiantChainAnchorBlockEntity end)) {
+        if (!(level.getBlockEntity(pos) instanceof ChainAnchorBlockEntity end)) {
             return InteractionResult.PASS;
         }
         if (level.isClientSide) {
@@ -86,13 +93,13 @@ public class GiantChainItem extends Item {
             tell(player, "let_go");
             return InteractionResult.CONSUME;
         }
-        if (!level.isLoaded(start) || !(level.getBlockEntity(start) instanceof GiantChainAnchorBlockEntity anchor)
+        if (!level.isLoaded(start) || !(level.getBlockEntity(start) instanceof ChainAnchorBlockEntity anchor)
                 || anchor.getTarget() != null) {
             letGo(stack);
             tell(player, "lost");
             return InteractionResult.CONSUME;
         }
-        if (start.getCenter().distanceTo(pos.getCenter()) > GiantChainAnchorBlock.MAX_LENGTH) {
+        if (start.getCenter().distanceTo(pos.getCenter()) > ChainAnchorBlock.MAX_LENGTH) {
             tell(player, "too_far");
             return InteractionResult.CONSUME;
         }
@@ -101,8 +108,8 @@ public class GiantChainItem extends Item {
             return InteractionResult.CONSUME;
         }
 
-        anchor.setTarget(pos);
-        end.addSource(start);
+        anchor.setTarget(pos, size);
+        end.addSource(start, size);
         letGo(stack);
         if (player == null || !player.getAbilities().instabuild) {
             stack.shrink(1);
@@ -125,7 +132,7 @@ public class GiantChainItem extends Item {
 
     private static void tell(Player player, String message) {
         if (player != null) {
-            player.displayClientMessage(Component.translatable("message." + DungeonBlocks.MOD_ID + ".giant_chain." + message), true);
+            player.displayClientMessage(Component.translatable("message." + DungeonBlocks.MOD_ID + ".chain." + message), true);
         }
     }
 

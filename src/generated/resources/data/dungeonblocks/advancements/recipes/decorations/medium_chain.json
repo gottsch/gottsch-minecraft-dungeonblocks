@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "dungeonblocks:giant_chain_anchor"
+        "recipe": "dungeonblocks:medium_chain"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "dungeonblocks:giant_chain_anchor"
+      "dungeonblocks:medium_chain"
     ]
   },
   "sends_telemetry_event": false

@@ -159,6 +159,9 @@ for lit, candle in (("", "candle"), ("_lit", "candle_lit")):
     JOBS.append(("bone_chandelier", f"bone_chandelier{lit}",
                  {**BONES, "candle": f"minecraft:block/{candle}", "chain": "minecraft:block/chain"},
                  {"frame": (0, 0, 0), "candles": (0, 0, 0)}))
+    JOBS.append(("medium_bone_chandelier", f"medium_bone_chandelier{lit}",
+                 {**BONES, "candle": f"minecraft:block/{candle}", "chain": "minecraft:block/chain"},
+                 {"frame": (0, 0, 0), "candles": (0, 0, 0)}))
     # skull candles: plain and black wax, on the floor and on a wall bracket
     for name, wax in (("skull_candle", "candle"), ("black_skull_candle", "black_candle")):
         for place in ("floor", "wall"):
@@ -236,9 +239,14 @@ STACKS.append(("template_altar_item", {"body": "minecraft:block/polished_deepsla
     ("altar_left", {"altar": (16, 0, 0)}), ("altar_middle", {"altar": (0, 0, 0)}),
     ("altar_right", {"altar": (-16, 0, 0)})], two_block_display(0.3)))
 
+# the medium bone chandelier's item: the unlit model, which overhangs its block about half a block
+# on every side, shrunk to fit the slot
+STACKS.append(("medium_bone_chandelier_item", {**BONES, "candle": "minecraft:block/candle", "chain": "minecraft:block/chain"},
+               [("medium_bone_chandelier", {"frame": (0, 0, 0), "candles": (0, 0, 0)})], two_block_display(0.4)))
+
 # models whose textures have see-through pixels: the skeleton's ribs, the chain's links. Without
 # cutout those pixels draw black.
-CUTOUT = ("gibbet", "chandelier", "bone_chandelier", "skull_candle", "black_skull_candle", "chain_fixture_", "occupied_")
+CUTOUT = ("gibbet", "chandelier", "bone_chandelier", "medium_bone_chandelier", "skull_candle", "black_skull_candle", "chain_fixture_", "occupied_")
 
 BOUNDARY = {"north": (2, 0, "from"), "south": (2, 16, "to"), "west": (0, 0, "from"),
             "east": (0, 16, "to"), "down": (1, 0, "from"), "up": (1, 16, "to")}

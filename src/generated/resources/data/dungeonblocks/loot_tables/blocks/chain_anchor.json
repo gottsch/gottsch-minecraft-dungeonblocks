@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "dungeonblocks:giant_chain_anchor"
+          "name": "dungeonblocks:chain_anchor"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "dungeonblocks:blocks/giant_chain_anchor"
+  "random_sequence": "dungeonblocks:blocks/chain_anchor"
 }

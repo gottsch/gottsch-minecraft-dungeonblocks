@@ -36,6 +36,7 @@ CONVENTIONS
 import base64
 import io
 import json
+import math
 import os
 import sys
 import uuid
@@ -179,15 +180,17 @@ DARK_IRON = "dungeonblocks:block/dark_iron"
 CHAIN = "minecraft:block/chain"
 
 
-def skull(p, group, name, x, y, z, size=6, facing="north"):
-    """A skull `size` px across, its corner at (x, y, z), its face toward `facing`."""
+def skull(p, group, name, x, y, z, size=6, facing="north", yaw=None):
+    """A skull `size` px across, its corner at (x, y, z), its face toward `facing`, turned `yaw`
+    degrees about its own centre (a JSON-legal angle) to face a diagonal."""
     faces = {"north": [0, 0, 8, 8], "south": [8, 8, 16, 16], "east": [0, 8, 8, 16],
              "west": [0, 8, 8, 16], "up": [8, 0, 16, 8], "down": [8, 0, 16, 8]}
     turn = {"north": {}, "south": {"north": "south", "south": "north"},
             "east": {"north": "east", "east": "south", "south": "west", "west": "north"},
             "west": {"north": "west", "west": "south", "south": "east", "east": "north"}}[facing]
     uv = {turn.get(d, d): faces[d] for d in faces}
-    p.box(group, name, (x, y, z), (x + size, y + size, z + size), "skull", uv=uv)
+    p.box(group, name, (x, y, z), (x + size, y + size, z + size), "skull", uv=uv,
+          rot=("y", yaw) if yaw else None)
 
 
 def head(p, group, name, x, y, z, key="head"):
@@ -553,6 +556,73 @@ def bone_chandelier():
         bone(p, "frame", f"rib_{n}", (cx - 0.5, cy - 3.5, cz - 0.5), (cx + 0.5, cy + 3.5, cz + 0.5), axis="y",
              rot=(axis, angle), origin=centre)
     for n, (x, z) in enumerate(BONE_CHANDELIER_CANDLES):
+        candle(p, "candles", f"candle_{n}", x, z, CHANDELIER_CANDLE_Y, CHANDELIER_CANDLE_HEIGHT)
+    return p
+
+
+# the medium bone chandelier: 8 skulls round a ring this far from the centre, in pixels, each with a
+# candle on its crown. MediumBoneChandelierBlock's FLAMES match MEDIUM_BONE_CHANDELIER_CANDLES.
+MEDIUM_CHANDELIER_RADIUS = 14
+MEDIUM_CHANDELIER_SKULL = 5
+MEDIUM_BONE_CHANDELIER_CANDLES = [
+    (round(8 + MEDIUM_CHANDELIER_RADIUS * math.cos(math.radians(a)), 2),
+     round(8 + MEDIUM_CHANDELIER_RADIUS * math.sin(math.radians(a)), 2)) for a in range(0, 360, 45)]
+
+
+def bone_between(p, group, name, a, b, y, trim=0.0):
+    """A femur lying from (ax, az) to (bx, bz) at height y, shortened by `trim` at each end. It must
+    run at a JSON-legal angle (a multiple of 22.5 degrees, within 45 of x or z)."""
+    dx, dz = b[0] - a[0], b[1] - a[1]
+    length = math.hypot(dx, dz) - 2 * trim
+    centre = ((a[0] + b[0]) / 2, y, (a[1] + b[1]) / 2)
+    if abs(dx) >= abs(dz):
+        if dx < 0:
+            dx, dz = -dx, -dz
+        along, yaw = "x", math.degrees(math.atan2(-dz, dx))
+    else:
+        if dz < 0:
+            dx, dz = -dx, -dz
+        along, yaw = "z", math.degrees(math.atan2(dx, dz))
+    yaw = round(yaw, 3)
+    if abs(yaw - round(yaw / 22.5) * 22.5) > 0.01:
+        raise SystemExit(f"{name}: {yaw} degrees is not a JSON-legal angle")
+    femur(p, group, name, centre, round(length, 2), along=along, yaw=round(yaw / 22.5) * 22.5 or None)
+
+
+def medium_bone_chandelier():
+    """A Sedlec-style bone chandelier about 2.5 blocks across, one block whose model overhangs its
+    eight neighbours: a vertebra column for the hub, eight femur spokes
+    out to eight skulls looking outward, a candle on each skull's crown, a femur rim from skull to
+    skull, and four ribs leaning in to the chain. (A small skull finial under the hub was tried and
+    dropped by the user, Nov 3.) The candles stand where the iron chandelier's do
+    (y 5, 4 tall), so ChandelierBlock's FLAME_Y holds."""
+    p = Project("medium_bone_chandelier", {"bone": BONE, "skull": SKULL, "candle": "minecraft:block/candle",
+                                           "chain": CHAIN})
+    half = MEDIUM_CHANDELIER_SKULL / 2
+    # skulls, cardinal ones squarely outward, diagonal ones turned 45 from north or south
+    facings = {0: ("east", None), 45: ("south", 45), 90: ("south", None), 135: ("south", -45),
+               180: ("west", None), 225: ("north", 45), 270: ("north", None), 315: ("north", -45)}
+    for n, (cx, cz) in enumerate(MEDIUM_BONE_CHANDELIER_CANDLES):
+        facing, yaw = facings[n * 45]
+        skull(p, "frame", f"skull_{n}", cx - half, 0, cz - half, size=MEDIUM_CHANDELIER_SKULL,
+              facing=facing, yaw=yaw)
+    # spokes from the hub to each skull, at mid-skull height; the rim from skull to skull
+    for n, (cx, cz) in enumerate(MEDIUM_BONE_CHANDELIER_CANDLES):
+        bone_between(p, "frame", f"spoke_{n}", (8, 8), (cx, cz), 1.5, trim=0)
+        nx, nz = MEDIUM_BONE_CHANDELIER_CANDLES[(n + 1) % 8]
+        bone_between(p, "frame", f"rim_{n}", (cx, cz), (nx, nz), 1.5, trim=1.5)
+    # the hub: vertebrae stacked up to the chain
+    for n, y in enumerate((0, 2.5, 5, 7.5, 10)):
+        bone(p, "frame", f"vertebra_{n}", (6, y, 6), (10, y + 1.5, 10), axis="y")
+        bone(p, "frame", f"disc_{n}", (7, y + 1.5, 7), (9, y + 2.5, 9), axis="y")
+    chain(p, "frame", "chain", 8, 8, 12.5, 16)
+    # ribs from the spokes up to the top of the hub, leaning in
+    for n, (axis, angle, centre) in enumerate((("z", -22.5, (4, 7, 8)), ("z", 22.5, (12, 7, 8)),
+                                                ("x", 22.5, (8, 7, 4)), ("x", -22.5, (8, 7, 12)))):
+        cx, cy, cz = centre
+        bone(p, "frame", f"rib_{n}", (cx - 0.5, cy - 5, cz - 0.5), (cx + 0.5, cy + 5, cz + 0.5), axis="y",
+             rot=(axis, angle), origin=centre)
+    for n, (x, z) in enumerate(MEDIUM_BONE_CHANDELIER_CANDLES):
         candle(p, "candles", f"candle_{n}", x, z, CHANDELIER_CANDLE_Y, CHANDELIER_CANDLE_HEIGHT)
     return p
 
@@ -981,6 +1051,7 @@ PROJECTS = {
                                                        "bloody_steve_head_pike"),
     "chandelier": chandelier,
     "bone_chandelier": bone_chandelier,
+    "medium_bone_chandelier": medium_bone_chandelier,
     "shelf": shelf,
     "skull_candle": skull_candle,
     "large_candle": large_candle,

@@ -19,8 +19,7 @@
  */
 package mod.gottsch.forge.dungeonblocks.core.block;
 
-import mod.gottsch.forge.dungeonblocks.core.blockentity.GiantChainAnchorBlockEntity;
-import mod.gottsch.forge.dungeonblocks.core.item.ModItems;
+import mod.gottsch.forge.dungeonblocks.core.blockentity.ChainAnchorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -47,12 +46,16 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 /**
- * A block of dark iron plate that a giant chain is fixed to. The chain runs from the centre of one
+ * A block of dark iron plate that a giant or medium chain is fixed to. The chain runs from the centre of one
  * anchor to the centre of another, so it can leave by any face at any angle and the plate hides
- * where it starts. Connect two with a {@link mod.gottsch.forge.dungeonblocks.core.item.GiantChainItem};
+ * where it starts. Connect two with a {@link mod.gottsch.forge.dungeonblocks.core.item.ChainItem};
  * shears cut every chain on an anchor, and breaking either end takes its chains down. Each chain
- * gives back the one giant chain it took.
+ * gives back the one chain item it took. Giant and medium chains ({@link ChainSize}) share the
+ * anchor, and the same rules.
  *
  * <p><b>FACING and MIRRORED are not seen.</b> The plate looks the same every way round. They are
  * the frame the block entity's chain offsets are stored in, and exist so that a structure, which
@@ -61,14 +64,14 @@ import net.minecraft.world.phys.BlockHitResult;
  *
  * @author Mark Gottschling on 11/03/2026
  */
-public class GiantChainAnchorBlock extends Block implements EntityBlock {
+public class ChainAnchorBlock extends Block implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty MIRRORED = BooleanProperty.create("mirrored");
 
     /** The longest chain, centre to centre. A design choice: nothing breaks past it. */
     public static final double MAX_LENGTH = 32.0;
 
-    public GiantChainAnchorBlock(Properties properties) {
+    public ChainAnchorBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(MIRRORED, false));
     }
@@ -80,7 +83,7 @@ public class GiantChainAnchorBlock extends Block implements EntityBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new GiantChainAnchorBlockEntity(pos, state);
+        return new ChainAnchorBlockEntity(pos, state);
     }
 
     /**
@@ -141,7 +144,7 @@ public class GiantChainAnchorBlock extends Block implements EntityBlock {
                                  BlockHitResult hit) {
         ItemStack held = player.getItemInHand(hand);
         if (!held.is(Items.SHEARS) || !player.getAbilities().mayBuild
-                || !(level.getBlockEntity(pos) instanceof GiantChainAnchorBlockEntity anchor) || !anchor.hasChains()) {
+                || !(level.getBlockEntity(pos) instanceof ChainAnchorBlockEntity anchor) || !anchor.hasChains()) {
             return InteractionResult.PASS;
         }
         if (!level.isClientSide) {
@@ -154,57 +157,57 @@ public class GiantChainAnchorBlock extends Block implements EntityBlock {
     }
 
     /**
-     * Takes down every chain on this anchor, telling the anchor at each far end, and drops one giant
-     * chain for each. A far end that is not loaded is left as it is, and drops its half of the chain
+     * Takes down every chain on this anchor, telling the anchor at each far end, and drops one chain
+     * item of the chain's size for each. A far end that is not loaded is left as it is, and drops its half of the chain
      * the next time it loads ({@link #tick}).
      */
-    private static void cutChains(Level level, BlockPos pos, GiantChainAnchorBlockEntity anchor) {
-        int chains = 0;
+    private static void cutChains(Level level, BlockPos pos, ChainAnchorBlockEntity anchor) {
+        Map<ChainSize, Integer> chains = new EnumMap<>(ChainSize.class);
         BlockPos target = anchor.getTarget();
         if (target != null) {
-            if (level.isLoaded(target) && level.getBlockEntity(target) instanceof GiantChainAnchorBlockEntity end) {
+            if (level.isLoaded(target) && level.getBlockEntity(target) instanceof ChainAnchorBlockEntity end) {
                 end.removeSource(pos);
             }
-            anchor.setTarget(null);
-            chains++;
+            chains.merge(anchor.getTargetSize(), 1, Integer::sum);
+            anchor.clearTarget();
         }
-        for (BlockPos source : anchor.getSources()) {
-            if (level.isLoaded(source) && level.getBlockEntity(source) instanceof GiantChainAnchorBlockEntity start
+        anchor.getSources().forEach((source, size) -> {
+            if (level.isLoaded(source) && level.getBlockEntity(source) instanceof ChainAnchorBlockEntity start
                     && pos.equals(start.getTarget())) {
-                start.setTarget(null);
+                start.clearTarget();
             }
             anchor.removeSource(source);
-            chains++;
-        }
-        if (chains > 0) {
-            Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                    new ItemStack(ModItems.GIANT_CHAIN.get(), chains));
-        }
+            chains.merge(size, 1, Integer::sum);
+        });
+        chains.forEach((size, count) -> drop(level, pos, new ItemStack(size.getItem(), count)));
+    }
+
+    private static void drop(Level level, BlockPos pos, ItemStack stack) {
+        Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
     }
 
     /**
      * Scheduled by the block entity's load: drops what no longer holds. A chain out to a block that is
-     * no longer an anchor is cut, and its giant chain dropped here; one that the far anchor has
+     * no longer an anchor is cut, and its chain item dropped here; one that the far anchor has
      * forgotten is mended, so a structure need only record a chain at its start. A chain in from an
-     * anchor that no longer points here is forgotten - its giant chain went with the other end.
+     * anchor that no longer points here is forgotten - its chain item went with the other end.
      */
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (!(level.getBlockEntity(pos) instanceof GiantChainAnchorBlockEntity anchor)) {
+        if (!(level.getBlockEntity(pos) instanceof ChainAnchorBlockEntity anchor)) {
             return;
         }
         BlockPos target = anchor.getTarget();
         if (target != null && level.isLoaded(target)) {
-            if (level.getBlockEntity(target) instanceof GiantChainAnchorBlockEntity end) {
-                end.addSource(pos);
+            if (level.getBlockEntity(target) instanceof ChainAnchorBlockEntity end) {
+                end.addSource(pos, anchor.getTargetSize());
             } else {
-                anchor.setTarget(null);
-                Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                        new ItemStack(ModItems.GIANT_CHAIN.get()));
+                drop(level, pos, new ItemStack(anchor.getTargetSize().getItem()));
+                anchor.clearTarget();
             }
         }
-        for (BlockPos source : anchor.getSources()) {
-            if (level.isLoaded(source) && !(level.getBlockEntity(source) instanceof GiantChainAnchorBlockEntity start
+        for (BlockPos source : anchor.getSources().keySet()) {
+            if (level.isLoaded(source) && !(level.getBlockEntity(source) instanceof ChainAnchorBlockEntity start
                     && pos.equals(start.getTarget()))) {
                 anchor.removeSource(source);
             }
@@ -214,7 +217,7 @@ public class GiantChainAnchorBlock extends Block implements EntityBlock {
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
         if (!state.is(newState.getBlock())) {
-            if (!level.isClientSide && level.getBlockEntity(pos) instanceof GiantChainAnchorBlockEntity anchor) {
+            if (!level.isClientSide && level.getBlockEntity(pos) instanceof ChainAnchorBlockEntity anchor) {
                 cutChains(level, pos, anchor);
             }
             super.onRemove(state, level, pos, newState, moved);

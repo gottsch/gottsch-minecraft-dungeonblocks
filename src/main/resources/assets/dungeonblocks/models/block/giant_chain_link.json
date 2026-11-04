@@ -1,5 +1,5 @@
 {
-  "__comment": "The giant chain's link: 16px long on y, 10 wide, a 3px square bar, centred in the block. GiantChainRenderer draws it along every chain, every other one turned a quarter about y. Hand-written.",
+  "__comment": "The giant chain's link: 16px long on y, 10 wide, a 3px square bar, centred in the block. ChainRenderer draws it along every chain, every other one turned a quarter about y. Hand-written.",
   "parent": "block/block",
   "ambientocclusion": false,
   "textures": {

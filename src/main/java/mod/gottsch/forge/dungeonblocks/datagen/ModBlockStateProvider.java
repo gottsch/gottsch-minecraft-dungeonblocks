@@ -719,6 +719,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(ModBlocks.BONE_CHANDELIER.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(models().getExistingFile(modLoc(state.getValue(ChandelierBlock.LIT)
                         ? "block/bone_chandelier_lit" : "block/bone_chandelier"))).build());
+        getVariantBuilder(ModBlocks.MEDIUM_BONE_CHANDELIER.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(models().getExistingFile(modLoc(state.getValue(ChandelierBlock.LIT)
+                        ? "block/medium_bone_chandelier_lit" : "block/medium_bone_chandelier"))).build());
         // stained glass windows: a 2px panel per PART, running along X; turned for a Z window. The
         // back face is mirrored, so a broken pane's hole lines up from both sides. The broken middle
         // has two variants, picked by position.
@@ -745,7 +748,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         // soul vent: hand-written lit and unlit models; the lit one's fire and bed glow
         // one plate for every state: FACING and MIRRORED only carry the chain offsets' frame
-        simpleBlock(ModBlocks.GIANT_CHAIN_ANCHOR.get());
+        simpleBlock(ModBlocks.CHAIN_ANCHOR.get());
         getVariantBuilder(ModBlocks.SOUL_VENT.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
                 .modelFile(models().getExistingFile(modLoc(state.getValue(SoulVentBlock.LIT)
                         ? "block/soul_vent" : "block/soul_vent_unlit"))).build(), SoulVentBlock.WATERLOGGED);

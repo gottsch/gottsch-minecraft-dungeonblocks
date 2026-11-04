@@ -23,7 +23,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
-import mod.gottsch.forge.dungeonblocks.core.blockentity.GiantChainAnchorBlockEntity;
+import mod.gottsch.forge.dungeonblocks.core.block.ChainSize;
+import mod.gottsch.forge.dungeonblocks.core.blockentity.ChainAnchorBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -35,7 +36,6 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -52,9 +52,10 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Draws every giant chain, straight and taut from the centre of one anchor to the centre of another,
- * as one link model repeated along the line with every other link turned a quarter about it so
- * they interlock.
+ * Draws every giant and medium chain, straight and taut from the centre of one anchor to the centre
+ * of another, as its size's link model ({@link ChainSize}) repeated along the line with every other
+ * link turned a quarter about it so they interlock. Each link model lies along y through the
+ * block's centre.
  *
  * <p><b>Not a block entity renderer.</b> A block entity renderer is culled by its block's bounding
  * box and dropped past 64 blocks, and a chain is up to 32 long at any angle; it would vanish as its
@@ -76,12 +77,7 @@ import java.util.Set;
  */
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = DungeonBlocks.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class GiantChainRenderer {
-    /** The link, 16px long and 10 wide, its bar 3px square, lying along y through the block's centre. */
-    public static final ResourceLocation LINK_MODEL = new ResourceLocation(DungeonBlocks.MOD_ID, "block/giant_chain_link");
-
-    /** Link to link: the inside length of a link, so each one's end bar sits in the next one's eye. */
-    private static final double PITCH = 10.0 / 16.0;
+public class ChainRenderer {
     /** Past this the links are a few pixels wide, and not worth their draw. */
     private static final double MAX_DISTANCE = 128.0;
 
@@ -113,7 +109,6 @@ public class GiantChainRenderer {
         if (level == null) {
             return;
         }
-        BakedModel link = minecraft.getModelManager().getModel(LINK_MODEL);
         ModelBlockRenderer renderer = minecraft.getBlockRenderer().getModelRenderer();
         MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
         VertexConsumer consumer = buffers.getBuffer(Sheets.cutoutBlockSheet());
@@ -125,26 +120,28 @@ public class GiantChainRenderer {
         while (iterator.hasNext()) {
             BlockPos pos = iterator.next();
             // a missed unload must not leave a chain hanging in the air
-            if (!(level.getBlockEntity(pos) instanceof GiantChainAnchorBlockEntity anchor) || anchor.isRemoved()) {
+            if (!(level.getBlockEntity(pos) instanceof ChainAnchorBlockEntity anchor) || anchor.isRemoved()) {
                 iterator.remove();
                 continue;
             }
             BlockPos target = anchor.getTarget();
             // a chain to an anchor that is known to be gone is not drawn; one into unloaded ground is
-            if (target != null && (!level.isLoaded(target) || level.getBlockEntity(target) instanceof GiantChainAnchorBlockEntity)) {
-                drawChain(level, poseStack, consumer, renderer, link, frustum, camera, pos, target);
+            if (target != null && (!level.isLoaded(target) || level.getBlockEntity(target) instanceof ChainAnchorBlockEntity)) {
+                drawChain(level, poseStack, consumer, renderer, anchor.getTargetSize(), frustum, camera, pos, target);
             }
-            for (BlockPos source : anchor.getSources()) {
-                if (!ANCHORS.contains(source)) {
-                    drawChain(level, poseStack, consumer, renderer, link, frustum, camera, source, pos);
+            anchor.getSources().forEach((source, size) -> {
+                // drawn from this end only while the start is out of the loaded world: a start that is
+                // loaded but no anchor is a chain the client has not yet heard was cut
+                if (!ANCHORS.contains(source) && !level.isLoaded(source)) {
+                    drawChain(level, poseStack, consumer, renderer, size, frustum, camera, source, pos);
                 }
-            }
+            });
         }
         buffers.endBatch(Sheets.cutoutBlockSheet());
     }
 
     private static void drawChain(ClientLevel level, PoseStack poseStack, VertexConsumer consumer, ModelBlockRenderer renderer,
-                                  BakedModel link, Frustum frustum, Vec3 camera, BlockPos from, BlockPos to) {
+                                  ChainSize size, Frustum frustum, Vec3 camera, BlockPos from, BlockPos to) {
         Vec3 start = from.getCenter();
         Vec3 end = to.getCenter();
         AABB whole = new AABB(start, end).inflate(0.5);
@@ -153,8 +150,11 @@ public class GiantChainRenderer {
         }
         Vec3 line = end.subtract(start);
         double length = line.length();
-        // evenly spaced, so that a link sits at the centre of each anchor, hidden in its plate
-        int links = Math.max(1, (int) Math.round(length / PITCH));
+        // evenly spaced from anchor centre to anchor centre, but the two links ON the centres are not
+        // drawn: turned to a slant, a giant link's corners reach 9.5px from its centre and poke out of
+        // the anchor's other faces. The next link in starts inside the anchor, so none is missed.
+        BakedModel link = Minecraft.getInstance().getModelManager().getModel(size.getLinkModel());
+        int links = Math.max(1, (int) Math.round(length / size.getPitch()));
         double step = length / links;
         Vec3 direction = line.scale(1.0 / length);
         // the turn that lays the model's y along the chain, the same for every link
@@ -162,7 +162,7 @@ public class GiantChainRenderer {
                 (float) direction.x, (float) direction.y, (float) direction.z);
         BlockPos.MutableBlockPos lightPos = new BlockPos.MutableBlockPos();
 
-        for (int i = 0; i <= links; i++) {
+        for (int i = 1; i < links; i++) {
             Vec3 centre = start.add(direction.scale(step * i));
             if (centre.distanceToSqr(camera) > MAX_DISTANCE * MAX_DISTANCE
                     || !frustum.isVisible(new AABB(centre, centre).inflate(0.5))) {

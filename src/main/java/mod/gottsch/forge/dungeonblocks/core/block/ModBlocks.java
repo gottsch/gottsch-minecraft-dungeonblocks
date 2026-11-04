@@ -964,6 +964,11 @@ public class ModBlocks {
     public static final RegistryObject<Block> BONE_CHANDELIER = Registration.BLOCKS.register("bone_chandelier",
             () -> new BoneChandelierBlock(Properties.of().mapColor(MapColor.SAND).strength(2.0F).sound(SoundType.BONE_BLOCK)
                     .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
+    // A room's centrepiece: one block whose model overhangs its neighbours. The bone chandelier's
+    // strength and sound.
+    public static final RegistryObject<Block> MEDIUM_BONE_CHANDELIER = Registration.BLOCKS.register("medium_bone_chandelier",
+            () -> new MediumBoneChandelierBlock(Properties.of().mapColor(MapColor.SAND).strength(2.0F).sound(SoundType.BONE_BLOCK)
+                    .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
     // Leaded stained glass that stacks into a lancet window, and a broken one for a ruined church.
     // A glass pane's strength and sound; textures from tools/gen_stained_glass_window_textures.py
     public static final RegistryObject<Block> STAINED_GLASS_WINDOW = Registration.BLOCKS.register("stained_glass_window",
@@ -976,9 +981,9 @@ public class ModBlocks {
             () -> new SoulVentBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()
                     .lightLevel(SoulVentBlock.LIGHT_EMISSION)));
     // Dark iron plate that a giant chain is fixed to, centre to centre with another anchor; drawn
-    // by GiantChainRenderer, not a block entity renderer. The grate's strength.
-    public static final RegistryObject<Block> GIANT_CHAIN_ANCHOR = Registration.BLOCKS.register("giant_chain_anchor",
-            () -> new GiantChainAnchorBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)
+    // by ChainRenderer, not a block entity renderer. The grate's strength.
+    public static final RegistryObject<Block> CHAIN_ANCHOR = Registration.BLOCKS.register("chain_anchor",
+            () -> new ChainAnchorBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)
                     .sound(SoundType.CHAIN).requiresCorrectToolForDrops()));
     // Chain fixtures, hung as blocks under a vanilla chain or from a ceiling, as a lantern hangs. On
     // a swinging chain they are its fixture instead (SwingingChainBlock#use), drawn from the same

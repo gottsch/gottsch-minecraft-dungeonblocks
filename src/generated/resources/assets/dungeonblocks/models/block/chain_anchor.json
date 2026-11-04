@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "dungeonblocks:block/giant_chain_anchor"
+    "all": "dungeonblocks:block/chain_anchor"
   }
 }

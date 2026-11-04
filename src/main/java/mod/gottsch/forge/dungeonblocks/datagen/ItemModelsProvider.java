@@ -245,8 +245,9 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.SKULL_PILE), modLoc("block/skull_pile_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.CHANDELIER), modLoc("block/chandelier"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.BONE_CHANDELIER), modLoc("block/bone_chandelier"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.MEDIUM_BONE_CHANDELIER), modLoc("block/medium_bone_chandelier_item"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.SOUL_VENT), modLoc("block/soul_vent"));
-		blockItemParent(ModBlocks.MAP.get(ModBlocks.GIANT_CHAIN_ANCHOR));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.CHAIN_ANCHOR));
 		// the giant chain's own item model, two interlocked links, is hand-written in models/item
 		// flat, as vanilla's glass panes are: a window one block tall
 		for (var window : List.of(ModBlocks.STAINED_GLASS_WINDOW, ModBlocks.BROKEN_STAINED_GLASS_WINDOW)) {

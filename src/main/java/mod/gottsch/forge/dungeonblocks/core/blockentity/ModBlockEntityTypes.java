@@ -78,11 +78,11 @@ public class ModBlockEntityTypes {
 							.of(PedestalBlockEntity::new, ModBlocks.PEDESTAL.get(), ModBlocks.BLACKSTONE_PEDESTAL.get())
 							.build(null));
 
-	/** The chains on a giant chain anchor, for GiantChainRenderer to draw. */
-	public static final RegistryObject<BlockEntityType<GiantChainAnchorBlockEntity>> GIANT_CHAIN_ANCHOR =
-			Registration.BLOCK_ENTITY_TYPES.register("giant_chain_anchor",
+	/** The chains on a chain anchor, for ChainRenderer to draw. */
+	public static final RegistryObject<BlockEntityType<ChainAnchorBlockEntity>> CHAIN_ANCHOR =
+			Registration.BLOCK_ENTITY_TYPES.register("chain_anchor",
 					() -> BlockEntityType.Builder
-							.of(GiantChainAnchorBlockEntity::new, ModBlocks.GIANT_CHAIN_ANCHOR.get())
+							.of(ChainAnchorBlockEntity::new, ModBlocks.CHAIN_ANCHOR.get())
 							.build(null));
 
 	public static void register(IEventBus bus) {

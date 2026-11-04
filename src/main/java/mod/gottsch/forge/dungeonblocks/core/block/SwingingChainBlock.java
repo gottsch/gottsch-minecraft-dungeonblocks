@@ -130,6 +130,7 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 		return switch (state.getValue(FIXTURE)) {
 			case CHANDELIER -> ChandelierBlock.SHAPE;
 			case BONE_CHANDELIER -> BoneChandelierBlock.SHAPE;
+			case MEDIUM_BONE_CHANDELIER -> MediumBoneChandelierBlock.SHAPE;
 			default -> SHAPE;
 		};
 	}
@@ -333,6 +334,9 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 		if (stack.is(ModBlocks.BONE_CHANDELIER.get().asItem())) {
 			return ChainFixture.BONE_CHANDELIER;
 		}
+		if (stack.is(ModBlocks.MEDIUM_BONE_CHANDELIER.get().asItem())) {
+			return ChainFixture.MEDIUM_BONE_CHANDELIER;
+		}
 		return ChainFixture.NONE;
 	}
 
@@ -346,6 +350,7 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 			case CENSER -> new ItemStack(ModBlocks.CENSER.get());
 			case CHANDELIER -> new ItemStack(ModBlocks.CHANDELIER.get());
 			case BONE_CHANDELIER -> new ItemStack(ModBlocks.BONE_CHANDELIER.get());
+			case MEDIUM_BONE_CHANDELIER -> new ItemStack(ModBlocks.MEDIUM_BONE_CHANDELIER.get());
 			case NONE -> ItemStack.EMPTY;
 		};
 	}
@@ -381,8 +386,7 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
 		ChainFixture fixture = state.getValue(FIXTURE);
-		if ((fixture != ChainFixture.CENSER && fixture != ChainFixture.CHANDELIER && fixture != ChainFixture.BONE_CHANDELIER)
-				|| !state.getValue(LIT)) {
+		if (!fixture.isLightable() || fixture == ChainFixture.DUNGEON_LANTERN || !state.getValue(LIT)) {
 			return;
 		}
 		if (!(level.getBlockEntity(findTop(level, pos)) instanceof SwingingChainBlockEntity chain)) {
@@ -394,6 +398,10 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 		}
 		if (fixture == ChainFixture.BONE_CHANDELIER) {
 			BoneChandelierBlock.flames(level, random, wick -> chain.bottomPoint(level.getGameTime(), wick));
+			return;
+		}
+		if (fixture == ChainFixture.MEDIUM_BONE_CHANDELIER) {
+			MediumBoneChandelierBlock.flames(level, random, wick -> chain.bottomPoint(level.getGameTime(), wick));
 			return;
 		}
 		Vec3 at = chain.bottomPoint(level.getGameTime(), CenserBlock.smokeOrigin(random));

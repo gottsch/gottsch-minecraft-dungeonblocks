@@ -1,11 +1,11 @@
 """
-Generates block/giant_chain_anchor - a dark iron plate, the same on all six faces, for the block a
-giant chain is fixed to. The chain runs from the block's centre at any angle, so the face has no
+Generates block/chain_anchor - a dark iron plate, the same on all six faces, for the block a
+giant or medium chain is fixed to. The chain runs from the block's centre at any angle, so the face has no
 ring or eye to line up with; it is dark_iron.png's own shades with a seam round the edge, so a run
 of anchors reads as separate plates, and a rivet in each corner.
 
 Run from the repo root:
-    python tools/gen_giant_chain_anchor_texture.py
+    python tools/gen_chain_anchor_texture.py
 """
 from PIL import Image
 
@@ -33,8 +33,8 @@ def main():
         out.putpixel((x + 1, y), scale(src.getpixel((x + 1, y)), SHADOW))
         out.putpixel((x, y + 1), scale(src.getpixel((x, y + 1)), SHADOW))
         out.putpixel((x + 1, y + 1), scale(src.getpixel((x + 1, y + 1)), SHADOW))
-    out.save(TEX + "giant_chain_anchor.png")
-    print("wrote giant_chain_anchor.png")
+    out.save(TEX + "chain_anchor.png")
+    print("wrote chain_anchor.png")
 
 
 if __name__ == "__main__":

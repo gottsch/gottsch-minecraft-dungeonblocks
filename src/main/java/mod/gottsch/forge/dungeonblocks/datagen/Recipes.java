@@ -396,6 +396,16 @@ public class Recipes extends RecipeProvider {
 					.define('b', Blocks.BONE_BLOCK)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.BONE_BLOCK))
 					.save(recipe);
+			// medium bone chandelier: the bone chandelier grown with more bone blocks and candles
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.MEDIUM_BONE_CHANDELIER.get())
+					.pattern("kkk")
+					.pattern("bcb")
+					.pattern("bbb")
+					.define('c', ModBlocks.BONE_CHANDELIER.get())
+					.define('k', ItemTags.CANDLES)
+					.define('b', Blocks.BONE_BLOCK)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.BONE_CHANDELIER.get()))
+					.save(recipe);
 
 			// soul vent: a dark iron grate over a soul campfire
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.SOUL_VENT.get())
@@ -406,13 +416,19 @@ public class Recipes extends RecipeProvider {
 
 			// giant chain: an iron block blackened with coal for the anchor, and four chains for the
 			// chain - one makes a chain of any length
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.GIANT_CHAIN_ANCHOR.get())
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.CHAIN_ANCHOR.get())
 					.requires(Blocks.IRON_BLOCK)
 					.requires(Items.COAL)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.CHAIN))
 					.save(recipe);
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.GIANT_CHAIN.get())
 					.requires(Items.CHAIN, 4)
+					.requires(Items.COAL)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.CHAIN))
+					.save(recipe);
+			// medium chain: two chains, blackened the same way; it hangs on the same anchors
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.MEDIUM_CHAIN.get())
+					.requires(Items.CHAIN, 2)
 					.requires(Items.COAL)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.CHAIN))
 					.save(recipe);

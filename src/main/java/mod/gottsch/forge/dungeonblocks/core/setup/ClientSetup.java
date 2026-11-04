@@ -28,7 +28,7 @@ import mod.gottsch.forge.dungeonblocks.core.entity.client.ScrollModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.ScrollRenderer;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.TomeModel;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.TomeRenderer;
-import mod.gottsch.forge.dungeonblocks.core.blockentity.client.GiantChainRenderer;
+import mod.gottsch.forge.dungeonblocks.core.block.ChainSize;
 import mod.gottsch.forge.dungeonblocks.core.state.properties.ChainFixture;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.resources.ResourceLocation;
@@ -202,7 +202,9 @@ public class ClientSetup {
                 }
             }
         }
-        // the giant chain's link, which GiantChainRenderer draws along every chain
-        event.register(GiantChainRenderer.LINK_MODEL);
+        // each chain size's link, which ChainRenderer draws along every chain
+        for (ChainSize size : ChainSize.values()) {
+            event.register(size.getLinkModel());
+        }
     }
 }
