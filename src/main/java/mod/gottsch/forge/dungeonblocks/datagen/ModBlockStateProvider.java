@@ -102,6 +102,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         // copper doors (waxed variants reuse the un-waxed door textures)
         ModBlocks.COPPER_DOORS.forEach((age, b) -> copperDoor(b, CopperFamily.id(age, "copper_door")));
         edgedDoor(ModBlocks.IRON_BARS_DOOR, "iron_bars_door");
+        edgedDoor(ModBlocks.BONE_LATTICE_GATE, "bone_lattice_gate");
         ModBlocks.DARK_IRON_BARS_DOORS.forEach((age, b) -> edgedDoor(b, age.id("dark_iron_bars_door")));
         ModBlocks.DARK_IRON_BARS.forEach((age, b) -> ironBars(b));
         // the Blockbench model faces north, against a south wall, as vanilla's ladder does
@@ -271,6 +272,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.CRACKED_BRICKS.get());
         simpleBlock(ModBlocks.HERRINGBONE_BRICKS.get());
         simpleBlock(ModBlocks.MOSSY_HERRINGBONE_BRICKS.get());
+        simpleBlock(ModBlocks.MIXED_ASHLAR.get());
         stairsBlock(ModBlocks.MOSSY_BRICK_STAIRS.get(), modLoc("block/mossy_bricks"));
 
         simpleBlock(ModBlocks.LARGE_BRICKS.get());
@@ -666,6 +668,30 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModelFile censerLit = models().getExistingFile(modLoc("block/chain_fixture_censer_lit"));
         getVariantBuilder(ModBlocks.CENSER.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(state.getValue(CenserBlock.LIT) ? censerLit : censer).build());
+        ModelFile oilLamp = models().getExistingFile(modLoc("block/hanging_oil_lamp"));
+        ModelFile oilLampLit = models().getExistingFile(modLoc("block/hanging_oil_lamp_lit"));
+        getVariantBuilder(ModBlocks.HANGING_OIL_LAMP.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
+                .modelFile(state.getValue(CenserBlock.LIT) ? oilLampLit : oilLamp).build(), CenserBlock.WATERLOGGED);
+        // duckboards: the template turned for AXIS x, boards of the wood's planks on its stripped log
+        for (RegistryObject<Block> b : ModBlocks.DUCKBOARDS) {
+            String wood = b.getId().getPath().replace("_duckboards", "");
+            ModelFile model = models().withExistingParent(b.getId().getPath(), modLoc("block/template_duckboard"))
+                    .texture("boards", mcLoc("block/" + wood + "_planks"))
+                    .texture("stringer", mcLoc("block/stripped_" + wood + "_log"))
+                    .renderType("minecraft:cutout");
+            getVariantBuilder(b.get()).forAllStatesExcept(state -> ConfiguredModel.builder().modelFile(model)
+                    .rotationY(state.getValue(DuckboardBlock.AXIS) == Direction.Axis.X ? 90 : 0).build(), DuckboardBlock.WATERLOGGED);
+        }
+        // stone benches: a model per PART (tools/gen_stone_benches.py), authored along x, turned for z
+        for (RegistryObject<Block> bench : ModBlocks.BENCHES) {
+            String name = bench.getId().getPath();
+            getVariantBuilder(bench.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
+                    .modelFile(models().getExistingFile(modLoc("block/" + name + "_" + state.getValue(StoneBenchBlock.PART).getSerializedName())))
+                    .rotationY(state.getValue(StoneBenchBlock.AXIS) == Direction.Axis.Z ? 90 : 0).build(), StoneBenchBlock.WATERLOGGED);
+        }
+        // the tomb door: an empty model for both halves; TombDoorRenderer draws the slab
+        ModelFile tombDoorEmpty = models().getExistingFile(modLoc("block/tomb_door_empty"));
+        getVariantBuilder(ModBlocks.TOMB_DOOR.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(tombDoorEmpty).build());
         // the fire basket: one model per brazier FIRE state
         getVariantBuilder(ModBlocks.FIRE_BASKET.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
                 .modelFile(models().getExistingFile(modLoc("block/fire_basket" + switch (state.getValue(FireBasketBlock.FIRE)) {
@@ -730,6 +756,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(ModBlocks.MEDIUM_BONE_CHANDELIER.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(models().getExistingFile(modLoc(state.getValue(ChandelierBlock.LIT)
                         ? "block/medium_bone_chandelier_lit" : "block/medium_bone_chandelier"))).build());
+        getVariantBuilder(ModBlocks.MEDIUM_CHANDELIER.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(models().getExistingFile(modLoc(state.getValue(ChandelierBlock.LIT)
+                        ? "block/medium_chandelier_lit" : "block/medium_chandelier"))).build());
+        // the large chandeliers: the block's model is only its break particle; LargeChandelierRenderer
+        // draws the chandelier, lit or not
+        for (RegistryObject<Block> large : List.of(ModBlocks.LARGE_CHANDELIER, ModBlocks.LARGE_BONE_CHANDELIER)) {
+            ModelFile particle = models().getExistingFile(modLoc("block/" + large.getId().getPath()));
+            getVariantBuilder(large.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(particle).build());
+        }
         // stained glass windows: a 2px panel per PART, running along X; turned for a Z window. The
         // back face is mirrored, so a broken pane's hole lines up from both sides. The broken middle
         // has two variants, picked by position.

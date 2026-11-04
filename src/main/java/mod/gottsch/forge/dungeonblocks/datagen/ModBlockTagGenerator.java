@@ -126,6 +126,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // what villagers path through.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.IRON_BARS_DOOR.get());
         this.tag(BlockTags.DOORS).add(ModBlocks.IRON_BARS_DOOR.get());
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.BONE_LATTICE_GATE.get());
+        this.tag(BlockTags.DOORS).add(ModBlocks.BONE_LATTICE_GATE.get());
         // the dark iron bars and their doors: the same, and pickaxe-only like vanilla iron bars
         ModBlocks.DARK_IRON_BARS.forEach((age, b) -> this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get()));
         ModBlocks.DARK_IRON_BARS_DOORS.forEach((age, b) -> this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b.get()));
@@ -137,6 +139,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // Sharpened logs are wood: axe, no tier, like vanilla logs. Their ids match nothing in
         // stone_blocks, and must stay out of that sweep, which would tag them for a pickaxe.
         ModBlocks.SHARPENED_LOGS.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
+        ModBlocks.DUCKBOARDS.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
         ModBlocks.CHEVALS_DE_FRISE.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
         ModBlocks.WALKWAY_BRACKETS.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
 
@@ -187,9 +190,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.RUBBLE_SCATTER.get());
         // The bone pile, the chandelier and the chain fixtures drop to anything; a pickaxe only
         // takes them down faster.
-        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.BONE_PILE.get(), ModBlocks.SKULL_PILE.get(), ModBlocks.CHANDELIER.get(), ModBlocks.BONE_CHANDELIER.get(), ModBlocks.MEDIUM_BONE_CHANDELIER.get(), ModBlocks.SKULL_CANDLE.get(), ModBlocks.BLACK_SKULL_CANDLE.get(),
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.BONE_PILE.get(), ModBlocks.SKULL_PILE.get(), ModBlocks.CHANDELIER.get(), ModBlocks.BONE_CHANDELIER.get(), ModBlocks.MEDIUM_BONE_CHANDELIER.get(),
+                ModBlocks.MEDIUM_CHANDELIER.get(), ModBlocks.LARGE_CHANDELIER.get(), ModBlocks.LARGE_BONE_CHANDELIER.get(), ModBlocks.SKULL_CANDLE.get(), ModBlocks.BLACK_SKULL_CANDLE.get(),
                 ModBlocks.MANACLES.get(), ModBlocks.MEAT_HOOK.get(), ModBlocks.CENSER.get(), ModBlocks.SOUL_VENT.get(),
-                ModBlocks.FIRE_BASKET.get());
+                ModBlocks.FIRE_BASKET.get(), ModBlocks.HANGING_OIL_LAMP.get(), ModBlocks.TOMB_DOOR.get());
         // The chain anchor is a block of iron plate, and needs a pickaxe to drop.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.CHAIN_ANCHOR.get());
         // The large candles are lit by vanilla's flint and steel and fire charge, which light only

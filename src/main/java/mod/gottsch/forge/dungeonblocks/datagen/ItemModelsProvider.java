@@ -174,6 +174,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.CRACKED_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.HERRINGBONE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_HERRINGBONE_BRICKS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MIXED_ASHLAR));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.LARGE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LARGE_BRICKS));
@@ -197,6 +198,9 @@ public class ItemModelsProvider extends ItemModelProvider {
 		// copper door items: flat icon from the door item texture (waxed reuse the un-waxed texture)
 		ModBlocks.COPPER_DOORS.forEach((age, b) -> basicItem(ModBlocks.MAP.get(b), modLoc("item/" + CopperFamily.id(age, "copper_door"))));
 		basicItem(ModBlocks.MAP.get(ModBlocks.IRON_BARS_DOOR), modLoc("item/iron_bars_door"));
+		basicItem(ModBlocks.MAP.get(ModBlocks.BONE_LATTICE_GATE), modLoc("item/bone_lattice_gate"));
+		ModBlocks.BENCHES.forEach(b -> withExistingParent(ModBlocks.MAP.get(b).getId().getPath(), modLoc("block/" + b.getId().getPath() + "_single")));
+		ModBlocks.DUCKBOARDS.forEach(b -> withExistingParent(ModBlocks.MAP.get(b).getId().getPath(), modLoc("block/" + b.getId().getPath())));
 		ModBlocks.DARK_IRON_BARS_DOORS.forEach((age, b) -> basicItem(ModBlocks.MAP.get(b), modLoc("item/" + age.id("dark_iron_bars_door"))));
 		// bars show their flat texture in the inventory, as vanilla iron bars do
 		ModBlocks.DARK_IRON_BARS.forEach((age, b) -> basicItem(ModBlocks.MAP.get(b), modLoc("block/" + age.id("dark_iron_bars"))));
@@ -246,6 +250,9 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.CHANDELIER), modLoc("block/chandelier"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.BONE_CHANDELIER), modLoc("block/bone_chandelier"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.MEDIUM_BONE_CHANDELIER), modLoc("block/medium_bone_chandelier_item"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.MEDIUM_CHANDELIER), modLoc("block/medium_chandelier_item"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.LARGE_CHANDELIER), modLoc("block/large_chandelier_item"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.LARGE_BONE_CHANDELIER), modLoc("block/large_bone_chandelier_item"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.SOUL_VENT), modLoc("block/soul_vent"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.CHAIN_ANCHOR));
 		// the giant chain's own item model, two interlocked links, is hand-written in models/item
@@ -288,6 +295,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		basicItem(ModBlocks.MAP.get(ModBlocks.MEAT_HOOK), modLoc("item/meat_hook"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.CENSER), modLoc("block/chain_fixture_censer"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.FIRE_BASKET), modLoc("block/fire_basket"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.HANGING_OIL_LAMP), modLoc("block/hanging_oil_lamp"));
 		// vanilla's cauldron icon with the default green brew baked in (tools/gen_bubbling_cauldron_item.py)
 		basicItem(ModBlocks.MAP.get(ModBlocks.BUBBLING_CAULDRON), modLoc("item/bubbling_cauldron"));
 

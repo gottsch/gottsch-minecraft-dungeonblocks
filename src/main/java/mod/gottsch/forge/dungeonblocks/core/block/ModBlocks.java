@@ -484,6 +484,11 @@ public class ModBlocks {
     public static final RegistryObject<Block> MOSSY_HERRINGBONE_BRICKS = stone("mossy_herringbone_bricks", () -> {
         return new Block(Properties.copy(Blocks.BRICKS));
     });
+    // squared stones of mixed sizes in one repeating block, the one-block form of mixed ashlar;
+    // texture from tools/gen_mixed_ashlar_texture.py
+    public static final RegistryObject<Block> MIXED_ASHLAR = stone("mixed_ashlar", () -> {
+        return new Block(Properties.copy(Blocks.STONE_BRICKS));
+    });
     public static final RegistryObject<StairBlock> MOSSY_BRICK_STAIRS =stone("mossy_brick_stairs", () -> {
         return new StairBlock(Blocks.BRICKS.defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
     });
@@ -728,6 +733,12 @@ public class ModBlocks {
     // iron block set type anyway.
     public static final RegistryObject<Block> IRON_BARS_DOOR = Registration.BLOCKS.register("iron_bars_door",
             () -> new IronBarsDoorBlock(Properties.copy(Blocks.IRON_DOOR)));
+    // An ossuary gate: bones in a diamond lattice in a femur frame. The iron bars door's centred
+    // panel and hand-opening (villagers kept out, zombies can't break it); a bone block's sound.
+    // Textures: tools/gen_bone_lattice_gate_textures.py
+    public static final RegistryObject<Block> BONE_LATTICE_GATE = Registration.BLOCKS.register("bone_lattice_gate",
+            () -> new IronBarsDoorBlock(Properties.of().mapColor(MapColor.SAND).strength(2.0F).sound(SoundType.BONE_BLOCK)
+                    .requiresCorrectToolForDrops().noOcclusion().pushReaction(PushReaction.DESTROY)));
 
     // Dark iron bars, plain and lightly rusted, each with a matching cell door. Vanilla's own
     // IronBarsBlock, so they connect to each other and to vanilla iron bars exactly as iron bars
@@ -969,6 +980,19 @@ public class ModBlocks {
     public static final RegistryObject<Block> MEDIUM_BONE_CHANDELIER = Registration.BLOCKS.register("medium_bone_chandelier",
             () -> new MediumBoneChandelierBlock(Properties.of().mapColor(MapColor.SAND).strength(2.0F).sound(SoundType.BONE_BLOCK)
                     .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
+    // The iron chandelier at the medium bone chandelier's size, and the two-tier large ones, which a
+    // renderer draws (LargeChandelierBlock). Each keeps its small one's strength and sound.
+    public static final RegistryObject<Block> MEDIUM_CHANDELIER = Registration.BLOCKS.register("medium_chandelier",
+            () -> new MediumChandelierBlock(Properties.of().mapColor(MapColor.METAL).strength(3.5F).sound(SoundType.LANTERN)
+                    .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
+    public static final RegistryObject<Block> LARGE_CHANDELIER = Registration.BLOCKS.register("large_chandelier",
+            () -> new LargeChandelierBlock(Properties.of().mapColor(MapColor.METAL).strength(3.5F).sound(SoundType.LANTERN)
+                    .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY),
+                    LargeChandelierBlock.IRON_SHAPE, LargeChandelierBlock.IRON_WICKS));
+    public static final RegistryObject<Block> LARGE_BONE_CHANDELIER = Registration.BLOCKS.register("large_bone_chandelier",
+            () -> new LargeChandelierBlock(Properties.of().mapColor(MapColor.SAND).strength(2.0F).sound(SoundType.BONE_BLOCK)
+                    .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY),
+                    LargeChandelierBlock.BONE_SHAPE, LargeChandelierBlock.BONE_WICKS));
     // Leaded stained glass that stacks into a lancet window, and a broken one for a ruined church.
     // A glass pane's strength and sound; textures from tools/gen_stained_glass_window_textures.py
     public static final RegistryObject<Block> STAINED_GLASS_WINDOW = Registration.BLOCKS.register("stained_glass_window",
@@ -1001,6 +1025,42 @@ public class ModBlocks {
     // An open iron basket of burning logs, on the brazier's FIRE states and light levels
     public static final RegistryObject<Block> FIRE_BASKET = Registration.BLOCKS.register("fire_basket",
             () -> new FireBasketBlock(fixtureProperties(SoundType.LANTERN).lightLevel(FireBasketBlock.LIGHT_EMISSION)));
+    // Duckboards: a plank walkway over mud or water, in three woods; planks' properties
+    public static final List<RegistryObject<Block>> DUCKBOARDS = new ArrayList<>();
+    public static final RegistryObject<Block> OAK_DUCKBOARDS = duckboards("oak", Blocks.OAK_PLANKS);
+    public static final RegistryObject<Block> SPRUCE_DUCKBOARDS = duckboards("spruce", Blocks.SPRUCE_PLANKS);
+    public static final RegistryObject<Block> DARK_OAK_DUCKBOARDS = duckboards("dark_oak", Blocks.DARK_OAK_PLANKS);
+
+    private static RegistryObject<Block> duckboards(String wood, Block planks) {
+        RegistryObject<Block> block = Registration.BLOCKS.register(wood + "_duckboards",
+                () -> new DuckboardBlock(Properties.copy(planks).noOcclusion()));
+        DUCKBOARDS.add(block);
+        return block;
+    }
+
+    // Stone benches to sit on, dressed like the large bricks of their stone; benches side by side join
+    // into one long bench. Each takes its brick block's strength and sound.
+    public static final List<RegistryObject<Block>> BENCHES = new ArrayList<>();
+    public static final RegistryObject<Block> STONE_BENCH = bench("stone", () -> Blocks.STONE_BRICKS);
+    public static final RegistryObject<Block> DEEPSLATE_BENCH = bench("deepslate", () -> Blocks.DEEPSLATE_BRICKS);
+    public static final RegistryObject<Block> OSSUARY_BENCH = bench("ossuary", () -> OSSUARY_BRICKS.get());
+    public static final RegistryObject<Block> BRICK_BENCH = bench("brick", () -> Blocks.BRICKS);
+    public static final RegistryObject<Block> MUD_BRICK_BENCH = bench("mud_brick", () -> Blocks.MUD_BRICKS);
+
+    private static RegistryObject<Block> bench(String stone, Supplier<Block> bricks) {
+        RegistryObject<Block> block = stone(stone + "_bench",
+                () -> new StoneBenchBlock(Properties.copy(bricks.get()).noOcclusion()));
+        BENCHES.add(block);
+        return block;
+    }
+
+    // A carved stone slab door, two blocks tall, that grinds sideways into the wall to open; drawn by
+    // TombDoorRenderer. Smooth stone's properties.
+    public static final RegistryObject<Block> TOMB_DOOR = Registration.BLOCKS.register("tomb_door",
+            () -> new TombDoorBlock(Properties.copy(Blocks.SMOOTH_STONE).noOcclusion().pushReaction(PushReaction.BLOCK)));
+    // A terracotta oil lamp on a bail and chain; a clay pot's sound, the fixtures' strength
+    public static final RegistryObject<Block> HANGING_OIL_LAMP = Registration.BLOCKS.register("hanging_oil_lamp",
+            () -> new HangingOilLampBlock(fixtureProperties(SoundType.DECORATED_POT).lightLevel(HangingOilLampBlock.LIGHT_EMISSION)));
 
     // A cauldron of coloured brew at a boil. Vanilla cauldron's properties exactly, so it needs a
     // pickaxe to drop, as a cauldron does (tagged by hand in ModBlockTagGenerator).

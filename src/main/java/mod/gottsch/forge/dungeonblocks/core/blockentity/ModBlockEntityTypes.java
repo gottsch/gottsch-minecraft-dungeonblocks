@@ -64,6 +64,17 @@ public class ModBlockEntityTypes {
 									.toArray(net.minecraft.world.level.block.Block[]::new))
 							.build(null));
 
+	/** A tomb door's lower half: where TombDoorRenderer keeps the slab's slide. */
+	public static final RegistryObject<BlockEntityType<TombDoorBlockEntity>> TOMB_DOOR =
+			Registration.BLOCK_ENTITY_TYPES.register("tomb_door",
+					() -> BlockEntityType.Builder.of(TombDoorBlockEntity::new, ModBlocks.TOMB_DOOR.get()).build(null));
+
+	/** A large chandelier's core: only there for LargeChandelierRenderer to draw it. */
+	public static final RegistryObject<BlockEntityType<LargeChandelierBlockEntity>> LARGE_CHANDELIER =
+			Registration.BLOCK_ENTITY_TYPES.register("large_chandelier",
+					() -> BlockEntityType.Builder.of(LargeChandelierBlockEntity::new, ModBlocks.LARGE_CHANDELIER.get(),
+							ModBlocks.LARGE_BONE_CHANDELIER.get()).build(null));
+
 	/** The weapons on a weapon rack, for WeaponRackRenderer to draw. */
 	public static final RegistryObject<BlockEntityType<WeaponRackBlockEntity>> WEAPON_RACK =
 			Registration.BLOCK_ENTITY_TYPES.register("weapon_rack",

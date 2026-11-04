@@ -406,6 +406,35 @@ public class Recipes extends RecipeProvider {
 					.define('b', Blocks.BONE_BLOCK)
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.BONE_CHANDELIER.get()))
 					.save(recipe);
+			// large bone chandelier: two medium ones, more bone blocks and candles
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.LARGE_BONE_CHANDELIER.get())
+					.pattern("kkk")
+					.pattern("mbm")
+					.pattern("bbb")
+					.define('m', ModBlocks.MEDIUM_BONE_CHANDELIER.get())
+					.define('k', ItemTags.CANDLES)
+					.define('b', Blocks.BONE_BLOCK)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.MEDIUM_BONE_CHANDELIER.get()))
+					.save(recipe);
+			// medium and large iron chandeliers: the same steps up, in iron
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.MEDIUM_CHANDELIER.get())
+					.pattern("kkk")
+					.pattern("ici")
+					.pattern("iii")
+					.define('c', ModBlocks.CHANDELIER.get())
+					.define('k', ItemTags.CANDLES)
+					.define('i', Items.IRON_INGOT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.CHANDELIER.get()))
+					.save(recipe);
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.LARGE_CHANDELIER.get())
+					.pattern("kkk")
+					.pattern("mim")
+					.pattern("iii")
+					.define('m', ModBlocks.MEDIUM_CHANDELIER.get())
+					.define('k', ItemTags.CANDLES)
+					.define('i', Items.IRON_INGOT)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.MEDIUM_CHANDELIER.get()))
+					.save(recipe);
 
 			// soul vent: a dark iron grate over a soul campfire
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.SOUL_VENT.get())
@@ -550,6 +579,20 @@ public class Recipes extends RecipeProvider {
 			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.BRICKS), RecipeCategory.BUILDING_BLOCKS, ModBlocks.HERRINGBONE_BRICKS.get())
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.BRICKS))
 					.save(recipe);
+			// stone benches are cut from their stone's bricks, one for one
+			for (var entry : java.util.Map.of(ModBlocks.STONE_BENCH, Blocks.STONE_BRICKS, ModBlocks.DEEPSLATE_BENCH, Blocks.DEEPSLATE_BRICKS,
+					ModBlocks.OSSUARY_BENCH, ModBlocks.OSSUARY_BRICKS.get(), ModBlocks.BRICK_BENCH, Blocks.BRICKS,
+					ModBlocks.MUD_BRICK_BENCH, Blocks.MUD_BRICKS).entrySet()) {
+				SingleItemRecipeBuilder.stonecutting(Ingredient.of(entry.getValue()), RecipeCategory.DECORATIONS, entry.getKey().get())
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(entry.getValue()))
+						.save(recipe, new ResourceLocation(DungeonBlocks.MOD_ID, entry.getKey().getId().getPath() + "_stonecutting"));
+			}
+			// mixed ashlar is stone recut, from stone or stone bricks
+			for (Block from : List.of(Blocks.STONE, Blocks.STONE_BRICKS)) {
+				SingleItemRecipeBuilder.stonecutting(Ingredient.of(from), RecipeCategory.BUILDING_BLOCKS, ModBlocks.MIXED_ASHLAR.get())
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(from))
+						.save(recipe, new ResourceLocation(DungeonBlocks.MOD_ID, "mixed_ashlar_from_" + ForgeRegistries.BLOCKS.getKey(from).getPath() + "_stonecutting"));
+			}
 			// bone walls are hewn tufa packed with a bone block for the skulls, as on the skull
 			// pike, or with bones; knucklebone paving is cobblestone set with a bone
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.PACKED_SKULLS.get())
@@ -749,6 +792,45 @@ public class Recipes extends RecipeProvider {
 					.define('c', Blocks.CHAIN)
 					.define('b', ModBlocks.BRAZIER.get())
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.BRAZIER.get()))
+					.save(recipe);
+
+			// bone lattice gate: bones round a bone block, in a door's shape
+			ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ModBlocks.BONE_LATTICE_GATE.get())
+					.pattern("bb")
+					.pattern("kb")
+					.pattern("bb")
+					.define('b', Items.BONE)
+					.define('k', Blocks.BONE_BLOCK)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.BONE))
+					.save(recipe);
+
+			// duckboards: planks laid across two sticks, six at a time
+			for (var entry : java.util.Map.of(ModBlocks.OAK_DUCKBOARDS, Blocks.OAK_PLANKS, ModBlocks.SPRUCE_DUCKBOARDS,
+					Blocks.SPRUCE_PLANKS, ModBlocks.DARK_OAK_DUCKBOARDS, Blocks.DARK_OAK_PLANKS).entrySet()) {
+				ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, entry.getKey().get(), 6)
+						.pattern("ppp")
+						.pattern("s s")
+						.define('p', entry.getValue())
+						.define('s', Items.STICK)
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(entry.getValue()))
+						.save(recipe);
+			}
+
+			// tomb door: a slab of smooth stone, in a door's shape
+			ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ModBlocks.TOMB_DOOR.get())
+					.pattern("ss")
+					.pattern("ss")
+					.pattern("ss")
+					.define('s', Blocks.SMOOTH_STONE)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.SMOOTH_STONE))
+					.save(recipe);
+
+			// hanging oil lamp: a clay pot, a chain to hang it by, string for the wick
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.HANGING_OIL_LAMP.get())
+					.requires(Blocks.FLOWER_POT)
+					.requires(Blocks.CHAIN)
+					.requires(Items.STRING)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.FLOWER_POT))
 					.save(recipe);
 
 			// bubbling cauldron: a cauldron, water, and nether wart for the brew; it starts green

@@ -228,6 +228,15 @@ public class ModEntityTypes {
 					.build("tome"));
 
 	// one type for every design, as the tome: the variant is synced data
+	/** The invisible seat a player rides while sitting on a stone bench. */
+	public static final RegistryObject<EntityType<SeatEntity>> SEAT = Registration.ENTITY_TYPES.register("seat",
+			() -> EntityType.Builder.<SeatEntity>of(SeatEntity::new, MobCategory.MISC)
+					.sized(0.25F, 0.25F)
+					.noSummon()
+					.fireImmune()
+					.clientTrackingRange(10)
+					.build("seat"));
+
 	public static final RegistryObject<EntityType<ScrollEntity>> SCROLL = Registration.ENTITY_TYPES.register("scroll",
 			() -> EntityType.Builder.<ScrollEntity>of(ScrollEntity::new, MobCategory.MISC)
 					// the rolled scroll: 7 px long, 1.5 px thick
