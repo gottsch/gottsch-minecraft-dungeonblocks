@@ -131,6 +131,7 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 			case CHANDELIER -> ChandelierBlock.SHAPE;
 			case BONE_CHANDELIER -> BoneChandelierBlock.SHAPE;
 			case MEDIUM_BONE_CHANDELIER -> MediumBoneChandelierBlock.SHAPE;
+			case FIRE_BASKET, SOUL_FIRE_BASKET -> FireBasketBlock.SHAPE;
 			default -> SHAPE;
 		};
 	}
@@ -250,10 +251,14 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 		ChainFixture fixture = state.getValue(FIXTURE);
 
 		if (fixture.isLightable()) {
-			boolean igniter = held.is(Items.FLINT_AND_STEEL) || held.is(Blocks.TORCH.asItem());
+			// a soul torch lights a fire basket with soul fire, which is its own fixture
+			boolean soul = fixture.isFireBasket() && held.is(Blocks.SOUL_TORCH.asItem());
+			boolean igniter = soul || held.is(Items.FLINT_AND_STEEL) || held.is(Blocks.TORCH.asItem());
 			if (!state.getValue(LIT) && igniter) {
 				if (!level.isClientSide) {
-					level.setBlock(pos, state.setValue(LIT, true), Block.UPDATE_ALL);
+					ChainFixture burning = !fixture.isFireBasket() ? fixture
+							: soul ? ChainFixture.SOUL_FIRE_BASKET : ChainFixture.FIRE_BASKET;
+					level.setBlock(pos, state.setValue(FIXTURE, burning).setValue(LIT, true), Block.UPDATE_ALL);
 					level.playSound(null, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
 					if (held.is(Items.FLINT_AND_STEEL)) {
 						held.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
@@ -263,7 +268,8 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 			}
 			if (state.getValue(LIT) && held.isEmpty()) {
 				if (!level.isClientSide) {
-					level.setBlock(pos, state.setValue(LIT, false), Block.UPDATE_ALL);
+					ChainFixture out = fixture == ChainFixture.SOUL_FIRE_BASKET ? ChainFixture.FIRE_BASKET : fixture;
+					level.setBlock(pos, state.setValue(FIXTURE, out).setValue(LIT, false), Block.UPDATE_ALL);
 					level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 1.5F);
 				}
 				return InteractionResult.sidedSuccess(level.isClientSide);
@@ -337,6 +343,9 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 		if (stack.is(ModBlocks.MEDIUM_BONE_CHANDELIER.get().asItem())) {
 			return ChainFixture.MEDIUM_BONE_CHANDELIER;
 		}
+		if (stack.is(ModBlocks.FIRE_BASKET.get().asItem())) {
+			return ChainFixture.FIRE_BASKET;
+		}
 		return ChainFixture.NONE;
 	}
 
@@ -351,6 +360,7 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 			case CHANDELIER -> new ItemStack(ModBlocks.CHANDELIER.get());
 			case BONE_CHANDELIER -> new ItemStack(ModBlocks.BONE_CHANDELIER.get());
 			case MEDIUM_BONE_CHANDELIER -> new ItemStack(ModBlocks.MEDIUM_BONE_CHANDELIER.get());
+			case FIRE_BASKET, SOUL_FIRE_BASKET -> new ItemStack(ModBlocks.FIRE_BASKET.get());
 			case NONE -> ItemStack.EMPTY;
 		};
 	}
@@ -402,6 +412,11 @@ public class SwingingChainBlock extends Block implements EntityBlock {
 		}
 		if (fixture == ChainFixture.MEDIUM_BONE_CHANDELIER) {
 			MediumBoneChandelierBlock.flames(level, random, wick -> chain.bottomPoint(level.getGameTime(), wick));
+			return;
+		}
+		if (fixture.isFireBasket()) {
+			FireBasketBlock.particles(fixture == ChainFixture.SOUL_FIRE_BASKET ? BrazierBlock.BrazierFire.SOUL
+					: BrazierBlock.BrazierFire.LIT, level, random, at -> chain.bottomPoint(level.getGameTime(), at));
 			return;
 		}
 		Vec3 at = chain.bottomPoint(level.getGameTime(), CenserBlock.smokeOrigin(random));

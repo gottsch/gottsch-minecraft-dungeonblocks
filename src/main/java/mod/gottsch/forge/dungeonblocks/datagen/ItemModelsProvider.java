@@ -287,6 +287,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.MANACLES), modLoc("block/chain_fixture_manacles"));
 		basicItem(ModBlocks.MAP.get(ModBlocks.MEAT_HOOK), modLoc("item/meat_hook"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.CENSER), modLoc("block/chain_fixture_censer"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.FIRE_BASKET), modLoc("block/fire_basket"));
 		// vanilla's cauldron icon with the default green brew baked in (tools/gen_bubbling_cauldron_item.py)
 		basicItem(ModBlocks.MAP.get(ModBlocks.BUBBLING_CAULDRON), modLoc("item/bubbling_cauldron"));
 

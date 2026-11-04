@@ -767,6 +767,65 @@ def censer():
     return p
 
 
+def fire_basket_log(p, group, name, frm, to, along):
+    """A campfire log lying along `along` ("x" or "z"): bark down its length, the cut end at its
+    ends. campfire_log's bark is rows 0-4, its end [0,4,4,8]."""
+    a = "xz".index(along) * 2
+    length = to[a] - frm[a]
+    bark = [0, 0, length, 4]
+    end = [0, 4, 4, 8]
+    ends = ("east", "west") if along == "x" else ("north", "south")
+    uv = {d: end if d in ends else bark for d in DIRS}
+    # bark runs along u: on a log along z the top and bottom see it turned a quarter
+    turned = {"up": 90, "down": 90} if along == "z" else {}
+    p.box(group, name, frm, to, "log", uv=uv, face_rot=turned)
+
+
+def fire_basket():
+    """Chain fixture: a cresset - an open dark iron basket of burning logs, hung on four rods from
+    an eye. The basket steps out from a 6px base through a lower hoop (8px) to the rim (10px), with
+    bars between, so the fire shows through it. Groups: `cage` (iron), `fuel` (the logs, textured
+    per state: campfire_log, or its lit/soul glow) and `flames` (two crossed planes of vanilla fire,
+    only in the burning models)."""
+    p = Project("fire_basket", {"iron": DARK_IRON, "log": "minecraft:block/campfire_log",
+                                "fire": "minecraft:block/fire_0"})
+    # the base, the lower hoop and the rim
+    p.box("cage", "base", (5, 1, 5), (11, 2, 11), "iron")
+    for name, lo, hi, y0, y1 in (("hoop", 4, 12, 4.5, 5.5), ("rim", 3, 13, 8, 9)):
+        p.box("cage", f"{name}_n", (lo, y0, lo), (hi, y1, lo + 1), "iron")
+        p.box("cage", f"{name}_s", (lo, y0, hi - 1), (hi, y1, hi), "iron")
+        p.box("cage", f"{name}_w", (lo, y0, lo + 1), (lo + 1, y1, hi - 1), "iron", skip=("north", "south"))
+        p.box("cage", f"{name}_e", (hi - 1, y0, lo + 1), (hi, y1, hi - 1), "iron", skip=("north", "south"))
+    # bars: base to hoop, then hoop to rim, at the corners and the middle of each side. Each stands
+    # half a pixel outside the part below it, so its underside shows from beneath: keep "down"
+    for name, lo, hi, y0, y1 in (("low", 4.5, 11.5, 2, 4.5), ("high", 3.5, 12.5, 5.5, 8)):
+        for n, (x, z) in enumerate(((lo, lo), (8, lo), (hi, lo), (lo, 8), (hi, 8), (lo, hi), (8, hi), (hi, hi))):
+            p.box("cage", f"bar_{name}_{n}", (x - 0.5, y0, z - 0.5), (x + 0.5, y1, z + 0.5), "iron",
+                  skip=("up",))
+    # prongs standing up from the rim's corners
+    for n, (x, z) in enumerate(((3, 3), (12, 3), (3, 12), (12, 12))):
+        p.box("cage", f"prong_{n}", (x, 9, z), (x + 1, 10.5, z + 1), "iron", skip=("down",))
+    # four rods from the middle of each side of the rim up to the eye, leaning in at 45 degrees
+    # (the bone chandelier's rib signs: x+ leans a north rod south, z- leans a west rod east)
+    rod = 6.4
+    for n, (axis, angle, (x, z)) in enumerate((("x", 45, (8, 3.5)), ("x", -45, (8, 12.5)),
+                                                ("z", -45, (3.5, 8)), ("z", 45, (12.5, 8)))):
+        p.box("cage", f"rod_{n}", (x - 0.5, 9, z - 0.5), (x + 0.5, 9 + rod, z + 0.5), "iron",
+              rot=(axis, angle), origin=(x, 9, z))
+    iron_ring(p, "cage", "eye", (8, 14.5, 8), 3, "xy", bar=0.75, depth=1)
+    # the logs: two along x on the base, two along z across them
+    fire_basket_log(p, "fuel", "log_0", (5, 2, 5), (11, 4.5, 7.5), "x")
+    fire_basket_log(p, "fuel", "log_1", (5, 2, 8.5), (11, 4.5, 11), "x")
+    fire_basket_log(p, "fuel", "log_2", (5.5, 4.5, 5), (8, 7, 11), "z")
+    fire_basket_log(p, "fuel", "log_3", (8.5, 4.5, 5), (11, 7, 11), "z")
+    # the flames: vanilla fire on two crossed planes, as the campfire draws it
+    p.box("flames", "fire_a", (3.5, 4.5, 8), (12.5, 14, 8), {"north": "fire", "south": "fire"},
+          uv={"north": [0, 0, 16, 16], "south": [0, 0, 16, 16]}, rot=("y", 45), origin=(8, 8, 8))
+    p.box("flames", "fire_b", (8, 4.5, 3.5), (8, 14, 12.5), {"west": "fire", "east": "fire"},
+          uv={"west": [0, 0, 16, 16], "east": [0, 0, 16, 16]}, rot=("y", 45), origin=(8, 8, 8))
+    return p
+
+
 def rubble_scatter():
     """Loose chips of stone strewn over a floor, in four stages that each add to the last:
     RubbleScatterBlock's CHIPS, groups chips_1..chips_4, one model per stage. Small boxes of the mod's
@@ -1061,6 +1120,7 @@ PROJECTS = {
     "chain_fixture_manacles": manacles,
     "chain_fixture_meat_hook": meat_hook,
     "chain_fixture_censer": censer,
+    "fire_basket": fire_basket,
     "pillory_lower": lambda: pillory("lower"),
     "pillory_upper": lambda: pillory("upper"),
     "torture_rack_head": lambda: torture_rack("head"),

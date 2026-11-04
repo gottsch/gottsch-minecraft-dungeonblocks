@@ -22,7 +22,8 @@ CONVERSION RULES
   gets is set in JOBS below - and per material in datagen, for the sarcophagus.
 - UVs are converted from each texture's own UV size to Minecraft's 0-16 space, so a non-16
   texture such as the 64x32 skeleton mob texture maps correctly.
-- An element textured only with `chain` gets "shade": false, as vanilla's chain model has.
+- An element textured only with `chain` or `fire` gets "shade": false, as vanilla's chain and
+  campfire models have.
 - Any unrotated face lying flush on a block boundary gets the matching cullface. A flush face
   without one renders black against a solid neighbour.
 - An element may rotate on ONE axis, by a multiple of 22.5 degrees up to 45: the JSON format's
@@ -196,6 +197,17 @@ for lit, ember in (("", "coal_block"), ("_lit", "magma")):
     JOBS.append(("chain_fixture_censer", f"chain_fixture_censer{lit}",
                  {"metal": "dungeonblocks:block/dark_iron", "chain": "minecraft:block/chain",
                   "ember": f"minecraft:block/{ember}"}, {"fixture": (0, 0, 0)}))
+# the fire basket, one model per FIRE state; SwingingChainRenderer draws the unlit, lit and soul ones.
+# The logs glow with the campfire's own lit textures; embers are the glowing logs with no flames.
+for state, log, fire in (("", "campfire_log", None), ("_embers", "campfire_log_lit", None),
+                         ("_lit", "campfire_log_lit", "fire_0"), ("_soul", "soul_campfire_log_lit", "soul_fire_0")):
+    # every texture the project names needs a value, drawn or not
+    textures = {"iron": "dungeonblocks:block/dark_iron", "log": f"minecraft:block/{log}",
+                "fire": f"minecraft:block/{fire or 'fire_0'}"}
+    groups = {"cage": (0, 0, 0), "fuel": (0, 0, 0)}
+    if fire:
+        groups["flames"] = (0, 0, 0)
+    JOBS.append(("fire_basket", f"fire_basket{state}", textures, groups))
 
 # torture devices, each empty and with a skeleton in it ("occupied_"). The pillory's top board
 # (board_upper) lifts 3px when open. The rack has three tension notches: crank_<n> and ropes_<n>
@@ -246,7 +258,7 @@ STACKS.append(("medium_bone_chandelier_item", {**BONES, "candle": "minecraft:blo
 
 # models whose textures have see-through pixels: the skeleton's ribs, the chain's links. Without
 # cutout those pixels draw black.
-CUTOUT = ("gibbet", "chandelier", "bone_chandelier", "medium_bone_chandelier", "skull_candle", "black_skull_candle", "chain_fixture_", "occupied_")
+CUTOUT = ("gibbet", "chandelier", "bone_chandelier", "medium_bone_chandelier", "skull_candle", "black_skull_candle", "chain_fixture_", "occupied_", "fire_basket")
 
 BOUNDARY = {"north": (2, 0, "from"), "south": (2, 16, "to"), "west": (0, 0, "from"),
             "east": (0, 16, "to"), "down": (1, 0, "from"), "up": (1, 16, "to")}
@@ -295,7 +307,9 @@ def convert(project, groups, textures):
                 out["faces"][name] = f
             # vanilla's chain model draws its crossed planes unshaded; shaded, they come out grey
             # instead of the chain's blue - the gibbet's chain beside a real one looked dark iron
-            if out["faces"] and all(f["texture"] == "#chain" for f in out["faces"].values()):
+            # (and so does the campfire its fire planes: a flame is not lit from one side)
+            if out["faces"] and (all(f["texture"] == "#chain" for f in out["faces"].values())
+                                 or all(f["texture"] == "#fire" for f in out["faces"].values())):
                 out["shade"] = False
             elements.append(out)
     keys = sorted({t["name"] for t in tex})

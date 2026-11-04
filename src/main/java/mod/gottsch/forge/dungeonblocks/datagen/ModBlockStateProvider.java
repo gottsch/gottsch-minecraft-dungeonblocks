@@ -666,6 +666,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModelFile censerLit = models().getExistingFile(modLoc("block/chain_fixture_censer_lit"));
         getVariantBuilder(ModBlocks.CENSER.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(state.getValue(CenserBlock.LIT) ? censerLit : censer).build());
+        // the fire basket: one model per brazier FIRE state
+        getVariantBuilder(ModBlocks.FIRE_BASKET.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
+                .modelFile(models().getExistingFile(modLoc("block/fire_basket" + switch (state.getValue(FireBasketBlock.FIRE)) {
+                    case NONE -> "";
+                    case EMBERS -> "_embers";
+                    case LIT -> "_lit";
+                    case SOUL -> "_soul";
+                }))).build(), FireBasketBlock.WATERLOGGED);
 
         // bubbling cauldron: vanilla's full cauldron, its brew a greyscale boil tinted per colour
         // (ClientSetup), so every colour is the one model

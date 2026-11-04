@@ -45,7 +45,11 @@ public enum ChainFixture implements StringRepresentable {
 	CENSER("censer"),
 	CHANDELIER("chandelier"),
 	BONE_CHANDELIER("bone_chandelier"),
-	MEDIUM_BONE_CHANDELIER("medium_bone_chandelier");
+	MEDIUM_BONE_CHANDELIER("medium_bone_chandelier"),
+	/** A fire basket, unlit or burning ordinary fire. Lit with a soul torch it becomes {@link #SOUL_FIRE_BASKET}. */
+	FIRE_BASKET("fire_basket"),
+	/** A fire basket burning soul fire; put out, it is a plain {@link #FIRE_BASKET} again. */
+	SOUL_FIRE_BASKET("soul_fire_basket");
 
 	private final String name;
 
@@ -79,7 +83,12 @@ public enum ChainFixture implements StringRepresentable {
 	 */
 	public boolean isLightable() {
 		return this == DUNGEON_LANTERN || this == CENSER || this == CHANDELIER || this == BONE_CHANDELIER
-				|| this == MEDIUM_BONE_CHANDELIER;
+				|| this == MEDIUM_BONE_CHANDELIER || isFireBasket();
+	}
+
+	/** Either fire basket: the one fixture, which a soul torch lights with soul fire. */
+	public boolean isFireBasket() {
+		return this == FIRE_BASKET || this == SOUL_FIRE_BASKET;
 	}
 
 	/** Block light emitted while attached. Matches each source's own vanilla/mod value. */
@@ -87,7 +96,9 @@ public enum ChainFixture implements StringRepresentable {
 		return switch (this) {
 			case LANTERN -> 15;
 			case SOUL_LANTERN -> 10;
-			case DUNGEON_LANTERN, CHANDELIER, BONE_CHANDELIER, MEDIUM_BONE_CHANDELIER -> lit ? 15 : 0;
+			case DUNGEON_LANTERN, CHANDELIER, BONE_CHANDELIER, MEDIUM_BONE_CHANDELIER, FIRE_BASKET -> lit ? 15 : 0;
+			// the brazier's soul fire, as FireBasketBlock gives
+			case SOUL_FIRE_BASKET -> lit ? 10 : 0;
 			// smouldering incense: a glow, not a lamp. CenserBlock gives the same.
 			case CENSER -> lit ? 7 : 0;
 			case NONE, MANACLES, MEAT_HOOK -> 0;
@@ -108,6 +119,8 @@ public enum ChainFixture implements StringRepresentable {
 			case CHANDELIER -> lit ? "chandelier_lit" : "chandelier";
 			case BONE_CHANDELIER -> lit ? "bone_chandelier_lit" : "bone_chandelier";
 			case MEDIUM_BONE_CHANDELIER -> lit ? "medium_bone_chandelier_lit" : "medium_bone_chandelier";
+			case FIRE_BASKET -> lit ? "fire_basket_lit" : "fire_basket";
+			case SOUL_FIRE_BASKET -> lit ? "fire_basket_soul" : "fire_basket";
 			case NONE, LANTERN, SOUL_LANTERN, DUNGEON_LANTERN -> null;
 		};
 	}

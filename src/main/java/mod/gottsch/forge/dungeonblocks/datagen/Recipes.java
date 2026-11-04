@@ -741,6 +741,16 @@ public class Recipes extends RecipeProvider {
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CHAIN))
 					.save(recipe);
 
+			// fire basket: a brazier hung on chains
+			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.FIRE_BASKET.get())
+					.pattern("c c")
+					.pattern(" c ")
+					.pattern(" b ")
+					.define('c', Blocks.CHAIN)
+					.define('b', ModBlocks.BRAZIER.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.BRAZIER.get()))
+					.save(recipe);
+
 			// bubbling cauldron: a cauldron, water, and nether wart for the brew; it starts green
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.BUBBLING_CAULDRON.get())
 					.requires(Blocks.CAULDRON)

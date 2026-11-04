@@ -998,6 +998,9 @@ public class ModBlocks {
     public static final RegistryObject<Block> CENSER = Registration.BLOCKS.register("censer",
             () -> new CenserBlock(fixtureProperties(SoundType.LANTERN).lightLevel(CenserBlock.LIGHT_EMISSION),
                     Shapes.or(Block.box(7, 10, 7, 9, 16, 9), Block.box(5, 1.5, 5, 11, 10, 11))));
+    // An open iron basket of burning logs, on the brazier's FIRE states and light levels
+    public static final RegistryObject<Block> FIRE_BASKET = Registration.BLOCKS.register("fire_basket",
+            () -> new FireBasketBlock(fixtureProperties(SoundType.LANTERN).lightLevel(FireBasketBlock.LIGHT_EMISSION)));
 
     // A cauldron of coloured brew at a boil. Vanilla cauldron's properties exactly, so it needs a
     // pickaxe to drop, as a cauldron does (tagged by hand in ModBlockTagGenerator).
