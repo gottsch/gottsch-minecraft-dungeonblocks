@@ -70,6 +70,9 @@ public class ModItems {
 	public static RegistryObject<Item> SKELETON = Registration.ITEMS.register("skeleton", () -> new SkeletonItem(ModBlocks.SKELETON.get(), new Item.Properties()));
 
 	// hung between two chain anchors; one makes one chain
+	// a posed skeleton entity, placed off the block grid (creative only, as the Skeleton block is)
+	public static final RegistryObject<Item> SKELETON_REMAINS = Registration.ITEMS.register("skeleton_remains",
+			() -> new SkeletonRemainsItem(new Item.Properties()));
 	public static final RegistryObject<Item> GIANT_CHAIN = Registration.ITEMS.register("giant_chain", () -> new ChainItem(new Item.Properties(), ChainSize.GIANT));
 	public static final RegistryObject<Item> MEDIUM_CHAIN = Registration.ITEMS.register("medium_chain", () -> new ChainItem(new Item.Properties(), ChainSize.MEDIUM));
 
@@ -150,6 +153,7 @@ public class ModItems {
 	 * DungeonBlocks Entities tab instead — see {@link ModCreativeModeTabs}.
 	 */
 	public static final List<RegistryObject<Item>> ENTITY_ITEMS = Stream.concat(Stream.of(
+			SKELETON_REMAINS,
 			POT, SQUAT_CLAY_POT, THIN_CLAY_POT,
 			STONE_POT, SQUAT_STONE_POT, THIN_STONE_POT,
 			RED_POT, SQUAT_RED_POT, THIN_RED_POT,

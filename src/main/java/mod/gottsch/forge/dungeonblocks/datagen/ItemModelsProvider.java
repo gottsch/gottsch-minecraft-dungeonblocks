@@ -306,6 +306,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		basicItem(ModItems.MOLD, modLoc("block/mold"));
 
 		basicItem(ModItems.SKELETON, modLoc("item/skeleton"));
+		basicItem(ModItems.SKELETON_REMAINS, modLoc("item/skeleton_remains"));
 
 		// the chain block is drawn by a BlockEntityRenderer and has no baked model to inherit from,
 		// so its item uses vanilla's chain sprite

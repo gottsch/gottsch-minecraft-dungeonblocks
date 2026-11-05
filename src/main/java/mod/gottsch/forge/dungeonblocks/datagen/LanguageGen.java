@@ -19,6 +19,7 @@ package mod.gottsch.forge.dungeonblocks.datagen;
 
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
+import mod.gottsch.forge.dungeonblocks.core.entity.ModEntityTypes;
 import mod.gottsch.forge.dungeonblocks.core.item.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -85,6 +86,8 @@ public class LanguageGen extends LanguageProvider {
         add(ModBlocks.MOLD.get(), "Mold");
         add(ModBlocks.LICHEN.get(), "Lichen");
         add(ModItems.SKELETON.get(), "Skeleton");
+        add(ModItems.SKELETON_REMAINS.get(), "Skeleton Remains");
+        add(ModEntityTypes.SKELETON_REMAINS.get(), "Skeleton Remains");
         add(ModItems.GIANT_CHAIN.get(), "Giant Chain");
         add(ModItems.MEDIUM_CHAIN.get(), "Medium Chain");
         String chain = "message." + DungeonBlocks.MOD_ID + ".chain.";

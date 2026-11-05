@@ -194,6 +194,10 @@ STACKS.append(("huge_candle_item", {"wax": "dungeonblocks:block/huge_candle", "t
 # draws in a swinging chain's bottom link when one is hung there.
 IRON_CHAIN = {"iron": "dungeonblocks:block/dark_iron", "chain": "minecraft:block/chain"}
 JOBS.append(("chain_fixture_manacles", "chain_fixture_manacles", IRON_CHAIN, {"fixture": (0, 0, 0)}))
+# the shackles a hanging Skeleton Remains hangs from; SkeletonRemainsRenderer draws them
+JOBS.append(("skeleton_remains_shackles", "skeleton_remains_shackles",
+             {"iron": "dungeonblocks:block/dark_iron", "chain": "minecraft:block/chain"},
+             {"shackles": (0, 0, 0)}))
 JOBS.append(("chain_fixture_meat_hook", "chain_fixture_meat_hook", {"iron": "dungeonblocks:block/dark_iron"},
              {"fixture": (0, 0, 0)}))
 for lit, ember in (("", "coal_block"), ("_lit", "magma")):
@@ -296,7 +300,7 @@ SCALED = [
 
 # models whose textures have see-through pixels: the skeleton's ribs, the chain's links. Without
 # cutout those pixels draw black.
-CUTOUT = ("gibbet", "chandelier", "bone_chandelier", "medium_bone_chandelier", "medium_chandelier",
+CUTOUT = ("skeleton_remains_shackles", "gibbet", "chandelier", "bone_chandelier", "medium_bone_chandelier", "medium_chandelier",
           "large_chandelier", "large_bone_chandelier", "skull_candle", "black_skull_candle", "chain_fixture_", "occupied_", "fire_basket", "hanging_oil_lamp")
 
 BOUNDARY = {"north": (2, 0, "from"), "south": (2, 16, "to"), "west": (0, 0, "from"),

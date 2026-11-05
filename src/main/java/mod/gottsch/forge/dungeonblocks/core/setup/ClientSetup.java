@@ -2,6 +2,7 @@ package mod.gottsch.forge.dungeonblocks.core.setup;
 
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.LargeChandelierRenderer;
 import net.minecraft.client.renderer.entity.NoopRenderer;
+import mod.gottsch.forge.dungeonblocks.core.entity.client.SkeletonRemainsRenderer;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.TombDoorRenderer;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.BubblingCauldronBlock;
@@ -173,6 +174,7 @@ public class ClientSetup {
         event.registerEntityRenderer(ModEntityTypes.POT_SHARD.get(), PotShardRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.TOME.get(), TomeRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.SCROLL.get(), ScrollRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.SKELETON_REMAINS.get(), SkeletonRemainsRenderer::new);
         // a bench seat is never drawn: the player sitting on it is
         event.registerEntityRenderer(ModEntityTypes.SEAT.get(), NoopRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.SWINGING_CHAIN.get(), SwingingChainRenderer::new);
@@ -195,6 +197,7 @@ public class ClientSetup {
     @SubscribeEvent
     public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
         event.register(TombDoorRenderer.SLAB);
+        event.register(SkeletonRemainsRenderer.SHACKLES);
         // the large chandelier's nine parts, unlit and lit, per chandelier
         for (RegistryObject<Block> block : List.of(ModBlocks.LARGE_CHANDELIER, ModBlocks.LARGE_BONE_CHANDELIER)) {
             for (boolean lit : new boolean[] {false, true}) {

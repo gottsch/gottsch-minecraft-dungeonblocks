@@ -980,6 +980,43 @@ def manacles():
     return p
 
 
+def skeleton_remains_shackles():
+    """What a hanging Skeleton Remains hangs from: an iron plate and eye on the ceiling, two chains
+    splaying down from the eye at 45 degrees, and a cuff round each wrist. Not a block:
+    SkeletonRemainsRenderer draws it over the raised hands. y 0 is level with the hands' tips and the
+    ceiling is y 8 (SkeletonRemainsEntity.HANGING_REACH is the raised hands' 2.25 blocks plus this half
+    block); the wrists are 5.9px either side of the middle, where the raised, spread arms put them.
+    The chains are vanilla's chain texture on two crossed planes, as the mod's other chains are (the
+    first try, small iron boxes for links, read as blocks, Nov 4). The cuffs lie flat round the
+    wrist, 1.5px tall, with a 2.2px hole for the 2px arm."""
+    p = Project("skeleton_remains_shackles", {"iron": DARK_IRON, "chain": CHAIN})
+    g = "shackles"
+    p.box(g, "plate", (6, 7.25, 6), (10, 8, 10), "iron")
+    iron_ring(p, g, "eye", (8, 6, 8), 2.5, "xy", bar=0.5, depth=0.75)
+    wrist, top, cuff_top = 5.9, 5.0, -1.5
+    drop = top - cuff_top                     # the chain runs at 45: as far out as it drops
+    length = drop * math.sqrt(2)
+    for side, sx in (("w", -1), ("e", 1)):
+        cx = 8 + sx * (wrist - drop / 2)
+        cy = (top + cuff_top) / 2
+        # the top leans in toward the eye: + on the east side, - on the west (as the struts' signs)
+        rot = ("z", 45 * sx)
+        v1 = min(16, round(length, 2))
+        p.box(g, f"chain_{side}_a", (cx - 1.5, cy - length / 2, 8), (cx + 1.5, cy + length / 2, 8),
+              {"north": "chain", "south": "chain"}, uv={"north": [3, 0, 0, v1], "south": [0, 0, 3, v1]},
+              rot=rot, origin=(cx, cy, 8))
+        p.box(g, f"chain_{side}_b", (cx, cy - length / 2, 6.5), (cx, cy + length / 2, 9.5),
+              {"west": "chain", "east": "chain"}, uv={"west": [6, 0, 3, v1], "east": [3, 0, 6, v1]},
+              rot=rot, origin=(cx, cy, 8))
+        # the cuff: four walls round the wrist
+        wx, y0, y1, o, i = 8 + sx * wrist, -3, cuff_top, 1.75, 1.1
+        p.box(g, f"cuff_{side}_n", (wx - o, y0, 8 - o), (wx + o, y1, 8 - i), "iron")
+        p.box(g, f"cuff_{side}_s", (wx - o, y0, 8 + i), (wx + o, y1, 8 + o), "iron")
+        p.box(g, f"cuff_{side}_w", (wx - o, y0, 8 - i), (wx - i, y1, 8 + i), "iron", skip=("north", "south"))
+        p.box(g, f"cuff_{side}_e", (wx + i, y0, 8 - i), (wx + o, y1, 8 + i), "iron", skip=("north", "south"))
+    return p
+
+
 def meat_hook():
     """Chain fixture: a butcher's hook - an eye at the top, a long shank and a J turned up to a
     point - built flat, then turned 45 degrees so no side sees it edge-on."""
@@ -1396,6 +1433,7 @@ PROJECTS = {
     "candle_cluster": candle_cluster,
     "chain_fixture_manacles": manacles,
     "chain_fixture_meat_hook": meat_hook,
+    "skeleton_remains_shackles": skeleton_remains_shackles,
     "chain_fixture_censer": censer,
     "fire_basket": fire_basket,
     "hanging_oil_lamp": hanging_oil_lamp,

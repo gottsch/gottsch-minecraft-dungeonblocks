@@ -228,6 +228,13 @@ public class ModEntityTypes {
 					.build("tome"));
 
 	// one type for every design, as the tome: the variant is synced data
+	/** A posed skeleton laid out as set dressing, off the block grid. Its box is only what it rests on. */
+	public static final RegistryObject<EntityType<SkeletonRemainsEntity>> SKELETON_REMAINS = Registration.ENTITY_TYPES.register("skeleton_remains",
+			() -> EntityType.Builder.<SkeletonRemainsEntity>of(SkeletonRemainsEntity::new, MobCategory.MISC)
+					.sized(0.4F, 0.5F)
+					.clientTrackingRange(10)
+					.build("skeleton_remains"));
+
 	/** The invisible seat a player rides while sitting on a stone bench. */
 	public static final RegistryObject<EntityType<SeatEntity>> SEAT = Registration.ENTITY_TYPES.register("seat",
 			() -> EntityType.Builder.<SeatEntity>of(SeatEntity::new, MobCategory.MISC)
