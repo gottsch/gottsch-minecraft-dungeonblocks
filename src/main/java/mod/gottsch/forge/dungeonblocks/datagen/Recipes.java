@@ -575,6 +575,25 @@ public class Recipes extends RecipeProvider {
 			SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.HEWN_TUFA.get()), RecipeCategory.BUILDING_BLOCKS, ModBlocks.GRAVE_SLAB_PAVEMENT.get())
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.HEWN_TUFA.get()))
 					.save(recipe);
+			// cracked in a furnace, as the flagstones are
+			SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.GRAVE_SLAB_PAVEMENT.get()), RecipeCategory.BUILDING_BLOCKS,
+							ModBlocks.CRACKED_GRAVE_SLAB_PAVEMENT.get(), 0.1F, 200)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.GRAVE_SLAB_PAVEMENT.get()))
+					.save(recipe);
+			// ossuary cobblestone is cobblestone bleached with bone meal, as its bricks are; mossy
+			// with a vine or a moss block; stairs, slabs and walls cut from either
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.OSSUARY_COBBLESTONE.get())
+					.requires(Blocks.COBBLESTONE)
+					.requires(Items.BONE_MEAL)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.BONE_MEAL))
+					.save(recipe);
+			mossy(recipe, ModBlocks.MOSSY_OSSUARY_COBBLESTONE, ModBlocks.OSSUARY_COBBLESTONE.get());
+			cutPiece(recipe, ModBlocks.OSSUARY_COBBLESTONE, ModBlocks.OSSUARY_COBBLESTONE_STAIRS, 1);
+			cutPiece(recipe, ModBlocks.OSSUARY_COBBLESTONE, ModBlocks.OSSUARY_COBBLESTONE_SLAB, 2);
+			cutPiece(recipe, ModBlocks.OSSUARY_COBBLESTONE, ModBlocks.OSSUARY_COBBLESTONE_WALL, 1);
+			cutPiece(recipe, ModBlocks.MOSSY_OSSUARY_COBBLESTONE, ModBlocks.MOSSY_OSSUARY_COBBLESTONE_STAIRS, 1);
+			cutPiece(recipe, ModBlocks.MOSSY_OSSUARY_COBBLESTONE, ModBlocks.MOSSY_OSSUARY_COBBLESTONE_SLAB, 2);
+			cutPiece(recipe, ModBlocks.MOSSY_OSSUARY_COBBLESTONE, ModBlocks.MOSSY_OSSUARY_COBBLESTONE_WALL, 1);
 			// herringbone bricks are relaid bricks
 			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.BRICKS), RecipeCategory.BUILDING_BLOCKS, ModBlocks.HERRINGBONE_BRICKS.get())
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.BRICKS))
@@ -593,6 +612,7 @@ public class Recipes extends RecipeProvider {
 						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(from))
 						.save(recipe, new ResourceLocation(DungeonBlocks.MOD_ID, "mixed_ashlar_from_" + ForgeRegistries.BLOCKS.getKey(from).getPath() + "_stonecutting"));
 			}
+			mossy(recipe, ModBlocks.MOSSY_MIXED_ASHLAR, ModBlocks.MIXED_ASHLAR.get());
 			// bone walls are hewn tufa packed with a bone block for the skulls, as on the skull
 			// pike, or with bones; knucklebone paving is cobblestone set with a bone
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.PACKED_SKULLS.get())

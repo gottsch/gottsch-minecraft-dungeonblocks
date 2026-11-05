@@ -114,6 +114,14 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.SANDSTONE_ASHLAR), modLoc("block/sandstone_ashlar_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DRIFTED_SANDSTONE_ASHLAR), modLoc("block/drifted_sandstone_ashlar_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.GRAVE_SLAB_PAVEMENT), modLoc("block/grave_slab_pavement_4_1"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.CRACKED_GRAVE_SLAB_PAVEMENT), modLoc("block/cracked_grave_slab_pavement_4_1"));
+		for (RegistryObject<? extends Block> block : List.of(ModBlocks.OSSUARY_COBBLESTONE, ModBlocks.MOSSY_OSSUARY_COBBLESTONE,
+				ModBlocks.OSSUARY_COBBLESTONE_STAIRS, ModBlocks.MOSSY_OSSUARY_COBBLESTONE_STAIRS,
+				ModBlocks.OSSUARY_COBBLESTONE_SLAB, ModBlocks.MOSSY_OSSUARY_COBBLESTONE_SLAB)) {
+			blockItemParent(ModBlocks.MAP.get(block));
+		}
+		wallInventory(ModBlocks.OSSUARY_COBBLESTONE_WALL.getId().getPath(), modLoc("block/ossuary_cobblestone"));
+		wallInventory(ModBlocks.MOSSY_OSSUARY_COBBLESTONE_WALL.getId().getPath(), modLoc("block/mossy_ossuary_cobblestone"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.KNUCKLEBONE_PAVING), modLoc("block/knucklebone_paving_4_1"));
 		// the circle's centre, the sun
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DEEPSLATE_RITUAL_CIRCLE), modLoc("block/deepslate_ritual_circle_4"));
@@ -175,6 +183,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.HERRINGBONE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_HERRINGBONE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MIXED_ASHLAR));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_MIXED_ASHLAR));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.LARGE_BRICKS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LARGE_BRICKS));

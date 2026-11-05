@@ -198,7 +198,19 @@ public class ModBlockStateProvider extends BlockStateProvider {
         patternTiles(ModBlocks.SANDSTONE_ASHLAR);
         patternTiles(ModBlocks.DRIFTED_SANDSTONE_ASHLAR);
         stackedPatternTiles(ModBlocks.GRAVE_SLAB_PAVEMENT);
+        stackedPatternTiles(ModBlocks.CRACKED_GRAVE_SLAB_PAVEMENT);
         stackedPatternTiles(ModBlocks.KNUCKLEBONE_PAVING);
+        // ossuary cobblestone and its pieces, as vanilla's cobblestone family
+        ResourceLocation cobble = modLoc("block/ossuary_cobblestone");
+        ResourceLocation mossyCobble = modLoc("block/mossy_ossuary_cobblestone");
+        simpleBlock(ModBlocks.OSSUARY_COBBLESTONE.get());
+        simpleBlock(ModBlocks.MOSSY_OSSUARY_COBBLESTONE.get());
+        stairsBlock(ModBlocks.OSSUARY_COBBLESTONE_STAIRS.get(), cobble);
+        stairsBlock(ModBlocks.MOSSY_OSSUARY_COBBLESTONE_STAIRS.get(), mossyCobble);
+        slabBlock(ModBlocks.OSSUARY_COBBLESTONE_SLAB.get(), cobble, cobble);
+        slabBlock(ModBlocks.MOSSY_OSSUARY_COBBLESTONE_SLAB.get(), mossyCobble, mossyCobble);
+        wallBlock(ModBlocks.OSSUARY_COBBLESTONE_WALL.get(), cobble);
+        wallBlock(ModBlocks.MOSSY_OSSUARY_COBBLESTONE_WALL.get(), mossyCobble);
         // the circles are chalked on the top only: their sides and bottom are their plain stone
         Map.of(ModBlocks.DEEPSLATE_RITUAL_CIRCLE, mcLoc("block/polished_deepslate"),
                 ModBlocks.BLACKSTONE_RITUAL_CIRCLE, mcLoc("block/polished_blackstone")).forEach((block, stone) -> {
@@ -273,6 +285,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.HERRINGBONE_BRICKS.get());
         simpleBlock(ModBlocks.MOSSY_HERRINGBONE_BRICKS.get());
         simpleBlock(ModBlocks.MIXED_ASHLAR.get());
+        simpleBlock(ModBlocks.MOSSY_MIXED_ASHLAR.get());
         stairsBlock(ModBlocks.MOSSY_BRICK_STAIRS.get(), modLoc("block/mossy_bricks"));
 
         simpleBlock(ModBlocks.LARGE_BRICKS.get());

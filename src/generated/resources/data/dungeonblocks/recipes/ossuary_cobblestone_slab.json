@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "dungeonblocks:ossuary_cobblestone"
+  },
+  "result": "dungeonblocks:ossuary_cobblestone_slab"
+}

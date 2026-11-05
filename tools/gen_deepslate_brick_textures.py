@@ -73,6 +73,21 @@ BONE_SHADE = {
     (90, 89, 90):    (86, 79, 63),
 }
 
+# vanilla cobblestone -> the same dirty bone, brightest first. Cobblestone has six shades, not
+# seven, and a wider spread than stone_bricks (luma 181..82), so it gets its own ramp: the middle
+# four are BONE_SHADE's own classes and the top two carry the bone hue brighter, which keeps
+# cobblestone's rougher contrast. Ossuary Cobblestone is what Ossuary Bricks weather down to (D2's
+# bricks -> cracked | mossy -> cobblestone chain), so it must read as the same stone: vanilla's grey
+# cobblestone beside the warm bricks looked like a patch from another building.
+COBBLE_BONE_SHADE = {
+    (181, 181, 181): (188, 183, 159),
+    (166, 166, 166): (173, 168, 145),
+    (136, 135, 136): (145, 140, 117),
+    (110, 109, 109): (121, 114, 93),
+    (97, 97, 97):    (103, 96, 77),
+    (82, 82, 82):    (86, 79, 63),
+}
+
 LUMA = (0.299, 0.587, 0.114)
 luma = lambda c: sum(w * v for w, v in zip(LUMA, c))
 
@@ -98,6 +113,13 @@ BONE_PAIRS = [
     ("right_large_stone_brick",        "right_large_ossuary_brick",          False),
 ]
 
+# As PAIRS, retoned with COBBLE_BONE_SHADE. Vanilla mossy_cobblestone keeps its greys at
+# cobblestone's exact shades, so the same table retones it and the moss passes through.
+COBBLE_BONE_PAIRS = [
+    ("cobblestone",                    "ossuary_cobblestone",                True),
+    ("mossy_cobblestone",              "mossy_ossuary_cobblestone",          True),
+]
+
 
 def convert(px, shade):
     """Retone the stone; leave everything else (i.e. the moss) exactly as it is."""
@@ -119,7 +141,8 @@ def load(name, vanilla):
     return Image.open(io.BytesIO(data)).convert("RGBA")
 
 
-for src, dst, vanilla, shade in [p + (SHADE,) for p in PAIRS] + [p + (BONE_SHADE,) for p in BONE_PAIRS]:
+for src, dst, vanilla, shade in [p + (SHADE,) for p in PAIRS] + [p + (BONE_SHADE,) for p in BONE_PAIRS] \
+        + [p + (COBBLE_BONE_SHADE,) for p in COBBLE_BONE_PAIRS]:
     im = load(src, vanilla)
     out = Image.new("RGBA", im.size)
     out.putdata([convert(p, shade) for p in im.getdata()])

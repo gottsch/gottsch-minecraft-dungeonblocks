@@ -84,7 +84,11 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
 
         // mineable/needs-tool come from the stone_blocks sweep ("square"); the slab tag does not
         this.tag(BlockTags.SLABS).add(ModBlocks.SQUARE_STONE_BRICK_SLAB.get(), ModBlocks.MOSSY_SQUARE_STONE_BRICK_SLAB.get(),
-                ModBlocks.SQUARE_DEEPSLATE_BRICK_SLAB.get(), ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_SLAB.get());
+                ModBlocks.SQUARE_DEEPSLATE_BRICK_SLAB.get(), ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_SLAB.get(),
+                ModBlocks.OSSUARY_COBBLESTONE_SLAB.get(), ModBlocks.MOSSY_OSSUARY_COBBLESTONE_SLAB.get());
+        this.tag(BlockTags.STAIRS).add(ModBlocks.OSSUARY_COBBLESTONE_STAIRS.get(), ModBlocks.MOSSY_OSSUARY_COBBLESTONE_STAIRS.get());
+        // walls join other walls only through this tag
+        this.tag(BlockTags.WALLS).add(ModBlocks.OSSUARY_COBBLESTONE_WALL.get(), ModBlocks.MOSSY_OSSUARY_COBBLESTONE_WALL.get());
 
         // same reason as the skeleton above: "rubble" matches nothing in stone_blocks, so
         // the loop skips it, but it copies requiresCorrectToolForDrops from cobblestone.

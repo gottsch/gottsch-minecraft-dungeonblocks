@@ -446,6 +446,39 @@ public class ModBlocks {
     // three-block pattern as the flagstones: the joints cross block edges. Stone bricks' properties.
     public static final RegistryObject<Block> GRAVE_SLAB_PAVEMENT = stone("grave_slab_pavement",
             () -> new StackedPatternTileBlock(Properties.copy(Blocks.STONE_BRICKS)));
+    // its weathered twin, the same pattern with the same TILE, so a weathering rule can swap them.
+    // Pavement weathers cracked -> rubble | dirt, never to a cobblestone: it is one layer of slabs.
+    public static final RegistryObject<Block> CRACKED_GRAVE_SLAB_PAVEMENT = stone("cracked_grave_slab_pavement",
+            () -> new StackedPatternTileBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
+
+    // Ossuary Cobblestone: vanilla cobblestone re-toned to the ossuary bricks' dirty bone, what they
+    // weather down to (bricks -> cracked | mossy -> cobblestone | mossy cobblestone -> rubble | dirt),
+    // so the decay reads as one stone; vanilla's grey cobblestone beside them looked patched in.
+    public static final RegistryObject<Block> OSSUARY_COBBLESTONE = stone("ossuary_cobblestone", () -> {
+        return new Block(Properties.copy(Blocks.COBBLESTONE));
+    });
+    public static final RegistryObject<Block> MOSSY_OSSUARY_COBBLESTONE = stone("mossy_ossuary_cobblestone", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_COBBLESTONE));
+    });
+    public static final RegistryObject<StairBlock> OSSUARY_COBBLESTONE_STAIRS = stone("ossuary_cobblestone_stairs", () -> {
+        return new StairBlock(OSSUARY_COBBLESTONE.get().defaultBlockState(), Properties.copy(Blocks.COBBLESTONE_STAIRS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_OSSUARY_COBBLESTONE_STAIRS = stone("mossy_ossuary_cobblestone_stairs", () -> {
+        return new StairBlock(MOSSY_OSSUARY_COBBLESTONE.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_COBBLESTONE_STAIRS));
+    });
+    public static final RegistryObject<SlabBlock> OSSUARY_COBBLESTONE_SLAB = stone("ossuary_cobblestone_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.COBBLESTONE_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> MOSSY_OSSUARY_COBBLESTONE_SLAB = stone("mossy_ossuary_cobblestone_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.MOSSY_COBBLESTONE_SLAB));
+    });
+    // the mod's first WallBlocks: they join each other and other walls through BlockTags.WALLS
+    public static final RegistryObject<WallBlock> OSSUARY_COBBLESTONE_WALL = stone("ossuary_cobblestone_wall", () -> {
+        return new WallBlock(Properties.copy(Blocks.COBBLESTONE_WALL));
+    });
+    public static final RegistryObject<WallBlock> MOSSY_OSSUARY_COBBLESTONE_WALL = stone("mossy_ossuary_cobblestone_wall", () -> {
+        return new WallBlock(Properties.copy(Blocks.MOSSY_COBBLESTONE_WALL));
+    });
 
     // Knucklebone Paving: a dark pebble floor with small bones set in as a mosaic, on the same
     // three-block pattern. Cobblestone's properties.
@@ -488,6 +521,11 @@ public class ModBlocks {
     // texture from tools/gen_mixed_ashlar_texture.py
     public static final RegistryObject<Block> MIXED_ASHLAR = stone("mixed_ashlar", () -> {
         return new Block(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    // moss grown in its own joints (the same script); no cracked twin, since one block's cracks
+    // would repeat on every block of a floor
+    public static final RegistryObject<Block> MOSSY_MIXED_ASHLAR = stone("mossy_mixed_ashlar", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
     public static final RegistryObject<StairBlock> MOSSY_BRICK_STAIRS =stone("mossy_brick_stairs", () -> {
         return new StairBlock(Blocks.BRICKS.defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
