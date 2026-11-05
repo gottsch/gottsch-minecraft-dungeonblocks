@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "dungeonblocks:mossy_hewn_tufa"
+  },
+  "result": "dungeonblocks:mossy_left_large_tufa_brick"
+}
