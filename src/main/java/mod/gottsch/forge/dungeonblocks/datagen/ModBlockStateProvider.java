@@ -200,6 +200,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         stackedPatternTiles(ModBlocks.GRAVE_SLAB_PAVEMENT);
         stackedPatternTiles(ModBlocks.CRACKED_GRAVE_SLAB_PAVEMENT);
         stackedPatternTiles(ModBlocks.KNUCKLEBONE_PAVING);
+        // saw traps: the stone's own cube with the slot overlaid on top; the blade is SawTrapRenderer's
+        sawTrap(ModBlocks.STONE_BRICK_SAW_TRAP, "stone_brick", mcLoc("block/stone_bricks"));
+        patternSawTrap(ModBlocks.GRAVE_SLAB_SAW_TRAP, "grave_slab", "grave_slab_pavement");
         // ossuary cobblestone and its pieces, as vanilla's cobblestone family
         ResourceLocation cobble = modLoc("block/ossuary_cobblestone");
         ResourceLocation mossyCobble = modLoc("block/mossy_ossuary_cobblestone");
@@ -234,6 +237,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         largeBrickPair(ModBlocks.MOSSY_LEFT_LARGE_STONE_BRICK, ModBlocks.MOSSY_RIGHT_LARGE_STONE_BRICK);
         largeBrickPair(ModBlocks.LEFT_LARGE_MUD_BRICK, ModBlocks.RIGHT_LARGE_MUD_BRICK);
         simpleBlock(ModBlocks.MOSSY_SQUARE_MUD_BRICK.get());
+        stairsBlock(ModBlocks.MOSSY_SQUARE_MUD_BRICK_STAIRS.get(), modLoc("block/mossy_square_mud_brick"));
         largeBrickPair(ModBlocks.MOSSY_LEFT_LARGE_MUD_BRICK, ModBlocks.MOSSY_RIGHT_LARGE_MUD_BRICK);
 
         simpleBlock(ModBlocks.SQUARE_DEEPSLATE_BRICK.get());
@@ -256,6 +260,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         stairsBlock(ModBlocks.HEWN_TUFA_STAIRS.get(), modLoc("block/hewn_tufa"));
         simpleBlock(ModBlocks.SQUARE_OSSUARY_BRICK.get());
         largeBrickPair(ModBlocks.LEFT_LARGE_OSSUARY_BRICK, ModBlocks.RIGHT_LARGE_OSSUARY_BRICK);
+        largeBrickPair(ModBlocks.LEFT_LARGE_TUFA_BRICK, ModBlocks.RIGHT_LARGE_TUFA_BRICK);
+        largeBrickPair(ModBlocks.MOSSY_LEFT_LARGE_TUFA_BRICK, ModBlocks.MOSSY_RIGHT_LARGE_TUFA_BRICK);
         // four variants with matching edges, so its pick marks don't repeat block by block
         simpleBlock(ModBlocks.HEWN_TUFA.get(),
                 new ConfiguredModel(cubeAll(ModBlocks.HEWN_TUFA.get())),
@@ -294,6 +300,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         stairsBlock(ModBlocks.MOSSY_LARGE_BRICK_STAIRS.get(), modLoc("block/mossy_large_bricks"));
         simpleBlock(ModBlocks.SQUARE_BRICK.get());
         simpleBlock(ModBlocks.MOSSY_SQUARE_BRICK.get());
+        stairsBlock(ModBlocks.SQUARE_BRICK_STAIRS.get(), modLoc("block/square_brick"));
+        stairsBlock(ModBlocks.MOSSY_SQUARE_BRICK_STAIRS.get(), modLoc("block/mossy_square_brick"));
         largeBrickPair(ModBlocks.LEFT_LARGE_BRICK, ModBlocks.RIGHT_LARGE_BRICK);
         largeBrickPair(ModBlocks.MOSSY_LEFT_LARGE_BRICK, ModBlocks.MOSSY_RIGHT_LARGE_BRICK);
 
@@ -873,6 +881,53 @@ public class ModBlockStateProvider extends BlockStateProvider {
             return ConfiguredModel.builder().modelFile(models()
                     .cube(name + "_" + tile + "_" + layer, ends, ends, north, south, east, west)
                     .texture("particle", ends)).build();
+        });
+    }
+
+    /**
+     * A saw trap of one texture all round: a model per AXIS from template_saw_trap_x/_z
+     * (tools/gen_saw_trap.py), which turn only the slot overlay, so the stone itself never turns.
+     * RAISED changes nothing baked: the blade is drawn by SawTrapRenderer.
+     */
+    private void sawTrap(RegistryObject<? extends Block> block, String stone, ResourceLocation texture) {
+        String name = block.getId().getPath();
+        ResourceLocation slot = modLoc("block/" + stone + "_saw_trap_slot");
+        getVariantBuilder(block.get()).forAllStates(state -> {
+            String axis = state.getValue(SawTrapBlock.AXIS).getName();
+            return ConfiguredModel.builder().modelFile(models()
+                    .withExistingParent(name + "_" + axis, modLoc("block/template_saw_trap_" + axis))
+                    .texture("down", texture).texture("up", texture)
+                    .texture("north", texture).texture("south", texture)
+                    .texture("east", texture).texture("west", texture)
+                    .texture("slot", slot)).build();
+        });
+    }
+
+    /**
+     * A saw trap in a stacked pattern floor: the floor's model for each TILE and LAYER (as
+     * {@link #stackedPatternTiles} makes them, from the slices &lt;floor&gt;_&lt;n&gt;), per AXIS, with the slot
+     * overlaid on top.
+     */
+    private void patternSawTrap(RegistryObject<? extends Block> block, String stone, String floor) {
+        String name = block.getId().getPath();
+        int span = PatternTileBlock.SPAN;
+        ResourceLocation slot = modLoc("block/" + stone + "_saw_trap_slot");
+        getVariantBuilder(block.get()).forAllStates(state -> {
+            String axis = state.getValue(SawTrapBlock.AXIS).getName();
+            int tile = state.getValue(PatternTileBlock.TILE);
+            int layer = state.getValue(StackedPatternTileBlock.LAYER);
+            int x = tile % span;
+            int z = tile / span;
+            int row = span - 1 - layer;
+            ResourceLocation ends = modLoc("block/" + floor + "_" + tile);
+            return ConfiguredModel.builder().modelFile(models()
+                    .withExistingParent(name + "_" + tile + "_" + layer + "_" + axis, modLoc("block/template_saw_trap_" + axis))
+                    .texture("down", ends).texture("up", ends)
+                    .texture("north", modLoc("block/" + floor + "_" + (Math.floorMod(-x, span) + span * row)))
+                    .texture("south", modLoc("block/" + floor + "_" + (x + span * row)))
+                    .texture("east", modLoc("block/" + floor + "_" + (Math.floorMod(-z, span) + span * row)))
+                    .texture("west", modLoc("block/" + floor + "_" + (z + span * row)))
+                    .texture("slot", slot)).build();
         });
     }
 

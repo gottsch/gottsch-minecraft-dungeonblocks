@@ -115,6 +115,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.DRIFTED_SANDSTONE_ASHLAR), modLoc("block/drifted_sandstone_ashlar_4"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.GRAVE_SLAB_PAVEMENT), modLoc("block/grave_slab_pavement_4_1"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.CRACKED_GRAVE_SLAB_PAVEMENT), modLoc("block/cracked_grave_slab_pavement_4_1"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.STONE_BRICK_SAW_TRAP), modLoc("block/stone_brick_saw_trap_z"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.GRAVE_SLAB_SAW_TRAP), modLoc("block/grave_slab_saw_trap_4_1_z"));
 		for (RegistryObject<? extends Block> block : List.of(ModBlocks.OSSUARY_COBBLESTONE, ModBlocks.MOSSY_OSSUARY_COBBLESTONE,
 				ModBlocks.OSSUARY_COBBLESTONE_STAIRS, ModBlocks.MOSSY_OSSUARY_COBBLESTONE_STAIRS,
 				ModBlocks.OSSUARY_COBBLESTONE_SLAB, ModBlocks.MOSSY_OSSUARY_COBBLESTONE_SLAB)) {
@@ -141,6 +143,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.LEFT_LARGE_MUD_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_MUD_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_MUD_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_MUD_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LEFT_LARGE_MUD_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_RIGHT_LARGE_MUD_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_DEEPSLATE_BRICK));
@@ -164,6 +167,10 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_OSSUARY_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.LEFT_LARGE_OSSUARY_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_OSSUARY_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.LEFT_LARGE_TUFA_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_TUFA_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LEFT_LARGE_TUFA_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_RIGHT_LARGE_TUFA_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.HEWN_TUFA));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_HEWN_TUFA));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.PACKED_SKULLS), modLoc("block/packed_skulls_1_1_1"));
@@ -191,6 +198,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LARGE_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_BRICK));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.SQUARE_BRICK_STAIRS));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_SQUARE_BRICK_STAIRS));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.LEFT_LARGE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.RIGHT_LARGE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_LEFT_LARGE_BRICK));

@@ -196,6 +196,21 @@ public class ModBlocks {
     // its weathered twins, the same pattern with the same TILE, so a weathering rule can swap them
     public static final RegistryObject<Block> CRACKED_FLAGSTONES = stone("cracked_flagstones",
             () -> new StackedPatternTileBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
+
+    // Saw traps: a floor block with a circular saw inside that rises, after a click and a short delay,
+    // to cut whatever stands on it. Only a slot across the top gives it away. Drawn by SawTrapRenderer.
+    public static final List<RegistryObject<? extends SawTrapBlock>> SAW_TRAPS = new ArrayList<>();
+    public static final RegistryObject<SawTrapBlock> STONE_BRICK_SAW_TRAP = sawTrap("stone_brick",
+            () -> new SawTrapBlock(Properties.copy(Blocks.STONE_BRICKS)));
+    // the grave slab one keeps the pavement's TILE and LAYER, so it shows the floor's own slice
+    public static final RegistryObject<SawTrapBlock> GRAVE_SLAB_SAW_TRAP = sawTrap("grave_slab",
+            () -> new PatternSawTrapBlock(Properties.copy(Blocks.STONE_BRICKS)));
+
+    private static RegistryObject<SawTrapBlock> sawTrap(String stone, Supplier<SawTrapBlock> block) {
+        RegistryObject<SawTrapBlock> trap = stone(stone + "_saw_trap", block);
+        SAW_TRAPS.add(trap);
+        return trap;
+    }
     public static final RegistryObject<Block> MOSSY_FLAGSTONES = stone("mossy_flagstones",
             () -> new StackedPatternTileBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS)));
     // A floor of small setts laid in overlapping arcs, fan paving, on the same three-block pattern
@@ -296,6 +311,9 @@ public class ModBlocks {
     // copy - and their moss is the mod's usual overlay, unchanged from the stone and clay variants.
     public static final RegistryObject<Block> MOSSY_SQUARE_MUD_BRICK = stone("mossy_square_mud_brick", () -> {
         return new Block(Properties.copy(Blocks.MUD_BRICKS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_SQUARE_MUD_BRICK_STAIRS = stone("mossy_square_mud_brick_stairs", () -> {
+        return new StairBlock(MOSSY_SQUARE_MUD_BRICK.get().defaultBlockState(), Properties.copy(Blocks.MUD_BRICK_STAIRS));
     });
     public static final RegistryObject<Block> MOSSY_LEFT_LARGE_MUD_BRICK = stone("mossy_left_large_mud_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.MUD_BRICKS));
@@ -431,6 +449,20 @@ public class ModBlocks {
     public static final RegistryObject<Block> RIGHT_LARGE_OSSUARY_BRICK = stone("right_large_ossuary_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
     });
+    // large tufa bricks: the large stone brick pair retoned to hewn tufa's palette, plain and mossy;
+    // tuff's properties, as hewn tufa's
+    public static final RegistryObject<Block> LEFT_LARGE_TUFA_BRICK = stone("left_large_tufa_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.TUFF));
+    });
+    public static final RegistryObject<Block> RIGHT_LARGE_TUFA_BRICK = stone("right_large_tufa_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.TUFF));
+    });
+    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_TUFA_BRICK = stone("mossy_left_large_tufa_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.TUFF));
+    });
+    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_TUFA_BRICK = stone("mossy_right_large_tufa_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.TUFF));
+    });
 
     // Packed Skulls: a wall of skulls crammed together on tufa, a pattern three blocks square.
     public static final RegistryObject<Block> PACKED_SKULLS = stone("packed_skulls",
@@ -547,6 +579,13 @@ public class ModBlocks {
     });
     public static final RegistryObject<Block> MOSSY_SQUARE_BRICK = stone("mossy_square_brick", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    // square brick stairs, plain and mossy, as the stone and deepslate square bricks have
+    public static final RegistryObject<StairBlock> SQUARE_BRICK_STAIRS = stone("square_brick_stairs", () -> {
+        return new StairBlock(SQUARE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.BRICK_STAIRS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_SQUARE_BRICK_STAIRS = stone("mossy_square_brick_stairs", () -> {
+        return new StairBlock(MOSSY_SQUARE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.BRICK_STAIRS));
     });
     public static final RegistryObject<Block> LEFT_LARGE_BRICK = stone("left_large_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.BRICKS));
@@ -1257,6 +1296,7 @@ public class ModBlocks {
         catacombNiche("bricks", () -> Blocks.BRICKS);
         catacombNiche("mossy_bricks", () -> MOSSY_BRICKS.get());
         catacombNiche("cracked_bricks", () -> CRACKED_BRICKS.get());
+        catacombNiche("large_bricks", () -> LARGE_BRICKS.get());
     }
 
     /** Registers "<source>_catacomb_niche", singular like the capstones: stone_brick_catacomb_niche. */

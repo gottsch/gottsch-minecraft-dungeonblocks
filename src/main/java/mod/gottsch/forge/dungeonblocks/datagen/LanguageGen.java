@@ -82,6 +82,9 @@ public class LanguageGen extends LanguageProvider {
         // death messages for the spikes damage type (data/dungeonblocks/damage_type/spikes.json)
         add("death.attack." + DungeonBlocks.MOD_ID + ".spikes", "%1$s was impaled on spikes");
         add("death.attack." + DungeonBlocks.MOD_ID + ".spikes.player", "%1$s was impaled on spikes whilst fighting %2$s");
+        // and for the saw trap's (data/dungeonblocks/damage_type/saw.json)
+        add("death.attack." + DungeonBlocks.MOD_ID + ".saw", "%1$s was cut down by a hidden saw");
+        add("death.attack." + DungeonBlocks.MOD_ID + ".saw.player", "%1$s was cut down by a hidden saw whilst fighting %2$s");
 
         add(ModBlocks.MOLD.get(), "Mold");
         add(ModBlocks.LICHEN.get(), "Lichen");

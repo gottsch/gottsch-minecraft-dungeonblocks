@@ -541,6 +541,9 @@ public class Recipes extends RecipeProvider {
 					ModBlocks.SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK, ModBlocks.SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK);
 			cutPieces(recipe, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_STAIRS, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_SLAB,
 					ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK);
+			cutPiece(recipe, ModBlocks.MOSSY_SQUARE_MUD_BRICK, ModBlocks.MOSSY_SQUARE_MUD_BRICK_STAIRS, 1);
+			cutPiece(recipe, ModBlocks.SQUARE_BRICK, ModBlocks.SQUARE_BRICK_STAIRS, 1);
+			cutPiece(recipe, ModBlocks.MOSSY_SQUARE_BRICK, ModBlocks.MOSSY_SQUARE_BRICK_STAIRS, 1);
 			cutPieces(recipe, ModBlocks.LARGE_BRICKS, ModBlocks.LARGE_BRICK_STAIRS, null, null, null);
 			cutPieces(recipe, ModBlocks.MOSSY_LARGE_BRICKS, ModBlocks.MOSSY_LARGE_BRICK_STAIRS, null, null, null);
 
@@ -567,6 +570,11 @@ public class Recipes extends RecipeProvider {
 			cutPiece(recipe, ModBlocks.OSSUARY_BRICKS, ModBlocks.OSSUARY_BRICK_STAIRS, 1);
 			cutPiece(recipe, ModBlocks.MOSSY_OSSUARY_BRICKS, ModBlocks.MOSSY_OSSUARY_BRICK_STAIRS, 1);
 			cutPiece(recipe, ModBlocks.HEWN_TUFA, ModBlocks.HEWN_TUFA_STAIRS, 1);
+			// large tufa bricks are cut from hewn tufa (the mossy ones from mossy hewn tufa), as the
+			// other large bricks are from their bricks
+			cutBricks(recipe, ModBlocks.HEWN_TUFA.get(), ModBlocks.MOSSY_HEWN_TUFA.get(), Map.of(
+					ModBlocks.LEFT_LARGE_TUFA_BRICK, ModBlocks.MOSSY_LEFT_LARGE_TUFA_BRICK,
+					ModBlocks.RIGHT_LARGE_TUFA_BRICK, ModBlocks.MOSSY_RIGHT_LARGE_TUFA_BRICK));
 			slabTable(recipe, ModBlocks.OSSUARY_BRICKS_SLAB_TABLE, ModBlocks.OSSUARY_BRICKS.get(), ModBlocks.OSSUARY_BRICKS.get());
 			// hewn tufa is cut from tuff, and the grave slabs from that
 			SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.TUFF), RecipeCategory.BUILDING_BLOCKS, ModBlocks.HEWN_TUFA.get())
@@ -833,6 +841,19 @@ public class Recipes extends RecipeProvider {
 						.define('p', entry.getValue())
 						.define('s', Items.STICK)
 						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(entry.getValue()))
+						.save(recipe);
+			}
+
+			// saw traps: the floor block with an iron blade set in it, sprung by redstone
+			for (var trap : List.of(Map.entry(ModBlocks.STONE_BRICK_SAW_TRAP.get(), Blocks.STONE_BRICKS.asItem()),
+					Map.entry(ModBlocks.GRAVE_SLAB_SAW_TRAP.get(), ModBlocks.GRAVE_SLAB_PAVEMENT.get().asItem()))) {
+				ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, trap.getKey())
+						.pattern("iBi")
+						.pattern(" r ")
+						.define('i', Items.IRON_INGOT)
+						.define('B', trap.getValue())
+						.define('r', Items.REDSTONE)
+						.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(trap.getValue()))
 						.save(recipe);
 			}
 

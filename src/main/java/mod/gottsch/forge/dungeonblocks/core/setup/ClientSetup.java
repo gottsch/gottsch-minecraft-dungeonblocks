@@ -4,6 +4,7 @@ import mod.gottsch.forge.dungeonblocks.core.blockentity.client.LargeChandelierRe
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import mod.gottsch.forge.dungeonblocks.core.entity.client.SkeletonRemainsRenderer;
 import mod.gottsch.forge.dungeonblocks.core.blockentity.client.TombDoorRenderer;
+import mod.gottsch.forge.dungeonblocks.core.blockentity.client.SawTrapRenderer;
 import mod.gottsch.forge.dungeonblocks.DungeonBlocks;
 import mod.gottsch.forge.dungeonblocks.core.block.BubblingCauldronBlock;
 import mod.gottsch.forge.dungeonblocks.core.block.ModBlocks;
@@ -181,6 +182,7 @@ public class ClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntityTypes.DUNGEON_BANNER.get(), DungeonBannerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.SARCOPHAGUS.get(), SarcophagusRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.TOMB_DOOR.get(), TombDoorRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityTypes.SAW_TRAP.get(), SawTrapRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.LARGE_CHANDELIER.get(), LargeChandelierRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.WEAPON_RACK.get(), WeaponRackRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.PEDESTAL.get(), PedestalRenderer::new);
@@ -197,6 +199,7 @@ public class ClientSetup {
     @SubscribeEvent
     public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
         event.register(TombDoorRenderer.SLAB);
+        event.register(SawTrapRenderer.BLADE);
         event.register(SkeletonRemainsRenderer.SHACKLES);
         // the large chandelier's nine parts, unlit and lit, per chandelier
         for (RegistryObject<Block> block : List.of(ModBlocks.LARGE_CHANDELIER, ModBlocks.LARGE_BONE_CHANDELIER)) {

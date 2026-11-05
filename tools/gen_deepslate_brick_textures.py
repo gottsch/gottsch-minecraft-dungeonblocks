@@ -38,6 +38,10 @@ because near-white reads far too bright across a whole wall and, at ~148, bone p
 disappeared into the wall by torchlight. Its low shades are pushed toward brown so the joints
 look dirty.
 
+The large tufa bricks use the same remap onto hewn_tufa's palette (gen_hewn_tufa_texture.py:
+its four base shades, its lit edge and grave_slab_pavement's one lighter shade at the top, its
+pits for the joints), so a course of them sits in a hewn tufa wall. Moss passes through, as above.
+
 Re-run after changing any of the stone sources. Hand edits to the generated PNGs will be
 overwritten. Run from the repo root:  python tools/gen_deepslate_brick_textures.py
 """
@@ -88,6 +92,18 @@ COBBLE_BONE_SHADE = {
     (82, 82, 82):    (86, 79, 63),
 }
 
+# vanilla stone_bricks -> hewn tufa, brightest first. The face shade (127) lands on hewn tufa's
+# middle shade, so the brick is no brighter than the tufa wall round it; the joints are its pits.
+TUFA_SHADE = {
+    (156, 153, 156): (122, 115, 99),
+    (139, 137, 139): (112, 105, 90),
+    (127, 127, 127): (102, 96, 82),
+    (120, 118, 120): (94, 88, 75),
+    (106, 109, 106): (86, 80, 68),
+    (99, 99, 99):    (76, 71, 60),
+    (90, 89, 90):    (66, 61, 51),
+}
+
 LUMA = (0.299, 0.587, 0.114)
 luma = lambda c: sum(w * v for w, v in zip(LUMA, c))
 
@@ -120,6 +136,14 @@ COBBLE_BONE_PAIRS = [
     ("mossy_cobblestone",              "mossy_ossuary_cobblestone",          True),
 ]
 
+# As PAIRS, retoned with TUFA_SHADE.
+TUFA_PAIRS = [
+    ("left_large_stone_brick",         "left_large_tufa_brick",              False),
+    ("right_large_stone_brick",        "right_large_tufa_brick",             False),
+    ("mossy_left_large_stone_brick",   "mossy_left_large_tufa_brick",        False),
+    ("mossy_right_large_stone_brick",  "mossy_right_large_tufa_brick",       False),
+]
+
 
 def convert(px, shade):
     """Retone the stone; leave everything else (i.e. the moss) exactly as it is."""
@@ -142,7 +166,7 @@ def load(name, vanilla):
 
 
 for src, dst, vanilla, shade in [p + (SHADE,) for p in PAIRS] + [p + (BONE_SHADE,) for p in BONE_PAIRS] \
-        + [p + (COBBLE_BONE_SHADE,) for p in COBBLE_BONE_PAIRS]:
+        + [p + (COBBLE_BONE_SHADE,) for p in COBBLE_BONE_PAIRS] + [p + (TUFA_SHADE,) for p in TUFA_PAIRS]:
     im = load(src, vanilla)
     out = Image.new("RGBA", im.size)
     out.putdata([convert(p, shade) for p in im.getdata()])
