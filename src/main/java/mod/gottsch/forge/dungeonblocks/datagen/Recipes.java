@@ -534,16 +534,19 @@ public class Recipes extends RecipeProvider {
 			cutPieces(recipe, ModBlocks.SQUARE_STONE_BRICK, ModBlocks.SQUARE_STONE_BRICK_STAIRS, ModBlocks.SQUARE_STONE_BRICK_SLAB,
 					ModBlocks.SQUARE_STONE_BRICK_FACADE_BLOCK, ModBlocks.SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK);
 			cutPieces(recipe, ModBlocks.MOSSY_SQUARE_STONE_BRICK, ModBlocks.MOSSY_SQUARE_STONE_BRICK_STAIRS, ModBlocks.MOSSY_SQUARE_STONE_BRICK_SLAB,
-					null, null);
-			cutPieces(recipe, ModBlocks.SQUARE_MUD_BRICK, ModBlocks.SQUARE_MUD_BRICK_STAIRS, null,
+					ModBlocks.MOSSY_SQUARE_STONE_BRICK_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK);
+			cutPieces(recipe, ModBlocks.SQUARE_MUD_BRICK, ModBlocks.SQUARE_MUD_BRICK_STAIRS, ModBlocks.SQUARE_MUD_BRICK_SLAB,
 					ModBlocks.SQUARE_MUD_BRICK_FACADE_BLOCK, ModBlocks.SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK);
 			cutPieces(recipe, ModBlocks.SQUARE_DEEPSLATE_BRICK, ModBlocks.SQUARE_DEEPSLATE_BRICK_STAIRS, ModBlocks.SQUARE_DEEPSLATE_BRICK_SLAB,
 					ModBlocks.SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK, ModBlocks.SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK);
 			cutPieces(recipe, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_STAIRS, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_SLAB,
 					ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK);
-			cutPiece(recipe, ModBlocks.MOSSY_SQUARE_MUD_BRICK, ModBlocks.MOSSY_SQUARE_MUD_BRICK_STAIRS, 1);
-			cutPiece(recipe, ModBlocks.SQUARE_BRICK, ModBlocks.SQUARE_BRICK_STAIRS, 1);
-			cutPiece(recipe, ModBlocks.MOSSY_SQUARE_BRICK, ModBlocks.MOSSY_SQUARE_BRICK_STAIRS, 1);
+			cutPieces(recipe, ModBlocks.MOSSY_SQUARE_MUD_BRICK, ModBlocks.MOSSY_SQUARE_MUD_BRICK_STAIRS, ModBlocks.MOSSY_SQUARE_MUD_BRICK_SLAB,
+					ModBlocks.MOSSY_SQUARE_MUD_BRICK_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK);
+			cutPieces(recipe, ModBlocks.SQUARE_BRICK, ModBlocks.SQUARE_BRICK_STAIRS, ModBlocks.SQUARE_BRICK_SLAB,
+					ModBlocks.SQUARE_BRICK_FACADE_BLOCK, ModBlocks.SQUARE_BRICK_QUARTER_FACADE_BLOCK);
+			cutPieces(recipe, ModBlocks.MOSSY_SQUARE_BRICK, ModBlocks.MOSSY_SQUARE_BRICK_STAIRS, ModBlocks.MOSSY_SQUARE_BRICK_SLAB,
+					ModBlocks.MOSSY_SQUARE_BRICK_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_BRICK_QUARTER_FACADE_BLOCK);
 			cutPieces(recipe, ModBlocks.LARGE_BRICKS, ModBlocks.LARGE_BRICK_STAIRS, null, null, null);
 			cutPieces(recipe, ModBlocks.MOSSY_LARGE_BRICKS, ModBlocks.MOSSY_LARGE_BRICK_STAIRS, null, null, null);
 
@@ -570,6 +573,20 @@ public class Recipes extends RecipeProvider {
 			cutPiece(recipe, ModBlocks.OSSUARY_BRICKS, ModBlocks.OSSUARY_BRICK_STAIRS, 1);
 			cutPiece(recipe, ModBlocks.MOSSY_OSSUARY_BRICKS, ModBlocks.MOSSY_OSSUARY_BRICK_STAIRS, 1);
 			cutPiece(recipe, ModBlocks.HEWN_TUFA, ModBlocks.HEWN_TUFA_STAIRS, 1);
+			cutPiece(recipe, ModBlocks.HEWN_TUFA, ModBlocks.HEWN_TUFA_SLAB, 2);
+			cutPiece(recipe, ModBlocks.HEWN_TUFA, ModBlocks.HEWN_TUFA_WALL, 1);
+			cutPiece(recipe, ModBlocks.MOSSY_HEWN_TUFA, ModBlocks.MOSSY_HEWN_TUFA_STAIRS, 1);
+			cutPiece(recipe, ModBlocks.OSSUARY_BRICKS, ModBlocks.OSSUARY_BRICK_SLAB, 2);
+			cutPiece(recipe, ModBlocks.OSSUARY_BRICKS, ModBlocks.OSSUARY_BRICK_WALL, 1);
+			cutPiece(recipe, ModBlocks.MOSSY_OSSUARY_BRICKS, ModBlocks.MOSSY_OSSUARY_BRICK_SLAB, 2);
+			cutPiece(recipe, ModBlocks.MOSSY_OSSUARY_BRICKS, ModBlocks.MOSSY_OSSUARY_BRICK_WALL, 1);
+			cutPiece(recipe, ModBlocks.SQUARE_OSSUARY_BRICK, ModBlocks.SQUARE_OSSUARY_BRICK_STAIRS, 1);
+			// mossy square ossuary brick: cut from mossy ossuary bricks, or the plain one and a vine or moss
+			cutPiece(recipe, ModBlocks.MOSSY_OSSUARY_BRICKS, ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK, 1);
+			mossy(recipe, ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK, ModBlocks.SQUARE_OSSUARY_BRICK.get());
+			cutPiece(recipe, ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK, ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK_STAIRS, 1);
+			cutPiece(recipe, ModBlocks.SQUARE_OSSUARY_BRICK, ModBlocks.SQUARE_OSSUARY_BRICK_SLAB, 2);
+			cutPiece(recipe, ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK, ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK_SLAB, 2);
 			// large tufa bricks are cut from hewn tufa (the mossy ones from mossy hewn tufa), as the
 			// other large bricks are from their bricks
 			cutBricks(recipe, ModBlocks.HEWN_TUFA.get(), ModBlocks.MOSSY_HEWN_TUFA.get(), Map.of(
@@ -786,6 +803,11 @@ public class Recipes extends RecipeProvider {
 					.requires(ModBlocks.RUBBLE.get())
 					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.RUBBLE.get()))
 					.save(recipe);
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.BRICK_RUBBLE_SCATTER.get(), 4)
+					.requires(ModBlocks.BRICK_RUBBLE.get())
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.BRICK_RUBBLE.get()))
+					.save(recipe);
+			mossy(recipe, ModBlocks.MOSSY_BRICK_RUBBLE, ModBlocks.BRICK_RUBBLE.get());
 
 			// chain fixtures. Manacles: two iron cuffs on a chain
 			ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.MANACLES.get())

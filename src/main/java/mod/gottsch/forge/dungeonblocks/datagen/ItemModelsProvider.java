@@ -57,9 +57,13 @@ public class ItemModelsProvider extends ItemModelProvider {
 		for (RegistryObject<Block> b : List.of(ModBlocks.STONE_GREEK_BLOCK, ModBlocks.ANDESITE_GREEK_BLOCK,
 				ModBlocks.POLISHED_BASALT_GREEK_BLOCK,
 				ModBlocks.SQUARE_STONE_BRICK_FACADE_BLOCK, ModBlocks.SQUARE_MUD_BRICK_FACADE_BLOCK,
+				ModBlocks.MOSSY_SQUARE_STONE_BRICK_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK,
+				ModBlocks.MOSSY_SQUARE_MUD_BRICK_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK,
 				ModBlocks.SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_FACADE_BLOCK,
 				ModBlocks.SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK, ModBlocks.SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK,
-				ModBlocks.SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK)) {
+				ModBlocks.SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK,
+				ModBlocks.SQUARE_BRICK_FACADE_BLOCK, ModBlocks.SQUARE_BRICK_QUARTER_FACADE_BLOCK,
+				ModBlocks.MOSSY_SQUARE_BRICK_FACADE_BLOCK, ModBlocks.MOSSY_SQUARE_BRICK_QUARTER_FACADE_BLOCK)) {
 			blockItemParent(ModBlocks.MAP.get(b));
 		}
 
@@ -119,9 +123,16 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.GRAVE_SLAB_SAW_TRAP), modLoc("block/grave_slab_saw_trap_4_1_z"));
 		for (RegistryObject<? extends Block> block : List.of(ModBlocks.OSSUARY_COBBLESTONE, ModBlocks.MOSSY_OSSUARY_COBBLESTONE,
 				ModBlocks.OSSUARY_COBBLESTONE_STAIRS, ModBlocks.MOSSY_OSSUARY_COBBLESTONE_STAIRS,
-				ModBlocks.OSSUARY_COBBLESTONE_SLAB, ModBlocks.MOSSY_OSSUARY_COBBLESTONE_SLAB)) {
+				ModBlocks.OSSUARY_COBBLESTONE_SLAB, ModBlocks.MOSSY_OSSUARY_COBBLESTONE_SLAB,
+				ModBlocks.MOSSY_HEWN_TUFA_STAIRS, ModBlocks.SQUARE_OSSUARY_BRICK_STAIRS,
+				ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK, ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK_STAIRS,
+				ModBlocks.SQUARE_BRICK_SLAB, ModBlocks.MOSSY_SQUARE_BRICK_SLAB, ModBlocks.SQUARE_MUD_BRICK_SLAB, ModBlocks.MOSSY_SQUARE_MUD_BRICK_SLAB, ModBlocks.SQUARE_OSSUARY_BRICK_SLAB, ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK_SLAB,
+				ModBlocks.OSSUARY_BRICK_SLAB, ModBlocks.MOSSY_OSSUARY_BRICK_SLAB, ModBlocks.HEWN_TUFA_SLAB)) {
 			blockItemParent(ModBlocks.MAP.get(block));
 		}
+		wallInventory(ModBlocks.OSSUARY_BRICK_WALL.getId().getPath(), modLoc("block/ossuary_bricks"));
+		wallInventory(ModBlocks.MOSSY_OSSUARY_BRICK_WALL.getId().getPath(), modLoc("block/mossy_ossuary_bricks"));
+		wallInventory(ModBlocks.HEWN_TUFA_WALL.getId().getPath(), modLoc("block/hewn_tufa"));
 		wallInventory(ModBlocks.OSSUARY_COBBLESTONE_WALL.getId().getPath(), modLoc("block/ossuary_cobblestone"));
 		wallInventory(ModBlocks.MOSSY_OSSUARY_COBBLESTONE_WALL.getId().getPath(), modLoc("block/mossy_ossuary_cobblestone"));
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.KNUCKLEBONE_PAVING), modLoc("block/knucklebone_paving_4_1"));
@@ -208,6 +219,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_COBBLESTONE_BRICK));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.RUBBLE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_RUBBLE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.BRICK_RUBBLE));
+		blockItemParent(ModBlocks.MAP.get(ModBlocks.MOSSY_BRICK_RUBBLE));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.GRAVEL_BRICK));
 
 		basicItem(ModBlocks.MAP.get(ModBlocks.ROOTS), modLoc("block/roots_head"));
@@ -301,6 +314,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 		ModBlocks.CRUMBLING_FLOORS.keySet().forEach(b -> blockItemParent(ModBlocks.MAP.get(b)));
 		// the full scatter, though a placed one starts at a few chips
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.RUBBLE_SCATTER), modLoc("block/rubble_scatter_4"));
+		withExistingParent(ModBlocks.MAP.get(ModBlocks.BRICK_RUBBLE_SCATTER), modLoc("block/brick_rubble_scatter_4"));
 		blockItemParent(ModBlocks.MAP.get(ModBlocks.GARGOYLE_BUST));
 		// the whole statue, shrunk to fit: its top half alone is a pair of wings
 		withExistingParent(ModBlocks.MAP.get(ModBlocks.GARGOYLE_STATUE), modLoc("block/gargoyle_statue_item"));

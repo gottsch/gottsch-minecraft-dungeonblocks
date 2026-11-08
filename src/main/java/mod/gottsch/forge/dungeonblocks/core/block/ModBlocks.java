@@ -286,6 +286,18 @@ public class ModBlocks {
     public static final RegistryObject<Block> SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK = stone("square_mud_brick_quarter_facade_block", () -> {
         return new FacadeShapeBlock(Properties.copy(Blocks.MUD_BRICKS), DecorType.QUARTER_FACADE);
     });
+    public static final RegistryObject<Block> MOSSY_SQUARE_STONE_BRICK_FACADE_BLOCK = stone("mossy_square_stone_brick_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS), DecorType.FACADE);
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK = stone("mossy_square_stone_brick_quarter_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS), DecorType.QUARTER_FACADE);
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_MUD_BRICK_FACADE_BLOCK = stone("mossy_square_mud_brick_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MUD_BRICKS), DecorType.FACADE);
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK = stone("mossy_square_mud_brick_quarter_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MUD_BRICKS), DecorType.QUARTER_FACADE);
+    });
     public static final RegistryObject<Block> LEFT_LARGE_STONE_BRICK = stone("left_large_stone_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
     });
@@ -439,9 +451,40 @@ public class ModBlocks {
     public static final RegistryObject<StairBlock> HEWN_TUFA_STAIRS = stone("hewn_tufa_stairs", () -> {
         return new StairBlock(HEWN_TUFA.get().defaultBlockState(), Properties.copy(Blocks.TUFF));
     });
+    public static final RegistryObject<StairBlock> MOSSY_HEWN_TUFA_STAIRS = stone("mossy_hewn_tufa_stairs", () -> {
+        return new StairBlock(MOSSY_HEWN_TUFA.get().defaultBlockState(), Properties.copy(Blocks.TUFF));
+    });
+    // slabs and walls for the catacombs' bricks and rock, as Ossuary Cobblestone has
+    public static final RegistryObject<SlabBlock> OSSUARY_BRICK_SLAB = stone("ossuary_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.STONE_BRICK_SLAB));
+    });
+    public static final RegistryObject<WallBlock> OSSUARY_BRICK_WALL = stone("ossuary_brick_wall", () -> {
+        return new WallBlock(Properties.copy(Blocks.STONE_BRICK_WALL));
+    });
+    public static final RegistryObject<SlabBlock> MOSSY_OSSUARY_BRICK_SLAB = stone("mossy_ossuary_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.MOSSY_STONE_BRICK_SLAB));
+    });
+    public static final RegistryObject<WallBlock> MOSSY_OSSUARY_BRICK_WALL = stone("mossy_ossuary_brick_wall", () -> {
+        return new WallBlock(Properties.copy(Blocks.MOSSY_STONE_BRICK_WALL));
+    });
+    public static final RegistryObject<SlabBlock> HEWN_TUFA_SLAB = stone("hewn_tufa_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.TUFF));
+    });
+    public static final RegistryObject<WallBlock> HEWN_TUFA_WALL = stone("hewn_tufa_wall", () -> {
+        return new WallBlock(Properties.copy(Blocks.TUFF).forceSolidOn());
+    });
 
     public static final RegistryObject<Block> SQUARE_OSSUARY_BRICK = stone("square_ossuary_brick", () -> {
         return new Block(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<StairBlock> SQUARE_OSSUARY_BRICK_STAIRS = stone("square_ossuary_brick_stairs", () -> {
+        return new StairBlock(SQUARE_OSSUARY_BRICK.get().defaultBlockState(), Properties.copy(Blocks.STONE_BRICK_STAIRS));
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_OSSUARY_BRICK = stone("mossy_square_ossuary_brick", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_SQUARE_OSSUARY_BRICK_STAIRS = stone("mossy_square_ossuary_brick_stairs", () -> {
+        return new StairBlock(MOSSY_SQUARE_OSSUARY_BRICK.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
     });
     public static final RegistryObject<Block> LEFT_LARGE_OSSUARY_BRICK = stone("left_large_ossuary_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
@@ -587,6 +630,38 @@ public class ModBlocks {
     public static final RegistryObject<StairBlock> MOSSY_SQUARE_BRICK_STAIRS = stone("mossy_square_brick_stairs", () -> {
         return new StairBlock(MOSSY_SQUARE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.BRICK_STAIRS));
     });
+    // slabs for the square bricks that had none, so every square brick has the full set
+    public static final RegistryObject<SlabBlock> SQUARE_BRICK_SLAB = stone("square_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.BRICK_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> MOSSY_SQUARE_BRICK_SLAB = stone("mossy_square_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.BRICK_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> SQUARE_MUD_BRICK_SLAB = stone("square_mud_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.MUD_BRICK_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> MOSSY_SQUARE_MUD_BRICK_SLAB = stone("mossy_square_mud_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.MUD_BRICK_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> SQUARE_OSSUARY_BRICK_SLAB = stone("square_ossuary_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.STONE_BRICK_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> MOSSY_SQUARE_OSSUARY_BRICK_SLAB = stone("mossy_square_ossuary_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.MOSSY_STONE_BRICK_SLAB));
+    });
+    // square brick facades, as the stone, mud and deepslate square bricks have
+    public static final RegistryObject<Block> SQUARE_BRICK_FACADE_BLOCK = stone("square_brick_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.BRICKS), DecorType.FACADE);
+    });
+    public static final RegistryObject<Block> SQUARE_BRICK_QUARTER_FACADE_BLOCK = stone("square_brick_quarter_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.BRICKS), DecorType.QUARTER_FACADE);
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_BRICK_FACADE_BLOCK = stone("mossy_square_brick_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS), DecorType.FACADE);
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_BRICK_QUARTER_FACADE_BLOCK = stone("mossy_square_brick_quarter_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS), DecorType.QUARTER_FACADE);
+    });
     public static final RegistryObject<Block> LEFT_LARGE_BRICK = stone("left_large_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.BRICKS));
     });
@@ -612,6 +687,14 @@ public class ModBlocks {
     });
     public static final RegistryObject<Block> MOSSY_RUBBLE = Registration.BLOCKS.register("mossy_rubble", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_COBBLESTONE));
+    });
+    // rubble in red brick, plain and mossy: rubble.png recoloured (tools/gen_brick_rubble.py),
+    // bricks' properties
+    public static final RegistryObject<Block> BRICK_RUBBLE = stone("brick_rubble", () -> {
+        return new Block(Properties.copy(Blocks.BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_BRICK_RUBBLE = stone("mossy_brick_rubble", () -> {
+        return new Block(Properties.copy(Blocks.BRICKS));
     });
     // a full block only - it has no material family in ModMaterials.STONE, so no decorative
     // pieces and no stonecutting recipes. Vanilla has no mossy chiseled stone bricks, so it is
@@ -998,6 +1081,10 @@ public class ModBlocks {
     // something under it.
     public static final RegistryObject<Block> RUBBLE_SCATTER = Registration.BLOCKS.register("rubble_scatter",
             () -> new RubbleScatterBlock(Properties.of().mapColor(MapColor.STONE).strength(0.5F).sound(SoundType.STONE)
+                    .noOcclusion().pushReaction(PushReaction.DESTROY)));
+    // the same, chips of broken red brick: its models are the rubble scatter's, retextured
+    public static final RegistryObject<Block> BRICK_RUBBLE_SCATTER = Registration.BLOCKS.register("brick_rubble_scatter",
+            () -> new RubbleScatterBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(0.5F).sound(SoundType.STONE)
                     .noOcclusion().pushReaction(PushReaction.DESTROY)));
 
     // Gargoyles: the Monster Manual's gargoyle mob, its own model baked in stone

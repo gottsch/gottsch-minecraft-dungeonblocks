@@ -85,10 +85,15 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // mineable/needs-tool come from the stone_blocks sweep ("square"); the slab tag does not
         this.tag(BlockTags.SLABS).add(ModBlocks.SQUARE_STONE_BRICK_SLAB.get(), ModBlocks.MOSSY_SQUARE_STONE_BRICK_SLAB.get(),
                 ModBlocks.SQUARE_DEEPSLATE_BRICK_SLAB.get(), ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_SLAB.get(),
-                ModBlocks.OSSUARY_COBBLESTONE_SLAB.get(), ModBlocks.MOSSY_OSSUARY_COBBLESTONE_SLAB.get());
-        this.tag(BlockTags.STAIRS).add(ModBlocks.OSSUARY_COBBLESTONE_STAIRS.get(), ModBlocks.MOSSY_OSSUARY_COBBLESTONE_STAIRS.get());
+                ModBlocks.OSSUARY_COBBLESTONE_SLAB.get(), ModBlocks.MOSSY_OSSUARY_COBBLESTONE_SLAB.get(),
+                ModBlocks.OSSUARY_BRICK_SLAB.get(), ModBlocks.MOSSY_OSSUARY_BRICK_SLAB.get(), ModBlocks.HEWN_TUFA_SLAB.get(),
+                ModBlocks.SQUARE_BRICK_SLAB.get(), ModBlocks.MOSSY_SQUARE_BRICK_SLAB.get(), ModBlocks.SQUARE_MUD_BRICK_SLAB.get(), ModBlocks.MOSSY_SQUARE_MUD_BRICK_SLAB.get(), ModBlocks.SQUARE_OSSUARY_BRICK_SLAB.get(), ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK_SLAB.get());
+        this.tag(BlockTags.STAIRS).add(ModBlocks.OSSUARY_COBBLESTONE_STAIRS.get(), ModBlocks.MOSSY_OSSUARY_COBBLESTONE_STAIRS.get(),
+                ModBlocks.MOSSY_HEWN_TUFA_STAIRS.get(), ModBlocks.SQUARE_OSSUARY_BRICK_STAIRS.get(),
+                ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK_STAIRS.get());
         // walls join other walls only through this tag
-        this.tag(BlockTags.WALLS).add(ModBlocks.OSSUARY_COBBLESTONE_WALL.get(), ModBlocks.MOSSY_OSSUARY_COBBLESTONE_WALL.get());
+        this.tag(BlockTags.WALLS).add(ModBlocks.OSSUARY_COBBLESTONE_WALL.get(), ModBlocks.MOSSY_OSSUARY_COBBLESTONE_WALL.get(),
+                ModBlocks.OSSUARY_BRICK_WALL.get(), ModBlocks.MOSSY_OSSUARY_BRICK_WALL.get(), ModBlocks.HEWN_TUFA_WALL.get());
 
         // same reason as the skeleton above: "rubble" matches nothing in stone_blocks, so
         // the loop skips it, but it copies requiresCorrectToolForDrops from cobblestone.
@@ -191,7 +196,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // banners are tagged.
         ModBlocks.TAPESTRIES.forEach(b -> this.tag(BlockTags.MINEABLE_WITH_AXE).add(b.get()));
         // The rubble scatter is loose stone: pickaxe, no tier, and it drops to anything.
-        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.RUBBLE_SCATTER.get());
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.RUBBLE_SCATTER.get(), ModBlocks.BRICK_RUBBLE_SCATTER.get());
         // The bone pile, the chandelier and the chain fixtures drop to anything; a pickaxe only
         // takes them down faster.
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.BONE_PILE.get(), ModBlocks.SKULL_PILE.get(), ModBlocks.CHANDELIER.get(), ModBlocks.BONE_CHANDELIER.get(), ModBlocks.MEDIUM_BONE_CHANDELIER.get(),

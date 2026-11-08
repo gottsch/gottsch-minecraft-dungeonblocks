@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "dungeonblocks:mossy_ossuary_bricks"
+  },
+  "result": "dungeonblocks:mossy_ossuary_brick_slab"
+}

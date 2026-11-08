@@ -54,7 +54,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
         facadeBlock(ModBlocks.SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK, "quarter_facade", modLoc("block/square_stone_brick"));
         facadeBlock(ModBlocks.SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK, "quarter_facade", modLoc("block/square_mud_brick"));
         facadeBlock(ModBlocks.SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK, "quarter_facade", modLoc("block/square_deepslate_brick"));
+        facadeBlock(ModBlocks.MOSSY_SQUARE_STONE_BRICK_FACADE_BLOCK, "facade", modLoc("block/mossy_square_stone_brick"));
+        facadeBlock(ModBlocks.MOSSY_SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK, "quarter_facade", modLoc("block/mossy_square_stone_brick"));
+        facadeBlock(ModBlocks.MOSSY_SQUARE_MUD_BRICK_FACADE_BLOCK, "facade", modLoc("block/mossy_square_mud_brick"));
+        facadeBlock(ModBlocks.MOSSY_SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK, "quarter_facade", modLoc("block/mossy_square_mud_brick"));
         facadeBlock(ModBlocks.MOSSY_SQUARE_DEEPSLATE_BRICK_QUARTER_FACADE_BLOCK, "quarter_facade", modLoc("block/mossy_square_deepslate_brick"));
+        facadeBlock(ModBlocks.SQUARE_BRICK_FACADE_BLOCK, "facade", modLoc("block/square_brick"));
+        facadeBlock(ModBlocks.SQUARE_BRICK_QUARTER_FACADE_BLOCK, "quarter_facade", modLoc("block/square_brick"));
+        facadeBlock(ModBlocks.MOSSY_SQUARE_BRICK_FACADE_BLOCK, "facade", modLoc("block/mossy_square_brick"));
+        facadeBlock(ModBlocks.MOSSY_SQUARE_BRICK_QUARTER_FACADE_BLOCK, "quarter_facade", modLoc("block/mossy_square_brick"));
 
         // dark iron and copper families: every age (and waxed twin) of a shape is the same model,
         // textured by its age
@@ -258,6 +266,30 @@ public class ModBlockStateProvider extends BlockStateProvider {
         stairsBlock(ModBlocks.OSSUARY_BRICK_STAIRS.get(), modLoc("block/ossuary_bricks"));
         stairsBlock(ModBlocks.MOSSY_OSSUARY_BRICK_STAIRS.get(), modLoc("block/mossy_ossuary_bricks"));
         stairsBlock(ModBlocks.HEWN_TUFA_STAIRS.get(), modLoc("block/hewn_tufa"));
+        stairsBlock(ModBlocks.MOSSY_HEWN_TUFA_STAIRS.get(), modLoc("block/mossy_hewn_tufa"));
+        stairsBlock(ModBlocks.SQUARE_OSSUARY_BRICK_STAIRS.get(), modLoc("block/square_ossuary_brick"));
+        simpleBlock(ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK.get());
+        stairsBlock(ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK_STAIRS.get(), modLoc("block/mossy_square_ossuary_brick"));
+        // the square brick slabs; their double slab is the full block's model, passed unchecked
+        squareSlab(ModBlocks.SQUARE_BRICK_SLAB, "square_brick");
+        squareSlab(ModBlocks.MOSSY_SQUARE_BRICK_SLAB, "mossy_square_brick");
+        squareSlab(ModBlocks.SQUARE_MUD_BRICK_SLAB, "square_mud_brick");
+        squareSlab(ModBlocks.MOSSY_SQUARE_MUD_BRICK_SLAB, "mossy_square_mud_brick");
+        squareSlab(ModBlocks.SQUARE_OSSUARY_BRICK_SLAB, "square_ossuary_brick");
+        squareSlab(ModBlocks.MOSSY_SQUARE_OSSUARY_BRICK_SLAB, "mossy_square_ossuary_brick");
+        slabBlock(ModBlocks.OSSUARY_BRICK_SLAB.get(), modLoc("block/ossuary_bricks"), modLoc("block/ossuary_bricks"));
+        wallBlock(ModBlocks.OSSUARY_BRICK_WALL.get(), modLoc("block/ossuary_bricks"));
+        slabBlock(ModBlocks.MOSSY_OSSUARY_BRICK_SLAB.get(),
+                models().slab("mossy_ossuary_brick_slab", modLoc("block/mossy_ossuary_bricks"), modLoc("block/mossy_ossuary_bricks"), modLoc("block/mossy_ossuary_bricks")),
+                models().slabTop("mossy_ossuary_brick_slab_top", modLoc("block/mossy_ossuary_bricks"), modLoc("block/mossy_ossuary_bricks"), modLoc("block/mossy_ossuary_bricks")),
+                new ModelFile.UncheckedModelFile(modLoc("block/mossy_ossuary_bricks")));
+        wallBlock(ModBlocks.MOSSY_OSSUARY_BRICK_WALL.get(), modLoc("block/mossy_ossuary_bricks"));
+        // hewn tufa's block model is generated in this same run, so it can't be looked up as an existing file
+        slabBlock(ModBlocks.HEWN_TUFA_SLAB.get(),
+                models().slab("hewn_tufa_slab", modLoc("block/hewn_tufa"), modLoc("block/hewn_tufa"), modLoc("block/hewn_tufa")),
+                models().slabTop("hewn_tufa_slab_top", modLoc("block/hewn_tufa"), modLoc("block/hewn_tufa"), modLoc("block/hewn_tufa")),
+                new ModelFile.UncheckedModelFile(modLoc("block/hewn_tufa")));
+        wallBlock(ModBlocks.HEWN_TUFA_WALL.get(), modLoc("block/hewn_tufa"));
         simpleBlock(ModBlocks.SQUARE_OSSUARY_BRICK.get());
         largeBrickPair(ModBlocks.LEFT_LARGE_OSSUARY_BRICK, ModBlocks.RIGHT_LARGE_OSSUARY_BRICK);
         largeBrickPair(ModBlocks.LEFT_LARGE_TUFA_BRICK, ModBlocks.RIGHT_LARGE_TUFA_BRICK);
@@ -309,6 +341,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.MOSSY_COBBLESTONE_BRICK.get());
         simpleBlock(ModBlocks.RUBBLE.get());
         simpleBlock(ModBlocks.MOSSY_RUBBLE.get());
+        simpleBlock(ModBlocks.BRICK_RUBBLE.get());
+        simpleBlock(ModBlocks.MOSSY_BRICK_RUBBLE.get());
         simpleBlock(ModBlocks.GRAVEL_BRICK.get());
         simpleBlock(ModBlocks.MOSSY_CHISELED_STONE_BRICKS.get());
 
@@ -739,6 +773,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
             getVariantBuilder(ModBlocks.RUBBLE_SCATTER.get()).partialState().with(RubbleScatterBlock.CHIPS, chips)
                     .setModels(ConfiguredModel.allYRotations(
                             models().getExistingFile(modLoc("block/rubble_scatter_" + chips)), 0, false));
+            // brick chips: the same models, retextured
+            getVariantBuilder(ModBlocks.BRICK_RUBBLE_SCATTER.get()).partialState().with(RubbleScatterBlock.CHIPS, chips)
+                    .setModels(ConfiguredModel.allYRotations(
+                            models().withExistingParent("brick_rubble_scatter_" + chips, modLoc("block/rubble_scatter_" + chips))
+                                    .texture("rubble", modLoc("block/brick_rubble"))
+                                    .texture("particle", modLoc("block/brick_rubble")), 0, false));
         }
 
         // gargoyles: the gargoyle mob's model baked in stone (tools/gen_obj_models.py), on smooth
@@ -1691,5 +1731,13 @@ public class ModBlockStateProvider extends BlockStateProvider {
                             .uvLock(uvlock)
                             .build();
                 }, StairBlock.WATERLOGGED);
+    }
+
+    /** A slab of a square brick, its sides, top and bottom all the brick's texture. */
+    private void squareSlab(RegistryObject<SlabBlock> slab, String texture) {
+        ResourceLocation tex = modLoc("block/" + texture);
+        String name = slab.getId().getPath();
+        slabBlock(slab.get(), models().slab(name, tex, tex, tex), models().slabTop(name + "_top", tex, tex, tex),
+                new ModelFile.UncheckedModelFile(tex));
     }
 }

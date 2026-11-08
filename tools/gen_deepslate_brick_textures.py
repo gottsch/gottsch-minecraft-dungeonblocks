@@ -125,6 +125,7 @@ BONE_PAIRS = [
     ("mossy_stone_bricks",             "mossy_ossuary_bricks",               True),
     ("cracked_stone_bricks",           "cracked_ossuary_bricks",             True),
     ("square_stone_brick",             "square_ossuary_brick",               False),
+    ("mossy_square_stone_brick",       "mossy_square_ossuary_brick",         False),
     ("left_large_stone_brick",         "left_large_ossuary_brick",           False),
     ("right_large_stone_brick",        "right_large_ossuary_brick",          False),
 ]
