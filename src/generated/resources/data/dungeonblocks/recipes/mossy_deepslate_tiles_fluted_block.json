@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "dungeonblocks:mossy_deepslate_tiles"
+  },
+  "result": "dungeonblocks:mossy_deepslate_tiles_fluted_block"
+}

@@ -21,13 +21,18 @@ package mod.gottsch.forge.dungeonblocks.core.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -68,7 +73,7 @@ import java.util.Map;
 public class CatacombNicheBlock extends HorizontalDirectionalBlock {
     /** What lies in the recess, each a group in the Blockbench project. */
     public enum Remains implements StringRepresentable {
-        EMPTY(1), SKULL(2), BONES(2), SKULL_AND_BONES(3), SKULLS(2), SKULL_HEAP(2);
+        EMPTY(1), SKULL(2), BONES(2), SKULL_AND_BONES(3), SKULLS(2), SKULL_HEAP(2), SOUL_LAMP(0);
 
         /** How often a placed niche takes this, out of the sum over all of them. */
         private final int weight;
@@ -83,7 +88,8 @@ public class CatacombNicheBlock extends HorizontalDirectionalBlock {
         }
 
         Remains next() {
-            return values()[(ordinal() + 1) % values().length];
+            // the lamp is last and out of the round: it is lit with a soul torch, not rearranged to
+            return values()[(ordinal() + 1) % SOUL_LAMP.ordinal()];
         }
 
         /** One by weight, from a position's hash: fixed per place, and different next door. */
@@ -104,6 +110,9 @@ public class CatacombNicheBlock extends HorizontalDirectionalBlock {
     }
 
     public static final EnumProperty<Remains> REMAINS = EnumProperty.create("remains", Remains.class);
+
+    /** Monsters spawn only at block light 0, so this keeps them off just the two blocks nearest the lamp. */
+    private static final int LAMP_LIGHT = 3;
 
     /** The block less its recess, x 2-14, y 2-14 and 12 deep, for each way the opening can face. */
     private static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
@@ -136,15 +145,47 @@ public class CatacombNicheBlock extends HorizontalDirectionalBlock {
                 .setValue(REMAINS, Remains.at(context.getClickedPos()));
     }
 
+    public static int lightOf(BlockState state) {
+        return state.getValue(REMAINS) == Remains.SOUL_LAMP ? LAMP_LIGHT : 0;
+    }
+
     /**
-     * An empty hand rearranges what lies in the niche, to the next of REMAINS. Holding anything
+     * An empty hand rearranges what lies in the niche, to the next of REMAINS, or takes the torch back
+     * out of a lit lamp. A soul torch lights the lamp in place of the remains. Holding anything else
      * passes, so building against a niche still places the block.
      */
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
                                  BlockHitResult hit) {
-        if (!player.getItemInHand(hand).isEmpty() || !player.getAbilities().mayBuild) {
+        ItemStack held = player.getItemInHand(hand);
+        boolean lit = state.getValue(REMAINS) == Remains.SOUL_LAMP;
+        if (!player.getAbilities().mayBuild) {
             return InteractionResult.PASS;
+        }
+        if (held.is(Items.SOUL_TORCH) && !lit) {
+            if (!level.isClientSide) {
+                level.setBlock(pos, state.setValue(REMAINS, Remains.SOUL_LAMP), Block.UPDATE_ALL);
+                level.playSound(null, pos, SoundEvents.SOUL_ESCAPE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
+                if (!player.getAbilities().instabuild) {
+                    held.shrink(1);
+                }
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+        if (!held.isEmpty()) {
+            return InteractionResult.PASS;
+        }
+        if (lit) {
+            if (!level.isClientSide) {
+                level.setBlock(pos, state.setValue(REMAINS, Remains.EMPTY), Block.UPDATE_ALL);
+                level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 1.0F);
+                level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
+                if (!player.getAbilities().instabuild) {
+                    player.setItemInHand(hand, new ItemStack(Items.SOUL_TORCH));
+                }
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
         if (!level.isClientSide) {
             level.setBlock(pos, state.setValue(REMAINS, state.getValue(REMAINS).next()), Block.UPDATE_ALL);
@@ -153,6 +194,26 @@ public class CatacombNicheBlock extends HorizontalDirectionalBlock {
             level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    /** A broken lamp gives its torch back along with the niche. */
+    @Override
+    public void spawnAfterBreak(BlockState state, ServerLevel level, BlockPos pos, ItemStack tool, boolean dropXp) {
+        super.spawnAfterBreak(state, level, pos, tool, dropXp);
+        if (state.getValue(REMAINS) == Remains.SOUL_LAMP) {
+            popResource(level, pos, new ItemStack(Items.SOUL_TORCH));
+        }
+    }
+
+    /** The odd soul flame rising off the lamp, from the middle of the recess. */
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (state.getValue(REMAINS) != Remains.SOUL_LAMP || random.nextInt(4) != 0) {
+            return;
+        }
+        Direction facing = state.getValue(FACING);
+        level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, pos.getX() + 0.5 + facing.getStepX() * 0.125, pos.getY() + 0.6,
+                pos.getZ() + 0.5 + facing.getStepZ() * 0.125, 0.0, 0.005, 0.0);
     }
 
     @Override

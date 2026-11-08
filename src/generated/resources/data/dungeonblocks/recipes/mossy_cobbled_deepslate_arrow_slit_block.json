@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "dungeonblocks:mossy_cobbled_deepslate"
+  },
+  "result": "dungeonblocks:mossy_cobbled_deepslate_arrow_slit_block"
+}

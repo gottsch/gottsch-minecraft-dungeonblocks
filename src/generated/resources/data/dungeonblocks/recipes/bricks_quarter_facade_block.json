@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 4,
+  "ingredient": {
+    "item": "minecraft:bricks"
+  },
+  "result": "dungeonblocks:bricks_quarter_facade_block"
+}

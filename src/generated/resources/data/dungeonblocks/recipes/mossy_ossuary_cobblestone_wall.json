@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "dungeonblocks:mossy_ossuary_cobblestone"
+  },
+  "result": "dungeonblocks:mossy_ossuary_cobblestone_wall"
+}

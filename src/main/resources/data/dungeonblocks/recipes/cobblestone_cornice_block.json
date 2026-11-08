@@ -1,8 +1,0 @@
-{
-    "type": "minecraft:stonecutting",
-    "ingredient": {
-        "item": "minecraft:cobblestone"
-    },
-    "result": "dungeonblocks:cobblestone_cornice_block",
-    "count": 2
-}

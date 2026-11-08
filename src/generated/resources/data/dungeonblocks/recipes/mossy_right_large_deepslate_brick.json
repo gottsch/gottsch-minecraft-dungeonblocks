@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "dungeonblocks:mossy_deepslate_bricks"
+  },
+  "result": "dungeonblocks:mossy_right_large_deepslate_brick"
+}

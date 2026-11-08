@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "dungeonblocks:ossuary_bricks"
+  },
+  "result": "dungeonblocks:ossuary_bench"
+}

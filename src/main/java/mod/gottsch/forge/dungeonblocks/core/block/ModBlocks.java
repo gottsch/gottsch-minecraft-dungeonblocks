@@ -150,6 +150,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> MOSSY_STONE_BRICKS_SLAB_TABLE = slabTable("mossy_stone_bricks_slab_table", Blocks.MOSSY_STONE_BRICKS);
     public static final RegistryObject<Block> SMOOTH_STONE_SLAB_TABLE = slabTable("smooth_stone_slab_table", Blocks.SMOOTH_STONE);
     public static final RegistryObject<Block> SMOOTH_SANDSTONE_SLAB_TABLE = slabTable("smooth_sandstone_slab_table", Blocks.SMOOTH_SANDSTONE);
+    public static final RegistryObject<Block> OSSUARY_BRICKS_SLAB_TABLE = slabTable("ossuary_bricks_slab_table", Blocks.STONE_BRICKS);
 
     // Dark iron grates in their rust stages. Separate blocks, not a weathering chain (see
     // AgedIronFamily): a builder places whichever stage they want. Same properties as the plain grate -
@@ -191,12 +192,44 @@ public class ModBlocks {
     // A floor of irregular flagstones, a pattern three blocks square whose stones cross block edges:
     // each block shows the TILE its position picks. Stone bricks' properties.
     public static final RegistryObject<Block> FLAGSTONES = stone("flagstones",
-            () -> new PatternTileBlock(Properties.copy(Blocks.STONE_BRICKS)));
+            () -> new StackedPatternTileBlock(Properties.copy(Blocks.STONE_BRICKS)));
     // its weathered twins, the same pattern with the same TILE, so a weathering rule can swap them
     public static final RegistryObject<Block> CRACKED_FLAGSTONES = stone("cracked_flagstones",
-            () -> new PatternTileBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
+            () -> new StackedPatternTileBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
+
+    // Saw traps: a floor block with a circular saw inside that rises, after a click and a short delay,
+    // to cut whatever stands on it. Only a slot across the top gives it away. Drawn by SawTrapRenderer.
+    public static final List<RegistryObject<? extends SawTrapBlock>> SAW_TRAPS = new ArrayList<>();
+    public static final RegistryObject<SawTrapBlock> STONE_BRICK_SAW_TRAP = sawTrap("stone_brick",
+            () -> new SawTrapBlock(Properties.copy(Blocks.STONE_BRICKS)));
+    // the grave slab one keeps the pavement's TILE and LAYER, so it shows the floor's own slice
+    public static final RegistryObject<SawTrapBlock> GRAVE_SLAB_SAW_TRAP = sawTrap("grave_slab",
+            () -> new PatternSawTrapBlock(Properties.copy(Blocks.STONE_BRICKS)));
+
+    private static RegistryObject<SawTrapBlock> sawTrap(String stone, Supplier<SawTrapBlock> block) {
+        RegistryObject<SawTrapBlock> trap = stone(stone + "_saw_trap", block);
+        SAW_TRAPS.add(trap);
+        return trap;
+    }
     public static final RegistryObject<Block> MOSSY_FLAGSTONES = stone("mossy_flagstones",
-            () -> new PatternTileBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS)));
+            () -> new StackedPatternTileBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS)));
+    // A floor of small setts laid in overlapping arcs, fan paving, on the same three-block pattern
+    // as the flagstones: the arcs cross block edges, and bulge toward FACING, any of four ways.
+    // Cobblestone's properties.
+    public static final RegistryObject<Block> FAN_COBBLES = stone("fan_cobbles",
+            () -> new FacingPatternTileBlock(Properties.copy(Blocks.COBBLESTONE)));
+    // its mossy twin, the same setts with the same TILE and FACING, so a rule can swap them
+    public static final RegistryObject<Block> MOSSY_FAN_COBBLES = stone("mossy_fan_cobbles",
+            () -> new FacingPatternTileBlock(Properties.copy(Blocks.MOSSY_COBBLESTONE)));
+    // A floor of squared sandstone blocks laid in courses, on the same three-block pattern: the
+    // joints cross block edges, and the courses run across FACING, so either way. Cut sandstone's
+    // properties.
+    public static final RegistryObject<Block> SANDSTONE_ASHLAR = stone("sandstone_ashlar",
+            () -> new FacingPatternTileBlock(Properties.copy(Blocks.CUT_SANDSTONE)));
+    // its aged twin, sand blown into the joints, the same stones with the same TILE and FACING, so
+    // a rule can swap them
+    public static final RegistryObject<Block> DRIFTED_SANDSTONE_ASHLAR = stone("drifted_sandstone_ashlar",
+            () -> new FacingPatternTileBlock(Properties.copy(Blocks.CUT_SANDSTONE)));
     // A ritual circle chalked on a slab of polished deepslate or blackstone, three blocks across:
     // kept where its author drew it by structures, which only turn it (RitualCircleBlock).
     public static final RegistryObject<Block> DEEPSLATE_RITUAL_CIRCLE = stone("deepslate_ritual_circle",
@@ -253,6 +286,18 @@ public class ModBlocks {
     public static final RegistryObject<Block> SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK = stone("square_mud_brick_quarter_facade_block", () -> {
         return new FacadeShapeBlock(Properties.copy(Blocks.MUD_BRICKS), DecorType.QUARTER_FACADE);
     });
+    public static final RegistryObject<Block> MOSSY_SQUARE_STONE_BRICK_FACADE_BLOCK = stone("mossy_square_stone_brick_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS), DecorType.FACADE);
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_STONE_BRICK_QUARTER_FACADE_BLOCK = stone("mossy_square_stone_brick_quarter_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS), DecorType.QUARTER_FACADE);
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_MUD_BRICK_FACADE_BLOCK = stone("mossy_square_mud_brick_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MUD_BRICKS), DecorType.FACADE);
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_MUD_BRICK_QUARTER_FACADE_BLOCK = stone("mossy_square_mud_brick_quarter_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MUD_BRICKS), DecorType.QUARTER_FACADE);
+    });
     public static final RegistryObject<Block> LEFT_LARGE_STONE_BRICK = stone("left_large_stone_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
     });
@@ -278,6 +323,9 @@ public class ModBlocks {
     // copy - and their moss is the mod's usual overlay, unchanged from the stone and clay variants.
     public static final RegistryObject<Block> MOSSY_SQUARE_MUD_BRICK = stone("mossy_square_mud_brick", () -> {
         return new Block(Properties.copy(Blocks.MUD_BRICKS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_SQUARE_MUD_BRICK_STAIRS = stone("mossy_square_mud_brick_stairs", () -> {
+        return new StairBlock(MOSSY_SQUARE_MUD_BRICK.get().defaultBlockState(), Properties.copy(Blocks.MUD_BRICK_STAIRS));
     });
     public static final RegistryObject<Block> MOSSY_LEFT_LARGE_MUD_BRICK = stone("mossy_left_large_mud_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.MUD_BRICKS));
@@ -375,6 +423,143 @@ public class ModBlocks {
         return new StairBlock(MOSSY_DEEPSLATE_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.DEEPSLATE_BRICK_STAIRS));
     });
 
+    // Ossuary Bricks: the vanilla stone brick pattern re-toned to a dirty bone, for the catacombs.
+    public static final RegistryObject<Block> OSSUARY_BRICKS = stone("ossuary_bricks", () -> {
+        return new Block(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_OSSUARY_BRICKS = stone("mossy_ossuary_bricks", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> CRACKED_OSSUARY_BRICKS = stone("cracked_ossuary_bricks", () -> {
+        return new Block(Properties.copy(Blocks.CRACKED_STONE_BRICKS));
+    });
+
+    // Hewn Tufa: soft tunnel rock with pick marks, for catacomb walls that were dug rather than built.
+    public static final RegistryObject<Block> HEWN_TUFA = stone("hewn_tufa", () -> {
+        return new Block(Properties.copy(Blocks.TUFF));
+    });
+    public static final RegistryObject<Block> MOSSY_HEWN_TUFA = stone("mossy_hewn_tufa", () -> {
+        return new Block(Properties.copy(Blocks.TUFF));
+    });
+
+    public static final RegistryObject<StairBlock> OSSUARY_BRICK_STAIRS = stone("ossuary_brick_stairs", () -> {
+        return new StairBlock(OSSUARY_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.STONE_BRICK_STAIRS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_OSSUARY_BRICK_STAIRS = stone("mossy_ossuary_brick_stairs", () -> {
+        return new StairBlock(MOSSY_OSSUARY_BRICKS.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
+    });
+    public static final RegistryObject<StairBlock> HEWN_TUFA_STAIRS = stone("hewn_tufa_stairs", () -> {
+        return new StairBlock(HEWN_TUFA.get().defaultBlockState(), Properties.copy(Blocks.TUFF));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_HEWN_TUFA_STAIRS = stone("mossy_hewn_tufa_stairs", () -> {
+        return new StairBlock(MOSSY_HEWN_TUFA.get().defaultBlockState(), Properties.copy(Blocks.TUFF));
+    });
+    // slabs and walls for the catacombs' bricks and rock, as Ossuary Cobblestone has
+    public static final RegistryObject<SlabBlock> OSSUARY_BRICK_SLAB = stone("ossuary_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.STONE_BRICK_SLAB));
+    });
+    public static final RegistryObject<WallBlock> OSSUARY_BRICK_WALL = stone("ossuary_brick_wall", () -> {
+        return new WallBlock(Properties.copy(Blocks.STONE_BRICK_WALL));
+    });
+    public static final RegistryObject<SlabBlock> MOSSY_OSSUARY_BRICK_SLAB = stone("mossy_ossuary_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.MOSSY_STONE_BRICK_SLAB));
+    });
+    public static final RegistryObject<WallBlock> MOSSY_OSSUARY_BRICK_WALL = stone("mossy_ossuary_brick_wall", () -> {
+        return new WallBlock(Properties.copy(Blocks.MOSSY_STONE_BRICK_WALL));
+    });
+    public static final RegistryObject<SlabBlock> HEWN_TUFA_SLAB = stone("hewn_tufa_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.TUFF));
+    });
+    public static final RegistryObject<WallBlock> HEWN_TUFA_WALL = stone("hewn_tufa_wall", () -> {
+        return new WallBlock(Properties.copy(Blocks.TUFF).forceSolidOn());
+    });
+
+    public static final RegistryObject<Block> SQUARE_OSSUARY_BRICK = stone("square_ossuary_brick", () -> {
+        return new Block(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<StairBlock> SQUARE_OSSUARY_BRICK_STAIRS = stone("square_ossuary_brick_stairs", () -> {
+        return new StairBlock(SQUARE_OSSUARY_BRICK.get().defaultBlockState(), Properties.copy(Blocks.STONE_BRICK_STAIRS));
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_OSSUARY_BRICK = stone("mossy_square_ossuary_brick", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_SQUARE_OSSUARY_BRICK_STAIRS = stone("mossy_square_ossuary_brick_stairs", () -> {
+        return new StairBlock(MOSSY_SQUARE_OSSUARY_BRICK.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
+    });
+    public static final RegistryObject<Block> LEFT_LARGE_OSSUARY_BRICK = stone("left_large_ossuary_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    public static final RegistryObject<Block> RIGHT_LARGE_OSSUARY_BRICK = stone("right_large_ossuary_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    // large tufa bricks: the large stone brick pair retoned to hewn tufa's palette, plain and mossy;
+    // tuff's properties, as hewn tufa's
+    public static final RegistryObject<Block> LEFT_LARGE_TUFA_BRICK = stone("left_large_tufa_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.TUFF));
+    });
+    public static final RegistryObject<Block> RIGHT_LARGE_TUFA_BRICK = stone("right_large_tufa_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.TUFF));
+    });
+    public static final RegistryObject<Block> MOSSY_LEFT_LARGE_TUFA_BRICK = stone("mossy_left_large_tufa_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.TUFF));
+    });
+    public static final RegistryObject<Block> MOSSY_RIGHT_LARGE_TUFA_BRICK = stone("mossy_right_large_tufa_brick", () -> {
+        return new FacingBlock(Properties.copy(Blocks.TUFF));
+    });
+
+    // Packed Skulls: a wall of skulls crammed together on tufa, a pattern three blocks square.
+    public static final RegistryObject<Block> PACKED_SKULLS = stone("packed_skulls",
+            () -> new WallPatternBlock(Properties.copy(Blocks.BONE_BLOCK)));
+
+    // Jumbled Femurs: a wall of femurs thrown together on tufa, a pattern three blocks square.
+    public static final RegistryObject<Block> JUMBLED_FEMURS = stone("jumbled_femurs",
+            () -> new WallPatternBlock(Properties.copy(Blocks.BONE_BLOCK)));
+    public static final RegistryObject<Block> CRUMBLING_BONE_WALL = stone("crumbling_bone_wall",
+            () -> new CrumblingBoneWallBlock(Properties.copy(Blocks.BONE_BLOCK)));
+
+    // Grave Slab Pavement: a floor of worn, faintly carved slabs in tufa's colours, on the same
+    // three-block pattern as the flagstones: the joints cross block edges. Stone bricks' properties.
+    public static final RegistryObject<Block> GRAVE_SLAB_PAVEMENT = stone("grave_slab_pavement",
+            () -> new StackedPatternTileBlock(Properties.copy(Blocks.STONE_BRICKS)));
+    // its weathered twin, the same pattern with the same TILE, so a weathering rule can swap them.
+    // Pavement weathers cracked -> rubble | dirt, never to a cobblestone: it is one layer of slabs.
+    public static final RegistryObject<Block> CRACKED_GRAVE_SLAB_PAVEMENT = stone("cracked_grave_slab_pavement",
+            () -> new StackedPatternTileBlock(Properties.copy(Blocks.CRACKED_STONE_BRICKS)));
+
+    // Ossuary Cobblestone: vanilla cobblestone re-toned to the ossuary bricks' dirty bone, what they
+    // weather down to (bricks -> cracked | mossy -> cobblestone | mossy cobblestone -> rubble | dirt),
+    // so the decay reads as one stone; vanilla's grey cobblestone beside them looked patched in.
+    public static final RegistryObject<Block> OSSUARY_COBBLESTONE = stone("ossuary_cobblestone", () -> {
+        return new Block(Properties.copy(Blocks.COBBLESTONE));
+    });
+    public static final RegistryObject<Block> MOSSY_OSSUARY_COBBLESTONE = stone("mossy_ossuary_cobblestone", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_COBBLESTONE));
+    });
+    public static final RegistryObject<StairBlock> OSSUARY_COBBLESTONE_STAIRS = stone("ossuary_cobblestone_stairs", () -> {
+        return new StairBlock(OSSUARY_COBBLESTONE.get().defaultBlockState(), Properties.copy(Blocks.COBBLESTONE_STAIRS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_OSSUARY_COBBLESTONE_STAIRS = stone("mossy_ossuary_cobblestone_stairs", () -> {
+        return new StairBlock(MOSSY_OSSUARY_COBBLESTONE.get().defaultBlockState(), Properties.copy(Blocks.MOSSY_COBBLESTONE_STAIRS));
+    });
+    public static final RegistryObject<SlabBlock> OSSUARY_COBBLESTONE_SLAB = stone("ossuary_cobblestone_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.COBBLESTONE_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> MOSSY_OSSUARY_COBBLESTONE_SLAB = stone("mossy_ossuary_cobblestone_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.MOSSY_COBBLESTONE_SLAB));
+    });
+    // the mod's first WallBlocks: they join each other and other walls through BlockTags.WALLS
+    public static final RegistryObject<WallBlock> OSSUARY_COBBLESTONE_WALL = stone("ossuary_cobblestone_wall", () -> {
+        return new WallBlock(Properties.copy(Blocks.COBBLESTONE_WALL));
+    });
+    public static final RegistryObject<WallBlock> MOSSY_OSSUARY_COBBLESTONE_WALL = stone("mossy_ossuary_cobblestone_wall", () -> {
+        return new WallBlock(Properties.copy(Blocks.MOSSY_COBBLESTONE_WALL));
+    });
+
+    // Knucklebone Paving: a dark pebble floor with small bones set in as a mosaic, on the same
+    // three-block pattern. Cobblestone's properties.
+    public static final RegistryObject<Block> KNUCKLEBONE_PAVING = stone("knucklebone_paving",
+            () -> new StackedPatternTileBlock(Properties.copy(Blocks.COBBLESTONE)));
+
     // Polished Andesite Bricks: the vanilla stone brick pattern re-toned onto polished andesite's
     // own palette, the way vanilla derives deepslate_bricks from polished_deepslate. Plural, because
     // the texture shows several bricks - unlike square/large bricks, which are one brick per block.
@@ -396,7 +581,28 @@ public class ModBlocks {
     public static final RegistryObject<Block> MOSSY_BRICKS = stone("mossy_bricks", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
     });
-    public static final RegistryObject<StairBlock> MOSSY_BRICK_STAIRS = stone("mossy_brick_stairs", () -> {
+    // vanilla has no cracked red bricks; texture from tools/gen_cracked_bricks_texture.py
+    public static final RegistryObject<Block> CRACKED_BRICKS = stone("cracked_bricks", () -> {
+        return new Block(Properties.copy(Blocks.BRICKS));
+    });
+    // red bricks laid flat in a herringbone, for floors; texture from tools/gen_herringbone_bricks_texture.py
+    public static final RegistryObject<Block> HERRINGBONE_BRICKS = stone("herringbone_bricks", () -> {
+        return new Block(Properties.copy(Blocks.BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_HERRINGBONE_BRICKS = stone("mossy_herringbone_bricks", () -> {
+        return new Block(Properties.copy(Blocks.BRICKS));
+    });
+    // squared stones of mixed sizes in one repeating block, the one-block form of mixed ashlar;
+    // texture from tools/gen_mixed_ashlar_texture.py
+    public static final RegistryObject<Block> MIXED_ASHLAR = stone("mixed_ashlar", () -> {
+        return new Block(Properties.copy(Blocks.STONE_BRICKS));
+    });
+    // moss grown in its own joints (the same script); no cracked twin, since one block's cracks
+    // would repeat on every block of a floor
+    public static final RegistryObject<Block> MOSSY_MIXED_ASHLAR = stone("mossy_mixed_ashlar", () -> {
+        return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_BRICK_STAIRS =stone("mossy_brick_stairs", () -> {
         return new StairBlock(Blocks.BRICKS.defaultBlockState(), Properties.copy(Blocks.MOSSY_STONE_BRICK_STAIRS));
     });
     public static final RegistryObject<Block> LARGE_BRICKS = stone("large_bricks", () -> {
@@ -416,6 +622,45 @@ public class ModBlocks {
     });
     public static final RegistryObject<Block> MOSSY_SQUARE_BRICK = stone("mossy_square_brick", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_STONE_BRICKS));
+    });
+    // square brick stairs, plain and mossy, as the stone and deepslate square bricks have
+    public static final RegistryObject<StairBlock> SQUARE_BRICK_STAIRS = stone("square_brick_stairs", () -> {
+        return new StairBlock(SQUARE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.BRICK_STAIRS));
+    });
+    public static final RegistryObject<StairBlock> MOSSY_SQUARE_BRICK_STAIRS = stone("mossy_square_brick_stairs", () -> {
+        return new StairBlock(MOSSY_SQUARE_BRICK.get().defaultBlockState(), Properties.copy(Blocks.BRICK_STAIRS));
+    });
+    // slabs for the square bricks that had none, so every square brick has the full set
+    public static final RegistryObject<SlabBlock> SQUARE_BRICK_SLAB = stone("square_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.BRICK_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> MOSSY_SQUARE_BRICK_SLAB = stone("mossy_square_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.BRICK_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> SQUARE_MUD_BRICK_SLAB = stone("square_mud_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.MUD_BRICK_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> MOSSY_SQUARE_MUD_BRICK_SLAB = stone("mossy_square_mud_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.MUD_BRICK_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> SQUARE_OSSUARY_BRICK_SLAB = stone("square_ossuary_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.STONE_BRICK_SLAB));
+    });
+    public static final RegistryObject<SlabBlock> MOSSY_SQUARE_OSSUARY_BRICK_SLAB = stone("mossy_square_ossuary_brick_slab", () -> {
+        return new SlabBlock(Properties.copy(Blocks.MOSSY_STONE_BRICK_SLAB));
+    });
+    // square brick facades, as the stone, mud and deepslate square bricks have
+    public static final RegistryObject<Block> SQUARE_BRICK_FACADE_BLOCK = stone("square_brick_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.BRICKS), DecorType.FACADE);
+    });
+    public static final RegistryObject<Block> SQUARE_BRICK_QUARTER_FACADE_BLOCK = stone("square_brick_quarter_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.BRICKS), DecorType.QUARTER_FACADE);
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_BRICK_FACADE_BLOCK = stone("mossy_square_brick_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS), DecorType.FACADE);
+    });
+    public static final RegistryObject<Block> MOSSY_SQUARE_BRICK_QUARTER_FACADE_BLOCK = stone("mossy_square_brick_quarter_facade_block", () -> {
+        return new FacadeShapeBlock(Properties.copy(Blocks.MOSSY_STONE_BRICKS), DecorType.QUARTER_FACADE);
     });
     public static final RegistryObject<Block> LEFT_LARGE_BRICK = stone("left_large_brick", () -> {
         return new FacingBlock(Properties.copy(Blocks.BRICKS));
@@ -442,6 +687,14 @@ public class ModBlocks {
     });
     public static final RegistryObject<Block> MOSSY_RUBBLE = Registration.BLOCKS.register("mossy_rubble", () -> {
         return new Block(Properties.copy(Blocks.MOSSY_COBBLESTONE));
+    });
+    // rubble in red brick, plain and mossy: rubble.png recoloured (tools/gen_brick_rubble.py),
+    // bricks' properties
+    public static final RegistryObject<Block> BRICK_RUBBLE = stone("brick_rubble", () -> {
+        return new Block(Properties.copy(Blocks.BRICKS));
+    });
+    public static final RegistryObject<Block> MOSSY_BRICK_RUBBLE = stone("mossy_brick_rubble", () -> {
+        return new Block(Properties.copy(Blocks.BRICKS));
     });
     // a full block only - it has no material family in ModMaterials.STONE, so no decorative
     // pieces and no stonecutting recipes. Vanilla has no mossy chiseled stone bricks, so it is
@@ -640,6 +893,12 @@ public class ModBlocks {
     // iron block set type anyway.
     public static final RegistryObject<Block> IRON_BARS_DOOR = Registration.BLOCKS.register("iron_bars_door",
             () -> new IronBarsDoorBlock(Properties.copy(Blocks.IRON_DOOR)));
+    // An ossuary gate: bones in a diamond lattice in a femur frame. The iron bars door's centred
+    // panel and hand-opening (villagers kept out, zombies can't break it); a bone block's sound.
+    // Textures: tools/gen_bone_lattice_gate_textures.py
+    public static final RegistryObject<Block> BONE_LATTICE_GATE = Registration.BLOCKS.register("bone_lattice_gate",
+            () -> new IronBarsDoorBlock(Properties.of().mapColor(MapColor.SAND).strength(2.0F).sound(SoundType.BONE_BLOCK)
+                    .requiresCorrectToolForDrops().noOcclusion().pushReaction(PushReaction.DESTROY)));
 
     // Dark iron bars, plain and lightly rusted, each with a matching cell door. Vanilla's own
     // IronBarsBlock, so they connect to each other and to vanilla iron bars exactly as iron bars
@@ -823,6 +1082,10 @@ public class ModBlocks {
     public static final RegistryObject<Block> RUBBLE_SCATTER = Registration.BLOCKS.register("rubble_scatter",
             () -> new RubbleScatterBlock(Properties.of().mapColor(MapColor.STONE).strength(0.5F).sound(SoundType.STONE)
                     .noOcclusion().pushReaction(PushReaction.DESTROY)));
+    // the same, chips of broken red brick: its models are the rubble scatter's, retextured
+    public static final RegistryObject<Block> BRICK_RUBBLE_SCATTER = Registration.BLOCKS.register("brick_rubble_scatter",
+            () -> new RubbleScatterBlock(Properties.of().mapColor(MapColor.COLOR_RED).strength(0.5F).sound(SoundType.STONE)
+                    .noOcclusion().pushReaction(PushReaction.DESTROY)));
 
     // Gargoyles: the Monster Manual's gargoyle mob, its own model baked in stone
     // (tools/entity_model.py). Stone's properties, the need for a pickaxe included.
@@ -863,11 +1126,53 @@ public class ModBlocks {
             () -> new HugeCandleBlock(candleProperties().lightLevel(HugeCandleBlock.LIGHT_EMISSION)));
     public static final RegistryObject<Block> CANDLE_CLUSTER = Registration.BLOCKS.register("candle_cluster",
             () -> new CandleClusterBlock(candleProperties().lightLevel(CandleClusterBlock.LIGHT_EMISSION)));
+    public static final RegistryObject<Block> SKULL_CANDLE = Registration.BLOCKS.register("skull_candle",
+            () -> new SkullCandleBlock(candleProperties().sound(SoundType.BONE_BLOCK).lightLevel(SkullCandleBlock.LIGHT_EMISSION)));
+    public static final RegistryObject<Block> BLACK_SKULL_CANDLE = Registration.BLOCKS.register("black_skull_candle",
+            () -> new SkullCandleBlock(candleProperties().sound(SoundType.BONE_BLOCK).lightLevel(SkullCandleBlock.LIGHT_EMISSION)));
     // An iron wheel of candles hung from the ceiling. The dungeon lantern's strength and sound, but
     // like the sconces it needs no tool to take down.
     public static final RegistryObject<Block> CHANDELIER = Registration.BLOCKS.register("chandelier",
             () -> new ChandelierBlock(Properties.of().mapColor(MapColor.METAL).strength(3.5F).sound(SoundType.LANTERN)
                     .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
+    // Skulls and femurs instead of iron, and as easy to take down.
+    public static final RegistryObject<Block> BONE_CHANDELIER = Registration.BLOCKS.register("bone_chandelier",
+            () -> new BoneChandelierBlock(Properties.of().mapColor(MapColor.SAND).strength(2.0F).sound(SoundType.BONE_BLOCK)
+                    .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
+    // A room's centrepiece: one block whose model overhangs its neighbours. The bone chandelier's
+    // strength and sound.
+    public static final RegistryObject<Block> MEDIUM_BONE_CHANDELIER = Registration.BLOCKS.register("medium_bone_chandelier",
+            () -> new MediumBoneChandelierBlock(Properties.of().mapColor(MapColor.SAND).strength(2.0F).sound(SoundType.BONE_BLOCK)
+                    .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
+    // The iron chandelier at the medium bone chandelier's size, and the two-tier large ones, which a
+    // renderer draws (LargeChandelierBlock). Each keeps its small one's strength and sound.
+    public static final RegistryObject<Block> MEDIUM_CHANDELIER = Registration.BLOCKS.register("medium_chandelier",
+            () -> new MediumChandelierBlock(Properties.of().mapColor(MapColor.METAL).strength(3.5F).sound(SoundType.LANTERN)
+                    .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY)));
+    public static final RegistryObject<Block> LARGE_CHANDELIER = Registration.BLOCKS.register("large_chandelier",
+            () -> new LargeChandelierBlock(Properties.of().mapColor(MapColor.METAL).strength(3.5F).sound(SoundType.LANTERN)
+                    .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY),
+                    LargeChandelierBlock.IRON_SHAPE, LargeChandelierBlock.IRON_WICKS));
+    public static final RegistryObject<Block> LARGE_BONE_CHANDELIER = Registration.BLOCKS.register("large_bone_chandelier",
+            () -> new LargeChandelierBlock(Properties.of().mapColor(MapColor.SAND).strength(2.0F).sound(SoundType.BONE_BLOCK)
+                    .lightLevel(ChandelierBlock.LIGHT_EMISSION).noOcclusion().pushReaction(PushReaction.DESTROY),
+                    LargeChandelierBlock.BONE_SHAPE, LargeChandelierBlock.BONE_WICKS));
+    // Leaded stained glass that stacks into a lancet window, and a broken one for a ruined church.
+    // A glass pane's strength and sound; textures from tools/gen_stained_glass_window_textures.py
+    public static final RegistryObject<Block> STAINED_GLASS_WINDOW = Registration.BLOCKS.register("stained_glass_window",
+            () -> new StainedGlassWindowBlock(Properties.copy(Blocks.GLASS_PANE)));
+    public static final RegistryObject<Block> BROKEN_STAINED_GLASS_WINDOW = Registration.BLOCKS.register("broken_stained_glass_window",
+            () -> new StainedGlassWindowBlock(Properties.copy(Blocks.GLASS_PANE)));
+    // A dark iron floor grate over a pit of soul fire, giving off soul mist; the grate's strength.
+    // Put out and relit like a campfire (SoulVentBlock).
+    public static final RegistryObject<Block> SOUL_VENT = Registration.BLOCKS.register("soul_vent",
+            () -> new SoulVentBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F).noOcclusion()
+                    .lightLevel(SoulVentBlock.LIGHT_EMISSION)));
+    // Dark iron plate that a giant chain is fixed to, centre to centre with another anchor; drawn
+    // by ChainRenderer, not a block entity renderer. The grate's strength.
+    public static final RegistryObject<Block> CHAIN_ANCHOR = Registration.BLOCKS.register("chain_anchor",
+            () -> new ChainAnchorBlock(Properties.of().mapColor(MapColor.METAL).strength(1.5F, 6.0F)
+                    .sound(SoundType.CHAIN).requiresCorrectToolForDrops()));
     // Chain fixtures, hung as blocks under a vanilla chain or from a ceiling, as a lantern hangs. On
     // a swinging chain they are its fixture instead (SwingingChainBlock#use), drawn from the same
     // models. The chandelier's strength and leniency. Each shape is its model's: a thin chain or
@@ -881,6 +1186,45 @@ public class ModBlocks {
     public static final RegistryObject<Block> CENSER = Registration.BLOCKS.register("censer",
             () -> new CenserBlock(fixtureProperties(SoundType.LANTERN).lightLevel(CenserBlock.LIGHT_EMISSION),
                     Shapes.or(Block.box(7, 10, 7, 9, 16, 9), Block.box(5, 1.5, 5, 11, 10, 11))));
+    // An open iron basket of burning logs, on the brazier's FIRE states and light levels
+    public static final RegistryObject<Block> FIRE_BASKET = Registration.BLOCKS.register("fire_basket",
+            () -> new FireBasketBlock(fixtureProperties(SoundType.LANTERN).lightLevel(FireBasketBlock.LIGHT_EMISSION)));
+    // Duckboards: a plank walkway over mud or water, in three woods; planks' properties
+    public static final List<RegistryObject<Block>> DUCKBOARDS = new ArrayList<>();
+    public static final RegistryObject<Block> OAK_DUCKBOARDS = duckboards("oak", Blocks.OAK_PLANKS);
+    public static final RegistryObject<Block> SPRUCE_DUCKBOARDS = duckboards("spruce", Blocks.SPRUCE_PLANKS);
+    public static final RegistryObject<Block> DARK_OAK_DUCKBOARDS = duckboards("dark_oak", Blocks.DARK_OAK_PLANKS);
+
+    private static RegistryObject<Block> duckboards(String wood, Block planks) {
+        RegistryObject<Block> block = Registration.BLOCKS.register(wood + "_duckboards",
+                () -> new DuckboardBlock(Properties.copy(planks).noOcclusion()));
+        DUCKBOARDS.add(block);
+        return block;
+    }
+
+    // Stone benches to sit on, dressed like the large bricks of their stone; benches side by side join
+    // into one long bench. Each takes its brick block's strength and sound.
+    public static final List<RegistryObject<Block>> BENCHES = new ArrayList<>();
+    public static final RegistryObject<Block> STONE_BENCH = bench("stone", () -> Blocks.STONE_BRICKS);
+    public static final RegistryObject<Block> DEEPSLATE_BENCH = bench("deepslate", () -> Blocks.DEEPSLATE_BRICKS);
+    public static final RegistryObject<Block> OSSUARY_BENCH = bench("ossuary", () -> OSSUARY_BRICKS.get());
+    public static final RegistryObject<Block> BRICK_BENCH = bench("brick", () -> Blocks.BRICKS);
+    public static final RegistryObject<Block> MUD_BRICK_BENCH = bench("mud_brick", () -> Blocks.MUD_BRICKS);
+
+    private static RegistryObject<Block> bench(String stone, Supplier<Block> bricks) {
+        RegistryObject<Block> block = stone(stone + "_bench",
+                () -> new StoneBenchBlock(Properties.copy(bricks.get()).noOcclusion()));
+        BENCHES.add(block);
+        return block;
+    }
+
+    // A carved stone slab door, two blocks tall, that grinds sideways into the wall to open; drawn by
+    // TombDoorRenderer. Smooth stone's properties.
+    public static final RegistryObject<Block> TOMB_DOOR = Registration.BLOCKS.register("tomb_door",
+            () -> new TombDoorBlock(Properties.copy(Blocks.SMOOTH_STONE).noOcclusion().pushReaction(PushReaction.BLOCK)));
+    // A terracotta oil lamp on a bail and chain; a clay pot's sound, the fixtures' strength
+    public static final RegistryObject<Block> HANGING_OIL_LAMP = Registration.BLOCKS.register("hanging_oil_lamp",
+            () -> new HangingOilLampBlock(fixtureProperties(SoundType.DECORATED_POT).lightLevel(HangingOilLampBlock.LIGHT_EMISSION)));
 
     // A cauldron of coloured brew at a boil. Vanilla cauldron's properties exactly, so it needs a
     // pickaxe to drop, as a cauldron does (tagged by hand in ModBlockTagGenerator).
@@ -997,6 +1341,35 @@ public class ModBlocks {
     // and datagen reads the stone texture off the source's id, as for the capstones.
     public static final Map<RegistryObject<Block>, Supplier<Block>> CATACOMB_NICHES = new LinkedHashMap<>();
 
+    /**
+     * A wall shelf, the large brick pair that textures it, and what it is made from: a stone it is
+     * cut from, or for a mossy one, the plain shelf it is grown from.
+     *
+     * @author Mark Gottschling on 11/01/2026
+     */
+    public record Shelf(RegistryObject<Block> block, RegistryObject<Block> left, RegistryObject<Block> right,
+                        Supplier<Block> source) {}
+
+    public static final List<Shelf> SHELVES = new ArrayList<>();
+
+    static {
+        RegistryObject<Block> stoneShelf = shelf("stone_brick_shelf", LEFT_LARGE_STONE_BRICK, RIGHT_LARGE_STONE_BRICK, () -> Blocks.STONE_BRICKS);
+        shelf("mossy_stone_brick_shelf", MOSSY_LEFT_LARGE_STONE_BRICK, MOSSY_RIGHT_LARGE_STONE_BRICK, stoneShelf);
+        RegistryObject<Block> mudShelf = shelf("mud_brick_shelf", LEFT_LARGE_MUD_BRICK, RIGHT_LARGE_MUD_BRICK, () -> Blocks.MUD_BRICKS);
+        shelf("mossy_mud_brick_shelf", MOSSY_LEFT_LARGE_MUD_BRICK, MOSSY_RIGHT_LARGE_MUD_BRICK, mudShelf);
+        RegistryObject<Block> deepslateShelf = shelf("deepslate_brick_shelf", LEFT_LARGE_DEEPSLATE_BRICK, RIGHT_LARGE_DEEPSLATE_BRICK, () -> Blocks.DEEPSLATE_BRICKS);
+        shelf("mossy_deepslate_brick_shelf", MOSSY_LEFT_LARGE_DEEPSLATE_BRICK, MOSSY_RIGHT_LARGE_DEEPSLATE_BRICK, deepslateShelf);
+        shelf("ossuary_brick_shelf", LEFT_LARGE_OSSUARY_BRICK, RIGHT_LARGE_OSSUARY_BRICK, OSSUARY_BRICKS);
+        RegistryObject<Block> brickShelf = shelf("brick_shelf", LEFT_LARGE_BRICK, RIGHT_LARGE_BRICK, () -> Blocks.BRICKS);
+        shelf("mossy_brick_shelf", MOSSY_LEFT_LARGE_BRICK, MOSSY_RIGHT_LARGE_BRICK, brickShelf);
+    }
+
+    private static RegistryObject<Block> shelf(String id, RegistryObject<Block> left, RegistryObject<Block> right, Supplier<Block> source) {
+        RegistryObject<Block> block = stone(id, () -> new ShelfBlock(Properties.copy(left.get()).noOcclusion()));
+        SHELVES.add(new Shelf(block, left, right, source));
+        return block;
+    }
+
     static {
         catacombNiche("stone_bricks", () -> Blocks.STONE_BRICKS);
         catacombNiche("mossy_stone_bricks", () -> Blocks.MOSSY_STONE_BRICKS);
@@ -1005,13 +1378,19 @@ public class ModBlocks {
         catacombNiche("cracked_deepslate_bricks", () -> Blocks.CRACKED_DEEPSLATE_BRICKS);
         catacombNiche("tuff", () -> Blocks.TUFF);
         catacombNiche("sandstone", () -> Blocks.SANDSTONE);
+        catacombNiche("ossuary_bricks", () -> OSSUARY_BRICKS.get());
+        catacombNiche("hewn_tufa", () -> HEWN_TUFA.get());
+        catacombNiche("bricks", () -> Blocks.BRICKS);
+        catacombNiche("mossy_bricks", () -> MOSSY_BRICKS.get());
+        catacombNiche("cracked_bricks", () -> CRACKED_BRICKS.get());
+        catacombNiche("large_bricks", () -> LARGE_BRICKS.get());
     }
 
     /** Registers "<source>_catacomb_niche", singular like the capstones: stone_brick_catacomb_niche. */
     private static void catacombNiche(String source, Supplier<Block> block) {
         String name = source.endsWith("bricks") ? source.substring(0, source.length() - 1) : source;
         CATACOMB_NICHES.put(Registration.BLOCKS.register(name + "_catacomb_niche",
-                () -> new CatacombNicheBlock(Properties.copy(block.get()))), block);
+                () -> new CatacombNicheBlock(Properties.copy(block.get()).lightLevel(CatacombNicheBlock::lightOf))), block);
     }
 
     // ------------------------------------------------------------------
